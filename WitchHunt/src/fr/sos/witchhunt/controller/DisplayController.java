@@ -8,13 +8,24 @@ public final class DisplayController implements DisplayObserver {
 	
 	private StdView console;
 	
-	public DisplayController(StdView stdv) {
-		this.console=stdv;
+	public DisplayController() {
+		this.console=Application.console;
 	}
 	
 	public void displayMenu(Menu m) {
 		console.makeMenu(m);
 		//T0D0 : makeMenu for GUI view
+	}
+	public void displayYesNoQuestion(String q) {
+		console.yesNoQuestion(q);
+		//T0D0 : makeMenu for GUI view
+	}
+	
+	public void drawHardLine() {
+		console.logHardLine();
+	}
+	public void drawDashedLine() {
+		console.logDashedLine();
 	}
 	
 	@Override

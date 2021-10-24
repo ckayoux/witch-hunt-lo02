@@ -20,15 +20,19 @@ public final class StdView {
 		System.out.println(msg);
 	}
 	
-	private void logStarsLine() {
+	public void logStarsLine() {
 		log("*********************************************************");
 	}
 	
-	private void logDashedLine() {
+	public void logDashedLine() {
 		log("---------------------------------------------------------");
 	}
+	public void logHardLine() {
+		log("_________________________________________________________");
+	}
 	
-	private void crlf() {
+	public void crlf() {
+		//new line
 		log("");
 	}
 	
@@ -38,7 +42,7 @@ public final class StdView {
 	
 	public void makeMenu(Menu m) {
 		log(m.getName());
-		logDashedLine();
+		logHardLine();
 		int n=0;
 		for (String str : m.getOptions()) {
 			n++;
@@ -63,5 +67,9 @@ public final class StdView {
 		sc.close();
 		crlf();
 		return choice;
+	}
+
+	public void yesNoQuestion(String q) {
+		log(q+" (y/n) :");
 	}
 }
