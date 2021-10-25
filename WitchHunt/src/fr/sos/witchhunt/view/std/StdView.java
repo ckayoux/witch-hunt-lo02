@@ -14,7 +14,6 @@ public final class StdView {
 	public StdView() {
 		log("Welcome to Witch Hunt !");
 		logStarsLine();
-		crlf();
 	}
 	
 	public void log(String msg) {
