@@ -15,7 +15,6 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private Game() {		
 		tabletop = Tabletop.getInstance();
 		gotoMainMenu();
-		exit();
 	}
 	
 	public final static Game getInstance() {
@@ -37,6 +36,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 				startGame();
 				break;
 			case 2:
+				exit();
 				break;
 		}
 	}
@@ -55,7 +55,8 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 			n++;
 			tabletop.addPlayer(Application.inputController.createPlayer(n));
 		}
-		while(n<6 && askYesNoQuestion("\tWould you like to add another player ?")) {
+		Application.displayController.displayYesNoQuestion("\tWould you like to add another player ?");
+		while(n<6 && Application.inputController.answerYesNoQuestion()) {
 			n++;
 			tabletop.addPlayer(Application.inputController.createPlayer(n));
 		}
@@ -66,15 +67,11 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	}
 	
 	
-	
-	private boolean askYesNoQuestion(String q) {
-		Application.displayController.displayYesNoQuestion(q);
-		return Application.inputController.answerYesNoQuestion();
-	}
 	public static void exit() {
 		Application.displayController.crlf();
 		Application.displayController.drawStarsLine();
 		Application.displayController.passLog("See you soon !");
+		System.exit(0);
 	}
 	
 }

@@ -75,4 +75,8 @@ public final class Round {
 		List <Player> L = Tabletop.getInstance().getPlayersList();
 		nextPlayer = L.get((L.indexOf(currentPlayer)+1) % L.size());
 	}
+
+	public static void setRoundNumber(int n) {
+		roundNumber = n;
+	}
 }

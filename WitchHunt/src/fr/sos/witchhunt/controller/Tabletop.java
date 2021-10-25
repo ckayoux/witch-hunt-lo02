@@ -44,7 +44,7 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	//GAME ACTION METHODS
 	public void startPlaying() {
 		Application.displayController.displayMatchStartScreen();
-		
+
 		scoreCounter = new ScoreCounter();
 		
 		currentRound = new Round();
@@ -55,18 +55,19 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 			currentRound = null;
 			currentRound = new Round();
 		}
+		currentRound.setRoundNumber(0);
 		currentRound = null;
-		scoreCounter=null;
 		
 		Application.displayController.displayMatchEndScreen();
 		Application.displayController.displayWinner("winner's name",5); //TODO : use real values
 		Application.displayController.displayClassment(scoreCounter.getClassment());
 		Application.displayController.displayScoreTable(scoreCounter);
 		
-		Application.inputController.wannaContinue();
-		
+		scoreCounter=null;
 		playersList = null;
 		playersList = new ArrayList<Player>();
+		
+		Application.inputController.wannaContinue();
 		Game.getInstance().gotoMainMenu();
 	}
 	
