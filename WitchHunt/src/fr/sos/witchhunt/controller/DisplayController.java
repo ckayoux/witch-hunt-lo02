@@ -3,12 +3,12 @@ package fr.sos.witchhunt.controller;
 import java.util.List;
 import java.util.ArrayList;
 
-import fr.sos.witchhunt.DisplayObserver;
+import fr.sos.witchhunt.PlayerDisplayObserver;
 import fr.sos.witchhunt.Menu;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.std.StdView;
 
-public final class DisplayController implements DisplayObserver {
+public final class DisplayController implements PlayerDisplayObserver {
 	
 	private StdView console;
 	

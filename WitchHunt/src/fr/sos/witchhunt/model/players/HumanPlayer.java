@@ -1,13 +1,13 @@
 package fr.sos.witchhunt.model.players;
 
 import fr.sos.witchhunt.InputObservable;
-import fr.sos.witchhunt.InputObserver;
+import fr.sos.witchhunt.PlayerInputObserver;
 import fr.sos.witchhunt.Menu;
 import fr.sos.witchhunt.model.Identity;
 
 public final class HumanPlayer extends Player implements InputObservable {
 	
-	private InputObserver inputObserver;
+	private PlayerInputObserver inputObserver;
 	
 	//CONSTRUCTORS
 	public HumanPlayer(String name, int id) {
@@ -60,7 +60,7 @@ public final class HumanPlayer extends Player implements InputObservable {
 	}
 	
 	//INPUT METHODS
-	public void setInputObserver(InputObserver io) {
+	public void setInputObserver(PlayerInputObserver io) {
 		inputObserver = io;
 	}
 	

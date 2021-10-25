@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import java.util.concurrent.CountDownLatch;
 
-import fr.sos.witchhunt.InputObserver;
+import fr.sos.witchhunt.PlayerInputObserver;
 import fr.sos.witchhunt.Menu;
 import fr.sos.witchhunt.model.players.CPUPlayer;
 import fr.sos.witchhunt.model.players.HumanPlayer;
@@ -12,7 +12,7 @@ import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.std.InterruptibleStdInput;
 import fr.sos.witchhunt.view.std.StdView;
 
-public final class InputController implements InputObserver {
+public final class InputController implements PlayerInputObserver {
 
 	//ATTRIBUTES
 	private CountDownLatch latch = new CountDownLatch(1) ;

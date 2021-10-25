@@ -1,7 +1,7 @@
 package fr.sos.witchhunt.model.players;
 
 import fr.sos.witchhunt.DisplayObservable;
-import fr.sos.witchhunt.DisplayObserver;
+import fr.sos.witchhunt.PlayerDisplayObserver;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.cards.IdentityCard;
 
@@ -13,7 +13,7 @@ public abstract class Player implements DisplayObservable {
 	protected int score;
 	protected Identity identity;
 	protected IdentityCard identityCard;
-	protected DisplayObserver displayObserver;
+	protected PlayerDisplayObserver displayObserver;
 	
 	//CONSTRUCTORS
 	public Player(String name, int id) {
@@ -55,7 +55,7 @@ public abstract class Player implements DisplayObservable {
 	}
 	
 	//SETTERS
-	public void setDisplayObserver(DisplayObserver dO) {
+	public void setDisplayObserver(PlayerDisplayObserver dO) {
 		this.displayObserver=dO;
 	}
 	
