@@ -8,9 +8,6 @@ public final class DisplayController implements DisplayObserver {
 	
 	private StdView console;
 	
-	public DisplayController() {
-		this.console=Application.console;
-	}
 	
 	public void displayMenu(Menu m) {
 		console.makeMenu(m);
@@ -32,5 +29,12 @@ public final class DisplayController implements DisplayObserver {
 	public void passLog(String msg) {
 		console.log(msg);
 	}
-		
+	
+	public void crlf() {
+		console.crlf();
+	}
+	
+	public void setConsole(StdView console) {
+		this.console=console;
+	}
 }

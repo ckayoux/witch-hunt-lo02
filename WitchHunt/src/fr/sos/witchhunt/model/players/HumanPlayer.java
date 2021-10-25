@@ -17,5 +17,8 @@ public final class HumanPlayer extends Player implements InputObservable {
 	}
 	
 	//INPUT METHODS
+	public void setInputObserver(InputObserver io) {
+		inputObserver = io;
+	}
 	
 }

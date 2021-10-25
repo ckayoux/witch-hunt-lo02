@@ -43,6 +43,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	
 	public void startGame () {
 		addPlayers();
+		Tabletop.getInstance().startPlaying();
 	}
 	
 	private void addPlayers() {
@@ -51,40 +52,26 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		Application.displayController.passLog("Add 3 to 6 players :\n");
 		while(n<3) {
 			n++;
-			makePlayer(n);
+			tabletop.addPlayer(Application.inputController.createPlayer(n));
 		}
 		while(n<6 && askYesNoQuestion("\tWould you like to add another player ?")) {
 			n++;
-			makePlayer(n);
+			tabletop.addPlayer(Application.inputController.createPlayer(n));
 		}
-		log("\nAll "+Integer.toString(n)+" players have been successfully added.");
+		Application.displayController.passLog("\nAll "+Integer.toString(n)+" players have been successfully added.");
+		Application.displayController.passLog("Each will get "+(int)Math.ceil(12/(float)n)+" Rumour cards.");
 		Application.displayController.drawDashedLine();
-		log("");
+		Application.displayController.crlf();
 	}
 	
-	private void makePlayer(int n) {
-		log("\tPlayer "+Integer.toString(n)+" : ");
-		boolean human = askYesNoQuestion("\tHuman controlled ?");
-		if(human) {
-			log("\tName ?");
-			String name = Application.inputController.getStringInput();
-			tabletop.addPlayer(new HumanPlayer(name,n));
-		}
-		else tabletop.addPlayer(new CPUPlayer(n));
-		log("");
-	}
+	
 	
 	private boolean askYesNoQuestion(String q) {
 		Application.displayController.displayYesNoQuestion(q);
 		return Application.inputController.answerYesNoQuestion();
 	}
-	private void log(String str) {
-		Application.displayController.passLog(str);
-	}
-	private String gets() {
-		return Application.inputController.getStringInput();
-	}
 	public static void exit() {
+		Application.displayController.crlf();
 		Application.displayController.passLog("See you soon !");
 	}
 	
