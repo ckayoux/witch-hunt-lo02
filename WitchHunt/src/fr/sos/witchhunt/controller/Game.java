@@ -1,8 +1,8 @@
 package fr.sos.witchhunt.controller;
 
 import fr.sos.witchhunt.model.players.Player;
-import fr.sos.witchhunt.view.Menu;
 import fr.sos.witchhunt.view.std.StdView;
+import fr.sos.witchhunt.Menu;
 import fr.sos.witchhunt.model.players.CPUPlayer;
 import fr.sos.witchhunt.model.players.HumanPlayer;
 
@@ -11,6 +11,8 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	//ATTRIBUTES
 	private static volatile Game instance = null;
 	private Tabletop tabletop;
+	private final int minPlayersNumber = 3;
+	private final int maxPlayersNumber = 6;
 	
 	private Game() {		
 		tabletop = Tabletop.getInstance();
@@ -50,18 +52,17 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private void addPlayers() {
 		Application.displayController.drawDashedLine();
 		int n=0;
-		Application.displayController.passLog("Add 3 to 6 players :\n");
-		while(n<3) {
+		Application.displayController.passLog("~ Add "+minPlayersNumber+" to "+maxPlayersNumber+" players : ~\n");
+		while(n<minPlayersNumber) {
 			n++;
 			tabletop.addPlayer(Application.inputController.createPlayer(n));
 		}
 		Application.displayController.displayYesNoQuestion("\tWould you like to add another player ?");
-		while(n<6 && Application.inputController.answerYesNoQuestion()) {
+		while(n<maxPlayersNumber && Application.inputController.answerYesNoQuestion()) {
 			n++;
 			tabletop.addPlayer(Application.inputController.createPlayer(n));
 		}
 		Application.displayController.passLog("\nAll "+Integer.toString(n)+" players have been successfully added.");
-		Application.displayController.passLog("Each will get "+(int)Math.ceil(12/(float)n)+" Rumour cards.");
 		Application.displayController.drawDashedLine();
 		Application.displayController.crlf();
 	}

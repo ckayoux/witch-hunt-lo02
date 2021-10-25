@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 import fr.sos.witchhunt.DisplayObserver;
+import fr.sos.witchhunt.Menu;
 import fr.sos.witchhunt.model.players.Player;
-import fr.sos.witchhunt.view.Menu;
 import fr.sos.witchhunt.view.std.StdView;
 
 public final class DisplayController implements DisplayObserver {
@@ -17,6 +17,12 @@ public final class DisplayController implements DisplayObserver {
 		console.makeMenu(m);
 		//T0D0 : makeMenu for GUI view
 	}
+	
+	public void displayPossibilities(Menu possibilities) {
+		console.logPossibilities(possibilities);
+		//T0D0 : makeMenu for GUI view
+	}
+	
 	public void displayYesNoQuestion(String q) {
 		console.yesNoQuestion(q);
 		//T0D0 : makeMenu for GUI view
@@ -32,6 +38,10 @@ public final class DisplayController implements DisplayObserver {
 	
 	public void drawDashedLine() {
 		console.logDashedLine();
+	}
+	
+	public void drawWeakDashedLine() {
+		console.logWeakDashedLine();
 	}
 	
 	@Override
@@ -92,5 +102,17 @@ public final class DisplayController implements DisplayObserver {
 		}
 		console.logClassment(names,scores);
 		//TODO : equivalent for gui view
+	}
+
+	public void chooseIdentityScreen() {
+		console.logChooseIdentityMessage();
+		//TODO : equivalent for gui
+	}
+
+	public void distributeHandScreen(int playersNumber) {
+		int cardsNumber = (int)Math.ceil(12/(float)playersNumber);
+		int discardedCardsNumber = 12%playersNumber;
+		console.logHandDistributionMessage(cardsNumber,discardedCardsNumber);
+		//TODO : equivalent for gui
 	}
 }

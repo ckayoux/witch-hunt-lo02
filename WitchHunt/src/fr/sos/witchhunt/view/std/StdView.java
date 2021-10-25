@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import fr.sos.witchhunt.Menu;
 import fr.sos.witchhunt.controller.Application;
-import fr.sos.witchhunt.view.Menu;
 
 
 public final class StdView {
@@ -28,6 +28,11 @@ public final class StdView {
 	public void logDashedLine() {
 		log("---------------------------------------------------------");
 	}
+	
+	public void logWeakDashedLine() {
+		log("     - - - - - - - - - - - - - - - - - - - - - - - - - - -");
+	}
+	
 	public void logHardLine() {
 		log("―――――――――――――――――――――――――――――――――――――――――――――――――――――――――");
 	}
@@ -48,12 +53,22 @@ public final class StdView {
 	public void makeMenu(Menu m) {
 		crlf();
 		logHardLine();
-		log(m.getName());
+		log(m.getName().toUpperCase());
 		logHardLine();
 		int n=0;
 		for (String str : m.getOptions()) {
 			n++;
 			log("\t "+Integer.toString(n)+" - "+ str);
+		}
+		crlf();
+	}
+	
+	public void logPossibilities(Menu possibilities) {
+		log("\t"+possibilities.getName());
+		int n=0;
+		for (String str : possibilities.getOptions()) {
+			n++;
+			log("\t\t "+Integer.toString(n)+" - "+ str);
 		}
 		crlf();
 	}
@@ -72,28 +87,30 @@ public final class StdView {
 	
 	public void logRoundStartMessage(int roundNumber) {
 		logDashedLine();
-		log("Round "+roundNumber+" :");
+		log("ROUND "+roundNumber+" :");
 		crlf();
 	}
 	
 	public void logRoundEndMessage(int roundNumber) {
 		crlf();
-		log("Round "+roundNumber+" is over.");
+		log("ROUND "+roundNumber+" IS OVER.");
 		crlf();
 	}
 	
 	public void logWinner(String name, int score) {
 		//TEMPORARY
 		crlf();
-		log("Winner :");
-		log("\tSorry, but my developpers are very lazy and \n\tI have yet no clue who the winner might possibly be.");
+		log("\tWINNER :");
+		log("\t\t!--Sorry, but my developpers are very lazy and \n\tI have yet no clue who the winner might possibly be.--!");
 		crlf();
 	}
 	
 	public void logScoreTable(String [][] table ) {
 		//TEMPORARY
-		log("Scores :");
-		log("\tSorry, but this feature is not avaliable yet"); //TEMPORARY
+		logWeakDashedLine();
+		crlf();
+		log("\tSCOREBOARD :");
+		log("\t\t!--This feature is not avaliable yet--!"); //TEMPORARY
 		crlf();
 	}
 
@@ -102,9 +119,24 @@ public final class StdView {
 	}
 
 	public void logClassment(List <String> names, List <Integer> scores) {
-		log("Classment :"); 
-		log("\tSorry, but this feature is not avaliable yet"); //TEMPORARY
+		log("\tCLASSMENT :"); 
+		log("\t\t!--This feature is not avaliable yet--!"); //TEMPORARY
 		crlf();
+	}
+
+	public void logChooseIdentityMessage() {
+		logWeakDashedLine();
+		crlf();
+		log("\t~ Please choose your identity for this round ~");
+		crlf();
+	}
+
+	public void logHandDistributionMessage(int cardsNumber,int discardedCardsNumber) {
+		crlf();
+		log("\t~ Each player has received " + cardsNumber + " Rumour cards ~");
+		if(discardedCardsNumber > 0) log("\t~ "+ discardedCardsNumber +" were put into the pile. ~");
+		crlf();
+		logWeakDashedLine();
 	}
 
 }

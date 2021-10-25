@@ -2,6 +2,8 @@ package fr.sos.witchhunt.model.players;
 
 import fr.sos.witchhunt.DisplayObservable;
 import fr.sos.witchhunt.DisplayObserver;
+import fr.sos.witchhunt.model.Identity;
+import fr.sos.witchhunt.model.cards.IdentityCard;
 
 public abstract class Player implements DisplayObservable {
 	
@@ -9,6 +11,8 @@ public abstract class Player implements DisplayObservable {
 	protected String name;
 	protected int id;
 	protected int score;
+	protected Identity identity;
+	protected IdentityCard identityCard;
 	protected DisplayObserver displayObserver;
 	
 	//CONSTRUCTORS
@@ -29,6 +33,9 @@ public abstract class Player implements DisplayObservable {
 	public void playTurn() {
 		requestLog("\t"+this.name + " : it's my turn !");
 	}
+	public void chooseIdentity() {
+		this.identityCard = new IdentityCard();
+	};
 	
 	//DISPLAY METHODS
 	@Override
@@ -36,15 +43,20 @@ public abstract class Player implements DisplayObservable {
 		displayObserver.passLog(msg);
 	}
 	
-	//SETTERS
-	public void setDisplayObserver(DisplayObserver dO) {
-		this.displayObserver=dO;
-	}
+	//GETTERS
 	public String getName() {
 		return this.name;
 	}
 	public int getScore() {
 		return this.score;
+	}
+	public boolean canHunt() {
+		return true; //TEMPORARY
+	}
+	
+	//SETTERS
+	public void setDisplayObserver(DisplayObserver dO) {
+		this.displayObserver=dO;
 	}
 	
 }

@@ -5,10 +5,10 @@ import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 
 import fr.sos.witchhunt.InputObserver;
+import fr.sos.witchhunt.Menu;
 import fr.sos.witchhunt.model.players.CPUPlayer;
 import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
-import fr.sos.witchhunt.view.Menu;
 import fr.sos.witchhunt.view.std.InterruptibleStdInput;
 import fr.sos.witchhunt.view.std.StdView;
 
@@ -23,10 +23,26 @@ public final class InputController implements InputObserver {
 		int choice;
 		boolean correct;
 		int n = m.getOptionsNumber();
+		int timesWrong=0;
 		choice = getIntInput();
 		if(!(1 <= choice && choice <= n)) {
 				correct = false;
-				Application.displayController.passLog("Invalid choice. Please enter an integer in the range 1.."+Integer.toString(n)+" :");
+				timesWrong++;
+				String helperMsg = "Please enter an integer in the range 1.."+Integer.toString(n)+" :" ;
+				if(timesWrong==2) {
+					Application.displayController.passLog("Are you doing it on purpose ?");
+					if(n!=1)Application.displayController.passLog("helperMsg");
+				}
+				else if (timesWrong==3) {
+					Application.displayController.passLog("Come on ! I believe in you ! You can do it !");
+					if(n!=1)Application.displayController.passLog("helperMsg");
+				}
+				else {
+					if(n==1) {
+						Application.displayController.passLog("You can only choose option #1 here !");
+					}
+					else Application.displayController.passLog("Invalid choice. "+helperMsg);
+				}
 				return makeChoice(m);
 		}else {
 			Application.displayController.crlf();
@@ -57,14 +73,22 @@ public final class InputController implements InputObserver {
 		return output;
 	}
 	
-	public String getStringInput() {
+	public void getInput() {
 		stdInputThread= new Thread( new InterruptibleStdInput());
 		stdInputThread.start();
 		try{latch.await();}
 		catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		return receivedString;
+	}
+	
+	public String getStringInput() {
+		getInput();
+		if (receivedString.equals("")) {
+			Application.displayController.passLog("\tPlease make your choice.");
+			return getStringInput();
+		}
+		else return receivedString;
 	}
 	public int getIntInput() {
 		return Integer.parseInt(getStringInput());
@@ -78,7 +102,7 @@ public final class InputController implements InputObserver {
 			return false;
 		}
 		else {
-			Application.displayController.passLog("Invalid answer. Please type in whether 'y' or 'n' :"); 
+			Application.displayController.passLog("\tInvalid answer. Please type in whether 'y' or 'n' :"); 
 			return answerYesNoQuestion();
 		}
 	}
@@ -96,7 +120,7 @@ public final class InputController implements InputObserver {
 	
 	public void wannaContinue() {
 		Application.displayController.displayContinueMessage();
-		getStringInput();
+		getInput();
 	}
 	
 	public void interruptStdInput() {

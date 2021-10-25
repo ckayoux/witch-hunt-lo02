@@ -1,7 +1,7 @@
 package fr.sos.witchhunt.model.cards;
 
 public abstract class Card {
-	protected boolean revealed;
+	protected boolean revealed=false;
 	
 	public void reveal() {
 		this.revealed=true;

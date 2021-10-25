@@ -40,10 +40,16 @@ public final class Round {
 	
 	//UTILS METHODS
 	private void distributeIdentity() {
-		
+		Application.displayController.chooseIdentityScreen();
+		for(Player p : getPlayersList()) {
+			p.chooseIdentity();
+		}
+		Application.displayController.crlf();
+		Application.displayController.drawWeakDashedLine();
 	}
 	private void distributeHand() {
-		
+		//TODO : actually distribute cards
+		Application.displayController.distributeHandScreen(Tabletop.getInstance().getPlayersCount());
 	}
 	private boolean isOver() {
 		/*The round is over when :
@@ -64,6 +70,9 @@ public final class Round {
 	}
 	public Turn getCurrentTurn() {
 		return currentTurn;
+	}
+	private List<Player> getPlayersList() {
+		return Tabletop.getInstance().getPlayersList();
 	}
 	
 	//SETTERS
