@@ -8,6 +8,7 @@ public abstract class Player implements DisplayObservable {
 	//ATTRIBUTES
 	protected String name;
 	protected int id;
+	protected int score;
 	protected DisplayObserver displayObserver;
 	
 	//CONSTRUCTORS
@@ -26,7 +27,7 @@ public abstract class Player implements DisplayObservable {
 	
 	//GAME ACTIONS METHODS
 	public void playTurn() {
-		requestLog(this.name + " : it's my turn !");
+		requestLog("\t"+this.name + " : it's my turn !");
 	}
 	
 	//DISPLAY METHODS
@@ -38,6 +39,12 @@ public abstract class Player implements DisplayObservable {
 	//SETTERS
 	public void setDisplayObserver(DisplayObserver dO) {
 		this.displayObserver=dO;
+	}
+	public String getName() {
+		return this.name;
+	}
+	public int getScore() {
+		return this.score;
 	}
 	
 }

@@ -12,6 +12,7 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private List <Player> playersList;
 	private Round currentRound;
 	private Player lastUnrevealedPlayer;
+	private ScoreCounter scoreCounter;
 
 	//CONSTRUCTOR
 	private Tabletop () {
@@ -42,23 +43,31 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	
 	//GAME ACTION METHODS
 	public void startPlaying() {
-		Application.displayController.crlf();
-		Application.displayController.passLog("Let the witch hunt begin !");
-		Application.displayController.drawHardLine();
+		Application.displayController.displayMatchStartScreen();
+		
+		scoreCounter = new ScoreCounter();
 		
 		currentRound = new Round();
 		while (!gameIsOver()){
+			Application.displayController.displayScoreTable(scoreCounter);
+			Application.inputController.wannaContinue();
 			resetStates();
 			currentRound = null;
 			currentRound = new Round();
 		}
+		currentRound = null;
+		scoreCounter=null;
 		
-		Application.displayController.crlf();
-		Application.displayController.passLog("The game is over.");
-		//TODO : determine who is the winner
-		Application.displayController.passLog("Sorry, but my developpers are very lazy and I have yet no clue who the winner might possibly be.");
-		Application.displayController.crlf();
-		Application.displayController.drawHardLine();
+		Application.displayController.displayMatchEndScreen();
+		Application.displayController.displayWinner("winner's name",5); //TODO : use real values
+		Application.displayController.displayClassment(scoreCounter.getClassment());
+		Application.displayController.displayScoreTable(scoreCounter);
+		
+		Application.inputController.wannaContinue();
+		
+		playersList = null;
+		playersList = new ArrayList<Player>();
+		Game.getInstance().gotoMainMenu();
 	}
 	
 	//GETTERS
@@ -84,6 +93,10 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	
 	public List<Player> getPlayersList() {
 		return playersList;
+	}
+	
+	public ScoreCounter getScoreCounter() {
+		return scoreCounter;
 	}
 	
 	public int getPlayersCount() {

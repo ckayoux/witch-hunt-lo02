@@ -29,7 +29,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
         return Game.instance;
     }
 	
-	private void gotoMainMenu() {
+	public void gotoMainMenu() {
 		Menu mainMenu = new Menu("main menu","Start new game","Exit");
 		Application.displayController.displayMenu(mainMenu);
 		switch (Application.inputController.makeChoice(mainMenu)) {
@@ -43,6 +43,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	
 	public void startGame () {
 		addPlayers();
+		Application.inputController.wannaContinue();
 		Tabletop.getInstance().startPlaying();
 	}
 	
@@ -72,6 +73,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	}
 	public static void exit() {
 		Application.displayController.crlf();
+		Application.displayController.drawStarsLine();
 		Application.displayController.passLog("See you soon !");
 	}
 	

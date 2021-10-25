@@ -94,6 +94,11 @@ public final class InputController implements InputObserver {
 		interruptStdInput();
 	}
 	
+	public void wannaContinue() {
+		Application.displayController.displayContinueMessage();
+		getStringInput();
+	}
+	
 	public void interruptStdInput() {
 		if(stdInputThread != null) {
 			if(stdInputThread.isAlive()) {

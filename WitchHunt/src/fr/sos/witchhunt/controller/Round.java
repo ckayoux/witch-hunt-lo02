@@ -22,8 +22,7 @@ public final class Round {
 		roundNumber++;
 		Turn.setTurnNumber(0);
 		
-		Application.displayController.crlf();
-		Application.displayController.passLog("Round "+roundNumber+" :");
+		Application.displayController.displayRoundStartScreen(roundNumber);
 		//at the start of a round, before the first turn, each player has to choose an Identity and Rumour cards.
 		distributeIdentity();
 		distributeHand();
@@ -36,10 +35,7 @@ public final class Round {
 		
 		Tabletop.getInstance().setLastUnrevealedPlayer(getNextPlayer());//TODO : pass last unrevealed player instead.
 		
-		Application.displayController.crlf();
-		Application.displayController.passLog("Round "+roundNumber+" is over.");
-		Application.displayController.crlf();
-		Application.displayController.drawDashedLine();
+		Application.displayController.displayRoundEndScreen(roundNumber);
 	}
 	
 	//UTILS METHODS
