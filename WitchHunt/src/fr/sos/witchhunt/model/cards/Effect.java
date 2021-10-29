@@ -4,10 +4,12 @@ public abstract class Effect {
 	String description;
 	int value;
 	
-	public abstract void perform();
-	public abstract boolean isAllowed() ;
+	public abstract void perform(); //has to be redefined
+	public boolean isAllowed() {
+		return true; //has to be redefined for some cards
+	}
 	
-	private void takeNextTurn() {
+	public void takeNextTurn() {
 		//TODO
 	}
 	

@@ -1,7 +1,7 @@
 package fr.sos.witchhunt.controller;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.sos.witchhunt.model.players.Player;
 
@@ -92,6 +92,9 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		return currentRound.getCurrentTurn().getAccusator();
 	}
 	
+	public Player getCurrentPlayer() {
+		return currentRound.getCurrentPlayer();
+	}
 	public List<Player> getPlayersList() {
 		return playersList;
 	}

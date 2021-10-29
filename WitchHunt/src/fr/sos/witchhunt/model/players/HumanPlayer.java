@@ -2,8 +2,8 @@ package fr.sos.witchhunt.model.players;
 
 import fr.sos.witchhunt.InputObservable;
 import fr.sos.witchhunt.PlayerInputObserver;
-import fr.sos.witchhunt.Menu;
 import fr.sos.witchhunt.model.Identity;
+import fr.sos.witchhunt.model.Menu;
 
 public final class HumanPlayer extends Player implements InputObservable {
 	
@@ -19,6 +19,7 @@ public final class HumanPlayer extends Player implements InputObservable {
 	}
 	
 	//GAME ACTIONS METHODS
+	@Override
 	public void chooseIdentity() {
 		super.chooseIdentity();
 		Menu possibilities;
@@ -34,8 +35,10 @@ public final class HumanPlayer extends Player implements InputObservable {
 				this.identity=Identity.WITCH;
 				break;
 		}
+		this.identityCard.setChosenIdentity(this.identity);
 	}
 	
+	@Override
 	public void playTurn() {
 		super.playTurn();
 		Menu possibilities;
@@ -60,6 +63,7 @@ public final class HumanPlayer extends Player implements InputObservable {
 	}
 	
 	//INPUT METHODS
+	@Override
 	public void setInputObserver(PlayerInputObserver io) {
 		inputObserver = io;
 	}

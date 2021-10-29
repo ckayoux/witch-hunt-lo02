@@ -36,6 +36,10 @@ public abstract class Player implements DisplayObservable {
 	public void chooseIdentity() {
 		this.identityCard = new IdentityCard();
 	};
+	public Identity revealIdentity() {
+		this.identityCard.reveal();
+		return this.identity;
+	}
 	
 	//DISPLAY METHODS
 	@Override
@@ -47,6 +51,12 @@ public abstract class Player implements DisplayObservable {
 	public String getName() {
 		return this.name;
 	}
+	public Identity getIdentity() {
+		return this.identity;
+	}
+	public boolean isRevealed() {
+		return this.identityCard.isRevealed();
+	}
 	public int getScore() {
 		return this.score;
 	}
@@ -55,6 +65,7 @@ public abstract class Player implements DisplayObservable {
 	}
 	
 	//SETTERS
+	@Override
 	public void setDisplayObserver(PlayerDisplayObserver dO) {
 		this.displayObserver=dO;
 	}
