@@ -2,6 +2,8 @@ package fr.sos.witchhunt.controller;
 
 import java.util.List;
 
+import fr.sos.witchhunt.model.cards.RumourCard;
+import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;
 
 public final class Round {
@@ -11,6 +13,7 @@ public final class Round {
 	private static Player nextPlayer;
 	private static int roundNumber=0;
 	private Turn currentTurn;
+	private RumourCardsPile commonPile;
 	
 	//CONSTRUCTOR
 	public Round() {
@@ -25,6 +28,7 @@ public final class Round {
 		Application.displayController.displayRoundStartScreen(roundNumber);
 		//at the start of a round, before the first turn, each player has to choose an Identity and Rumour cards.
 		distributeIdentity();
+		commonPile = new RumourCardsPile();
 		distributeHand();
 		
 		do {
@@ -32,6 +36,8 @@ public final class Round {
 			new Turn(currentPlayer);
 			currentPlayer=nextPlayer; //Rumour cards played during the turn might have changed the next player.
 		}while(!isOver()); //We keep starting new turns until the round is over.
+		
+		recycleRumourCards(); //returning all rumourCards to the main pile, of Tabletop's instance
 		
 		Tabletop.getInstance().setLastUnrevealedPlayer(getNextPlayer());//TODO : pass last unrevealed player instead.
 		
@@ -48,14 +54,37 @@ public final class Round {
 		Application.displayController.drawWeakDashedLine();
 	}
 	private void distributeHand() {
-		//TODO : actually distribute cards
-		Application.displayController.distributeHandScreen(Tabletop.getInstance().getPlayersCount());
+		int playersNumber = Tabletop.getInstance().getPlayersCount();
+		int totalCardsCount = Game.getTotalRumourCardsCount();
+		int distributedCardsNumber = (int) Math.floor(totalCardsCount / (float)playersNumber);
+		int discardedCardsNumber = totalCardsCount % playersNumber;
+		
+		RumourCardsPile allCardsPile = Tabletop.getInstance().getAllCards();
+		allCardsPile.shuffle();
+		for (int i=0; i<discardedCardsNumber; i++) {
+			RumourCard givenCard = allCardsPile.getCards().get(i);
+			allCardsPile.giveCard(givenCard, commonPile);
+		}
+		for (Player p : Tabletop.getInstance().getPlayersList()) {
+			for(int i=0; i<distributedCardsNumber; i++) {
+				RumourCard givenCard = allCardsPile.getCards().get(i);
+				allCardsPile.giveCard(givenCard, p.getHand());
+			}
+		}
+		
+		Application.displayController.distributeHandScreen();
+		
 	}
 	private boolean isOver() {
 		/*The round is over when :
 		 * - Whether only one player is still unrevealed
 		 * - or one player reached a score of 5*/
 		return (Turn.getTurnNumber()<5)?false:true;//TEMPORARY
+	}
+	
+	private void recycleRumourCards() {
+		Tabletop.getInstance().getAllCardsPile().eat(commonPile); //returning the common pile to the main cards pile
+		for(Player p : getPlayersList()) Tabletop.getInstance().getAllCardsPile().eat(p.getHand());
 	}
 	
 	//GETTERS
@@ -73,6 +102,9 @@ public final class Round {
 	}
 	private List<Player> getPlayersList() {
 		return Tabletop.getInstance().getPlayersList();
+	}
+	public RumourCardsPile getPile() {
+		return this.commonPile;
 	}
 	
 	//SETTERS

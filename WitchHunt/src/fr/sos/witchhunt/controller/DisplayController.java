@@ -1,10 +1,10 @@
 package fr.sos.witchhunt.controller;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.sos.witchhunt.PlayerDisplayObserver;
-import fr.sos.witchhunt.Menu;
+import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.std.StdView;
 
@@ -109,10 +109,12 @@ public final class DisplayController implements PlayerDisplayObserver {
 		//TODO : equivalent for gui
 	}
 
-	public void distributeHandScreen(int playersNumber) {
-		int cardsNumber = (int)Math.ceil(12/(float)playersNumber);
-		int discardedCardsNumber = 12%playersNumber;
-		console.logHandDistributionMessage(cardsNumber,discardedCardsNumber);
+	public void distributeHandScreen() {
+		int totalRumourCardsCount = Game.getTotalRumourCardsCount();
+		int playersCount = Tabletop.getInstance().getPlayersCount();
+		int distributedCardsCount = (int)Math.floor( totalRumourCardsCount / (float)playersCount );
+		int discardedCardsCount = totalRumourCardsCount % playersCount;
+		console.logHandDistributionMessage(distributedCardsCount,discardedCardsCount);
 		//TODO : equivalent for gui
 	}
 }

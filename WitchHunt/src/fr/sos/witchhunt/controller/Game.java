@@ -1,18 +1,15 @@
 package fr.sos.witchhunt.controller;
 
-import fr.sos.witchhunt.model.players.Player;
-import fr.sos.witchhunt.view.std.StdView;
-import fr.sos.witchhunt.Menu;
-import fr.sos.witchhunt.model.players.CPUPlayer;
-import fr.sos.witchhunt.model.players.HumanPlayer;
+import fr.sos.witchhunt.model.Menu;
 
 public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 
 	//ATTRIBUTES
 	private static volatile Game instance = null;
 	private Tabletop tabletop;
-	private final int minPlayersNumber = 3;
-	private final int maxPlayersNumber = 6;
+	private final static int minPlayersNumber = 3;
+	private final static int maxPlayersNumber = 6;
+	private final static int totalRumourCardsCount = 12;
 	
 	private Game() {		
 		tabletop = Tabletop.getInstance();
@@ -65,6 +62,10 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		Application.displayController.passLog("\nAll "+Integer.toString(n)+" players have been successfully added.");
 		Application.displayController.drawDashedLine();
 		Application.displayController.crlf();
+	}
+	
+	public static int getTotalRumourCardsCount() {
+		return this.totalRumourCardsNumber;
 	}
 	
 	

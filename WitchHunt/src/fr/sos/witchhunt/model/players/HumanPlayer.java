@@ -21,7 +21,6 @@ public final class HumanPlayer extends Player implements InputObservable {
 	//GAME ACTIONS METHODS
 	@Override
 	public void chooseIdentity() {
-		super.chooseIdentity();
 		Menu possibilities;
 		possibilities = new Menu(name+" , make your choice (others, don't look !) :",
 									"Villager",

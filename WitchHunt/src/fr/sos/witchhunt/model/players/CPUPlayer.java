@@ -13,7 +13,6 @@ public final class CPUPlayer extends Player {
 	
 	@Override
 	public final void chooseIdentity() {
-		super.chooseIdentity();
 		this.identity = chosenStrategy.chooseIdentity();
 		this.identityCard.setChosenIdentity(this.identity);
 		displayObserver.passLog("\t"+this.name+" has chosen its identity.");
