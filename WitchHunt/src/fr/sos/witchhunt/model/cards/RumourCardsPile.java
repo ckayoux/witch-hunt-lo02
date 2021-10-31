@@ -6,7 +6,6 @@ import java.util.List;
 
 public final class RumourCardsPile {
 	private List <RumourCard> cards = new ArrayList <RumourCard> ();
-	
 	public void addCard(RumourCard rc) {
 		this.cards.add(rc);
 	}
@@ -23,9 +22,8 @@ public final class RumourCardsPile {
 	}
 	
 	public void eat(RumourCardsPile rcp) {
-		for(RumourCard rc : rcp.getCards()) {
-			rcp.giveCard(rc,this);
-		}
+		this.cards.addAll(rcp.getCards());
+		rcp.getCards().removeAll(rcp.getCards());
 	}
 	
 	public void shuffle() {

@@ -58,6 +58,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		while(n<maxPlayersNumber && Application.inputController.answerYesNoQuestion()) {
 			n++;
 			tabletop.addPlayer(Application.inputController.createPlayer(n));
+			Application.displayController.displayYesNoQuestion("\tWould you like to add another player ?");
 		}
 		Application.displayController.passLog("\nAll "+Integer.toString(n)+" players have been successfully added.");
 		Application.displayController.drawDashedLine();

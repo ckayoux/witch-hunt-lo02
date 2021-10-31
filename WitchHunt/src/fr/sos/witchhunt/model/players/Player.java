@@ -28,16 +28,18 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 			this.name=name;
 			this.id=id;
 		}
-		
 		this.identityCard = new IdentityCard();
+		this.hand = new RumourCardsPile();
 	}
 	public Player(int id) {
 		this.id=id;
+		this.identityCard = new IdentityCard();
+		this.hand = new RumourCardsPile();
 	}
 	
 	//GAME ACTIONS METHODS
 	public void playTurn() {
-		requestLog("\t"+this.name + " : it's my turn !");
+		requestPlayTurnMessage();
 	}
 	public abstract void chooseIdentity();;
 	public Identity revealIdentity() {
@@ -57,6 +59,10 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	@Override
 	public void requestLog(String msg) {
 		displayObserver.passLog(msg);
+	}
+	@Override
+	public void requestPlayTurnMessage() {
+		displayObserver.displayPlayTurnMessage(name);
 	}
 	
 	//GETTERS

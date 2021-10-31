@@ -117,4 +117,10 @@ public final class DisplayController implements PlayerDisplayObserver {
 		console.logHandDistributionMessage(distributedCardsCount,discardedCardsCount);
 		//TODO : equivalent for gui
 	}
+
+	@Override
+	public void displayPlayTurnMessage(String playerName) {
+		console.logPlayTurnMessage(playerName);
+		
+	}
 }

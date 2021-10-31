@@ -67,7 +67,7 @@ public final class Round {
 		}
 		for (Player p : Tabletop.getInstance().getPlayersList()) {
 			for(int i=0; i<distributedCardsNumber; i++) {
-				RumourCard givenCard = allCardsPile.getCards().get(i);
+				RumourCard givenCard = allCardsPile.getCards().get(0);
 				allCardsPile.giveCard(givenCard, p.getHand());
 			}
 		}

@@ -138,4 +138,8 @@ public final class StdView {
 		logWeakDashedLine();
 	}
 
+	public void logPlayTurnMessage(String playerName) {
+		log("\tIt is " + playerName + (playerName.charAt(playerName.length()-1)!='s'?"'s":"'") + " turn.");
+	}
+
 }

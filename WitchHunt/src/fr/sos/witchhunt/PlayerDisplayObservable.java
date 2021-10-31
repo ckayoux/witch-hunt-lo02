@@ -6,4 +6,5 @@ public interface PlayerDisplayObservable {
 
 	public void requestLog(String msg);
 	public void setDisplayObserver(PlayerDisplayObserver pdo);
+	public void requestPlayTurnMessage();
 }
