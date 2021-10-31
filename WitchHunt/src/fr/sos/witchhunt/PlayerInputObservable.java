@@ -1,5 +1,5 @@
 package fr.sos.witchhunt;
 
-public interface InputObservable {
+public interface PlayerInputObservable {
 	public void setInputObserver(PlayerInputObserver pio);
 }

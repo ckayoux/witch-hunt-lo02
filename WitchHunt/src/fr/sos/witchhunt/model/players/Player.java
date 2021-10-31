@@ -1,6 +1,6 @@
 package fr.sos.witchhunt.model.players;
 
-import fr.sos.witchhunt.DisplayObservable;
+import fr.sos.witchhunt.PlayerDisplayObservable;
 import fr.sos.witchhunt.PlayerDisplayObserver;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Resettable;
@@ -8,7 +8,7 @@ import fr.sos.witchhunt.model.cards.IdentityCard;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 
-public abstract class Player implements DisplayObservable, Resettable {
+public abstract class Player implements PlayerDisplayObservable, Resettable {
 	
 	//ATTRIBUTES
 	protected String name;

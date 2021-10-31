@@ -1,11 +1,11 @@
 package fr.sos.witchhunt.model.players;
 
-import fr.sos.witchhunt.InputObservable;
+import fr.sos.witchhunt.PlayerInputObservable;
 import fr.sos.witchhunt.PlayerInputObserver;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 
-public final class HumanPlayer extends Player implements InputObservable {
+public final class HumanPlayer extends Player implements PlayerInputObservable {
 	
 	private PlayerInputObserver inputObserver;
 	
