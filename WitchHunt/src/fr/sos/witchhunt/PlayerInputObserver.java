@@ -4,5 +4,4 @@ import fr.sos.witchhunt.model.Menu;
 
 public interface PlayerInputObserver {
 	public int makeChoice(Menu possibilities);
-	public void setInputObserver(PlayerInputObserver io);
 }
