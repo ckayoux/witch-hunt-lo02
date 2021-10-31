@@ -135,4 +135,5 @@ public final class InputController implements PlayerInputObserver {
 	public void wake() {
 		this.latch.countDown();
 	}
+
 }
