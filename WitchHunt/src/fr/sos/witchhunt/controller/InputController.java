@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 
 import fr.sos.witchhunt.PlayerInputObserver;
-import fr.sos.witchhunt.Menu;
+import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.players.CPUPlayer;
 import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;

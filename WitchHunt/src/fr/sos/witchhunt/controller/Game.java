@@ -65,7 +65,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	}
 	
 	public static int getTotalRumourCardsCount() {
-		return this.totalRumourCardsNumber;
+		return totalRumourCardsCount;
 	}
 	
 	

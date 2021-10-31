@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import fr.sos.witchhunt.Menu;
 import fr.sos.witchhunt.controller.Application;
+import fr.sos.witchhunt.model.Menu;
 
 
 public final class StdView {

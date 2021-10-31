@@ -59,7 +59,7 @@ public final class Round {
 		int distributedCardsNumber = (int) Math.floor(totalCardsCount / (float)playersNumber);
 		int discardedCardsNumber = totalCardsCount % playersNumber;
 		
-		RumourCardsPile allCardsPile = Tabletop.getInstance().getAllCards();
+		RumourCardsPile allCardsPile = Tabletop.getInstance().getAllCardsPile();
 		allCardsPile.shuffle();
 		for (int i=0; i<discardedCardsNumber; i++) {
 			RumourCard givenCard = allCardsPile.getCards().get(i);
