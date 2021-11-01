@@ -37,9 +37,33 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		this.identityCard.setChosenIdentity(this.identity);
 	}
 	
+	
 	@Override
-	public void playTurn() {
-		super.playTurn();
+	protected void accuse() {
+		displayObserver.passLog("\t!--This feature is not avaliable yet--!");//TEMPORARY
+		super.accuse();
+	}
+	
+	@Override
+	protected Player choosePlayerToAccuse() {
+		// TODO choisir dans un menu le jouer à accuser parmis Tabletop.getInstance().getAccusablePlayers();
+		return null;
+	}
+	
+	
+	@Override
+	public Identity defend() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public void hunt() {
+		displayObserver.passLog("\t!--This feature is not avaliable yet--!");//TEMPORARY
+	}
+	
+	@Override
+	public TurnAction chooseTurnAction() {
 		Menu possibilities;
 		if(this.canHunt()) {
 			possibilities = new Menu("Choose one of these two offensive actions :",
@@ -53,18 +77,17 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		displayObserver.displayPossibilities(possibilities);
 		switch(inputObserver.makeChoice(possibilities)) {
 			case 1:
-				displayObserver.passLog("\t!--This feature is not avaliable yet--!");//TEMPORARY
-				break;
+				return TurnAction.ACCUSE;
 			case 2:
-				displayObserver.passLog("\t!--This feature is not avaliable yet--!");//TEMPORARY
-				break;
+				return TurnAction.HUNT;
 		}
+		return null;
 	}
-	
+
 	//INPUT METHODS
 	@Override
 	public void setInputObserver(PlayerInputObserver io) {
 		inputObserver = io;
 	}
-	
+
 }

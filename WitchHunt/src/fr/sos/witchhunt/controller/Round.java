@@ -79,6 +79,12 @@ public final class Round {
 		/*The round is over when :
 		 * - Whether only one player is still unrevealed
 		 * - or one player reached a score of 5*/
+		/*REAL CONDITION, To uncomment when other functionnalities are ready :
+		int unrevealedPlayersCount = 0;
+		for (Player p : Tabletop.getInstance().getPlayersList()) {
+			if (!p.isRevealed()) unrevealedPlayersCount++;
+		}
+		return (unrevealedPlayersCount <= 1);*/
 		return (Turn.getTurnNumber()<5)?false:true;//TEMPORARY
 	}
 	
@@ -109,11 +115,11 @@ public final class Round {
 	
 	//SETTERS
 	public void setNextPlayer(Player p) {
-		nextPlayer = nextPlayer;
+		nextPlayer = p;
 	}
 	public void setNextPlayerClockwise() {
 		//automatically sets the next player to the one after the current player in Tabletop's players list
-		List <Player> L = Tabletop.getInstance().getPlayersList();
+		List <Player> L = Tabletop.getInstance().getActivePlayersList();
 		nextPlayer = L.get((L.indexOf(currentPlayer)+1) % L.size());
 	}
 

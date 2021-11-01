@@ -131,7 +131,11 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	public List<Player> getPlayersList() {
 		return playersList;
 	}
-	
+	public List<Player> getActivePlayersList() {
+		List <Player> l = new ArrayList<Player> ();
+		playersList.forEach(p -> {if (p.isActive()) l.add(p);});
+		return l;
+	}
 	public ScoreCounter getScoreCounter() {
 		return scoreCounter;
 	}
@@ -147,5 +151,11 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	//SETTERS
 	public void setLastUnrevealedPlayer(Player p) {
 		lastUnrevealedPlayer = p;
+	}
+
+	public List<Player> getAccusablePlayersList() {
+		List <Player> l = new ArrayList<Player>();
+		playersList.forEach(p -> { if(p.isAccusable()) l.add(p); });
+		return l;
 	}
 }
