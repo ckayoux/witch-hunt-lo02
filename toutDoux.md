@@ -30,7 +30,6 @@
 + _**ScoreCounter**_ et conditions de victoire dans Tabletop
 ### model
 + méthode _CPUPlayer.**choosePlayerToAccuse()**_, exemple pour la stratégie ExploringStrategy
-+ méthode _Player.**defend()**_ : *pouvoir jouer un effet witch ou _Player.**revealIdentity()**_
 + fonctionnalité pour qu'un joueur humain puisse afficher ses cartes lors de son tour
 + méthode _Player.**hunt()**_
 + coder les effets de chacune des RumourCards
