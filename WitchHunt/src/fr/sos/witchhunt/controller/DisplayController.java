@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.sos.witchhunt.PlayerDisplayObserver;
+import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.std.StdView;
@@ -119,8 +120,44 @@ public final class DisplayController implements PlayerDisplayObserver {
 	}
 
 	@Override
-	public void displayPlayTurnMessage(String playerName) {
+	public void displayPlayTurnScreen(String playerName) {
 		console.logPlayTurnMessage(playerName);
 		
+	}
+
+	@Override
+	public void displayAccusationScreen(Player accusator, Player accused) {
+		console.logAccusationMessage(accusator.getName(),accused.getName());
+		// TODO equivalent for gui
+	}
+
+	@Override
+	public void displayForcedToRevealScreen() {
+		console.logForcedToRevealMessage();
+		//ToutDoux : equivalent for gui
+	}
+
+	@Override
+	public void displayIdentityRevealScreen(Player p) {
+		switch(p.getIdentity()) {
+			case VILLAGER:
+				console.logVillagerRevealMessage(p.getName());
+				break;
+			case WITCH:
+				console.logWitchRevealMessage(p.getName());
+				break;
+		}
+		// Tout doux : equivalent for gui
+	}
+
+	@Override
+	public void displayScoreUpdateScreen(Player p, int points) {
+		console.logUpdateScreenMessage(p.getName(),points,p.getScore());
+	}
+
+	@Override
+	public void displayEliminationScreen(Player eliminator, Player victim) {
+		console.logEliminationMessage(eliminator.getName(),victim.getName());
+		// Tout doux : equivalent for gui
 	}
 }

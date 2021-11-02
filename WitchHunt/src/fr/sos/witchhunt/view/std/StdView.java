@@ -20,6 +20,10 @@ public final class StdView {
 		System.out.println(msg);
 	}
 	
+	public void print(String msg) {
+		System.out.print(msg);
+	}
+	
 	public void logStarsLine() {
 		log("*********************************************************");
 	}
@@ -140,6 +144,36 @@ public final class StdView {
 
 	public void logPlayTurnMessage(String playerName) {
 		log("\tIt is " + playerName + (playerName.charAt(playerName.length()-1)!='s'?"'s":"'") + " turn.");
+	}
+
+	public void logAccusationMessage(String accusatorName, String accusedName) {
+		log("\n\t"+accusedName + ", " + accusatorName + " accused you of practicing witchcraft !");
+		log("\tWhat do you have to say in your defense ?\n");
+	}
+
+	public void logForcedToRevealMessage() {
+		log("\tYou have no other choice but to reveal who you really are ...");
+	}
+
+	public void logVillagerRevealMessage(String playerName) {
+		log("\t\t"+playerName+" is going to reveal their identity...");
+		log("\t\t"+playerName+" is only a villager.\n");
+	}
+	public void logWitchRevealMessage(String playerName) {
+		log("\t\t"+playerName+" is going to reveal their identity...");
+		log("\t\t"+playerName+" was a witch !\n");
+	}
+
+	public void logUpdateScreenMessage(String playerName, int points, int totalPlayerScore) {
+		if(points>0) print("\t"+playerName+" earned "+Integer.toString(points));
+		else if (points<0) print("\t"+playerName+" lost "+Integer.toString(points));
+		else;
+		print(" " + ( (Math.abs(points) == 1)?"point":"points" ) + ".");
+		print(" (Total : "+ totalPlayerScore+")\n");
+	}
+
+	public void logEliminationMessage(String eliminatorName, String victimName) {
+		log("\t"+eliminatorName + " has eliminated " + victimName + ".");
 	}
 
 }

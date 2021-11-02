@@ -1,6 +1,7 @@
 package fr.sos.witchhunt.model.players.cpustrategies;
 
 import fr.sos.witchhunt.model.Identity;
+import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
 
@@ -12,7 +13,7 @@ public final class ExploringStrategy implements PlayStrategy {
 	
 	@Override
 	public Identity chooseIdentity() {
-		int n = (int) Math.random()*2;
+		int n = (int) Math.round(Math.random());
 		return (n==0) ? Identity.VILLAGER : Identity.WITCH;
 	}
 
@@ -23,7 +24,8 @@ public final class ExploringStrategy implements PlayStrategy {
 
 	@Override
 	public Player selectPlayerToAccuse() {
-		// TODO
+		// TOUT DOUX
 		return null;
-	} 
+	}
+
 }

@@ -10,6 +10,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private final static int minPlayersNumber = 3;
 	private final static int maxPlayersNumber = 6;
 	private final static int totalRumourCardsCount = 12;
+	private static int cpuPlayersNumber=0;
 	
 	private Game() {		
 		tabletop = Tabletop.getInstance();
@@ -69,6 +70,12 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		return totalRumourCardsCount;
 	}
 	
+	public static int getCPUPlayersNumber() {
+		return cpuPlayersNumber;
+	}
+	public static void incrementCPUPlayersNumber() {
+		cpuPlayersNumber++;
+	}
 	
 	public static void exit() {
 		Application.displayController.crlf();

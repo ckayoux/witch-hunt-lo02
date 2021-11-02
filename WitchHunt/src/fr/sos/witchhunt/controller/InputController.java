@@ -30,16 +30,16 @@ public final class InputController implements PlayerInputObserver {
 				timesWrong++;
 				String helperMsg = "Please enter an integer in the range 1.."+Integer.toString(n)+" :" ;
 				if(timesWrong==2) {
-					Application.displayController.passLog("Are you doing it on purpose ?");
+					Application.displayController.passLog("\tAre you doing it on purpose ?");
 					if(n!=1)Application.displayController.passLog("helperMsg");
 				}
 				else if (timesWrong==3) {
-					Application.displayController.passLog("Come on ! I believe in you ! You can do it !");
+					Application.displayController.passLog("\tCome on ! I believe in you ! You can do it !");
 					if(n!=1)Application.displayController.passLog("helperMsg");
 				}
 				else {
 					if(n==1) {
-						Application.displayController.passLog("You can only choose option #1 here !");
+						Application.displayController.passLog("\tYou can only choose option #1 here !");
 					}
 					else Application.displayController.passLog("Invalid choice. "+helperMsg);
 				}
@@ -66,8 +66,9 @@ public final class InputController implements PlayerInputObserver {
 			output=(Player) temp;
 		}
 		else {
+			Game.incrementCPUPlayersNumber();
 			Application.displayController.crlf();
-			output = new CPUPlayer(id);
+			output = new CPUPlayer(id,Game.getCPUPlayersNumber());
 		}
 		output.setDisplayObserver(Application.displayController);
 		return output;

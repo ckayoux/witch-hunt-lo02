@@ -2,6 +2,7 @@ package fr.sos.witchhunt.model.players;
 
 import java.util.List;
 
+import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.PlayerDisplayObservable;
 import fr.sos.witchhunt.PlayerDisplayObserver;
 import fr.sos.witchhunt.controller.Tabletop;
@@ -45,8 +46,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	//GAME ACTIONS METHODS
 	public abstract void chooseIdentity();;
 	public Identity revealIdentity() {
+		requestIdentityRevealScreen();
 		this.identityCard.reveal();
-		if(this.identity == Identity.WITCH) this.eliminate();
 		return this.identity;
 	}
 	
@@ -54,8 +55,10 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		hand.addCard(rc);
 	}
 	
+	public abstract TurnAction chooseTurnAction();
+	
 	public void playTurn() {
-		requestPlayTurnMessage();
+		requestPlayTurnScreen();
 		switch(chooseTurnAction()) {
 			case ACCUSE:
 				accuse();
@@ -75,23 +78,41 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	protected abstract Player choosePlayerToAccuse();
 	
 	public void accuse(Player p) {
-		//TO UNCOMMENT when we can select a player to accuse
-		/*switch(p.defend()) {
+		requestAccusationScreen(p);
+		switch(p.defend()) {
 			case VILLAGER:
 				this.addScore(1);
 				break;
 			case WITCH:
+				eliminate(p);
 				this.addScore(2);
-				p.eliminate();
 				break;
-		}*/
+		}
 	}
 	
-	public abstract Identity defend();
+	
+	public abstract DefenseAction chooseDefenseAction(boolean canWitch);
+	
+	public Identity defend() {
+		switch(chooseDefenseAction(this.canWitch())) {
+			case WITCH:
+				this.witch();
+				return null; //every witch effect protects the accused player's identity. null is always returned
+			case REVEAL:
+				return this.revealIdentity(); //accused players reveal their identity and return it 
+		}
+		return null;
+	}
+	
+	public abstract RumourCard selectWitchCard(RumourCardsPile rcp);
+	
+	protected void witch () {
+		requestLog("\t\t!-- This functionnality is not avaliable yet --!");
+		//TO UNCOMMENT WHEN PLAYERS ARE ABLE TO WITCH
+		//selectWitchCardFrom(hand).witch();
+	}
 	
 	protected abstract void hunt();
-	
-	public abstract TurnAction chooseTurnAction();
 	
 	public void reset() {
 		this.identity = null;
@@ -104,9 +125,40 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public void requestLog(String msg) {
 		displayObserver.passLog(msg);
 	}
+	
 	@Override
-	public void requestPlayTurnMessage() {
-		displayObserver.displayPlayTurnMessage(name);
+	public void requestPlayTurnScreen() {
+		displayObserver.displayPlayTurnScreen(name);
+	}
+	
+	@Override
+	public void requestAccusationScreen(Player p) {
+		displayObserver.displayAccusationScreen(this,p);
+	}	
+	
+	@Override
+	public void requestDisplayPossibilities(Menu m) {
+		displayObserver.displayPossibilities(m);
+	}
+	
+	@Override
+	public void requestForcedToRevealScreen() {
+		displayObserver.displayForcedToRevealScreen();
+	}
+	
+	@Override
+	public void requestIdentityRevealScreen() {
+		displayObserver.displayIdentityRevealScreen(this);
+	}
+	
+	@Override
+	public void requestScoreUpdateScreen(int scoreUpdatedBy) {
+		displayObserver.displayScoreUpdateScreen(this,scoreUpdatedBy);
+	}
+	
+	@Override
+	public void requestEliminationScreen(Player victim) {
+		displayObserver.displayEliminationScreen(this,victim);
 	}
 	
 	//GETTERS
@@ -142,6 +194,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	//SETTERS
 	public void addScore(int pts) {
 		this.score += pts;
+		requestScoreUpdateScreen(pts);
 	}
 	
 	public void immunize() {
@@ -158,8 +211,14 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		he will remove everyone's immunity afterwhile - because this bonus is only one-use.*/
 		this.immunized = false;
 	}
-	private void eliminate() {
+	
+	public void eliminate() {
 		this.active = false;
+	}
+	
+	private void eliminate(Player victim) {
+		victim.eliminate();
+		requestEliminationScreen(victim);
 	}
 	
 	@Override
@@ -173,7 +232,12 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		l.remove(this);
 		return l;
 	}
+	
 	protected boolean canHunt() {
+		return true; //TEMPORARY
+	}
+	
+	public boolean canWitch() {
 		return true; //TEMPORARY
 	}
 }

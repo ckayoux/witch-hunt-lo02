@@ -1,9 +1,13 @@
 package fr.sos.witchhunt.model.players;
 
+import java.util.List;
+
 import fr.sos.witchhunt.PlayerInputObservable;
 import fr.sos.witchhunt.PlayerInputObserver;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.model.cards.RumourCard;
+import fr.sos.witchhunt.model.cards.RumourCardsPile;
 
 public final class HumanPlayer extends Player implements PlayerInputObservable {
 	
@@ -25,8 +29,8 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		possibilities = new Menu(name+" , make your choice (others, don't look !) :",
 									"Villager",
 									"Witch");
-		displayObserver.displayPossibilities(possibilities);
-		switch(inputObserver.makeChoice(possibilities)) {
+		requestDisplayPossibilities(possibilities);
+		switch(makeChoice(possibilities)) {
 			case 1:
 				this.identity=Identity.VILLAGER;
 				break;
@@ -37,17 +41,16 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		this.identityCard.setChosenIdentity(this.identity);
 	}
 	
-	
-	@Override
-	protected void accuse() {
-		displayObserver.passLog("\t!--This feature is not avaliable yet--!");//TEMPORARY
-		super.accuse();
-	}
-	
 	@Override
 	protected Player choosePlayerToAccuse() {
-		// TODO choisir dans un menu le jouer à accuser parmis Tabletop.getInstance().getAccusablePlayers();
-		return null;
+		List<Player> accusablePlayersList = getAccusablePlayers();
+		String [] accusablePlayersNames = new String [accusablePlayersList.size()];
+		for (int i=0; i<accusablePlayersList.size(); i++) {
+			accusablePlayersNames[i] = accusablePlayersList.get(i).getName(); 
+		}
+		Menu m = new Menu("Select the player you want to accuse :", accusablePlayersNames);
+		displayObserver.displayPossibilities(m);
+		return accusablePlayersList.get(inputObserver.makeChoice(m)-1);
 	}
 	
 	
@@ -74,8 +77,8 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 			possibilities = new Menu("You have no more avaliable Hunt! effects.",
 										"Accuse another player");
 		}
-		displayObserver.displayPossibilities(possibilities);
-		switch(inputObserver.makeChoice(possibilities)) {
+		requestDisplayPossibilities(possibilities);
+		switch(makeChoice(possibilities)) {
 			case 1:
 				return TurnAction.ACCUSE;
 			case 2:
@@ -89,5 +92,35 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	public void setInputObserver(PlayerInputObserver io) {
 		inputObserver = io;
 	}
-
+	@Override
+	public int makeChoice(Menu m) {
+		return inputObserver.makeChoice(m);
+	}
+	
+	
+	@Override
+	public DefenseAction chooseDefenseAction(boolean canWitch) {
+		if(canWitch) {
+			Menu m = new Menu("Select your answer to this utterly slanderous and unfounded accusation",
+								"Play the Witch? effect of a Rumour card from your hand","Reveal your identity");
+			requestDisplayPossibilities(m);
+			switch(makeChoice(m)) {
+				case 1:
+					return DefenseAction.WITCH;
+				case 2:
+					return DefenseAction.REVEAL;
+			}
+		}
+		else {
+			requestForcedToRevealScreen();
+			return DefenseAction.REVEAL;
+		}
+		return null;
+	}
+	
+	@Override
+	public RumourCard selectWitchCard(RumourCardsPile rcp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
