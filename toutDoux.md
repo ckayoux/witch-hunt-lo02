@@ -21,7 +21,7 @@
 + Commentaires
 + Rangement
 + Gestion des erreurs
-+ + de modularité, généralité (changer nombre de joueurs max, min ...)
++ \+ de modularité, généralité (changer nombre de joueurs max, min ...)
 #view
 + tous les displays qui vont avec les choses à rajouter dans le modèle
 #controller
