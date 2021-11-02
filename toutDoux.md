@@ -1,32 +1,32 @@
 #Avancement :
 
 ## ~~done~~ :
-#appli
+###appli
 + ~~Squelette de l'appli~~
-#view
+###view
 + ~~Menus~~
 + ~~Classes d'affichage et de saisie console MVC~~
-#controller
+###controller
 + ~~Flux du jeu~~ _tours, rounds_
 + ~~Distribution de l'identité~~
 + ~~Distribution des cartes~~
-#model
+###model
 + ~~Caractéristiques d'un joueur~~
 + ~~Elimination d'un joueur~~
 + ~~Carte AngryMob~~
 + ~~Immunisation d'un joueur (EvilEye)~~
 	à revoir quand on aura codé EvilEye, on pourrait plutôt forcer la cible à jouer une action au tour d'après - qui est de choisir un joueur à accuser mais pas l'immunisé sauf si y a que lui d'accusable
 ## toutDoux :
-#appli
+###appli
 + Commentaires
 + Rangement
 + Gestion des erreurs
-+ \+ de modularité, généralité (changer nombre de joueurs max, min ...)
-#view
++ \+ de modularité, généralité (changer nombre de joueurs max, min ...)	
+###view
 + tous les displays qui vont avec les choses à rajouter dans le modèle
-#controller
+###controller
 + _**ScoreCounter**_ et conditions de victoire dans Tabletop
-#model
+###smodel
 + ajouter un display pour _Player.**revealIdentity()**_
 + ajouter un display pour _Player.**eliminate**()_, et changer la méthode eliminate pour que ce soit p1.eliminate(p2) plutôt que p2.eliminate(), comme ça on peut display "p2 a été éliminé par p1"
 + ajouter un display pour _Player.**addScore()**_ : si pts > 0 "you gain pts points" sinon si <0 "you loose pts points" sinon nada
