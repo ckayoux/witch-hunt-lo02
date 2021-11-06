@@ -1,5 +1,9 @@
 package fr.sos.witchhunt.model.players.cpustrategies;
 
+import java.util.Collections;
+import java.util.List;
+
+import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
@@ -23,9 +27,9 @@ public final class ExploringStrategy implements PlayStrategy {
 	}
 
 	@Override
-	public Player selectPlayerToAccuse() {
-		// TOUT DOUX
-		return null;
+	public Player selectPlayerToAccuse(List<Player> accusablePlayersList) {
+		//accuses a random accusable player
+		return accusablePlayersList.get((int) (Math.random() * accusablePlayersList.size()) );
 	}
 
 }

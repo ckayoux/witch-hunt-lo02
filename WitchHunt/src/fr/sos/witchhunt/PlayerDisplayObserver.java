@@ -9,8 +9,10 @@ public interface PlayerDisplayObserver {
 	public void displayPossibilities(Menu possibilities);
 	public void displayPlayTurnScreen(String playerName);
 	public void displayAccusationScreen(Player accusator, Player accused);
+	public void displayChooseDefenseScreen();
 	public void displayForcedToRevealScreen();
 	public void displayIdentityRevealScreen(Player p);
 	public void displayScoreUpdateScreen(Player p, int points);
 	public void displayEliminationScreen(Player eliminator,Player victim);
+	public void displayLastUnrevealedPlayerScreen(Player p);
 }

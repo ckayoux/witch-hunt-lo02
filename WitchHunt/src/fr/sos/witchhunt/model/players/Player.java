@@ -79,7 +79,9 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	
 	public void accuse(Player p) {
 		requestAccusationScreen(p);
-		switch(p.defend()) {
+		Identity returnedIdentity = p.defend();
+		if(returnedIdentity != null) {
+			switch(returnedIdentity) {
 			case VILLAGER:
 				this.addScore(1);
 				break;
@@ -87,23 +89,33 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 				eliminate(p);
 				this.addScore(2);
 				break;
+			}
 		}
 	}
 	
 	
-	public abstract DefenseAction chooseDefenseAction(boolean canWitch);
+	public abstract DefenseAction chooseDefenseAction();
 	
 	public Identity defend() {
-		switch(chooseDefenseAction(this.canWitch())) {
-			case WITCH:
-				this.witch();
-				return null; //every witch effect protects the accused player's identity. null is always returned
-			case REVEAL:
-				return this.revealIdentity(); //accused players reveal their identity and return it 
+		if(this.canWitch()) {
+			requestChooseDefenseScreen();
+			switch(chooseDefenseAction()) {
+				case WITCH:
+					this.witch();
+					return null; //every witch effect protects the accused player's identity. null is always returned
+				case REVEAL:
+					return this.revealIdentity(); //accused players reveal their identity and return it 
+			}
 		}
+		else return forcedReveal();
 		return null;
 	}
 	
+	public Identity forcedReveal() {
+		requestForcedToRevealScreen();
+		return this.revealIdentity();
+		
+	}
 	public abstract RumourCard selectWitchCard(RumourCardsPile rcp);
 	
 	protected void witch () {
@@ -113,6 +125,21 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	}
 	
 	protected abstract void hunt();
+	public abstract Player chooseTarget(List<Player> eligiblePlayers);
+	public abstract Player chooseNextPlayer();
+	
+	public void winRound() {
+		requestLastUnrevealedPlayerScreen();
+		switch (this.identity) {
+			case WITCH:
+				this.addScore(2);
+				break;
+				
+			case VILLAGER:
+				this.addScore(1);
+				break;
+		}
+	}
 	
 	public void reset() {
 		this.identity = null;
@@ -141,6 +168,12 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		displayObserver.displayPossibilities(m);
 	}
 	
+
+	@Override
+	public void requestChooseDefenseScreen() {
+		displayObserver.displayChooseDefenseScreen();
+	}
+	
 	@Override
 	public void requestForcedToRevealScreen() {
 		displayObserver.displayForcedToRevealScreen();
@@ -159,6 +192,11 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	@Override
 	public void requestEliminationScreen(Player victim) {
 		displayObserver.displayEliminationScreen(this,victim);
+	}
+	
+	@Override
+	public void requestLastUnrevealedPlayerScreen() {
+		displayObserver.displayLastUnrevealedPlayerScreen(this);
 	}
 	
 	//GETTERS
@@ -240,4 +278,6 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public boolean canWitch() {
 		return true; //TEMPORARY
 	}
+	
+
 }

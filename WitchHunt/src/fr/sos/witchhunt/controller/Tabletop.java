@@ -24,7 +24,6 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private static volatile Tabletop instance = null;
 	private List <Player> playersList;
 	private Round currentRound;
-	private Player lastUnrevealedPlayer;
 	private ScoreCounter scoreCounter;
 	private RumourCardsPile allCardsPile;
 
@@ -144,18 +143,25 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		return playersList.size();
 	}
 	
-	public Player getLastUnrevealedPlayer() {
-		return lastUnrevealedPlayer;
-	}
-	
-	//SETTERS
-	public void setLastUnrevealedPlayer(Player p) {
-		lastUnrevealedPlayer = p;
-	}
-
 	public List<Player> getAccusablePlayersList() {
 		List <Player> l = new ArrayList<Player>();
 		playersList.forEach(p -> { if(p.isAccusable()) l.add(p); });
 		return l;
 	}
+	
+	public List<Player> getUnrevealedPlayersList() {
+		List <Player> l = new ArrayList<Player>();
+		playersList.forEach(p -> { if(!p.isRevealed()) l.add(p); });
+		return l;
+	}
+	
+	public Player getLastUnrevealedPlayer() {
+		int unrevealedPlayersCount = getUnrevealedPlayersList().size();
+		if(unrevealedPlayersCount != 1) return null;
+		else return getUnrevealedPlayersList().get(0);
+	}
+	
+	//SETTERS
+
+
 }

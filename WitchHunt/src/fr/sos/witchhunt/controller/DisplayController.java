@@ -130,6 +130,12 @@ public final class DisplayController implements PlayerDisplayObserver {
 		console.logAccusationMessage(accusator.getName(),accused.getName());
 		// TODO equivalent for gui
 	}
+	
+	@Override
+	public void displayChooseDefenseScreen() {
+		console.logChooseDefenseMessage();
+		//ToutDoux : équivalent for gui
+	}
 
 	@Override
 	public void displayForcedToRevealScreen() {
@@ -139,6 +145,7 @@ public final class DisplayController implements PlayerDisplayObserver {
 
 	@Override
 	public void displayIdentityRevealScreen(Player p) {
+		console.logGoingToRevealMessage(p.getName());
 		switch(p.getIdentity()) {
 			case VILLAGER:
 				console.logVillagerRevealMessage(p.getName());
@@ -160,4 +167,18 @@ public final class DisplayController implements PlayerDisplayObserver {
 		console.logEliminationMessage(eliminator.getName(),victim.getName());
 		// Tout doux : equivalent for gui
 	}
+
+	public void displayLastUnrevealedPlayerScreen(Player lastUnrevealedPlayer) {
+		console.logLastUnrevealedMessage(lastUnrevealedPlayer.getName());
+		switch(lastUnrevealedPlayer.getIdentity()) {
+			case WITCH:
+				console.logWitchRevealMessage(lastUnrevealedPlayer.getName());
+				break;
+			case VILLAGER:
+				console.logVillagerRevealMessage(lastUnrevealedPlayer.getName());
+				break;
+		}
+		// Tout doux : equivalent for gui
+	}
+
 }

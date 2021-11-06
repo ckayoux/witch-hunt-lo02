@@ -11,8 +11,10 @@ public interface PlayerDisplayObservable {
 	public void setDisplayObserver(PlayerDisplayObserver pdo);
 	public void requestPlayTurnScreen();
 	public void requestAccusationScreen(Player accused);
+	public void requestChooseDefenseScreen();
 	public void requestForcedToRevealScreen();
 	public void requestIdentityRevealScreen();
 	public void requestScoreUpdateScreen(int scoreUpdatedBy);
 	public void requestEliminationScreen(Player victim);
+	public void requestLastUnrevealedPlayerScreen();
 }

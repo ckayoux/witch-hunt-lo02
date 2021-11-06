@@ -34,12 +34,11 @@ public final class Round {
 		do {
 			setNextPlayerClockwise(); //By default, the player who takes the next turn is the one after the current player in Tabletop's players list.
 			new Turn(currentPlayer);
-			currentPlayer=nextPlayer; //Rumour cards played during the turn might have changed the next player.
+			if(!nextPlayer.isActive()) setNextPlayerClockwise();
+			currentPlayer=nextPlayer; 
 		}while(!isOver()); //We keep starting new turns until the round is over.
 		
 		recycleRumourCards(); //returning all rumourCards to the main pile, of Tabletop's instance
-		
-		Tabletop.getInstance().setLastUnrevealedPlayer(getNextPlayer());//TODO : pass last unrevealed player instead.
 		
 		Application.displayController.displayRoundEndScreen(roundNumber);
 	}
@@ -79,13 +78,18 @@ public final class Round {
 		/*The round is over when :
 		 * - Whether only one player is still unrevealed
 		 * - or one player reached a score of 5*/
-		/*REAL CONDITION, To uncomment when other functionnalities are ready :
-		int unrevealedPlayersCount = 0;
-		for (Player p : Tabletop.getInstance().getPlayersList()) {
-			if (!p.isRevealed()) unrevealedPlayersCount++;
+		return checkLastUnrevealedPlayer(); //Temporary
+	}
+	
+	public boolean checkLastUnrevealedPlayer() {
+		Player lastManStanding = Tabletop.getInstance().getLastUnrevealedPlayer();
+		if (lastManStanding != null) {
+			lastManStanding.winRound();
+			Application.displayController.crlf();
+			Application.displayController.drawWeakDashedLine();
+			return (true);
 		}
-		return (unrevealedPlayersCount <= 1);*/
-		return (Turn.getTurnNumber()<5)?false:true;//TEMPORARY
+		else return false;
 	}
 	
 	private void recycleRumourCards() {

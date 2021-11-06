@@ -1,5 +1,7 @@
 package fr.sos.witchhunt.model.players;
 
+import java.util.List;
+
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
@@ -22,12 +24,19 @@ public final class CPUPlayer extends Player {
 	}
 
 	@Override
-	public void accuse(Player p) {
-		requestLog("\t\t!-- CPUPlayers can't choose a target to accuse yet. To be continued... --!");
-	}
-	@Override
 	protected Player choosePlayerToAccuse() {
-		return chosenStrategy.selectPlayerToAccuse();
+		return chosenStrategy.selectPlayerToAccuse(getAccusablePlayers());
+	}
+	
+	@Override
+	public Player chooseTarget(List<Player> eligiblePlayers) {
+		return chosenStrategy.chooseTarget(eligiblePlayers);
+	}
+
+	@Override
+	public Player chooseNextPlayer() {
+		// TODO
+		return null;
 	}
 	
 	@Override
@@ -36,8 +45,8 @@ public final class CPUPlayer extends Player {
 	}
 
 	@Override
-	public DefenseAction chooseDefenseAction(boolean canWitch) {
-		return chosenStrategy.chooseDefenseAction(canWitch);
+	public DefenseAction chooseDefenseAction() {
+		return chosenStrategy.chooseDefenseAction(this.canWitch());
 	}
 
 	
@@ -62,6 +71,8 @@ public final class CPUPlayer extends Player {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 
 }

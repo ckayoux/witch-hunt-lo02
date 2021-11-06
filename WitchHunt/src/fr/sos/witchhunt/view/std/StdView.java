@@ -148,20 +148,25 @@ public final class StdView {
 
 	public void logAccusationMessage(String accusatorName, String accusedName) {
 		log("\n\t"+accusedName + ", " + accusatorName + " accused you of practicing witchcraft !");
+	}
+	
+	public void logChooseDefenseMessage() {
 		log("\tWhat do you have to say in your defense ?\n");
 	}
 
 	public void logForcedToRevealMessage() {
-		log("\tYou have no other choice but to reveal who you really are ...");
+		log("\tYou have no other choice but to reveal who you really are.\n");
 	}
-
+	
+	public void logGoingToRevealMessage(String playerName) {
+		log("\t"+playerName+" is going to reveal their identity...");
+	}
+	
 	public void logVillagerRevealMessage(String playerName) {
-		log("\t\t"+playerName+" is going to reveal their identity...");
-		log("\t\t"+playerName+" is only a villager.\n");
+		log("\t"+playerName+" was a villager.\n");
 	}
 	public void logWitchRevealMessage(String playerName) {
-		log("\t\t"+playerName+" is going to reveal their identity...");
-		log("\t\t"+playerName+" was a witch !\n");
+		log("\t"+playerName+" was a witch !\n");
 	}
 
 	public void logUpdateScreenMessage(String playerName, int points, int totalPlayerScore) {
@@ -174,6 +179,10 @@ public final class StdView {
 
 	public void logEliminationMessage(String eliminatorName, String victimName) {
 		log("\t"+eliminatorName + " has eliminated " + victimName + ".");
+	}
+
+	public void logLastUnrevealedMessage(String playerName) {
+		log("\n\t" + playerName + " is the last unrevealed player remaining. It turns out...");
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import fr.sos.witchhunt.PlayerInputObservable;
 import fr.sos.witchhunt.PlayerInputObserver;
+import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
@@ -53,11 +54,29 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		return accusablePlayersList.get(inputObserver.makeChoice(m)-1);
 	}
 	
+	@Override
+	public Player chooseTarget(List<Player> eligiblePlayersList) {
+		eligiblePlayersList.remove(this); //so you can't target yourself
+		String [] eligiblePlayersNames = new String [eligiblePlayersList.size()];
+		for (int i=0; i<eligiblePlayersList.size(); i++) {
+			eligiblePlayersNames[i] = eligiblePlayersList.get(i).getName(); 
+		}
+		Menu m = new Menu("Select the player you want to target :", eligiblePlayersNames);
+		displayObserver.displayPossibilities(m);
+		return eligiblePlayersList.get(inputObserver.makeChoice(m)-1);
+	}
 	
 	@Override
-	public Identity defend() {
-		// TODO Auto-generated method stub
-		return null;
+	public Player chooseNextPlayer() {
+		List<Player> activePlayersList = Tabletop.getInstance().getActivePlayersList();
+		activePlayersList.remove(this);
+		String [] activePlayersNames = new String [activePlayersList.size()];
+		for (int i=0; i<activePlayersList.size(); i++) {
+			activePlayersNames[i] = activePlayersList.get(i).getName(); 
+		}
+		Menu m = new Menu("Select the next player to play :", activePlayersNames);
+		displayObserver.displayPossibilities(m);
+		return activePlayersList.get(inputObserver.makeChoice(m)-1);
 	}
 	
 	@Override
@@ -99,21 +118,15 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	
 	
 	@Override
-	public DefenseAction chooseDefenseAction(boolean canWitch) {
-		if(canWitch) {
-			Menu m = new Menu("Select your answer to this utterly slanderous and unfounded accusation",
-								"Play the Witch? effect of a Rumour card from your hand","Reveal your identity");
-			requestDisplayPossibilities(m);
-			switch(makeChoice(m)) {
-				case 1:
-					return DefenseAction.WITCH;
-				case 2:
-					return DefenseAction.REVEAL;
-			}
-		}
-		else {
-			requestForcedToRevealScreen();
-			return DefenseAction.REVEAL;
+	public DefenseAction chooseDefenseAction() {
+		Menu m = new Menu("Select your answer to this utterly slanderous and unfounded accusation",
+							"Play the Witch? effect of a Rumour card from your hand","Reveal your identity");
+		requestDisplayPossibilities(m);
+		switch(makeChoice(m)) {
+			case 1:
+				return DefenseAction.WITCH;
+			case 2:
+				return DefenseAction.REVEAL;
 		}
 		return null;
 	}

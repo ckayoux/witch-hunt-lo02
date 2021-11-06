@@ -9,6 +9,7 @@ public final class AngryMob extends RumourCard {
 
 	
 	public AngryMob() {
+		
 		this.witchEffect = new Effect() {
 			@Override
 			public void perform() {
@@ -17,14 +18,19 @@ public final class AngryMob extends RumourCard {
 		};
 		
 		this.huntEffect = new Effect() {
+			
 			private Player me;
 			@Override
 			public void perform() {
 				me = Tabletop.getInstance().getCurrentPlayer();
-				//TODO : select another unrevealed player.
-				//reveal their identity.
-				//+2 pts if witch, then takeNextTurn()
-				//-2 pts if villager, then set the next player to them
+				Player target = me.chooseTarget(Tabletop.getInstance().getUnrevealedPlayersList());
+				switch(target.forcedReveal()) {
+					case WITCH:
+					me.addScore(2);
+					
+					case VILLAGER:
+					me.addScore(-2);
+				}
 			}
 			
 			@Override
@@ -36,18 +42,6 @@ public final class AngryMob extends RumourCard {
 			}
 		};
 		
-	}
-	
-	@Override
-	public boolean witch() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean hunt() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }
