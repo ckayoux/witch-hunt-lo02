@@ -1,7 +1,9 @@
 package fr.sos.witchhunt.model.cards;
 
+import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
+
 public abstract class RumourCard extends Card {
-	int value;
+	protected int value;
 	protected Effect witchEffect;
 	protected Effect huntEffect;
 	
@@ -24,4 +26,7 @@ public abstract class RumourCard extends Card {
 			return false;
 		}
 	}
+	public CardValue getDefaultValue() {
+		return new CardValue(witchEffect.getValue(),huntEffect.getValue());
+	};
 }

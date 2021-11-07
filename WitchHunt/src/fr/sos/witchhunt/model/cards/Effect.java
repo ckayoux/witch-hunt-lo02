@@ -1,8 +1,15 @@
 package fr.sos.witchhunt.model.cards;
 
 public abstract class Effect {
-	String description;
-	int value;
+	private String description;
+	private int value;
+	
+	public Effect () {
+		
+	}
+	public Effect (int value) {
+		
+	}
 	
 	public abstract void perform(); //has to be redefined
 	public boolean isAllowed() {

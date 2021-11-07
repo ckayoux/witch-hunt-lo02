@@ -51,8 +51,35 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		return this.identity;
 	}
 	
-	public void takeRumourCard(RumourCard rc) {
+	/*public void addRumourCard(RumourCard rc) {
 		hand.addCard(rc);
+	}*/
+	public void takeRumourCard(RumourCard rc,RumourCardsPile from) {
+		from.giveCard(rc, this.hand);
+	}
+	
+	protected abstract RumourCard selectCardToDiscard() ;
+	
+	public void discard(RumourCard rc) {
+		this.hand.giveCard(rc, Tabletop.getInstance().getPile());
+	}
+	public void discard() {
+		discard(selectCardToDiscard());
+	}
+	public void discardRandomCard() {
+		//let's assume we can only discard unrevealed cards, unless all the cards are revealed
+		RumourCard chosenCard;
+		if(this.hasUnrevealedRumourCards()) {
+			chosenCard = this.getUnrevealedSubhand().getRandomCard();
+		}
+		else {
+			chosenCard = this.hand.getRandomCard();
+		}
+		discard(chosenCard);
+	}
+	
+	public boolean hasUnrevealedRumourCards() {
+		return !this.getRevealedSubhand().equals(this.hand);
 	}
 	
 	public abstract TurnAction chooseTurnAction();
@@ -206,6 +233,12 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public RumourCardsPile getHand() {
 		return this.hand;
 	}
+	public RumourCardsPile getUnrevealedSubhand() {
+		return this.hand.getUnrevealedSubpile();
+	}
+	public RumourCardsPile getRevealedSubhand() {
+		return this.hand.getRevealedSubpile();
+	}
 	public Identity getIdentity() {
 		return this.identity;
 	}
@@ -279,5 +312,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		return true; //TEMPORARY
 	}
 	
+	public String toString() {
+		return this.name;
+	}
 
 }

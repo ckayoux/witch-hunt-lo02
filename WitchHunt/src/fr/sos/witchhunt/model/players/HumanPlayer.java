@@ -42,7 +42,38 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		this.identityCard.setChosenIdentity(this.identity);
 	}
 	
-	@Override
+	private <T> T choose(List<T> from,String prompt){
+		/*this method is made for the human players to select an element from a list.
+		 * it will display the $prompt, then ask to select an option among the toString of each element of $from
+		 */
+		String [] options = new String [from.size()];
+		for(int i=0; i<from.size(); i++) {
+			options[i] = from.get(i).toString();
+		}
+		Menu m = new Menu(prompt,options);
+		requestDisplayPossibilities(m);
+		return from.get(makeChoice(m)-1);
+	}
+	protected Player choosePlayerToAccuse() {
+		return choose(getAccusablePlayers(),"Select the player you want to accuse :");
+	}
+	public Player chooseTarget(List<Player> eligiblePlayersList) {
+		return choose(eligiblePlayersList,"Select the player you want to target :");
+	}
+	public Player chooseNextPlayer() {
+		return choose(Tabletop.getInstance().getActivePlayersList(),"Select the next player to play :");
+	}
+	public RumourCard selectCardToDiscard() {
+		if(this.hasUnrevealedRumourCards()) {
+			return choose(this.getUnrevealedSubhand().getCards(),"Select the unrevealed card that you want to discard :");
+		}
+		else {
+			return choose(this.hand.getCards(),"Select the card that you want to discard :");
+		}
+	}
+	
+	
+	/*@Override
 	protected Player choosePlayerToAccuse() {
 		List<Player> accusablePlayersList = getAccusablePlayers();
 		String [] accusablePlayersNames = new String [accusablePlayersList.size()];
@@ -77,7 +108,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		Menu m = new Menu("Select the next player to play :", activePlayersNames);
 		displayObserver.displayPossibilities(m);
 		return activePlayersList.get(inputObserver.makeChoice(m)-1);
-	}
+	}*/
 	
 	@Override
 	public void hunt() {
@@ -136,4 +167,5 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 }

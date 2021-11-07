@@ -72,6 +72,14 @@ public final class CPUPlayer extends Player {
 		return null;
 	}
 
+	@Override
+	protected RumourCard selectCardToDiscard() {
+		if(this.hasUnrevealedRumourCards()) {
+			return chosenStrategy.selectCardToDiscard(this.getUnrevealedSubhand());
+		}
+		else return chosenStrategy.selectCardToDiscard(this.hand);
+	}
+
 
 
 

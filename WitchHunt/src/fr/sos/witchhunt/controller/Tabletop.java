@@ -3,19 +3,10 @@ package fr.sos.witchhunt.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.sos.witchhunt.model.cards.AngryMob;
-import fr.sos.witchhunt.model.cards.BlackCat;
-import fr.sos.witchhunt.model.cards.Broomstick;
-import fr.sos.witchhunt.model.cards.Cauldron;
-import fr.sos.witchhunt.model.cards.DuckingStool;
-import fr.sos.witchhunt.model.cards.EvilEye;
-import fr.sos.witchhunt.model.cards.HookedNose;
-import fr.sos.witchhunt.model.cards.PetNewt;
-import fr.sos.witchhunt.model.cards.PointedHat;
+import fr.sos.witchhunt.model.cards.ExistingRumourCards;
+
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
-import fr.sos.witchhunt.model.cards.TheInquisition;
-import fr.sos.witchhunt.model.cards.Toad;
-import fr.sos.witchhunt.model.cards.Wart;
+
 import fr.sos.witchhunt.model.players.Player;
 
 public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
@@ -31,7 +22,8 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private Tabletop () {
 		playersList = new ArrayList<Player> ();
 		
-		allCardsPile = new RumourCardsPile();
+		allCardsPile = new RumourCardsPile(ExistingRumourCards.getInstance().cloneList());
+		/*allCardsPile = new RumourCardsPile();
 		allCardsPile.addCard(new AngryMob());
 		allCardsPile.addCard(new BlackCat());
 		allCardsPile.addCard(new Broomstick());
@@ -43,7 +35,7 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		allCardsPile.addCard(new PointedHat());
 		allCardsPile.addCard(new TheInquisition());
 		allCardsPile.addCard(new Toad());
-		allCardsPile.addCard(new Wart());
+		allCardsPile.addCard(new Wart());*/
 	}
 	
 	public static Tabletop getInstance() {
@@ -110,6 +102,10 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	
 	public RumourCardsPile getAllCardsPile() {
 		return allCardsPile;
+	}
+	
+	public RumourCardsPile getPile() {
+		return currentRound.getPile();
 	}
 	
 	public Turn getCurrentTurn() {
