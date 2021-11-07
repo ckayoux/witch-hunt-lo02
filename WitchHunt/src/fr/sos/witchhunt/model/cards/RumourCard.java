@@ -4,8 +4,24 @@ import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
 
 public abstract class RumourCard extends Card {
 	protected int value;
-	protected Effect witchEffect;
-	protected Effect huntEffect;
+	protected Effect witchEffect=new Effect() { //TEMPORARY, to remove when all cards have their own
+
+		@Override
+		public void perform() {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	};
+	protected Effect huntEffect = new Effect() {//TEMPORARY, to remove when all cards have their own
+
+		@Override
+		public void perform() {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	};
 	
 	//public void discard(){}
 	public boolean witch() {
