@@ -180,5 +180,10 @@ public final class DisplayController implements PlayerDisplayObserver {
 		}
 		// Tout doux : equivalent for gui
 	}
+	
+	public void displayNoCardsScreen(Player p) {
+		console.logNoCardsMessage(p.getName());
+		//ToutDoux : equivalent for gui
+	}
 
 }

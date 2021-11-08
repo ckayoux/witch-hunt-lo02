@@ -22,7 +22,7 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private Tabletop () {
 		playersList = new ArrayList<Player> ();
 		
-		allCardsPile = new RumourCardsPile(ExistingRumourCards.getInstance().cloneList());
+		allCardsPile = new RumourCardsPile(ExistingRumourCards.getInstance().getList());
 		/*allCardsPile = new RumourCardsPile();
 		allCardsPile.addCard(new AngryMob());
 		allCardsPile.addCard(new BlackCat());
@@ -67,7 +67,7 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 
 		scoreCounter = new ScoreCounter();
 		
-		currentRound = new Round();
+		new Round();
 		while (!gameIsOver()){
 			Application.displayController.displayScoreTable(scoreCounter);
 			Application.inputController.wannaContinue();
@@ -117,9 +117,14 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	}
 	
 	public Player getAccusator() {
-		return currentRound.getCurrentTurn().getAccusator();
+		return getCurrentTurn().getAccusator();
 	}
-	
+	public Player getHuntedPlayer() {
+		return getCurrentTurn().getHuntedPlayer();
+	}
+	public Player getHunter() {
+		return getCurrentTurn().getHunter();
+	}
 	public Player getCurrentPlayer() {
 		return currentRound.getCurrentPlayer();
 	}
@@ -158,6 +163,19 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	}
 	
 	//SETTERS
-
-
+	public void setCurrentRound(Round r) {
+		currentRound = r;
+	}
+	public void setAccusedPlayer(Player accusedPlayer) {
+		getCurrentTurn().setAccusedPlayer(accusedPlayer);
+	}
+	public void setAccusator(Player accusator) {
+		getCurrentTurn().setAccusator(accusator);
+	}
+	public void setHuntedPlayer(Player huntedPlayer) {
+		getCurrentTurn().setHuntedPlayer(huntedPlayer);
+	}
+	public void setHunter(Player hunter) {
+		getCurrentTurn().setHunter(hunter);
+	}
 }

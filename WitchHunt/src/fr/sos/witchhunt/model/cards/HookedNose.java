@@ -1,17 +1,25 @@
 package fr.sos.witchhunt.model.cards;
 
 public final class HookedNose extends RumourCard {
-
-	@Override
-	public boolean witch() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean hunt() {
-		// TODO Auto-generated method stub
-		return false;
+	//TODO : default value ?
+	public HookedNose () {
+		this.witchEffect = new Effect() {
+			
+			@Override
+			public void perform() {
+				//TODO : take one card (not random) from the hand of the player who accused you (if hasRumourCards)
+				takeNextTurn();
+			}
+		};
+		
+		this.huntEffect = new Effect() {
+			@Override
+			public void perform() {
+				//Take a random card from their hand and add it to yours
+				chooseNextPlayer();
+			}
+			
+		};
 	}
 
 }

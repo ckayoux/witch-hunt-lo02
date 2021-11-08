@@ -7,9 +7,12 @@ public final class Turn {
 	private static int turnNumber=0;
 	private Player accused;
 	private Player accusator;
+	private Player hunted;
+	private Player hunter;
 	
 	//CONSTRUCTOR
 	public Turn (Player p) {
+		Tabletop.getInstance().getCurrentRound().setCurrentTurn(this);
 		turnNumber++;
 		Application.displayController.crlf();
 		p.playTurn();
@@ -27,6 +30,12 @@ public final class Turn {
 	public Player getAccusator() {
 		return accusator;
 	}
+	public Player getHuntedPlayer() {
+		return this.hunted;
+	}
+	public Player getHunter() {
+		return this.hunter;
+	}
 	
 	//SETTERS
 	public static void setTurnNumber(int turnNumber) {
@@ -37,6 +46,12 @@ public final class Turn {
 	}
 	public void setAccusator(Player accusator) {
 		this.accusator = accusator;
+	}
+	public void setHuntedPlayer(Player huntedPlayer) {
+		this.hunted = huntedPlayer;
+	}
+	public void setHunter(Player hunter) {
+		this.hunter = hunter;
 	}
 	
 

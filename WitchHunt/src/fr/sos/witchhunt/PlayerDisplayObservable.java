@@ -17,4 +17,5 @@ public interface PlayerDisplayObservable {
 	public void requestScoreUpdateScreen(int scoreUpdatedBy);
 	public void requestEliminationScreen(Player victim);
 	public void requestLastUnrevealedPlayerScreen();
+	public void requestNoCardsScreen();
 }

@@ -1,16 +1,17 @@
 package fr.sos.witchhunt.model.cards;
 
 import fr.sos.witchhunt.controller.Tabletop;
+import java.util.List;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.players.Player;
 
 public final class AngryMob extends RumourCard {
-
-
-	
+	//TODO : default value ?
 	public AngryMob() {
+		AngryMob cardInstance = this;
 		
 		this.witchEffect = new Effect() {
+			
 			@Override
 			public void perform() {
 				takeNextTurn();
@@ -22,8 +23,10 @@ public final class AngryMob extends RumourCard {
 			private Player me;
 			@Override
 			public void perform() {
-				me = Tabletop.getInstance().getCurrentPlayer();
-				Player target = me.chooseTarget(Tabletop.getInstance().getUnrevealedPlayersList());
+				me = getMyself();
+				//the eligible players are all those who are not revealed and are not immunized by a revealed BroomStick card
+				List <Player> eligiblePlayers = Tabletop.getInstance().getUnrevealedPlayersList().stream().filter(p -> !p.isImmunizedAgainstRumourCard(cardInstance)).toList();
+				Player target = me.chooseHuntedTarget(eligiblePlayers);
 				switch(target.forcedReveal()) {
 					case WITCH:
 					me.addScore(2);

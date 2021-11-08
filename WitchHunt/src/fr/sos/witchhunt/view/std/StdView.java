@@ -185,4 +185,8 @@ public final class StdView {
 		log("\n\t" + playerName + " is the last unrevealed player remaining. It turns out...");
 	}
 
+	public void logNoCardsMessage(String playerName) {
+		log("\t" + playerName + " has got not cards.");
+	}
+
 }

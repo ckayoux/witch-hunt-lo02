@@ -60,16 +60,24 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	public Player chooseTarget(List<Player> eligiblePlayersList) {
 		return choose(eligiblePlayersList,"Select the player you want to target :");
 	}
+	
 	public Player chooseNextPlayer() {
 		return choose(Tabletop.getInstance().getActivePlayersList(),"Select the next player to play :");
 	}
 	public RumourCard selectCardToDiscard() {
-		if(this.hasUnrevealedRumourCards()) {
-			return choose(this.getUnrevealedSubhand().getCards(),"Select the unrevealed card that you want to discard :");
+		if(this.hasRumourCards()) {
+			if(this.hasUnrevealedRumourCards()) {
+				return choose(this.getUnrevealedSubhand().getCards(),"Select the unrevealed card that you want to discard :");
+			}
+			else {
+				return choose(this.hand.getCards(),"Select the card that you want to discard :");
+			}
 		}
 		else {
-			return choose(this.hand.getCards(),"Select the card that you want to discard :");
+			requestNoCardsScreen();
+			return null;
 		}
+		
 	}
 	
 	

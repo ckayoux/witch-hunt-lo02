@@ -61,6 +61,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	protected abstract RumourCard selectCardToDiscard() ;
 	
 	public void discard(RumourCard rc) {
+		rc.reset();
 		this.hand.giveCard(rc, Tabletop.getInstance().getPile());
 	}
 	public void discard() {
@@ -69,13 +70,17 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public void discardRandomCard() {
 		//let's assume we can only discard unrevealed cards, unless all the cards are revealed
 		RumourCard chosenCard;
-		if(this.hasUnrevealedRumourCards()) {
-			chosenCard = this.getUnrevealedSubhand().getRandomCard();
+		if(this.hasRumourCards()) {
+			if(this.hasUnrevealedRumourCards()) {
+				chosenCard = this.getUnrevealedSubhand().getRandomCard();
+			}
+			else {
+				chosenCard = this.hand.getRandomCard();
+			}
+			
+			if (chosenCard != null) discard(chosenCard);
 		}
-		else {
-			chosenCard = this.hand.getRandomCard();
-		}
-		discard(chosenCard);
+		else requestNoCardsScreen();
 	}
 	
 	public boolean hasUnrevealedRumourCards() {
@@ -105,6 +110,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	protected abstract Player choosePlayerToAccuse();
 	
 	public void accuse(Player p) {
+		Tabletop.getInstance().setAccusator(this);
+		Tabletop.getInstance().setAccusedPlayer(p);
 		requestAccusationScreen(p);
 		Identity returnedIdentity = p.defend();
 		if(returnedIdentity != null) {
@@ -151,8 +158,17 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		//selectWitchCardFrom(hand).witch();
 	}
 	
-	protected abstract void hunt();
+	protected void hunt() {
+		Tabletop.getInstance().setHunter(this);
+	};
 	public abstract Player chooseTarget(List<Player> eligiblePlayers);
+	
+	public Player chooseHuntedTarget(List<Player> eligiblePlayersList) {
+		Player chosenTarget = chooseTarget(eligiblePlayersList);
+		Tabletop.getInstance().setHuntedPlayer(chosenTarget);
+		return chosenTarget;
+	}
+	
 	public abstract Player chooseNextPlayer();
 	
 	public void winRound() {
@@ -226,6 +242,12 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		displayObserver.displayLastUnrevealedPlayerScreen(this);
 	}
 	
+	@Override
+	public void requestNoCardsScreen() {
+		displayObserver.displayNoCardsScreen(this);
+	}
+	
+	
 	//GETTERS
 	public String getName() {
 		return this.name;
@@ -260,6 +282,16 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	}
 	public boolean isActive() {
 		return this.active;
+	}
+	public boolean isImmunizedAgainstRumourCard(RumourCard rc) {
+		//some cards grant immunity against the huntEffect of others. Example : Broomstick prevents from being targeted by the huntEffect of AngryMob
+		for(RumourCard card : this.hand.getCards()) {
+			if(card.grantsImmunityAgainst(rc)) return true;
+		}
+		return false;
+	}
+	public boolean hasRumourCards() {
+		return (!this.hand.isEmpty());
 	}
 	
 	//SETTERS

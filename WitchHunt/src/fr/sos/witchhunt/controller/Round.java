@@ -17,6 +17,7 @@ public final class Round {
 	
 	//CONSTRUCTOR
 	public Round() {
+		Tabletop.getInstance().setCurrentRound(this);
 		//For the first round, a random player begins.
 		if(roundNumber == 0) currentPlayer=Tabletop.getInstance().getPlayersList().get((int)Math.random()*Tabletop.getInstance().getPlayersCount());
 		//For all other rounds, the last unrevealed player begins.
@@ -33,7 +34,7 @@ public final class Round {
 		
 		do {
 			setNextPlayerClockwise(); //By default, the player who takes the next turn is the one after the current player in Tabletop's players list.
-			new Turn(currentPlayer);
+			currentTurn=new Turn(currentPlayer);
 			if(!nextPlayer.isActive()) setNextPlayerClockwise();
 			currentPlayer=nextPlayer; 
 		}while(!isOver()); //We keep starting new turns until the round is over.
@@ -118,6 +119,9 @@ public final class Round {
 	}
 	
 	//SETTERS
+	public void setCurrentTurn(Turn t) {
+		currentTurn = t;
+	}
 	public void setNextPlayer(Player p) {
 		nextPlayer = p;
 	}

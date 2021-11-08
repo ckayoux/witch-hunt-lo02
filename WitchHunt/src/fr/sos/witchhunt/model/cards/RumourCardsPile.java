@@ -53,19 +53,27 @@ public final class RumourCardsPile {
 		cards.forEach(c -> { if(!c.isRevealed()) L.add(c) ; });
 		return new RumourCardsPile(L);
 	}
-	public boolean containsCardWithClassName(String className) {
+	
+	public boolean contains(RumourCard rc) {
+		return this.cards.contains(rc);
+	}
+	
+	public boolean isEmpty() {
+		return this.cards.isEmpty();
+	}
+	/*public boolean containsCardWithClassName(String className) {
 		for (RumourCard rc : this.cards) {
 			if (rc.getClass().getName()==className) return true;
 		}
 		return false;
-	}
-	public RumourCard getCardWithClassName(String className) {
+	}*/
+	/*public RumourCard getCardWithClassName(String className) {
 		if(this.containsCardWithClassName(className)) {
 			List <RumourCard> matchedCards = (List <RumourCard>)this.cards.stream().filter(rc -> {return (rc.getClass().getName()==className);});
 			return matchedCards.get(0);
 		}
 		else return null;
-	}
+	}*/
 	
 	public void giveCard(RumourCard rc,RumourCardsPile destination) {
 		if(this.cards.contains(rc)) {

@@ -5,7 +5,7 @@ import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.players.Player;
 
 public final class BlackCat extends RumourCard {
-
+	//TODO : default value ?
 	public BlackCat() {
 		
 		this.witchEffect = new Effect() {
@@ -17,27 +17,13 @@ public final class BlackCat extends RumourCard {
 		
 		this.huntEffect = new Effect() {
 			
-			private Player me;
+
 			@Override
 			public void perform() {
-				me = Tabletop.getInstance().getCurrentPlayer();
-				Player target = me.chooseTarget(Tabletop.getInstance().getUnrevealedPlayersList());
-				switch(target.forcedReveal()) {
-					case WITCH:
-					me.addScore(2);
-					
-					case VILLAGER:
-					me.addScore(-2);
-				}
+				//TODO add one discarded card to your hand, and then discard this card.
+				
 			}
 			
-			@Override
-			public boolean isAllowed() {
-				//This card is only playable if you have been revealed as a villager.
-				me = Tabletop.getInstance().getCurrentPlayer();
-				if(me.isRevealed() && me.getIdentity() == Identity.VILLAGER) return true;
-				else return false;
-			}
 		};
 		
 	}

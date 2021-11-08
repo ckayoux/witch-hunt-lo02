@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class ExistingRumourCards {
-	
 	private static volatile ExistingRumourCards instance = null;
 	
 	private List <RumourCard> existingCardsList;
@@ -40,10 +39,6 @@ public final class ExistingRumourCards {
 	
 	public List <RumourCard> getList() {
 		return existingCardsList;
-	}
-	
-	public List <RumourCard> cloneList() {
-		return new ArrayList<RumourCard> (existingCardsList);
 	}
 	
 }

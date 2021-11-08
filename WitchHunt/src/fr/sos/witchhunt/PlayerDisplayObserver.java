@@ -15,4 +15,5 @@ public interface PlayerDisplayObserver {
 	public void displayScoreUpdateScreen(Player p, int points);
 	public void displayEliminationScreen(Player eliminator,Player victim);
 	public void displayLastUnrevealedPlayerScreen(Player p);
+	public void displayNoCardsScreen(Player p);
 }

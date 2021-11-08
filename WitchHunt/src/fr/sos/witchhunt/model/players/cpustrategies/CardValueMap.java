@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 import fr.sos.witchhunt.controller.Tabletop;
@@ -16,7 +17,7 @@ import fr.sos.witchhunt.model.cards.RumourCardsPile;
 
 
 public class CardValueMap {
-	Map <RumourCard,CardValue> m; //the instances of RumourCard stored in this map are NOT the ones manipulated by the players, they belong to ExistingRumourCards.
+	Map <RumourCard,CardValue> m;
 	
 	public CardValueMap () {
 		m =  new HashMap <RumourCard,CardValue> ();
@@ -40,25 +41,27 @@ public class CardValueMap {
 	}
 	
 	
-	public Map<RumourCard,CardValue> match(RumourCardsPile rcp){
+	public Map<RumourCard,CardValue> filter(RumourCardsPile rcp){
 		/*Copies the map $m. 
-		 *Keeps only the Rumour Cards types that are in rcp.
-		 *Replaces the instances of the RumourCards kept by the actual ones which are used in the game. 
+		 *Keeps only the Rumour Cards that are contained in rcp.
 		 */
-		return m.entrySet().stream().filter(e -> rcp.containsCardWithClassName(e.getKey().getClass().toString()))
-			.collect(Collectors.toMap(e -> rcp.getCardWithClassName(e.getKey().getClass().getName()), Map.Entry::getValue));
+		return m.entrySet().stream().filter(e -> rcp.contains(e.getKey()))
+			.collect(Collectors.toMap(e -> (e.getKey()), Map.Entry::getValue));
+	}
+	
+	private static List<Integer> getSubValues(Map<RumourCard,CardValue> M, ToIntFunction<CardValue> subValueGetter ){
+		return M.values().stream().mapToInt(v -> subValueGetter.applyAsInt(v)).boxed().toList();
+	}
+	
+	private List<RumourCard> getCardsWithSubValue(Map<RumourCard,CardValue> M, ToIntFunction<CardValue> subValueGetter, int lookingFor){
+		Map <RumourCard,CardValue> submap = M.entrySet().stream().filter( e -> (subValueGetter.applyAsInt(e.getValue())==lookingFor) ).collect(Collectors.toMap(e -> (e.getKey()), Map.Entry::getValue) );
+		return submap.keySet().stream().collect(Collectors.toList());
 	}
 	
 	public List<RumourCard> getCardsWithMinWitchValue(RumourCardsPile rcp) {
-		//returns the classname of the cards with the lowest witchEffect value
-		List<RumourCard> retainedCards = new ArrayList<RumourCard>() ;
-		Map<RumourCard,CardValue> M = this.match(rcp);
-		List<CardValue> CardValues = (List<CardValue>) M.values();
-		List<Integer> witchEffectValues = new ArrayList<Integer>();
-		M.values().forEach(cv -> witchEffectValues.add(cv.getWitchValue()));
+		Map<RumourCard,CardValue> M = this.filter(rcp);
+		List<Integer> witchEffectValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getWitchValue()) ;
 		int min = Collections.min(witchEffectValues);
-		M.forEach( (k,v) -> {if(v.getWitchValue()==min) retainedCards.add(k); });
-		Collections.shuffle(retainedCards);
-		return retainedCards;
+		return getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getWitchValue(), min);
 	}
 }
