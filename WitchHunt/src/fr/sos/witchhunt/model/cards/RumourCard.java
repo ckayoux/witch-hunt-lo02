@@ -33,4 +33,12 @@ public abstract class RumourCard extends Card {
 	public boolean grantsImmunityAgainst(RumourCard rc) {
 		return false;
 	}
+	
+	public boolean canWitch() {
+		return (this.witchEffect.isAllowed() && !this.revealed);
+	}
+	
+	public boolean canHunt() {
+		return (this.huntEffect.isAllowed() && !this.revealed);
+	}
 }

@@ -3,6 +3,7 @@ package fr.sos.witchhunt.model.cards;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
 
@@ -44,14 +45,10 @@ public final class RumourCardsPile {
 	}
 	
 	public RumourCardsPile getRevealedSubpile (){
-		List <RumourCard> L = new ArrayList <RumourCard> ();
-		cards.forEach(c -> { if(c.isRevealed()) L.add(c) ; });
-		return new RumourCardsPile(L);
+		return new RumourCardsPile((List <RumourCard>) cards.stream().filter(c->!c.isRevealed()).collect(Collectors.toList()));
 	}
 	public RumourCardsPile getUnrevealedSubpile (){
-		List <RumourCard> L = new ArrayList <RumourCard> ();
-		cards.forEach(c -> { if(!c.isRevealed()) L.add(c) ; });
-		return new RumourCardsPile(L);
+		return new RumourCardsPile((List <RumourCard>) cards.stream().filter(c->!c.isRevealed()).collect(Collectors.toList()));
 	}
 	
 	public boolean contains(RumourCard rc) {
@@ -61,19 +58,16 @@ public final class RumourCardsPile {
 	public boolean isEmpty() {
 		return this.cards.isEmpty();
 	}
-	/*public boolean containsCardWithClassName(String className) {
-		for (RumourCard rc : this.cards) {
-			if (rc.getClass().getName()==className) return true;
-		}
-		return false;
-	}*/
-	/*public RumourCard getCardWithClassName(String className) {
-		if(this.containsCardWithClassName(className)) {
-			List <RumourCard> matchedCards = (List <RumourCard>)this.cards.stream().filter(rc -> {return (rc.getClass().getName()==className);});
-			return matchedCards.get(0);
-		}
-		else return null;
-	}*/
+	
+	public RumourCardsPile getPlayableWitchSubpile (){
+		List <RumourCard> L = new ArrayList <RumourCard> ();
+		return new RumourCardsPile((List <RumourCard>) cards.stream().filter(c->c.canWitch()).collect(Collectors.toList()));
+	}
+	public RumourCardsPile getPlayableHuntSubpile (){
+		List <RumourCard> L = new ArrayList <RumourCard> ();
+		return new RumourCardsPile((List <RumourCard>) cards.stream().filter(c->c.canHunt()).collect(Collectors.toList()));
+
+	}
 	
 	public void giveCard(RumourCard rc,RumourCardsPile destination) {
 		if(this.cards.contains(rc)) {

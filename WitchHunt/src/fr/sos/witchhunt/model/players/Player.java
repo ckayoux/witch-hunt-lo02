@@ -59,7 +59,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	}
 	
 	protected abstract RumourCard selectCardToDiscard() ;
-	
+		
 	public void discard(RumourCard rc) {
 		rc.reset();
 		this.hand.giveCard(rc, Tabletop.getInstance().getPile());
@@ -337,11 +337,11 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	}
 	
 	protected boolean canHunt() {
-		return true; //TEMPORARY
+		return (this.hand.getPlayableHuntSubpile()==null);
 	}
 	
 	public boolean canWitch() {
-		return true; //TEMPORARY
+		return (this.hand.getPlayableWitchSubpile()==null);
 	}
 	
 	public String toString() {
