@@ -3,13 +3,15 @@ package fr.sos.witchhunt.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.sos.witchhunt.PlayerDisplayObserver;
+import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.model.cards.RumourCard;
+import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.std.StdView;
 
-public final class DisplayController implements PlayerDisplayObserver {
+public final class DisplayController implements DisplayMediator {
 	
 	private StdView console;
 	
@@ -186,4 +188,121 @@ public final class DisplayController implements PlayerDisplayObserver {
 		//ToutDoux : equivalent for gui
 	}
 
+	public void displayOnlyTwoUnrevealedRemainingScreen() {
+		console.logOnlyTwoUnrevealedRemainingMessage();
+		//ToutDoux : equivalent for gui
+	}
+
+	@Override
+	public void displayCard(RumourCard rc, boolean forcedReveal) {
+		if(rc.isRevealed() || forcedReveal) {
+			if(rc.getAdditionnalEffectDescription().equals("")) {
+				console.logRumourCard(rc.getName(),rc.isRevealed(),rc.getWitchEffectDescription(),rc.getHuntEffectDescription());
+			}
+			else {
+				console.logRumourCard(rc.getName(),rc.isRevealed(),rc.getAdditionnalEffectDescription(),rc.getWitchEffectDescription(),rc.getHuntEffectDescription());
+			}
+		}
+		else {
+			console.logUnrevealedCard();
+		}
+	}
+
+	@Override
+	public void displayWitchEffect(RumourCard rc) {
+		if(rc.getAdditionnalEffectDescription().equals("")) {
+			console.logEffect(rc.getName(),rc.getWitchEffectDescription());
+		}
+		else {
+			console.logEffect(rc.getName(),rc.getAdditionnalEffectDescription(),rc.getWitchEffectDescription());
+		}
+	}
+
+	@Override
+	public void displayHuntEffect(RumourCard rc) {
+		if(rc.getAdditionnalEffectDescription().equals("")) {
+			console.logEffect(rc.getName(),rc.getHuntEffectDescription());
+		}
+		else {
+			console.logEffect(rc.getName(),rc.getAdditionnalEffectDescription(),rc.getHuntEffectDescription());
+		}
+	}
+
+	@Override
+	public void displayCards(RumourCardsPile rcp, boolean forcedReveal) {
+		console.increaseTabulation();
+		int i=1;
+		for(RumourCard rc : rcp.getCards()) {
+			console.tabbedPrint(i + " - ");
+			displayCard(rc,forcedReveal);
+			i++;
+		};
+		console.decreaseTabulation();
+		console.crlf();
+	}
+
+	@Override
+	public void displayWitchEffects(RumourCardsPile rcp) {
+		console.increaseTabulation();
+		int i=1;
+		for(RumourCard rc : rcp.getCards()) {
+			console.tabbedPrint(i + " - ");
+			displayWitchEffect(rc);
+			i++;
+		};
+		console.decreaseTabulation();
+		console.crlf();
+	}
+	@Override
+	public void displayHuntEffects(RumourCardsPile rcp) {
+		console.increaseTabulation();
+		int i=1;
+		for(RumourCard rc : rcp.getCards()) {
+			console.tabbedPrint(i + " - ");
+			displayHuntEffect(rc);
+			i++;
+		};
+		console.decreaseTabulation();
+		console.crlf();
+	}
+
+	@Override
+	public void showCards(Player p) {
+		//shows all the cards of a player. Called on purpose by human players
+		if(p.hasRumourCards()) {
+			console.logShowPlayersCardsMessage(p.getName());
+			console.increaseTabulation();
+			displayCards(p.getHand(),true);
+			console.crlf();
+			console.decreaseTabulation();
+		}
+		else {
+			console.logNoCardsMessage(p.getName());
+		}
+	}
+	
+
+	@Override
+	public void displaySelectCardScreen() {
+		console.logSelectCardMessage();
+	}
+
+	@Override
+	public void displaySelectUnrevealedCardScreen() {
+		console.logSelectUnrevealedCardMessage();
+		
+	}
+	
+	@Override
+	public void displaySelectRevealedCardScreen() {
+		console.logSelectRevealedCardMessage();
+		
+	}
+
+
+	@Override
+	public void displayPlayerPlaysEffectScreen(Player p) {
+		console.logPlayerPlaysEffectMessage(p.getName());
+		
+	}
 }

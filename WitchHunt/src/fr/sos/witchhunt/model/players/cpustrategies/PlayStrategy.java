@@ -11,10 +11,10 @@ import fr.sos.witchhunt.model.players.TurnAction;
 
 public interface PlayStrategy {
 	
-	public Identity chooseIdentity();
-	public TurnAction chooseTurnAction();
+	public Identity selectIdentity();
+	public TurnAction selectTurnAction();
 	public Player selectPlayerToAccuse(List<Player> accusablePlayersList);
-	public default DefenseAction chooseDefenseAction(boolean canWitch) {
+	public default DefenseAction selectDefenseAction(boolean canWitch) {
 		if (canWitch) return DefenseAction.WITCH;
 		else return DefenseAction.REVEAL;
 		/*Tout Doux : do better.
@@ -25,10 +25,10 @@ public interface PlayStrategy {
 		return selectPlayerToAccuse(eligiblePlayers);
 	}
 	
-	public RumourCard chooseWorstCard(RumourCardsPile rcp);
-	
+	public RumourCard selectWorstCard(RumourCardsPile rcp);
+	public RumourCard selectWitchCard(RumourCardsPile rcp);
 	public default RumourCard selectCardToDiscard(RumourCardsPile rcp) {
-		return chooseWorstCard(rcp);
+		return selectWorstCard(rcp);
 	}
 	
 

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
 
 public final class RumourCardsPile {
@@ -74,6 +75,10 @@ public final class RumourCardsPile {
 			destination.addCard(rc);
 			this.cards.remove(rc);
 		}
+	}
+
+	public void show(DisplayMediator dc,boolean forcedReveal) {
+		dc.displayCards(this, forcedReveal);
 	}
 	
 }

@@ -34,7 +34,7 @@ public final class Round {
 		
 		do {
 			setNextPlayerClockwise(); //By default, the player who takes the next turn is the one after the current player in Tabletop's players list.
-			currentTurn=new Turn(currentPlayer);
+			new Turn(currentPlayer);
 			if(!nextPlayer.isActive()) setNextPlayerClockwise();
 			currentPlayer=nextPlayer; 
 		}while(!isOver()); //We keep starting new turns until the round is over.
@@ -83,14 +83,20 @@ public final class Round {
 	}
 	
 	public boolean checkLastUnrevealedPlayer() {
-		Player lastManStanding = Tabletop.getInstance().getLastUnrevealedPlayer();
-		if (lastManStanding != null) {
+		List<Player> unrevealedPlayersList = Tabletop.getInstance().getUnrevealedPlayersList();
+		switch(unrevealedPlayersList.size()) {
+		case 1:
+			Player lastManStanding = unrevealedPlayersList.get(0);
 			lastManStanding.winRound();
 			Application.displayController.crlf();
 			Application.displayController.drawWeakDashedLine();
-			return (true);
+			return true;
+		case 2:
+			Application.displayController.displayOnlyTwoUnrevealedRemainingScreen();
+		default:
+			return false;
 		}
-		else return false;
+
 	}
 	
 	private void recycleRumourCards() {

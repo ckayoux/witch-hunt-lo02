@@ -5,7 +5,7 @@ import fr.sos.witchhunt.model.players.Player;
 public final class PointedHat extends RumourCard {
 	//TODO : default value ?
 	public PointedHat () {
-		this.witchEffect = new Effect() {
+		this.witchEffect = new WitchEffect() {
 			private Player me;
 			@Override
 			public void perform() {
@@ -21,7 +21,7 @@ public final class PointedHat extends RumourCard {
 			
 		};
 		
-		this.huntEffect = new Effect() {
+		this.huntEffect = new HuntEffect() {
 			private Player me;
 			@Override
 			public void perform() {

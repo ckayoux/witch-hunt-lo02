@@ -4,7 +4,7 @@ import java.util.List;
 
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.PlayerDisplayObservable;
-import fr.sos.witchhunt.PlayerDisplayObserver;
+import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Resettable;
@@ -21,7 +21,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	protected RumourCardsPile hand;
 	protected Identity identity;
 	protected IdentityCard identityCard;
-	protected PlayerDisplayObserver displayObserver;
+	protected DisplayMediator displayMediator;
 	private boolean immunized; //the Rumour Card EvilEye can give immunity to accusation to one player for one turn
 	private boolean active = true;
 	
@@ -150,16 +150,22 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		return this.revealIdentity();
 		
 	}
-	public abstract RumourCard selectWitchCard(RumourCardsPile rcp);
+	public abstract RumourCard selectWitchCard();
+	public abstract RumourCard selectHuntCard();
 	
 	protected void witch () {
-		requestLog("\t\t!-- This functionnality is not avaliable yet --!");
-		//TO UNCOMMENT WHEN PLAYERS ARE ABLE TO WITCH
-		//selectWitchCardFrom(hand).witch();
+		RumourCard chosen = selectWitchCard();
+		requestPlayerPlaysEffectScreen();
+		displayMediator.displayWitchEffect(chosen);
+		chosen.witch();
 	}
 	
 	protected void hunt() {
 		Tabletop.getInstance().setHunter(this);
+		RumourCard chosen = selectHuntCard();
+		requestPlayerPlaysEffectScreen();
+		displayMediator.displayHuntEffect(chosen);
+		chosen.hunt();
 	};
 	public abstract Player chooseTarget(List<Player> eligiblePlayers);
 	
@@ -172,6 +178,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public abstract Player chooseNextPlayer();
 	
 	public void winRound() {
+		Tabletop.getInstance().setLastUnrevealedPlayer(this);
 		requestLastUnrevealedPlayerScreen();
 		switch (this.identity) {
 			case WITCH:
@@ -193,58 +200,82 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	//DISPLAY METHODS
 	@Override
 	public void requestLog(String msg) {
-		displayObserver.passLog(msg);
+		displayMediator.passLog(msg);
 	}
 	
 	@Override
 	public void requestPlayTurnScreen() {
-		displayObserver.displayPlayTurnScreen(name);
+		displayMediator.displayPlayTurnScreen(name);
 	}
 	
 	@Override
 	public void requestAccusationScreen(Player p) {
-		displayObserver.displayAccusationScreen(this,p);
+		displayMediator.displayAccusationScreen(this,p);
 	}	
 	
 	@Override
 	public void requestDisplayPossibilities(Menu m) {
-		displayObserver.displayPossibilities(m);
+		displayMediator.displayPossibilities(m);
 	}
 	
 
 	@Override
 	public void requestChooseDefenseScreen() {
-		displayObserver.displayChooseDefenseScreen();
+		displayMediator.displayChooseDefenseScreen();
 	}
 	
 	@Override
 	public void requestForcedToRevealScreen() {
-		displayObserver.displayForcedToRevealScreen();
+		displayMediator.displayForcedToRevealScreen();
 	}
 	
 	@Override
 	public void requestIdentityRevealScreen() {
-		displayObserver.displayIdentityRevealScreen(this);
+		displayMediator.displayIdentityRevealScreen(this);
 	}
 	
 	@Override
 	public void requestScoreUpdateScreen(int scoreUpdatedBy) {
-		displayObserver.displayScoreUpdateScreen(this,scoreUpdatedBy);
+		displayMediator.displayScoreUpdateScreen(this,scoreUpdatedBy);
 	}
 	
 	@Override
 	public void requestEliminationScreen(Player victim) {
-		displayObserver.displayEliminationScreen(this,victim);
+		displayMediator.displayEliminationScreen(this,victim);
 	}
 	
 	@Override
 	public void requestLastUnrevealedPlayerScreen() {
-		displayObserver.displayLastUnrevealedPlayerScreen(this);
+		displayMediator.displayLastUnrevealedPlayerScreen(this);
 	}
 	
 	@Override
 	public void requestNoCardsScreen() {
-		displayObserver.displayNoCardsScreen(this);
+		displayMediator.displayNoCardsScreen(this);
+	}
+	
+	@Override
+	public void requestSelectCardScreen() {
+		displayMediator.displaySelectCardScreen();
+	}
+
+	@Override
+	public void requestSelectUnrevealedCardScreen() {
+		displayMediator.displaySelectUnrevealedCardScreen();
+	}
+	
+	@Override
+	public void requestSelectRevealedCardScreen() {
+		displayMediator.displaySelectRevealedCardScreen();
+	}
+	
+	public void showHand(boolean forcedReveal) {
+		this.hand.show(displayMediator, forcedReveal);
+	}
+	
+	@Override
+	public void requestPlayerPlaysEffectScreen() {
+		displayMediator.displayPlayerPlaysEffectScreen(this);
 	}
 	
 	
@@ -325,8 +356,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	}
 	
 	@Override
-	public void setDisplayObserver(PlayerDisplayObserver dO) {
-		this.displayObserver=dO;
+	public void setDisplayMediator(DisplayMediator dm) {
+		this.displayMediator=dm;
 	}
 	
 	//UTILS
@@ -337,11 +368,12 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	}
 	
 	protected boolean canHunt() {
-		return (this.hand.getPlayableHuntSubpile()==null);
+		Tabletop.getInstance().setHunter(this);
+		return (!this.hand.getPlayableHuntSubpile().isEmpty());
 	}
 	
 	public boolean canWitch() {
-		return (this.hand.getPlayableWitchSubpile()==null);
+		return (!this.hand.getPlayableWitchSubpile().isEmpty());
 	}
 	
 	public String toString() {

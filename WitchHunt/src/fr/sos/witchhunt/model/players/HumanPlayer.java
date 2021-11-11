@@ -3,7 +3,8 @@ package fr.sos.witchhunt.model.players;
 import java.util.List;
 
 import fr.sos.witchhunt.PlayerInputObservable;
-import fr.sos.witchhunt.PlayerInputObserver;
+import fr.sos.witchhunt.InputMediator;
+import fr.sos.witchhunt.controller.DisplayController;
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
@@ -12,7 +13,7 @@ import fr.sos.witchhunt.model.cards.RumourCardsPile;
 
 public final class HumanPlayer extends Player implements PlayerInputObservable {
 	
-	private PlayerInputObserver inputObserver;
+	private InputMediator inputMediator;
 	
 	//CONSTRUCTORS
 	public HumanPlayer(String name, int id) {
@@ -64,21 +65,6 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	public Player chooseNextPlayer() {
 		return choose(Tabletop.getInstance().getActivePlayersList(),"Select the next player to play :");
 	}
-	public RumourCard selectCardToDiscard() {
-		if(this.hasRumourCards()) {
-			if(this.hasUnrevealedRumourCards()) {
-				return choose(this.getUnrevealedSubhand().getCards(),"Select the unrevealed card that you want to discard :");
-			}
-			else {
-				return choose(this.hand.getCards(),"Select the card that you want to discard :");
-			}
-		}
-		else {
-			requestNoCardsScreen();
-			return null;
-		}
-		
-	}
 	
 	
 	/*@Override
@@ -119,40 +105,48 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	}*/
 	
 	@Override
-	public void hunt() {
-		displayObserver.passLog("\t!--This feature is not avaliable yet--!");//TEMPORARY
-	}
-	
-	@Override
 	public TurnAction chooseTurnAction() {
 		Menu possibilities;
 		if(this.canHunt()) {
-			possibilities = new Menu("Choose one of these two offensive actions :",
+			possibilities = new Menu("Choose one of these actions :",
 										"Accuse another player",
-										"Play the Hunt! effect of a Rumour card from your hand");
+										"Play the Hunt! effect of a Rumour card from your hand",
+										"Show my cards");
+			requestDisplayPossibilities(possibilities);
+			switch(makeChoice(possibilities)) {
+				case 1:
+					return TurnAction.ACCUSE;
+				case 2:
+					return TurnAction.HUNT;
+				case 3:
+					this.showHand();
+					return this.chooseTurnAction();
+			}
 		}
 		else {
 			possibilities = new Menu("You have no more avaliable Hunt! effects.",
-										"Accuse another player");
+										"Accuse another player","Show my cards");
+			requestDisplayPossibilities(possibilities);
+			switch(makeChoice(possibilities)) {
+				case 1:
+					return TurnAction.ACCUSE;
+				case 2:
+					this.showHand();
+					return this.chooseTurnAction();
+			}
 		}
-		requestDisplayPossibilities(possibilities);
-		switch(makeChoice(possibilities)) {
-			case 1:
-				return TurnAction.ACCUSE;
-			case 2:
-				return TurnAction.HUNT;
-		}
+		
 		return null;
 	}
 
 	//INPUT METHODS
 	@Override
-	public void setInputObserver(PlayerInputObserver io) {
-		inputObserver = io;
+	public void setInputMediator(InputMediator im) {
+		inputMediator = im;
 	}
 	@Override
 	public int makeChoice(Menu m) {
-		return inputObserver.makeChoice(m);
+		return inputMediator.makeChoice(m);
 	}
 	
 	
@@ -169,11 +163,65 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		}
 		return null;
 	}
-	
-	@Override
-	public RumourCard selectWitchCard(RumourCardsPile rcp) {
-		// TODO Auto-generated method stub
-		return null;
+
+	public void showHand() {
+		displayMediator.showCards(this);
+	}
+	public RumourCard selectCardToDiscard() {
+		if(this.hasRumourCards()) {
+			if(this.hasUnrevealedRumourCards()) {
+				return chooseUnrevealedCard(this.getUnrevealedSubhand(),true);
+			}
+			else {
+				return chooseAnyCard(this.hand,true);
+			}
+		}
+		else {
+			requestNoCardsScreen();
+			return null;
+		}
+		
 	}
 	
+	private RumourCard chooseCard(RumourCardsPile from,boolean forcedReveal){
+		//this method must not be used alone.
+		String [] options = new String [from.getCardsCount()];
+		for(int i=0; i<from.getCardsCount(); i++) {
+			options[i] = from.getCards().get(i).getName();
+		}
+		Menu m = new Menu("",options);
+		return from.getCards().get(makeChoice(m)-1);
+	}
+	
+	public RumourCard chooseAnyCard(RumourCardsPile from,boolean forcedReveal){
+		requestSelectCardScreen();
+		displayMediator.displayCards(from,forcedReveal);
+		return chooseCard(from,forcedReveal);
+	}
+	public RumourCard chooseUnrevealedCard(RumourCardsPile from,boolean forcedReveal){
+		//the player must necessarily choose an unrevealed card
+		requestSelectUnrevealedCardScreen();
+		displayMediator.displayCards(from,forcedReveal);
+		return chooseCard(from,forcedReveal);
+	}
+	public RumourCard chooseRevealedCard(RumourCardsPile from,boolean forcedReveal){
+		//the player must necessarily choose a revealed card
+		requestSelectRevealedCardScreen();
+		displayMediator.displayCards(from,forcedReveal);
+		return chooseCard(from,forcedReveal);
+	}
+	
+	@Override
+	public RumourCard selectWitchCard() {
+		requestSelectCardScreen();
+		displayMediator.displayWitchEffects(this.hand.getPlayableWitchSubpile());
+		return chooseCard(this.hand.getPlayableWitchSubpile(),true);
+	}
+	
+	@Override
+	public RumourCard selectHuntCard() {
+		requestSelectCardScreen();
+		displayMediator.displayHuntEffects(this.hand.getPlayableHuntSubpile());
+		return chooseCard(this.hand.getPlayableHuntSubpile(),true);
+	}
 }

@@ -18,9 +18,9 @@ public final class CPUPlayer extends Player {
 	
 	@Override
 	public final void chooseIdentity() {
-		this.identity = chosenStrategy.chooseIdentity();
+		this.identity = chosenStrategy.selectIdentity();
 		this.identityCard.setChosenIdentity(this.identity);
-		displayObserver.passLog("\t"+this.name+" has chosen its identity.");
+		displayMediator.passLog("\t"+this.name+" has chosen its identity.");
 	}
 
 	@Override
@@ -41,12 +41,12 @@ public final class CPUPlayer extends Player {
 	
 	@Override
 	public TurnAction chooseTurnAction() {
-		return chosenStrategy.chooseTurnAction();
+		return chosenStrategy.selectTurnAction();
 	}
 
 	@Override
 	public DefenseAction chooseDefenseAction() {
-		return chosenStrategy.chooseDefenseAction(this.canWitch());
+		return chosenStrategy.selectDefenseAction(this.canWitch());
 	}
 
 	
@@ -60,16 +60,10 @@ public final class CPUPlayer extends Player {
 	protected boolean canHunt() {
 		return false; //TEMPORARY
 	}
-	
-	@Override
-	public boolean canWitch() {
-		return false; //TEMPORARY
-	}
 
 	@Override
-	public RumourCard selectWitchCard(RumourCardsPile rcp) {
-		// TODO Auto-generated method stub
-		return null;
+	public RumourCard selectWitchCard() {
+		return this.chosenStrategy.selectWitchCard(this.hand.getPlayableWitchSubpile());
 	}
 
 	@Override
@@ -78,6 +72,12 @@ public final class CPUPlayer extends Player {
 			return chosenStrategy.selectCardToDiscard(this.getUnrevealedSubhand());
 		}
 		else return chosenStrategy.selectCardToDiscard(this.hand);
+	}
+
+	@Override
+	public RumourCard selectHuntCard() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

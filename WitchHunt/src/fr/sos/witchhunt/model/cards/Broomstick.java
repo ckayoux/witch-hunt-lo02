@@ -11,7 +11,7 @@ public final class Broomstick extends RumourCard {
 	
 	public Broomstick() {
 		
-		this.witchEffect = new Effect() {
+		this.witchEffect = new WitchEffect() {
 
 			@Override
 			public void perform() {
@@ -20,7 +20,7 @@ public final class Broomstick extends RumourCard {
 			
 		};
 		
-		 this.huntEffect =  new Effect() {
+		 this.huntEffect =  new HuntEffect() {
 
 				@Override
 				public void perform() {

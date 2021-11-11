@@ -7,7 +7,7 @@ public final class TheInquisition extends RumourCard {
 	//TODO : default value ?
 	
 	public TheInquisition () {
-		this.witchEffect = new Effect() {
+		this.witchEffect = new WitchEffect() {
 			
 			@Override
 			public void perform() {
@@ -17,7 +17,7 @@ public final class TheInquisition extends RumourCard {
 			}
 		};
 		
-		this.huntEffect = new Effect() {
+		this.huntEffect = new HuntEffect() {
 			Player me;
 			@Override
 			public void perform() {

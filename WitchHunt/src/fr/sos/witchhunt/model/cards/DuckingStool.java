@@ -11,7 +11,7 @@ public final class DuckingStool extends RumourCard {
 		
 		DuckingStool cardInstance = this;
 		
-		this.witchEffect = new Effect() {
+		this.witchEffect = new WitchEffect() {
 			
 			@Override
 			public void perform() {
@@ -19,7 +19,7 @@ public final class DuckingStool extends RumourCard {
 			}
 		};
 		
-		this.huntEffect = new Effect() {
+		this.huntEffect = new HuntEffect() {
 			@Override
 			public void perform() {
 				/*TODO

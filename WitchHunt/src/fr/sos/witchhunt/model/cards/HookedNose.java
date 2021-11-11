@@ -3,7 +3,7 @@ package fr.sos.witchhunt.model.cards;
 public final class HookedNose extends RumourCard {
 	//TODO : default value ?
 	public HookedNose () {
-		this.witchEffect = new Effect() {
+		this.witchEffect = new WitchEffect() {
 			
 			@Override
 			public void perform() {
@@ -12,7 +12,7 @@ public final class HookedNose extends RumourCard {
 			}
 		};
 		
-		this.huntEffect = new Effect() {
+		this.huntEffect = new HuntEffect() {
 			@Override
 			public void perform() {
 				//Take a random card from their hand and add it to yours

@@ -58,10 +58,24 @@ public class CardValueMap {
 		return submap.keySet().stream().collect(Collectors.toList());
 	}
 	
-	public List<RumourCard> getCardsWithMinWitchValue(RumourCardsPile rcp) {
+	public RumourCardsPile getCardsWithMinWitchValue(RumourCardsPile rcp) {
 		Map<RumourCard,CardValue> M = this.filter(rcp);
 		List<Integer> witchEffectValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getWitchValue()) ;
 		int min = Collections.min(witchEffectValues);
-		return getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getWitchValue(), min);
+		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getWitchValue(), min));
+	}
+	
+	public RumourCardsPile getCardsWithMinHuntValue(RumourCardsPile rcp) {
+		Map<RumourCard,CardValue> M = this.filter(rcp);
+		List<Integer> huntEffectValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getHuntValue()) ;
+		int min = Collections.min(huntEffectValues);
+		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getHuntValue(), min));
+	}
+	
+	public RumourCardsPile getCardsWithMinOverallValue(RumourCardsPile rcp) {
+		Map<RumourCard,CardValue> M = this.filter(rcp);
+		List<Integer> overallValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getOverallValue()) ;
+		int min = Collections.min(overallValues);
+		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getOverallValue(), min));
 	}
 }

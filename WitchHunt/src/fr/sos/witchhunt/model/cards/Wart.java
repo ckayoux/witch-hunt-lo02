@@ -10,7 +10,7 @@ public final class Wart extends RumourCard {
 	
 	public Wart() {
 		
-		this.witchEffect = new Effect() {
+		this.witchEffect = new WitchEffect() {
 
 			@Override
 			public void perform() {
@@ -19,7 +19,7 @@ public final class Wart extends RumourCard {
 			
 		};
 		
-		 this.huntEffect =  new Effect() {
+		 this.huntEffect =  new HuntEffect() {
 
 				@Override
 				public void perform() {

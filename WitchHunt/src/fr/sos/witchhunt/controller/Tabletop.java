@@ -2,6 +2,7 @@ package fr.sos.witchhunt.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fr.sos.witchhunt.model.cards.ExistingRumourCards;
 
@@ -17,7 +18,8 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private Round currentRound;
 	private ScoreCounter scoreCounter;
 	private RumourCardsPile allCardsPile;
-
+	private Player lastUnrevealedPlayer=null;
+	
 	//CONSTRUCTOR
 	private Tabletop () {
 		playersList = new ArrayList<Player> ();
@@ -132,9 +134,7 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		return playersList;
 	}
 	public List<Player> getActivePlayersList() {
-		List <Player> l = new ArrayList<Player> ();
-		playersList.forEach(p -> {if (p.isActive()) l.add(p);});
-		return l;
+		return this.playersList.stream().filter(p -> p.isActive()).collect(Collectors.toList());
 	}
 	public ScoreCounter getScoreCounter() {
 		return scoreCounter;
@@ -145,22 +145,17 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	}
 	
 	public List<Player> getAccusablePlayersList() {
-		List <Player> l = new ArrayList<Player>();
-		playersList.forEach(p -> { if(p.isAccusable()) l.add(p); });
-		return l;
+		return this.playersList.stream().filter(p -> p.isAccusable()).collect(Collectors.toList());
 	}
 	
 	public List<Player> getUnrevealedPlayersList() {
-		List <Player> l = new ArrayList<Player>();
-		playersList.forEach(p -> { if(!p.isRevealed()) l.add(p); });
-		return l;
+		return this.playersList.stream().filter(p -> !p.isRevealed()).collect(Collectors.toList());
 	}
 	
 	public Player getLastUnrevealedPlayer() {
-		int unrevealedPlayersCount = getUnrevealedPlayersList().size();
-		if(unrevealedPlayersCount != 1) return null;
-		else return getUnrevealedPlayersList().get(0);
+		return this.lastUnrevealedPlayer;
 	}
+
 	
 	//SETTERS
 	public void setCurrentRound(Round r) {
@@ -177,5 +172,8 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	}
 	public void setHunter(Player hunter) {
 		getCurrentTurn().setHunter(hunter);
+	}
+	public void setLastUnrevealedPlayer(Player p) {
+		this.lastUnrevealedPlayer=p;
 	}
 }

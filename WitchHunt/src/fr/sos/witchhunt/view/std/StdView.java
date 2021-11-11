@@ -10,16 +10,45 @@ import fr.sos.witchhunt.model.Menu;
 
 public final class StdView {
 	
+	int tabulation = 0;
+	
 	//CONSTRUCTORS
 	public StdView() {
 		log("Welcome to Witch Hunt !");
 		logStarsLine();
 	}
 	
+	public void tabbedLog(String msg) {
+		if(tabulation != 0) {
+			StringBuffer sb = new StringBuffer();
+			for(int i=0; i<this.tabulation; i++) {
+				sb.append('\t');
+			}
+			sb.append(msg);
+			System.out.println(sb.toString());
+		}
+		else {
+			System.out.println(msg);
+		}
+	}
+	
 	public void log(String msg) {
 		System.out.println(msg);
 	}
 	
+	public void tabbedPrint(String msg) {
+		if(tabulation != 0) {
+			StringBuffer sb = new StringBuffer();
+			for(int i=0; i<this.tabulation; i++) {
+				sb.append('\t');
+			}
+			sb.append(msg);
+			System.out.print(sb.toString());
+		}
+		else {
+			System.out.print(msg);
+		}
+	}
 	public void print(String msg) {
 		System.out.print(msg);
 	}
@@ -189,4 +218,71 @@ public final class StdView {
 		log("\t" + playerName + " has got not cards.");
 	}
 
+	public void logOnlyTwoUnrevealedRemainingMessage() {
+		log("\t~ Only two unrevealed players remaining ! ~");
+	}
+
+	public void logUnrevealedCard() {
+		tabbedLog("*Unrevealed*");
+	}
+	
+	//SETTERS
+	public void setTabulation(int t) {
+		this.tabulation=t;
+	}
+	public void increaseTabulation() {
+		this.tabulation++;
+	}
+	public void decreaseTabulation() {
+		this.tabulation--;
+	}
+
+	public void logRumourCard(String name, boolean revealed, String additionnalEffectDescription, String witchEffectDescription,
+		String huntEffectDescription) {
+		log(name + ((revealed)?"\t(Revealed)":""));
+		increaseTabulation();
+			tabbedLog("*" + additionnalEffectDescription + "*");
+			tabbedLog("Witch : " + witchEffectDescription);
+			tabbedLog("Hunt : " + huntEffectDescription);
+		decreaseTabulation();
+		crlf();
+	}
+	public void logRumourCard(String name, boolean revealed, String witchEffectDescription, String huntEffectDescription) {
+		log(name + ((revealed)?"\t(Revealed)":""));
+		increaseTabulation();
+			tabbedLog("Witch : " + witchEffectDescription);
+			tabbedLog("Hunt : " + huntEffectDescription);
+		decreaseTabulation();
+		crlf();
+		}
+
+	public void logEffect(String name, String effectDescription) {
+		log(name + " (" + effectDescription+ ")");
+	}
+
+	public void logEffect(String name, String additionnalEffectDescription, String effectDescription) {
+		log(name + " (" + effectDescription + ")");
+		String blank = (name +" (").replaceAll(".", " ");
+		log(blank + "*" + additionnalEffectDescription + "*");
+	}
+
+	public void logShowPlayersCardsMessage(String playerName) {
+		log("\t"+playerName + ", here are all the cards in your possession (others, don't look !) :");
+	}
+
+	public void logSelectCardMessage() {
+		log("\tSelect a card among these ones :");
+	}
+
+	public void logSelectUnrevealedCardMessage() {
+		log("\tSelect an unrevealed card among these ones :");
+	}
+
+	public void logSelectRevealedCardMessage() {
+		log("\tSelect a revealed card among these ones :");
+	}
+
+	public void logPlayerPlaysEffectMessage(String playerName) {
+		print("\t"+playerName + " uses : ");
+	}
 }

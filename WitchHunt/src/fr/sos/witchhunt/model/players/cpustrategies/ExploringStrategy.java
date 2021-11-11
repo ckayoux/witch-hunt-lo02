@@ -20,13 +20,13 @@ public final class ExploringStrategy implements PlayStrategy {
 	CardValueMap map = new CardValueMap();
 	
 	@Override
-	public Identity chooseIdentity() {
+	public Identity selectIdentity() {
 		int n = (int) Math.round(Math.random());
 		return (n==0) ? Identity.VILLAGER : Identity.WITCH;
 	}
 
 	@Override
-	public TurnAction chooseTurnAction() {
+	public TurnAction selectTurnAction() {
 		return TurnAction.ACCUSE; //TODO do better
 	}
 
@@ -37,11 +37,20 @@ public final class ExploringStrategy implements PlayStrategy {
 	}
 
 	@Override
-	public RumourCard chooseWorstCard(RumourCardsPile rcp) {
-		//useful when choosing a card to discard.
-		List<RumourCard> worstCards = map.getCardsWithMinWitchValue(rcp);
-		//returns a random card among the ones with the lowest witchEffectValue + huntEffectValue sum.
-		return worstCards.get((int)(Math.random()*worstCards.size())); 
+	public RumourCard selectWorstCard(RumourCardsPile rcp) {
+		/*useful when choosing a card to discard.
+		returns a random card among the ones with the lowest witchEffectValue + huntEffectValue sum.*/
+		return map.getCardsWithMinOverallValue(rcp).getRandomCard();
+	}
+
+	@Override
+	public RumourCard selectWitchCard(RumourCardsPile rcp) {
+		RumourCardsPile worstWitchCards = map.getCardsWithMinWitchValue(rcp);
+		/*returns a random card among the ones with the lowest huntEffectValue among the ones with the lowest witchEffectValue.
+		this is not the same as taking the cards with the lowest overall value !
+		since this is a groping strategy, we want to avoid spending the best witch effects at the start of the game.*/
+		
+		return worstWitchCards.getRandomCard(); 
 	}
 
 }

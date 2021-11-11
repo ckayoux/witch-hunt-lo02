@@ -8,14 +8,14 @@ public final class BlackCat extends RumourCard {
 	//TODO : default value ?
 	public BlackCat() {
 		
-		this.witchEffect = new Effect() {
+		this.witchEffect = new WitchEffect() {
 			@Override
 			public void perform() {
 				takeNextTurn();
 			}
 		};
 		
-		this.huntEffect = new Effect() {
+		this.huntEffect = new HuntEffect() {
 			
 
 			@Override

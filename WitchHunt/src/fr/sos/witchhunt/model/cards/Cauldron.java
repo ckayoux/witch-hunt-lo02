@@ -8,7 +8,7 @@ public final class Cauldron extends RumourCard {
 	//TODO : default value ?
 	public Cauldron() {
 			
-			this.witchEffect = new Effect() {
+			this.witchEffect = new WitchEffect() {
 				@Override
 				public void perform() {
 					Tabletop.getInstance().getAccusator().discardRandomCard();
@@ -16,7 +16,7 @@ public final class Cauldron extends RumourCard {
 				}
 			};
 			
-			this.huntEffect = new Effect() {
+			this.huntEffect = new HuntEffect() {
 				@Override
 				public void perform() {
 					/*TODO

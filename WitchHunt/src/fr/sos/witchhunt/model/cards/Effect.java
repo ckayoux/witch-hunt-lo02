@@ -34,10 +34,6 @@ public abstract class Effect {
 	public int getValue() {
 		return value;
 	}
-	public Player getMyself() {
-		return Tabletop.getInstance().getHunter();
-	}
-	public Player getTarget() {
-		return Tabletop.getInstance().getHuntedPlayer();
-	}
+	protected abstract Player getMyself();
+
 }

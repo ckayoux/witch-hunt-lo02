@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import java.util.concurrent.CountDownLatch;
 
-import fr.sos.witchhunt.PlayerInputObserver;
+import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.players.CPUPlayer;
 import fr.sos.witchhunt.model.players.HumanPlayer;
@@ -12,7 +12,7 @@ import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.std.InterruptibleStdInput;
 import fr.sos.witchhunt.view.std.StdView;
 
-public final class InputController implements PlayerInputObserver {
+public final class InputController implements InputMediator {
 
 	//ATTRIBUTES
 	private CountDownLatch latch = new CountDownLatch(1) ;
@@ -62,7 +62,7 @@ public final class InputController implements PlayerInputObserver {
 			String name = getStringInput();
 			Application.displayController.crlf();
 			temp = new HumanPlayer(name,id);
-			temp.setInputObserver(Application.inputController);
+			temp.setInputMediator(Application.inputController);
 			output=(Player) temp;
 		}
 		else {
@@ -70,7 +70,7 @@ public final class InputController implements PlayerInputObserver {
 			Application.displayController.crlf();
 			output = new CPUPlayer(id,Game.getCPUPlayersNumber());
 		}
-		output.setDisplayObserver(Application.displayController);
+		output.setDisplayMediator(Application.displayController);
 		return output;
 	}
 	
@@ -92,7 +92,14 @@ public final class InputController implements PlayerInputObserver {
 		else return receivedString;
 	}
 	public int getIntInput() {
-		return Integer.parseInt(getStringInput());
+		try {
+			int got = Integer.parseInt(getStringInput());
+			return got;
+		}
+		catch (final NumberFormatException e) {
+			return -1;
+		}
+			
 	}
 	public boolean answerYesNoQuestion() {
 		char input = getStringInput().toLowerCase().charAt(0);

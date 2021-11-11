@@ -10,7 +10,7 @@ public final class AngryMob extends RumourCard {
 	public AngryMob() {
 		AngryMob cardInstance = this;
 		
-		this.witchEffect = new Effect() {
+		this.witchEffect = new WitchEffect() {
 			
 			@Override
 			public void perform() {
@@ -18,7 +18,7 @@ public final class AngryMob extends RumourCard {
 			}
 		};
 		
-		this.huntEffect = new Effect() {
+		this.huntEffect = new HuntEffect() {
 			
 			private Player me;
 			@Override
