@@ -3,16 +3,26 @@ package fr.sos.witchhunt.model.cards;
 import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
 
 public abstract class RumourCard extends Card {
-	protected int value;
+
 	protected Effect witchEffect;
 	protected Effect huntEffect;
 	protected String additionnalEffectDescription="";
+	protected int defaultAdditionnalValue=0;
+	
+	public RumourCard() {
+		
+	}
+	
+	public RumourCard(String additionnalEffectDescription,int defaultAdditionnalValue) {
+		this.additionnalEffectDescription=additionnalEffectDescription;
+		this.defaultAdditionnalValue=defaultAdditionnalValue;
+	}
 	
 	//public void discard(){}
 	public boolean witch() {
 		if(this.witchEffect.isAllowed()) {
-			this.reveal();
 			this.witchEffect.perform();
+			this.reveal();
 			return true;
 		}
 		else {
@@ -30,7 +40,12 @@ public abstract class RumourCard extends Card {
 		}
 	}
 	public CardValue getDefaultValue() {
-		return new CardValue(witchEffect.getValue(),huntEffect.getValue());
+		if(this.defaultAdditionnalValue<=0) {
+			return new CardValue(witchEffect.getValue(),huntEffect.getValue());
+		}
+		else {
+			return new CardValue(witchEffect.getValue(),huntEffect.getValue(),this.defaultAdditionnalValue);
+		}
 	};
 	
 	public boolean grantsImmunityAgainst(RumourCard rc) {
@@ -71,6 +86,5 @@ public abstract class RumourCard extends Card {
 	public String getAdditionnalEffectDescription() {
 		return this.additionnalEffectDescription;
 	}
-	
 	
 }

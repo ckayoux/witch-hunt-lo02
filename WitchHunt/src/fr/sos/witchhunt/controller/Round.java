@@ -35,7 +35,13 @@ public final class Round {
 		do {
 			setNextPlayerClockwise(); //By default, the player who takes the next turn is the one after the current player in Tabletop's players list.
 			new Turn(currentPlayer);
-			if(!nextPlayer.isActive()) setNextPlayerClockwise();
+			if(nextPlayer==null) {
+				setNextPlayerClockwise(); 
+				System.out.println("!--Error, next player was null.--!");
+			}
+			else {
+				if(!nextPlayer.isActive());
+			}
 			currentPlayer=nextPlayer; 
 		}while(!isOver()); //We keep starting new turns until the round is over.
 		
@@ -137,7 +143,16 @@ public final class Round {
 		nextPlayer = L.get((L.indexOf(currentPlayer)+1) % L.size());
 	}
 
+	public void setNextPlayerCounterclockwise() {
+		//automatically sets the next player to the one before the current player in Tabletop's players list. Used by the rumour card Cauldron
+				List <Player> L = Tabletop.getInstance().getActivePlayersList();
+				int chosenIndex = L.indexOf(currentPlayer) -1;
+				if(chosenIndex<0) chosenIndex=L.size()-1;
+				nextPlayer = L.get(chosenIndex);
+	}
 	public static void setRoundNumber(int n) {
 		roundNumber = n;
 	}
+
+	
 }

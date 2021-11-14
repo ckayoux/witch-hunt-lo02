@@ -78,4 +78,12 @@ public class CardValueMap {
 		int min = Collections.min(overallValues);
 		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getOverallValue(), min));
 	}
+
+
+	public RumourCardsPile getCardsWithMaxOverallValue(RumourCardsPile rcp) {
+		Map<RumourCard,CardValue> M = this.filter(rcp);
+		List<Integer> overallValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getOverallValue()) ;
+		int max = Collections.max(overallValues);
+		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getOverallValue(), max));
+	}
 }

@@ -11,6 +11,7 @@ import fr.sos.witchhunt.model.Menu;
 public final class StdView {
 	
 	int tabulation = 0;
+	private String offset="";
 	
 	//CONSTRUCTORS
 	public StdView() {
@@ -19,17 +20,8 @@ public final class StdView {
 	}
 	
 	public void tabbedLog(String msg) {
-		if(tabulation != 0) {
-			StringBuffer sb = new StringBuffer();
-			for(int i=0; i<this.tabulation; i++) {
-				sb.append('\t');
-			}
-			sb.append(msg);
-			System.out.println(sb.toString());
-		}
-		else {
-			System.out.println(msg);
-		}
+		tabbedPrint(msg);
+		crlf();
 	}
 	
 	public void log(String msg) {
@@ -37,17 +29,19 @@ public final class StdView {
 	}
 	
 	public void tabbedPrint(String msg) {
+		StringBuffer sb = new StringBuffer();
+		StringBuffer megaTabSb= new StringBuffer();
 		if(tabulation != 0) {
-			StringBuffer sb = new StringBuffer();
 			for(int i=0; i<this.tabulation; i++) {
-				sb.append('\t');
+				megaTabSb.append('\t');
 			}
-			sb.append(msg);
-			System.out.print(sb.toString());
+			sb.append(megaTabSb.toString());
+			
 		}
-		else {
-			System.out.print(msg);
-		}
+		sb.append(this.offset);
+		megaTabSb.append(" ".repeat(this.offset.length()));
+		sb.append(msg.replace("/+/", megaTabSb.toString()));
+		System.out.print(sb.toString());
 	}
 	public void print(String msg) {
 		System.out.print(msg);
@@ -207,7 +201,10 @@ public final class StdView {
 	}
 
 	public void logEliminationMessage(String eliminatorName, String victimName) {
-		log("\t"+eliminatorName + " has eliminated " + victimName + ".");
+		if(eliminatorName!=victimName)
+			log("\t"+eliminatorName + " has eliminated " + victimName + ".");
+		else 
+			log("\t"+eliminatorName+" has eliminated themselve.");
 	}
 
 	public void logLastUnrevealedMessage(String playerName) {
@@ -239,31 +236,40 @@ public final class StdView {
 
 	public void logRumourCard(String name, boolean revealed, String additionnalEffectDescription, String witchEffectDescription,
 		String huntEffectDescription) {
-		log(name + ((revealed)?"\t(Revealed)":""));
-		increaseTabulation();
+		tabbedLog(name + ((revealed)?"\t(Revealed)":""));
+		String off=" ".repeat(offset.length())+"  ";
+
+			setOffset(off);
 			tabbedLog("*" + additionnalEffectDescription + "*");
-			tabbedLog("Witch : " + witchEffectDescription);
-			tabbedLog("Hunt : " + huntEffectDescription);
-		decreaseTabulation();
+			setOffset(off+"Witch : ");
+			tabbedLog(witchEffectDescription);
+			setOffset(off+"Hunt  : ");
+			tabbedLog(huntEffectDescription);
+			resetOffset();
 		crlf();
 	}
 	public void logRumourCard(String name, boolean revealed, String witchEffectDescription, String huntEffectDescription) {
-		log(name + ((revealed)?"\t(Revealed)":""));
-		increaseTabulation();
-			tabbedLog("Witch : " + witchEffectDescription);
-			tabbedLog("Hunt : " + huntEffectDescription);
-		decreaseTabulation();
+		tabbedLog(name + ((revealed)?"\t(Revealed)":""));
+		String off=" ".repeat(offset.length())+"  ";
+			setOffset(off+"Witch : ");
+			tabbedLog(witchEffectDescription);
+			setOffset(off+"Hunt  : ");
+			tabbedLog(huntEffectDescription);
+			resetOffset();
+
 		crlf();
-		}
+	}
 
 	public void logEffect(String name, String effectDescription) {
-		log(name + " (" + effectDescription+ ")");
+		tabbedLog(name+" :");
+		setBlankOffset(this.offset+"  ");
+		tabbedLog(effectDescription);
 	}
 
 	public void logEffect(String name, String additionnalEffectDescription, String effectDescription) {
-		log(name + " (" + effectDescription + ")");
-		String blank = (name +" (").replaceAll(".", " ");
-		log(blank + "*" + additionnalEffectDescription + "*");
+		tabbedLog(name+" :");
+		setBlankOffset(this.offset+"  ");
+		tabbedLog("*"+additionnalEffectDescription +"*\n/+/" + effectDescription);
 	}
 
 	public void logShowPlayersCardsMessage(String playerName) {
@@ -282,7 +288,73 @@ public final class StdView {
 		log("\tSelect a revealed card among these ones :");
 	}
 
-	public void logPlayerPlaysEffectMessage(String playerName) {
-		print("\t"+playerName + " uses : ");
+	public void logPlayerPlaysEffectMessage(String playerName,String cardName, String effectDescription) {
+		setOffset("\t"+playerName+ " uses ");
+		logEffect(cardName,effectDescription);
+		resetOffset();
+		crlf();
+		
+	}
+	public void logPlayerPlaysEffectMessage(String playerName,String cardName, String effectDescription, String additionnalEffectDescription) {
+		setOffset("\t"+playerName + " uses ");
+		logEffect(cardName,additionnalEffectDescription,effectDescription);
+		resetOffset();
+		crlf();
+	}
+
+	public void setOffset(String str) {
+		this.offset=str;
+	}
+	public void setBlankOffset(String str) {
+		this.offset=" ".repeat(str.length());
+	}
+	public void addOffset(String str) {
+		this.offset+=str;
+	}
+	public void resetOffset() {
+		this.offset="";
+	}
+
+	public void logHasChosenCardMessage(String playerName,String cardName,boolean revealed,String additionnalEffectDescription,
+			String witchEffectDescription,String huntEffectDescription) {
+		setOffset("\t"+playerName + " has chosen ");
+		logRumourCard(cardName,revealed,additionnalEffectDescription,witchEffectDescription,huntEffectDescription);
+		resetOffset();
+		crlf();
+	}
+	public void logHasChosenCardMessage(String playerName,String cardName,boolean revealed,String witchEffectDescription,String huntEffectDescription) {
+		setOffset("\t"+playerName + " has chosen ");
+		logRumourCard(cardName,revealed,witchEffectDescription,huntEffectDescription);
+		resetOffset();
+		crlf();
+	}
+
+	public void logEmptyHandMessage(String ownersName) {
+		log("\t"+ownersName+"'"+((ownersName.charAt(ownersName.length()-1)!='s')?"s":"")+ "hand is empty.");
+	}
+	public void logEmptyPileMessage() {
+		log("\tThe pile is empty.");
+	}
+
+	public void printPlayerDiscardedCardMessage(String playerName) {
+		setOffset("\t"+playerName + " has discarded ");
+	}
+
+	public void logLookAtPlayersIdentityMessage(String myName, String targetsName) {
+		log("\t"+myName + " is looking at "+targetsName+"'"+((targetsName.charAt(targetsName.length()-1)!='s')?"s":"") + " identity.");
+	}
+
+	public void logSecretIdentityRevealMessage(String targetsName, String identity) {
+		log("\tOthers, close your eyes !");
+		log("\t\t"+targetsName + " is a "+identity.toLowerCase()+ ".\n");
+	}
+
+	public void logWasAlreadyRevealedAs(String playerName, String identity) {
+		log("\t"+playerName + " was already revealed as a "+identity.toLowerCase()+ ".\n");
+	}
+
+	public void logPlayerHasResetCardMessage(String playerName) {
+		setOffset("\t"+playerName + " has reset ");
+		
 	}
 }

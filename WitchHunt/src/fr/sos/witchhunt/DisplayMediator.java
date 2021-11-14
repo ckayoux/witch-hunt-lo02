@@ -29,5 +29,12 @@ public interface DisplayMediator {
 	public void displaySelectCardScreen();
 	public void displaySelectUnrevealedCardScreen();
 	public void displaySelectRevealedCardScreen();
-	public void displayPlayerPlaysEffectScreen(Player p);
+	public void displayPlayerPlaysWitchEffectScreen(Player player, RumourCard rc);
+	public void displayPlayerPlaysHuntEffectScreen(Player player, RumourCard rc);
+	public void displayHasChosenCardScreen(Player player, RumourCard chosen);
+	public void displayNoCardsInPileScreen(RumourCardsPile rcp);
+	public void displayDiscardCardScreen(Player owner,RumourCard rc);
+	public void displayLookAtPlayersIdentityScreen(Player me, Player target);
+	public void secretlyDisplayIdentity(Player target);
+	public void displayPlayerHasResetCardScreen(Player player, RumourCard chosenCard);
 }

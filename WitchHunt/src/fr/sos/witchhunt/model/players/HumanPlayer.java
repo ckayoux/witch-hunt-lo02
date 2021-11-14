@@ -63,7 +63,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	}
 	
 	public Player chooseNextPlayer() {
-		return choose(Tabletop.getInstance().getActivePlayersList(),"Select the next player to play :");
+		return choose(Tabletop.getInstance().getActivePlayersList().stream().filter(p->p!=this).toList(),"\n\tSelect the next player to play :");
 	}
 	
 	
@@ -194,21 +194,30 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	}
 	
 	public RumourCard chooseAnyCard(RumourCardsPile from,boolean forcedReveal){
-		requestSelectCardScreen();
-		displayMediator.displayCards(from,forcedReveal);
-		return chooseCard(from,forcedReveal);
+		if(targetPileContainsCards(from)) {
+			requestSelectCardScreen();
+			displayMediator.displayCards(from,forcedReveal);
+			return chooseCard(from,forcedReveal);
+		}
+		else return null;
 	}
 	public RumourCard chooseUnrevealedCard(RumourCardsPile from,boolean forcedReveal){
-		//the player must necessarily choose an unrevealed card
-		requestSelectUnrevealedCardScreen();
-		displayMediator.displayCards(from,forcedReveal);
-		return chooseCard(from,forcedReveal);
+		if(targetPileContainsCards(from.getUnrevealedSubpile())){
+			//the player must necessarily choose an unrevealed card
+			requestSelectUnrevealedCardScreen();
+			displayMediator.displayCards(from.getUnrevealedSubpile(),forcedReveal);
+			return chooseCard(from.getUnrevealedSubpile(),forcedReveal);
+		}
+		else return null;
 	}
-	public RumourCard chooseRevealedCard(RumourCardsPile from,boolean forcedReveal){
-		//the player must necessarily choose a revealed card
-		requestSelectRevealedCardScreen();
-		displayMediator.displayCards(from,forcedReveal);
-		return chooseCard(from,forcedReveal);
+	public RumourCard chooseRevealedCard(RumourCardsPile from){
+		if(targetPileContainsCards(from.getRevealedSubpile())){
+			//the player must necessarily choose a revealed card
+			requestSelectRevealedCardScreen();
+			displayMediator.displayCards(from.getRevealedSubpile(),false);
+			return chooseCard(from.getRevealedSubpile(),false);
+		}
+		else return null;
 	}
 	
 	@Override
@@ -223,5 +232,11 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		requestSelectCardScreen();
 		displayMediator.displayHuntEffects(this.hand.getPlayableHuntSubpile());
 		return chooseCard(this.hand.getPlayableHuntSubpile(),true);
+	}
+	
+	@Override
+	public void requestLookAtPlayersIdentityScreen(Player target) {
+		super.requestLookAtPlayersIdentityScreen(target);
+		displayMediator.secretlyDisplayIdentity(target);
 	}
 }

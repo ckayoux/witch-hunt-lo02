@@ -35,7 +35,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 			this.id=id;
 		}
 		this.identityCard = new IdentityCard();
-		this.hand = new RumourCardsPile();
+		this.hand = new RumourCardsPile(this);
 	}
 	public Player(int id) {
 		this.id=id;
@@ -61,7 +61,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	protected abstract RumourCard selectCardToDiscard() ;
 		
 	public void discard(RumourCard rc) {
-		rc.reset();
+		//rc.reset();
+		requestDiscardCardScreen(rc);
 		this.hand.giveCard(rc, Tabletop.getInstance().getPile());
 	}
 	public void discard() {
@@ -155,16 +156,14 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	
 	protected void witch () {
 		RumourCard chosen = selectWitchCard();
-		requestPlayerPlaysEffectScreen();
-		displayMediator.displayWitchEffect(chosen);
+		requestPlayerPlaysWitchEffectScreen(chosen);
 		chosen.witch();
 	}
 	
 	protected void hunt() {
 		Tabletop.getInstance().setHunter(this);
 		RumourCard chosen = selectHuntCard();
-		requestPlayerPlaysEffectScreen();
-		displayMediator.displayHuntEffect(chosen);
+		requestPlayerPlaysHuntEffectScreen(chosen);
 		chosen.hunt();
 	};
 	public abstract Player chooseTarget(List<Player> eligiblePlayers);
@@ -274,10 +273,33 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	}
 	
 	@Override
-	public void requestPlayerPlaysEffectScreen() {
-		displayMediator.displayPlayerPlaysEffectScreen(this);
+	public void requestPlayerPlaysWitchEffectScreen(RumourCard rc) {
+		displayMediator.displayPlayerPlaysWitchEffectScreen(this,rc);
 	}
-	
+	@Override
+	public void requestPlayerPlaysHuntEffectScreen(RumourCard rc) {
+		displayMediator.displayPlayerPlaysHuntEffectScreen(this,rc);
+	}
+	@Override
+	public void requestHasChosenCardScreen(RumourCard chosen) {
+		displayMediator.displayHasChosenCardScreen(this,chosen);
+	}
+	@Override
+	public void requestEmptyRCPScreen(RumourCardsPile rcp) {
+		displayMediator.displayNoCardsInPileScreen(rcp);
+	};
+	@Override
+	public void requestDiscardCardScreen(RumourCard rc) {
+		displayMediator.displayDiscardCardScreen(this,rc);
+	}
+	@Override
+	public void requestLookAtPlayersIdentityScreen(Player target) {
+		displayMediator.displayLookAtPlayersIdentityScreen(this,target);
+	}
+	@Override
+	public void requestHasResetCardScreen(RumourCard chosen) {
+		displayMediator.displayPlayerHasResetCardScreen(this,chosen);
+	}
 	
 	//GETTERS
 	public String getName() {
@@ -379,5 +401,21 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public String toString() {
 		return this.name;
 	}
-
+	
+	public abstract RumourCard chooseAnyCard(RumourCardsPile from,boolean seeUnrevealedCards);
+	public abstract RumourCard chooseRevealedCard(RumourCardsPile from);
+	
+	public boolean targetPileContainsCards(RumourCardsPile rcp) {
+		if(rcp.isEmpty()) {
+			requestEmptyRCPScreen(rcp);
+			return false;
+		}
+		return true;
+	}
+	public Identity lookAtPlayersIdentity(Player target) {
+		requestLookAtPlayersIdentityScreen(target);
+		return target.getIdentity();
+	}
+	
+	
 }

@@ -1,10 +1,13 @@
 package fr.sos.witchhunt.model.cards;
 
 public final class EvilEye extends RumourCard {
-	//TODO : default value ?
+	/*TODO : this card becomes more valuable when you are unrevealed and there are exactly two other unrevealed players, 
+	 * both being short of cards,
+	 *and even more if you are a witch,
+	 *as it allows you to choose the player right before you and thus let you accuse the last remaining player.*/
 	public EvilEye () {
-		this.witchEffect = new WitchEffect() {
-			
+		this.witchEffect = new WitchEffect("Choose next player.\n"
+				+ "/+/On their turn, they must accuse a player other than you, if possible.",2) {
 			@Override
 			public void perform() {
 				//on their turn, they must accuse a player other than you, if possible
@@ -12,7 +15,8 @@ public final class EvilEye extends RumourCard {
 			}
 		};
 		
-		this.huntEffect = new HuntEffect() {
+		this.huntEffect = new HuntEffect("Choose next player.\n"
+				+ "/+/On their turn, they must accuse a player other than you, if possible.",1) {
 			@Override
 			public void perform() {
 				//on their turn, they must accuse a player other than you, if possible

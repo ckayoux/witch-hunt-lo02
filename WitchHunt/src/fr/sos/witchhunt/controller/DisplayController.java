@@ -147,15 +147,18 @@ public final class DisplayController implements DisplayMediator {
 
 	@Override
 	public void displayIdentityRevealScreen(Player p) {
-		console.logGoingToRevealMessage(p.getName());
-		switch(p.getIdentity()) {
-			case VILLAGER:
-				console.logVillagerRevealMessage(p.getName());
-				break;
-			case WITCH:
-				console.logWitchRevealMessage(p.getName());
-				break;
+		if(!p.isRevealed()){
+			console.logGoingToRevealMessage(p.getName());
+			switch(p.getIdentity()) {
+				case VILLAGER:
+					console.logVillagerRevealMessage(p.getName());
+					break;
+				case WITCH:
+					console.logWitchRevealMessage(p.getName());
+					break;
+			}
 		}
+		else console.logWasAlreadyRevealedAs(p.getName(),p.getIdentity().toString());
 		// Tout doux : equivalent for gui
 	}
 
@@ -233,10 +236,11 @@ public final class DisplayController implements DisplayMediator {
 		console.increaseTabulation();
 		int i=1;
 		for(RumourCard rc : rcp.getCards()) {
-			console.tabbedPrint(i + " - ");
+			console.setOffset(i + " - ");
 			displayCard(rc,forcedReveal);
 			i++;
 		};
+		console.resetOffset();
 		console.decreaseTabulation();
 		console.crlf();
 	}
@@ -246,10 +250,12 @@ public final class DisplayController implements DisplayMediator {
 		console.increaseTabulation();
 		int i=1;
 		for(RumourCard rc : rcp.getCards()) {
-			console.tabbedPrint(i + " - ");
+			console.setOffset(i + " - ");
 			displayWitchEffect(rc);
+			console.crlf();
 			i++;
 		};
+		console.resetOffset();
 		console.decreaseTabulation();
 		console.crlf();
 	}
@@ -258,10 +264,12 @@ public final class DisplayController implements DisplayMediator {
 		console.increaseTabulation();
 		int i=1;
 		for(RumourCard rc : rcp.getCards()) {
-			console.tabbedPrint(i + " - ");
+			console.setOffset(i + " - ");
 			displayHuntEffect(rc);
+			console.crlf();
 			i++;
 		};
+		console.resetOffset();
 		console.decreaseTabulation();
 		console.crlf();
 	}
@@ -271,10 +279,9 @@ public final class DisplayController implements DisplayMediator {
 		//shows all the cards of a player. Called on purpose by human players
 		if(p.hasRumourCards()) {
 			console.logShowPlayersCardsMessage(p.getName());
-			console.increaseTabulation();
 			displayCards(p.getHand(),true);
 			console.crlf();
-			console.decreaseTabulation();
+
 		}
 		else {
 			console.logNoCardsMessage(p.getName());
@@ -301,8 +308,62 @@ public final class DisplayController implements DisplayMediator {
 
 
 	@Override
-	public void displayPlayerPlaysEffectScreen(Player p) {
-		console.logPlayerPlaysEffectMessage(p.getName());
-		
+	public void displayPlayerPlaysWitchEffectScreen(Player p,RumourCard rc) {
+		if(rc.getAdditionnalEffectDescription()=="")
+			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getWitchEffectDescription());
+		else
+			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getWitchEffectDescription(),rc.getAdditionnalEffectDescription());
+	}
+	
+	@Override
+	public void displayPlayerPlaysHuntEffectScreen(Player p,RumourCard rc) {
+		if(rc.getAdditionnalEffectDescription()=="")
+			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getHuntEffectDescription());
+		else
+			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getHuntEffectDescription(),rc.getAdditionnalEffectDescription());
+	}
+
+	@Override
+	public void displayHasChosenCardScreen(Player p, RumourCard chosen) {
+		if(chosen.getAdditionnalEffectDescription()=="") 
+			console.logHasChosenCardMessage(p.getName(),chosen.getName(),chosen.isRevealed(),
+					chosen.getWitchEffectDescription(),chosen.getHuntEffectDescription());
+		else 
+			console.logHasChosenCardMessage(p.getName(),chosen.getName(),chosen.isRevealed(),chosen.getAdditionnalEffectDescription(),
+					chosen.getWitchEffectDescription(),chosen.getHuntEffectDescription());
+	}
+	
+	@Override
+	public void displayNoCardsInPileScreen(RumourCardsPile rcp) {
+		if(rcp.getOwner()!=null) {
+			console.logEmptyHandMessage(rcp.getOwner().getName());
+		}
+		else if(rcp.isThePile()) {
+			console.logEmptyPileMessage();
+		}
+	}
+
+	@Override
+	public void displayDiscardCardScreen(Player owner,RumourCard rc) {
+		console.printPlayerDiscardedCardMessage(owner.getName());
+		displayCard(rc, false);
+		console.resetOffset();
+	}
+
+	@Override
+	public void displayLookAtPlayersIdentityScreen(Player me, Player target) {
+		console.logLookAtPlayersIdentityMessage(me.getName(),target.getName());
+	}
+
+	@Override
+	public void secretlyDisplayIdentity(Player target) {
+		console.logSecretIdentityRevealMessage(target.getName(), target.getIdentity().toString());
+	}
+
+	@Override
+	public void displayPlayerHasResetCardScreen(Player player, RumourCard chosenCard) {
+		console.logPlayerHasResetCardMessage(player.getName());
+		displayCard(chosenCard, true);
+		console.resetOffset();
 	}
 }

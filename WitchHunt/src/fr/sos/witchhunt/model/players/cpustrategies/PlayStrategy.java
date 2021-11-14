@@ -21,7 +21,7 @@ public interface PlayStrategy {
 		 * distinguer le cas d'un villageois, qui au pire peut être révélé mais reste dans la partie
 		 * de celui d'une sorcière pour qui c'est finito si elle se fait accuser*/
 	}
-	public default Player chooseTarget(List<Player> eligiblePlayers) {
+	public default Player selectTarget(List<Player> eligiblePlayers) {
 		return selectPlayerToAccuse(eligiblePlayers);
 	}
 	
@@ -30,6 +30,8 @@ public interface PlayStrategy {
 	public default RumourCard selectCardToDiscard(RumourCardsPile rcp) {
 		return selectWorstCard(rcp);
 	}
+	public Player selectNextPlayer(List<Player> list);
+	public RumourCard selectBestCard(RumourCardsPile rcp, boolean seeUnrevealedCards);
 	
 
 }

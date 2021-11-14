@@ -6,7 +6,7 @@ import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.players.Player;
 
 public final class AngryMob extends RumourCard {
-	//TODO : default value ?
+	//done, must test
 	public AngryMob() {
 		AngryMob cardInstance = this;
 		
@@ -18,7 +18,10 @@ public final class AngryMob extends RumourCard {
 			}
 		};
 		
-		this.huntEffect = new HuntEffect() {
+		this.huntEffect = new HuntEffect("(Only playable if you've been revealed as a Villager)\n"
+				+ "/+/Reveal another player's identity.\n"
+				+ "/+/W -> You gain 2pts and take next turn.\n"
+				+ "/+/V -> You loose 2 pts, they take next turn.", 0) {
 			
 			private Player me;
 			@Override
@@ -27,12 +30,16 @@ public final class AngryMob extends RumourCard {
 				//the eligible players are all those who are not revealed and are not immunized by a revealed BroomStick card
 				List <Player> eligiblePlayers = Tabletop.getInstance().getUnrevealedPlayersList().stream().filter(p -> !p.isImmunizedAgainstRumourCard(cardInstance)).toList();
 				Player target = me.chooseHuntedTarget(eligiblePlayers);
-				switch(target.forcedReveal()) {
+				switch(target.revealIdentity()) {
 					case WITCH:
 					me.addScore(2);
+					takeNextTurn();
+					break;
 					
 					case VILLAGER:
 					me.addScore(-2);
+					Tabletop.getInstance().getCurrentRound().setNextPlayer(target);
+					break;
 				}
 			}
 			

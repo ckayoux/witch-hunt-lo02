@@ -5,11 +5,11 @@ import java.util.List;
 import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
 
 public final class Broomstick extends RumourCard {
-	//TODO : default value ?
-	private int defaultAdditionnalValue = 1; //this card has an additionnal effect (immunity against AngryMob).
+	//done, must test
 	//ToutDoux : set this value to 0 in CardValueMap if AngryMob is revealed
 	
 	public Broomstick() {
+		super("While revealed, you cannot be chosen by the Angry Mob.",1);
 		
 		this.witchEffect = new WitchEffect() {
 
@@ -39,9 +39,5 @@ public final class Broomstick extends RumourCard {
 			return false;
 		}
 	}
-	@Override
-	public CardValue getDefaultValue() {
-		return new CardValue(witchEffect.getValue(),huntEffect.getValue(),defaultAdditionnalValue);
-	};
 
 }

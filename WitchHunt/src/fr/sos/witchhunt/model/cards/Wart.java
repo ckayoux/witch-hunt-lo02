@@ -9,6 +9,7 @@ public final class Wart extends RumourCard {
 	//ToutDoux : set this value to 0 in CardValueMap if DuckingStool is revealed
 	
 	public Wart() {
+		super("While revealed, you cannot be chosen by the Ducking Stool.",1);
 		
 		this.witchEffect = new WitchEffect() {
 
@@ -38,8 +39,5 @@ public final class Wart extends RumourCard {
 			return false;
 		}
 	}
-	@Override
-	public CardValue getDefaultValue() {
-		return new CardValue(witchEffect.getValue(),huntEffect.getValue(),defaultAdditionnalValue);
-	};
+
 }

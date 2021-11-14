@@ -35,7 +35,7 @@
 ### controller
 + _**ScoreCounter**_ et conditions de victoire dans Tabletop
 ### model
-+ finir de coder les effets de chacune des RumourCards (+se pencher sur la question du "à son tour, il doit faire ceci et ceci"
++ cartes DuckingStool,EvilEye,HookedNose, et PetNewt
 + ajouter à chacun des effets leur description + les effets bonus des deux cartes spéciales
 + IA (stratégies, attribuer des valeurs aux cartes selon la situation et la stratégie, choisir telle ou telle victime ...)
 

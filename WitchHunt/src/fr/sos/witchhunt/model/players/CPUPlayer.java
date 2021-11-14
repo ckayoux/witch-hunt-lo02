@@ -2,6 +2,7 @@ package fr.sos.witchhunt.model.players;
 
 import java.util.List;
 
+import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
@@ -30,13 +31,12 @@ public final class CPUPlayer extends Player {
 	
 	@Override
 	public Player chooseTarget(List<Player> eligiblePlayers) {
-		return chosenStrategy.chooseTarget(eligiblePlayers);
+		return chosenStrategy.selectTarget(eligiblePlayers);
 	}
 
 	@Override
 	public Player chooseNextPlayer() {
-		// TODO
-		return null;
+		return chosenStrategy.selectNextPlayer(Tabletop.getInstance().getActivePlayersList().stream().filter(p->p!=this).toList());
 	}
 	
 	@Override
@@ -80,6 +80,31 @@ public final class CPUPlayer extends Player {
 		return null;
 	}
 
+	@Override
+	public RumourCard chooseAnyCard(RumourCardsPile rcp, boolean seeUnrevealedCards) {
+		if(targetPileContainsCards(rcp)) {
+			return chosenStrategy.selectBestCard(rcp,seeUnrevealedCards);
+		}
+		else return null;
+	}
+	
+	@Override
+	public RumourCard chooseRevealedCard(RumourCardsPile from) {
+		if(targetPileContainsCards(from.getRevealedSubpile())) {
+			return chosenStrategy.selectBestCard(from.getRevealedSubpile(),false);
+		}
+		else return null;
+	}
+
+	@Override
+	public Identity lookAtPlayersIdentity(Player target) {
+		Identity id = super.lookAtPlayersIdentity(target);
+		/*Tout doux : remember the players identity and accuse him the next time
+		 * not necessarely if it is a villager and there is another very suspicious and weak player,
+		 * necessarely otherwise
+		 */
+		return id;
+	}
 
 
 

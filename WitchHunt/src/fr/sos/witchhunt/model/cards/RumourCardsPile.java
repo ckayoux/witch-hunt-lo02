@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import fr.sos.witchhunt.DisplayMediator;
+import fr.sos.witchhunt.controller.Tabletop;
+import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
 
 public final class RumourCardsPile {
 	private List <RumourCard> cards = new ArrayList <RumourCard> ();
-	
+	private Player owner=null;
+
 	public RumourCardsPile () {
 	}
 	
@@ -18,6 +21,10 @@ public final class RumourCardsPile {
 		this.cards=cards;
 	}
 	
+	public RumourCardsPile(Player player) {
+		this.owner=player;
+	}
+
 	public void addCard(RumourCard rc) {
 		this.cards.add(rc);
 	}
@@ -46,7 +53,7 @@ public final class RumourCardsPile {
 	}
 	
 	public RumourCardsPile getRevealedSubpile (){
-		return new RumourCardsPile((List <RumourCard>) cards.stream().filter(c->!c.isRevealed()).collect(Collectors.toList()));
+		return new RumourCardsPile((List <RumourCard>) cards.stream().filter(c->c.isRevealed()).collect(Collectors.toList()));
 	}
 	public RumourCardsPile getUnrevealedSubpile (){
 		return new RumourCardsPile((List <RumourCard>) cards.stream().filter(c->!c.isRevealed()).collect(Collectors.toList()));
@@ -79,6 +86,13 @@ public final class RumourCardsPile {
 
 	public void show(DisplayMediator dc,boolean forcedReveal) {
 		dc.displayCards(this, forcedReveal);
+	}
+	public boolean isThePile() {
+		return (this==Tabletop.getInstance().getPile());
+	}
+
+	public Player getOwner() {
+		return this.owner;
 	}
 	
 }

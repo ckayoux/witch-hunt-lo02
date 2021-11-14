@@ -14,7 +14,9 @@ public final class PetNewt extends RumourCard {
 			}
 		};
 		
-		this.huntEffect = new HuntEffect() {
+		this.huntEffect = new HuntEffect("Take a revealed rumour card from any other player into your hand.\n"
+				+"/+/Choose next player.",2) {
+			//cpu players target player with the best revealed rumour cards first
 			@Override
 			public void perform() {
 				//take a revealed (and not random) rumour card from any other player into your hand + reset it ?

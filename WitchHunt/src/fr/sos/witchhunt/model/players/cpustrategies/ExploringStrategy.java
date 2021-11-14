@@ -53,4 +53,24 @@ public final class ExploringStrategy implements PlayStrategy {
 		return worstWitchCards.getRandomCard(); 
 	}
 
+	@Override
+	public Player selectNextPlayer(List<Player> list) {
+		//this strategy selects the next player randomly
+		return list.get(list.size()*(int)Math.random());
+	}
+
+	@Override
+	public RumourCard selectBestCard(RumourCardsPile rcp, boolean seeUnrevealedCards) {
+		//Selects a random card in a list made of the cards with the best overall value + the unrevealed cards if we can't see them
+		RumourCardsPile selection;
+		if(seeUnrevealedCards) {
+			selection = new RumourCardsPile(map.getCardsWithMaxOverallValue(rcp).getCards());
+		}
+		else {
+			selection = new RumourCardsPile(map.getCardsWithMaxOverallValue(rcp.getRevealedSubpile()).getCards());
+			rcp.getUnrevealedSubpile().getCards().forEach(c -> selection.addCard(c));
+		}
+		return selection.getRandomCard();
+	}
+
 }

@@ -155,6 +155,7 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	public Player getLastUnrevealedPlayer() {
 		return this.lastUnrevealedPlayer;
 	}
+	
 
 	
 	//SETTERS

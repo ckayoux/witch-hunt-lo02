@@ -11,7 +11,7 @@ public final class DuckingStool extends RumourCard {
 		
 		DuckingStool cardInstance = this;
 		
-		this.witchEffect = new WitchEffect() {
+		this.witchEffect = new WitchEffect("Choose next player.",0) {
 			
 			@Override
 			public void perform() {
@@ -19,7 +19,12 @@ public final class DuckingStool extends RumourCard {
 			}
 		};
 		
-		this.huntEffect = new HuntEffect() {
+		this.huntEffect = new HuntEffect("Choose a player.\n"
+				+ "/+/They must reveal their identity or discard a card from their hand.\n"
+				+ "/+/W -> You gain 1 pt and take next turn.\n"
+				+ "/+/V -> You loose 1 pt, they take next turn.\n"
+				+ "/+/If they discard -> they take next turn.", 1) {
+			//cpu players target suspicious players first with this card, which means the one who have used the more witch effects
 			@Override
 			public void perform() {
 				/*TODO

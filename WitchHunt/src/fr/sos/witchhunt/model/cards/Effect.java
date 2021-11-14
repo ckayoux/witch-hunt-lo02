@@ -9,9 +9,11 @@ public abstract class Effect {
 	
 	public Effect () {
 		value=1;
+		description="";
 	}
-	public Effect (int value) {
+	public Effect (String desc,int value) {
 		this.value=value;
+		this.description=desc;
 	}
 	
 	public abstract void perform(); //has to be redefined
@@ -20,11 +22,13 @@ public abstract class Effect {
 	}
 	
 	public void takeNextTurn() {
-		//TODO
+		Tabletop.getInstance().getCurrentRound().setNextPlayer(getMyself());
 	}
 	
-	public void chooseNextPlayer() {
-		//TODO
+	public Player chooseNextPlayer() {
+		Player nextPlayer = getMyself().chooseNextPlayer();
+		Tabletop.getInstance().getCurrentRound().setNextPlayer(nextPlayer);
+		return nextPlayer;
 	}
 	
 	//GETTERS
@@ -35,5 +39,4 @@ public abstract class Effect {
 		return value;
 	}
 	protected abstract Player getMyself();
-
 }
