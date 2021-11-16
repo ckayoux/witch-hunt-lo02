@@ -2,9 +2,8 @@ package fr.sos.witchhunt.model.players;
 
 import java.util.List;
 
-import fr.sos.witchhunt.PlayerInputObservable;
 import fr.sos.witchhunt.InputMediator;
-import fr.sos.witchhunt.controller.DisplayController;
+import fr.sos.witchhunt.PlayerInputObservable;
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
@@ -55,13 +54,16 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		requestDisplayPossibilities(m);
 		return from.get(makeChoice(m)-1);
 	}
+	@Override
 	protected Player choosePlayerToAccuse() {
 		return choose(getAccusablePlayers(),"Select the player you want to accuse :");
 	}
+	@Override
 	public Player chooseTarget(List<Player> eligiblePlayersList) {
 		return choose(eligiblePlayersList,"Select the player you want to target :");
 	}
 	
+	@Override
 	public Player chooseNextPlayer() {
 		return choose(Tabletop.getInstance().getActivePlayersList().stream().filter(p->p!=this).toList(),"\n\tSelect the next player to play :");
 	}
@@ -111,7 +113,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 			possibilities = new Menu("Choose one of these actions :",
 										"Accuse another player",
 										"Play the Hunt! effect of a Rumour card from your hand",
-										"Show my cards");
+										"Show your cards");
 			requestDisplayPossibilities(possibilities);
 			switch(makeChoice(possibilities)) {
 				case 1:
@@ -125,7 +127,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		}
 		else {
 			possibilities = new Menu("You have no more avaliable Hunt! effects.",
-										"Accuse another player","Show my cards");
+										"Accuse another player","Show your cards");
 			requestDisplayPossibilities(possibilities);
 			switch(makeChoice(possibilities)) {
 				case 1:
@@ -167,6 +169,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	public void showHand() {
 		displayMediator.showCards(this);
 	}
+	@Override
 	public RumourCard selectCardToDiscard() {
 		if(this.hasRumourCards()) {
 			if(this.hasUnrevealedRumourCards()) {
@@ -193,6 +196,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		return from.getCards().get(makeChoice(m)-1);
 	}
 	
+	@Override
 	public RumourCard chooseAnyCard(RumourCardsPile from,boolean forcedReveal){
 		if(targetPileContainsCards(from)) {
 			requestSelectCardScreen();
@@ -210,6 +214,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		}
 		else return null;
 	}
+	@Override
 	public RumourCard chooseRevealedCard(RumourCardsPile from){
 		if(targetPileContainsCards(from.getRevealedSubpile())){
 			//the player must necessarily choose a revealed card
