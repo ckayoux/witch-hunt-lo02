@@ -1,5 +1,6 @@
 package fr.sos.witchhunt.controller;
 
+import java.util.List;
 import java.util.Scanner;
 
 import java.util.concurrent.CountDownLatch;
@@ -51,7 +52,7 @@ public final class InputController implements InputMediator {
 		
 	}
 	
-	public Player createPlayer(int id) {
+	public Player createPlayer(int id,List<String> chosenNames) {
 		Application.displayController.passLog("\tPlayer "+Integer.toString(id)+" : ");
 		Application.displayController.displayYesNoQuestion("\tHuman-controlled ?");
 		boolean human = answerYesNoQuestion();
@@ -59,7 +60,25 @@ public final class InputController implements InputMediator {
 		if(human) {
 			HumanPlayer temp;
 			Application.displayController.passLog("\tName :");
-			String name = getStringInput();
+			String name = "";
+			boolean correct;
+			do {
+				name = getStringInput();
+				if(chosenNames.contains(name)) {
+					Application.displayController.passLog("\tThis name is already taken.");
+					correct=false;
+				}
+				else if (name.contains("CPU")) {
+					Application.displayController.passLog("\tThis name is reserved.");
+					correct=false;
+				}
+				else {
+					correct=true;
+				}
+				if(!correct) Application.displayController.passLog("\tPlease choose another one :");
+			}
+			while(!correct);
+			chosenNames.add(name);
 			Application.displayController.crlf();
 			temp = new HumanPlayer(name,id);
 			temp.setInputMediator(Application.inputController);

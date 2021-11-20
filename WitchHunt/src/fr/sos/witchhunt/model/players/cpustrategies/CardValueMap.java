@@ -17,7 +17,7 @@ import fr.sos.witchhunt.model.cards.RumourCardsPile;
 
 
 public class CardValueMap {
-	Map <RumourCard,CardValue> m;
+	private Map <RumourCard,CardValue> m;
 	
 	public CardValueMap () {
 		m =  new HashMap <RumourCard,CardValue> ();
@@ -27,19 +27,16 @@ public class CardValueMap {
 	}
 
 	
-	public void setValueFor(String cardClassName,CardValue cv) throws ClassNotFoundException {
-		for (RumourCard rc : ExistingRumourCards.getInstance().getList()) {
-			try  {
-				if(rc.getClass().equals(Class.forName(cardClassName))) {
-					m.replace(rc, cv);
-				}
-			}
-			catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
+	public void setValueFor(RumourCard rc,CardValue cv) {
+		m.replace(rc, cv);
+	}
+	public Map<RumourCard,CardValue> getMap() {
+		return m;
 	}
 	
+	public CardValue getValueByCard(RumourCard rc) {
+		return this.m.get(rc);
+	}
 	
 	public Map<RumourCard,CardValue> filter(RumourCardsPile rcp){
 		/*Copies the map $m. 

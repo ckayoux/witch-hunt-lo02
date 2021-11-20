@@ -73,4 +73,10 @@ public final class ExploringStrategy implements PlayStrategy {
 		return selection.getRandomCard();
 	}
 
+	@Override
+	public CardValueMap getCardValueMap() {
+		return map;
+	}
+
+
 }

@@ -34,6 +34,7 @@
 + tous les displays qui vont avec les choses à rajouter dans le modèle
 ### controller
 + _**ScoreCounter**_ et conditions de victoire dans Tabletop
++ after accusing accused takes next turn if villager, accusator takes next turn if witch
 ### model
 + cartes DuckingStool,EvilEye,HookedNose, et PetNewt
 + ajouter à chacun des effets leur description + les effets bonus des deux cartes spéciales

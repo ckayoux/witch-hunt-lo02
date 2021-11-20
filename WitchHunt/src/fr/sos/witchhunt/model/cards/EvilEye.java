@@ -1,5 +1,8 @@
 package fr.sos.witchhunt.model.cards;
 
+import fr.sos.witchhunt.controller.Tabletop;
+import fr.sos.witchhunt.model.players.Player;
+
 public final class EvilEye extends RumourCard {
 	/*TODO : this card becomes more valuable when you are unrevealed and there are exactly two other unrevealed players, 
 	 * both being short of cards,
@@ -10,8 +13,10 @@ public final class EvilEye extends RumourCard {
 				+ "/+/On their turn, they must accuse a player other than you, if possible.",2) {
 			@Override
 			public void perform() {
-				//on their turn, they must accuse a player other than you, if possible
-				chooseNextPlayer();
+				Player me = getMyself();
+				Player target = chooseNextPlayer();
+				me.forceToAccuseNextTurn(target);
+				
 			}
 		};
 		
@@ -19,8 +24,9 @@ public final class EvilEye extends RumourCard {
 				+ "/+/On their turn, they must accuse a player other than you, if possible.",1) {
 			@Override
 			public void perform() {
-				//on their turn, they must accuse a player other than you, if possible
-				chooseNextPlayer();
+				Player me = getMyself();
+				Player target = chooseNextPlayer();
+				me.forceToAccuseNextTurn(target);
 			}
 			
 		};

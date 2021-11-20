@@ -1,9 +1,11 @@
 package fr.sos.witchhunt.model.players;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
+import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.cpustrategies.*;
@@ -15,6 +17,11 @@ public final class CPUPlayer extends Player {
 	public CPUPlayer(int id, int cpuNumberHowMuch) {
 		super(id);
 		this.name="CPU "+Integer.toString(cpuNumberHowMuch);
+	}
+	
+	@Override
+	public void playTurn() {
+		super.playTurn();		
 	}
 	
 	@Override
@@ -67,11 +74,11 @@ public final class CPUPlayer extends Player {
 	}
 
 	@Override
-	protected RumourCard selectCardToDiscard() {
+	public RumourCard selectCardToDiscard(RumourCardsPile in) {
 		if(this.hasUnrevealedRumourCards()) {
-			return chosenStrategy.selectCardToDiscard(this.getUnrevealedSubhand());
+			return chosenStrategy.selectCardToDiscard(in.getUnrevealedSubpile());
 		}
-		else return chosenStrategy.selectCardToDiscard(this.hand);
+		else return chosenStrategy.selectCardToDiscard(in);
 	}
 
 	@Override
@@ -104,6 +111,21 @@ public final class CPUPlayer extends Player {
 		 * necessarely otherwise
 		 */
 		return id;
+	}
+
+	@Override
+	public DefenseAction revealOrDiscard() {
+		if(this.hasRumourCards()&&!this.isRevealed()) {
+			return chosenStrategy.revealOrDiscard(this.getIdentity(),this.getHand());
+		}
+		else if(!this.hasRumourCards()&&!this.isRevealed()) {
+			requestNoCardsScreen();
+			requestForcedToRevealScreen();
+			return DefenseAction.REVEAL;
+		}
+		else { //cannot be chosen by ducking stool if is revealed and has no rumour cards
+			return DefenseAction.DISCARD;
+		}
 	}
 
 

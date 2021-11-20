@@ -31,10 +31,14 @@ public interface DisplayMediator {
 	public void displaySelectRevealedCardScreen();
 	public void displayPlayerPlaysWitchEffectScreen(Player player, RumourCard rc);
 	public void displayPlayerPlaysHuntEffectScreen(Player player, RumourCard rc);
-	public void displayHasChosenCardScreen(Player player, RumourCard chosen);
+	public void displayHasChosenCardScreen(Player player, RumourCard chosen, boolean forceReveal);
 	public void displayNoCardsInPileScreen(RumourCardsPile rcp);
 	public void displayDiscardCardScreen(Player owner,RumourCard rc);
 	public void displayLookAtPlayersIdentityScreen(Player me, Player target);
 	public void secretlyDisplayIdentity(Player target);
 	public void displayPlayerHasResetCardScreen(Player player, RumourCard chosenCard);
+	public void displayTakeNextTurnScreen(Player p);
+	public void displayPlayTurnAgainScreen(Player p);
+	public void freezeDisplay(int duration);
+	public void displayForcedToAccuseScreen(Player theOneWhoMustAccuse, Player theOneWhoForcedThem);
 }

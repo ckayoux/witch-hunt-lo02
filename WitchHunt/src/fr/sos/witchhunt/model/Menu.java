@@ -1,5 +1,9 @@
 package fr.sos.witchhunt.model;
 
+import java.util.Collection;
+
+import java.util.Iterator;
+
 public class Menu {
 	
 	//ATTRIBUTES

@@ -21,13 +21,13 @@ public abstract class Effect {
 		return true; //has to be redefined for some cards
 	}
 	
-	public void takeNextTurn() {
-		Tabletop.getInstance().getCurrentRound().setNextPlayer(getMyself());
+	protected void takeNextTurn() {
+		getMyself().takeNextTurn();
 	}
 	
-	public Player chooseNextPlayer() {
+	protected Player chooseNextPlayer() {
 		Player nextPlayer = getMyself().chooseNextPlayer();
-		Tabletop.getInstance().getCurrentRound().setNextPlayer(nextPlayer);
+		nextPlayer.takeNextTurn();;
 		return nextPlayer;
 	}
 	

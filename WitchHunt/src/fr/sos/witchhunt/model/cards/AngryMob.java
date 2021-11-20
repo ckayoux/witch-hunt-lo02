@@ -33,7 +33,7 @@ public final class AngryMob extends RumourCard {
 				switch(target.revealIdentity()) {
 					case WITCH:
 					me.addScore(2);
-					takeNextTurn();
+					me.playTurnAgain();
 					break;
 					
 					case VILLAGER:
@@ -46,8 +46,10 @@ public final class AngryMob extends RumourCard {
 			@Override
 			public boolean isAllowed() {
 				//This card is only playable if you have been revealed as a villager.
-				me = Tabletop.getInstance().getCurrentPlayer();
-				if(me.isRevealed() && me.getIdentity() == Identity.VILLAGER) return true;
+				me = getMyself();
+				List <Player> eligiblePlayers = Tabletop.getInstance().getUnrevealedPlayersList().stream().filter(p -> !p.isImmunizedAgainstRumourCard(cardInstance)&&p!=me).toList();
+				if(me.isRevealed() && me.getIdentity() == Identity.VILLAGER &&
+						eligiblePlayers.size() > 0) return true;
 				else return false;
 			}
 		};

@@ -16,4 +16,7 @@ public abstract class WitchEffect extends Effect {
 	protected Player getMyself() {
 		return Tabletop.getInstance().getAccusedPlayer();
 	}
+	protected Player getTarget() {
+		return Tabletop.getInstance().getAccusator();
+	}
 }

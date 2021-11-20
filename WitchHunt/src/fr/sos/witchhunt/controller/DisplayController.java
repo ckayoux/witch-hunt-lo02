@@ -2,9 +2,11 @@ package fr.sos.witchhunt.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.model.Identity;
+import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
@@ -324,12 +326,12 @@ public final class DisplayController implements DisplayMediator {
 	}
 
 	@Override
-	public void displayHasChosenCardScreen(Player p, RumourCard chosen) {
+	public void displayHasChosenCardScreen(Player p, RumourCard chosen,boolean forceReveal) {
 		if(chosen.getAdditionnalEffectDescription()=="") 
-			console.logHasChosenCardMessage(p.getName(),chosen.getName(),chosen.isRevealed(),
+			console.logHasChosenCardMessage(p.getName(),chosen.getName(),(chosen.isRevealed()||forceReveal),
 					chosen.getWitchEffectDescription(),chosen.getHuntEffectDescription());
 		else 
-			console.logHasChosenCardMessage(p.getName(),chosen.getName(),chosen.isRevealed(),chosen.getAdditionnalEffectDescription(),
+			console.logHasChosenCardMessage(p.getName(),chosen.getName(),(chosen.isRevealed()||forceReveal),chosen.getAdditionnalEffectDescription(),
 					chosen.getWitchEffectDescription(),chosen.getHuntEffectDescription());
 	}
 	
@@ -365,5 +367,30 @@ public final class DisplayController implements DisplayMediator {
 		console.logPlayerHasResetCardMessage(player.getName());
 		displayCard(chosenCard, true);
 		console.resetOffset();
+	}
+	
+	@Override
+	public void displayTakeNextTurnScreen(Player p) {
+		console.logTakeNextTurnMessage(p.getName());;
+	}
+	@Override
+	public void displayPlayTurnAgainScreen(Player p) {
+		console.logPlayTurnAgainMessage(p.getName());
+	}
+	@Override
+	public void freezeDisplay(int duration) {
+		if(Game.getInstance().sleepingIsAllowed()) {
+			//FIX
+		}
+		/*try {
+			//TimeUnit.SECONDS.sleep(duration);//temporary
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}//temporary*/
+	}
+
+	@Override
+	public void displayForcedToAccuseScreen(Player theOneWhoMustAccuse, Player theOneWhoForcedThem) {
+		console.logForcedToAccuseMessage(theOneWhoMustAccuse.getName(),theOneWhoForcedThem.getName(),theOneWhoForcedThem.isImmunized());
 	}
 }

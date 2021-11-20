@@ -25,9 +25,14 @@ public interface PlayerDisplayObservable {
 	public void requestSelectRevealedCardScreen();
 	public void requestPlayerPlaysWitchEffectScreen(RumourCard rc);
 	public void requestPlayerPlaysHuntEffectScreen(RumourCard rc);
-	public void requestHasChosenCardScreen(RumourCard chosen);
 	public void requestEmptyRCPScreen(RumourCardsPile rcp);
 	public void requestDiscardCardScreen(RumourCard rc);
 	public void requestLookAtPlayersIdentityScreen(Player target);
+	public void requestHasChosenCardScreen(RumourCard chosen, boolean forceReveal);
 	public void requestHasResetCardScreen(RumourCard chosen);
+	public void requestTakeNextTurnScreen();
+	public void requestPlayTurnAgainScreen();
+	public void sleep(int ms);
+	public void requestForcedToAccuseScreen(Player by);
+
 }

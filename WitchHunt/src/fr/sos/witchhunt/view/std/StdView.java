@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import fr.sos.witchhunt.controller.Application;
 import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.model.Menu;
 
 
 public final class StdView {
@@ -186,10 +187,18 @@ public final class StdView {
 	}
 	
 	public void logVillagerRevealMessage(String playerName) {
-		log("\t"+playerName+" was a villager.\n");
+		log("\t"+playerName+" was only a villager.\n");
 	}
 	public void logWitchRevealMessage(String playerName) {
 		log("\t"+playerName+" was a witch !\n");
+	}
+	
+	public void logTakeNextTurnMessage(String playerName) {
+		log("\t"+playerName+" takes the next turn.");
+	}
+	
+	public void logPlayTurnAgainMessage(String playerName) {
+		log("\t"+playerName+" can play again.");
 	}
 
 	public void logUpdateScreenMessage(String playerName, int points, int totalPlayerScore) {
@@ -354,7 +363,12 @@ public final class StdView {
 	}
 
 	public void logPlayerHasResetCardMessage(String playerName) {
-		setOffset("\t"+playerName + " has reset ");
+		setOffset("\t"+playerName + " took back ");
 		
 	}
+
+	public void logForcedToAccuseMessage(String accuserName, String forcedByName, boolean immunizedThemselve) {
+		log("\t"+accuserName+", "+forcedByName+" forced you to accuse "+((immunizedThemselve)?"someone else ":"them ")+ "!");
+	}
+
 }

@@ -6,15 +6,19 @@ import fr.sos.witchhunt.model.players.Player;
 
 public final class TheInquisition extends RumourCard {
 	//done, must test
+	private TheInquisition cardInstance;
 	
 	public TheInquisition () {
+		cardInstance = this;
 		this.witchEffect = new WitchEffect("Discard a card from your hand.\n"
 				+ "/+/Take next turn.",0) {
 			
 			@Override
 			public void perform() {
 				Player me = getMyself();
-				me.discard(); //select a card to discard from your hand
+				me.discard(new RumourCardsPile(
+						me.getHand().getCards().stream().filter(c->c!=cardInstance).toList()
+						)); //select a card to discard from your hand, except this one itselfs
 				//we assume that we can discard a revealed card
 				takeNextTurn();
 			}

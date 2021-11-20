@@ -24,6 +24,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	protected DisplayMediator displayMediator;
 	private boolean immunized; //the Rumour Card EvilEye can give immunity to accusation to one player for one turn
 	private boolean active = true;
+	private Player forcedToAccuseBy=null;
 	
 	//CONSTRUCTORS
 	public Player(String name, int id) {
@@ -57,17 +58,26 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public void takeRumourCard(RumourCard rc,RumourCardsPile from) {
 		from.giveCard(rc, this.hand);
 	}
+	public void takeRumourCard(RumourCard rc,Player stolenPlayer) {
+		stolenPlayer.getHand().giveCard(rc, this.hand);
+	}
 	
-	protected abstract RumourCard selectCardToDiscard() ;
-		
+	public abstract RumourCard selectCardToDiscard(RumourCardsPile in) ;
+	public  RumourCard selectCardToDiscard() {
+		return selectCardToDiscard(this.getHand());
+	};
 	public void discard(RumourCard rc) {
-		//rc.reset();
 		requestDiscardCardScreen(rc);
 		this.hand.giveCard(rc, Tabletop.getInstance().getPile());
 	}
 	public void discard() {
 		discard(selectCardToDiscard());
 	}
+	public void discard(RumourCardsPile in) {
+		if(in!=null) discard(selectCardToDiscard(in));
+		else selectCardToDiscard();
+	}
+	
 	public void discardRandomCard() {
 		//let's assume we can only discard unrevealed cards, unless all the cards are revealed
 		RumourCard chosenCard;
@@ -88,24 +98,42 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		return !this.getRevealedSubhand().equals(this.hand);
 	}
 	
+	public boolean hasRevealedRumourCards() {
+		return !this.getRevealedSubhand().isEmpty();
+	}
+	
 	public abstract TurnAction chooseTurnAction();
 	
 	public void playTurn() {
 		requestPlayTurnScreen();
-		switch(chooseTurnAction()) {
-			case ACCUSE:
-				accuse();
-				break;
-			case HUNT:
-				hunt();
-				break;
+		if(forcedToAccuseBy==null) {
+			switch(chooseTurnAction()) {
+				case ACCUSE:
+					accuse();
+					break;
+				case HUNT:
+					hunt();
+					break;
+			}
 		}
+		else { //the EvilEye RumourCard can force you to accuse on your turn
+			List<Player> l = getAccusablePlayers();
+			l.remove(forcedToAccuseBy);
+			if(!l.isEmpty()) {
+				forcedToAccuseBy.immunize();
+			}
+			requestForcedToAccuseScreen(forcedToAccuseBy);
+			accuse();
+			forcedToAccuseBy=null;
+			clearImmunities();
+		}
+		
 		
 	}
 	
+	
 	protected void accuse() {
 		accuse(choosePlayerToAccuse());
-		clearImmunities();
 	}
 	
 	protected abstract Player choosePlayerToAccuse();
@@ -119,10 +147,12 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 			switch(returnedIdentity) {
 			case VILLAGER:
 				this.addScore(1);
+				p.takeNextTurn();
 				break;
 			case WITCH:
 				eliminate(p);
 				this.addScore(2);
+				this.playTurnAgain();
 				break;
 			}
 		}
@@ -169,7 +199,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public abstract Player chooseTarget(List<Player> eligiblePlayers);
 	
 	public Player chooseHuntedTarget(List<Player> eligiblePlayersList) {
-		Player chosenTarget = chooseTarget(eligiblePlayersList);
+		Player chosenTarget = chooseTarget(eligiblePlayersList.stream().filter(p->p!=this).toList());
 		Tabletop.getInstance().setHuntedPlayer(chosenTarget);
 		return chosenTarget;
 	}
@@ -197,6 +227,10 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	}
 	
 	//DISPLAY METHODS
+	@Override
+	public void setDisplayMediator(DisplayMediator dm) {
+		this.displayMediator=dm;
+	}
 	@Override
 	public void requestLog(String msg) {
 		displayMediator.passLog(msg);
@@ -281,8 +315,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		displayMediator.displayPlayerPlaysHuntEffectScreen(this,rc);
 	}
 	@Override
-	public void requestHasChosenCardScreen(RumourCard chosen) {
-		displayMediator.displayHasChosenCardScreen(this,chosen);
+	public void requestHasChosenCardScreen(RumourCard chosen,boolean forceReveal) {
+		displayMediator.displayHasChosenCardScreen(this,chosen,forceReveal);
 	}
 	@Override
 	public void requestEmptyRCPScreen(RumourCardsPile rcp) {
@@ -300,7 +334,22 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public void requestHasResetCardScreen(RumourCard chosen) {
 		displayMediator.displayPlayerHasResetCardScreen(this,chosen);
 	}
-	
+	@Override
+	public void requestTakeNextTurnScreen() {
+		displayMediator.displayTakeNextTurnScreen(this);
+	}
+	@Override
+	public void requestPlayTurnAgainScreen() {
+		displayMediator.displayPlayTurnAgainScreen(this);
+	}
+	@Override
+	public void sleep(int ms) {
+		displayMediator.freezeDisplay(ms);
+	}
+	@Override
+	public void requestForcedToAccuseScreen(Player by) {
+		displayMediator.displayForcedToAccuseScreen(this,by);
+	}
 	//GETTERS
 	public String getName() {
 		return this.name;
@@ -327,6 +376,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		return this.score;
 	}
 	public boolean isImmunized() {
+		//EvilEye immunizes a player against accusation for the next time an accusation occurs.
 		return this.immunized;
 	}
 	public boolean isAccusable() {
@@ -361,26 +411,25 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		this.immunized = false;
 	}
 	private void clearImmunities() {
-		if (!this.immunized) Tabletop.getInstance().getPlayersList().forEach(p -> {if(p.isImmunized()) p.looseImmunity();});
+		Tabletop.getInstance().getPlayersList().forEach(p -> {if(p.isImmunized()) p.looseImmunity();});
 		/*is called at the end of the accuse method.
-		if the accusator is not the player who immunized himself,
-		he will remove everyone's immunity afterwhile - because this bonus is only one-use.*/
-		this.immunized = false;
+		will remove everyone's immunity after an accusation excepted for the accused - because he could have just immunized itselfs with the witch effect of Evil Eye.*/
 	}
 	
 	public void eliminate() {
 		this.active = false;
 	}
 	
-	private void eliminate(Player victim) {
+	public void eliminate(Player victim) {
 		victim.eliminate();
 		requestEliminationScreen(victim);
 	}
 	
-	@Override
-	public void setDisplayMediator(DisplayMediator dm) {
-		this.displayMediator=dm;
-	}
+	
+	public void setForcedToAccuseNextTurnBy(Player player) {
+		this.forcedToAccuseBy=player;
+	};
+	
 	
 	//UTILS
 	public List<Player> getAccusablePlayers() {
@@ -417,5 +466,20 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		return target.getIdentity();
 	}
 	
+	public void takeNextTurn() {
+		Tabletop.getInstance().getCurrentRound().setNextPlayer(this);
+		requestTakeNextTurnScreen();
+	}
+	
+	public void playTurnAgain() {
+		Tabletop.getInstance().getCurrentRound().setNextPlayer(this);
+		requestPlayTurnAgainScreen();
+	}
+	
+	public abstract DefenseAction revealOrDiscard();
+	
+	public void forceToAccuseNextTurn(Player target) {
+		target.setForcedToAccuseNextTurnBy(this);
+	}
 	
 }
