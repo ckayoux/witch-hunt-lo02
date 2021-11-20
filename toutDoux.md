@@ -23,20 +23,19 @@
 + ~~méthode _Player.**defend()**_ : *pouvoir jouer un effet witch ou _Player.**revealIdentity()**_~~
 + ~~fonctionnalité pour qu'un joueur humain puisse afficher ses cartes lors de son tour~~
 + ~~méthode _Player.**hunt()**_~~
-
++ ~~Les 12 rumour cards~~
++ ~~ajouter à chacun des effets leur description + les effets bonus des deux cartes spéciales ~~
++ ~~ after accusing accused takes next turn if villager, accusator takes next turn if witch~~
 ## toutDoux :
 ### appli
 + Commentaires
 + Rangement
 + Gestion des erreurs
 + + de modularité, généralité (changer nombre de joueurs max, min ...)
-### view
-+ tous les displays qui vont avec les choses à rajouter dans le modèle
 ### controller
 + _**ScoreCounter**_ et conditions de victoire dans Tabletop
-+ after accusing accused takes next turn if villager, accusator takes next turn if witch
 ### model
-+ cartes DuckingStool,EvilEye,HookedNose, et PetNewt
-+ ajouter à chacun des effets leur description + les effets bonus des deux cartes spéciales
++ corriger un bug sur la carte EvilEye qui fait qu'on peut se retrouver avec aucun joueur à accuser s'il reste que celui qui a joué la carte et la cible
++ faire le Hunt des CPUPlayers
 + IA (stratégies, attribuer des valeurs aux cartes selon la situation et la stratégie, choisir telle ou telle victime ...)
 
