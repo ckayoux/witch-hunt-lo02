@@ -7,6 +7,7 @@ public final class CardValue {
 	private boolean protects=false;
 	private boolean isDecisive=false;
 	private boolean isRisked=false;
+	private boolean isOffensive=false;
 	private boolean locked=false;
 	private boolean givesCards=false;
 	
@@ -42,6 +43,9 @@ public final class CardValue {
 	}
 	public boolean isRisked() {
 		return this.isRisked;
+	}
+	public boolean isOffensive() {
+		return this.isOffensive;
 	}
 	public boolean givesCards() {
 		return this.givesCards;
@@ -79,6 +83,12 @@ public final class CardValue {
 			if(!this.isRisked&&risked==true) this.additionnalValue++;
 			else if(this.isRisked&&risked==false) this.additionnalValue--;
 			this.isRisked=risked;
+		}
+		
+	}
+	public void setOffensive(boolean is) {
+		if(!locked) {
+			this.isOffensive=is;
 		}
 		
 	}

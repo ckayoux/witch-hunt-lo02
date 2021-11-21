@@ -250,14 +250,17 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		DefenseAction choice=DefenseAction.DISCARD;
 		if(this.hasRumourCards()&&!this.isRevealed()) {
 			ultimatum = new Menu(this.getName()+", choose an action :","Discard a card","Reveal your identity");
+			requestDisplayPossibilities(ultimatum);
 			if(makeChoice(ultimatum)==2) choice=DefenseAction.REVEAL;
 		}
 		else if(!this.hasRumourCards()&&!this.isRevealed()) {
 			ultimatum = new Menu(this.getName()+", you have no cards to discard. You have only one choice :","Reveal your identity");
+			requestDisplayPossibilities(ultimatum);
 			makeChoice(ultimatum);
 		}
 		else if(this.hasRumourCards()) {
 			ultimatum = new Menu(this.getName()+", you are already revealed. You have only one choice :","Discard a card");
+			requestDisplayPossibilities(ultimatum);
 			makeChoice(ultimatum);
 		}
 		//cannot be chosen by ducking stool if is revealed and has no rumour cards

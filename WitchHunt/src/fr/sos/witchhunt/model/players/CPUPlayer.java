@@ -48,25 +48,16 @@ public final class CPUPlayer extends Player {
 	
 	@Override
 	public TurnAction chooseTurnAction() {
-		return chosenStrategy.selectTurnAction();
+		return chosenStrategy.selectTurnAction(this.identity,this.hand,this.canHunt());
 	}
 
 	@Override
 	public DefenseAction chooseDefenseAction() {
-		return chosenStrategy.selectDefenseAction(this.canWitch());
+		//must initialize Tabletop's hunter with canHunt, as the player will look at its playable hunt cards to make their decision
+		this.canHunt();
+		return chosenStrategy.selectDefenseAction(this.canWitch(),this.hand);
 	}
 
-	
-	@Override
-	public void hunt() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	protected boolean canHunt() {
-		return false; //TEMPORARY
-	}
 
 	@Override
 	public RumourCard selectWitchCard() {
@@ -83,8 +74,7 @@ public final class CPUPlayer extends Player {
 
 	@Override
 	public RumourCard selectHuntCard() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.chosenStrategy.selectHuntCard(this.hand.getPlayableHuntSubpile());
 	}
 
 	@Override

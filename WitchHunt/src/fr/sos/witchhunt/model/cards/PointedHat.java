@@ -8,7 +8,9 @@ public final class PointedHat extends RumourCard {
 	//done, but not tested at all
 	//toutDoux : overall value increases when you have a revealed rumour card
 	public PointedHat () {
+		this.givesCards=true;
 		cardInstance = this;
+		
 		this.witchEffect = new WitchEffect("(Only playable if you have a revealed Rumour card)\n"
 				+ "/+/Take one of your own revealed Rumour cards into your hand.\n"
 				+ "/+/Take next turn.",2) {

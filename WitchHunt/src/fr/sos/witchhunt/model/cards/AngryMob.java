@@ -9,6 +9,8 @@ public final class AngryMob extends RumourCard {
 	//done, must test
 	public AngryMob() {
 		AngryMob cardInstance = this;
+		this.isRisked=true;
+		this.isOffensive=true;
 		
 		this.witchEffect = new WitchEffect() {
 			

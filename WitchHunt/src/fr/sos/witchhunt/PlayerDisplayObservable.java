@@ -34,5 +34,6 @@ public interface PlayerDisplayObservable {
 	public void requestPlayTurnAgainScreen();
 	public void sleep(int ms);
 	public void requestForcedToAccuseScreen(Player by);
+	public void requestStealCardFromScreen(Player stolenPlayer);
 
 }

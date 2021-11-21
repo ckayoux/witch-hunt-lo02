@@ -5,9 +5,9 @@ import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.players.Player;
 
 public final class Toad extends RumourCard {
-	//TODO : default value ?
 	
 	public Toad () {
+		this.isRisked=true;
 		this.witchEffect = new WitchEffect() {
 			
 			@Override

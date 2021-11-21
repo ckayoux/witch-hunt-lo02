@@ -6,8 +6,13 @@ import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.players.Player;
 
 public final class PetNewt extends RumourCard {
-	//TODO : default value ?
+
+	
 	public PetNewt () {
+		
+		this.givesCards=true;
+		this.isOffensive=true;
+		
 		this.witchEffect = new WitchEffect() {
 			
 			@Override

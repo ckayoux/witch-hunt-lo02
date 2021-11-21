@@ -8,6 +8,8 @@ public final class BlackCat extends RumourCard {
 	//done, must test
 	public BlackCat() {
 		RumourCard cardInstance=this;
+		this.givesCards=true;
+		
 		this.witchEffect = new WitchEffect() {
 			@Override
 			public void perform() {
@@ -16,7 +18,7 @@ public final class BlackCat extends RumourCard {
 		};
 		
 		this.huntEffect = new HuntEffect("Add one discarded card to your hand, and then discard this card.\n"
-				+ "/+/Take next turn.",2) { //value augments when there is at least 1 card in the pile, even more if there is one revealed card with overall value>=3
+				+ "/+/Take next turn.",1) { //value augments when there is at least 1 card in the pile, even more if there is one revealed card with overall value>=3
 			
 
 			@Override
@@ -29,8 +31,9 @@ public final class BlackCat extends RumourCard {
 					me.takeRumourCard(chosen, pile);
 					me.requestHasChosenCardScreen(chosen,false);
 				}
-				takeNextTurn();
 				me.discard(cardInstance);
+				takeNextTurn();
+				
 			}
 			
 		};

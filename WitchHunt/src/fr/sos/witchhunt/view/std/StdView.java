@@ -203,7 +203,7 @@ public final class StdView {
 
 	public void logUpdateScreenMessage(String playerName, int points, int totalPlayerScore) {
 		if(points>0) print("\t"+playerName+" earned "+Integer.toString(points));
-		else if (points<0) print("\t"+playerName+" lost "+Integer.toString(points));
+		else if (points<0) print("\t"+playerName+" lost "+Integer.toString(Math.abs(points)));
 		else;
 		print(" " + ( (Math.abs(points) == 1)?"point":"points" ) + ".");
 		print(" (Total : "+ totalPlayerScore+")\n");
@@ -369,6 +369,10 @@ public final class StdView {
 
 	public void logForcedToAccuseMessage(String accuserName, String forcedByName, boolean immunizedThemselve) {
 		log("\t"+accuserName+", "+forcedByName+" forced you to accuse "+((immunizedThemselve)?"someone else ":"them ")+ "!");
+	}
+
+	public void logStealCardMessage(String thiefName,String stolenName) {
+		log("\t"+thiefName+" is subtilizing a card from "+stolenName+" !");
 	}
 
 }

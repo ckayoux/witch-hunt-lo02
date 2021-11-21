@@ -7,8 +7,11 @@ import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
 
 public final class DuckingStool extends RumourCard {
-	//TODO : default value ?
+	
+	
 	public DuckingStool () {
+		this.isOffensive=true;
+		this.isRisked=true;
 		
 		DuckingStool cardInstance = this;
 		

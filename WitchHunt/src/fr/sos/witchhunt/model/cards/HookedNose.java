@@ -3,8 +3,11 @@ package fr.sos.witchhunt.model.cards;
 import fr.sos.witchhunt.model.players.Player;
 
 public final class HookedNose extends RumourCard {
-	//TODO : test
+	
 	public HookedNose () {
+		this.givesCards=true;
+		this.isOffensive=true;
+		
 		this.witchEffect = new WitchEffect("Take one card from the hand of the player who accused you.\n"
 				+ "/+/Take next turn.",3) {
 			

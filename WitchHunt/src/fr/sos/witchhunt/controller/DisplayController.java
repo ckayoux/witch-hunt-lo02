@@ -393,4 +393,10 @@ public final class DisplayController implements DisplayMediator {
 	public void displayForcedToAccuseScreen(Player theOneWhoMustAccuse, Player theOneWhoForcedThem) {
 		console.logForcedToAccuseMessage(theOneWhoMustAccuse.getName(),theOneWhoForcedThem.getName(),theOneWhoForcedThem.isImmunized());
 	}
+
+	@Override
+	public void displayStealCardScreen(Player thief, Player stolenPlayer) {
+		console.logStealCardMessage(thief.getName(),stolenPlayer.getName());
+		
+	}
 }

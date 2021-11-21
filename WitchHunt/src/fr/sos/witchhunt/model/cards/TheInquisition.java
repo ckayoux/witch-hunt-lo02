@@ -9,7 +9,9 @@ public final class TheInquisition extends RumourCard {
 	private TheInquisition cardInstance;
 	
 	public TheInquisition () {
+		this.isOffensive=true;
 		cardInstance = this;
+		
 		this.witchEffect = new WitchEffect("Discard a card from your hand.\n"
 				+ "/+/Take next turn.",0) {
 			

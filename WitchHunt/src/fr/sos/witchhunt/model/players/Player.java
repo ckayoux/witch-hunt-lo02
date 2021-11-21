@@ -48,7 +48,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public abstract void chooseIdentity();;
 	public Identity revealIdentity() {
 		requestIdentityRevealScreen();
-		this.identityCard.reveal();
+		this.identityCard.reveal();	
 		return this.identity;
 	}
 	
@@ -59,8 +59,10 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		from.giveCard(rc, this.hand);
 	}
 	public void takeRumourCard(RumourCard rc,Player stolenPlayer) {
+		requestStealCardFromScreen(stolenPlayer);
 		stolenPlayer.getHand().giveCard(rc, this.hand);
 	}
+	
 	
 	public abstract RumourCard selectCardToDiscard(RumourCardsPile in) ;
 	public  RumourCard selectCardToDiscard() {
@@ -340,7 +342,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	}
 	@Override
 	public void requestPlayTurnAgainScreen() {
-		displayMediator.displayPlayTurnAgainScreen(this);
+		if(Tabletop.getInstance().getUnrevealedPlayersList().size()>1) displayMediator.displayPlayTurnAgainScreen(this);
+		//the message isn't displayed if there is only one unrevealed player remaining (as the round is going to end).
 	}
 	@Override
 	public void sleep(int ms) {
@@ -350,6 +353,10 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public void requestForcedToAccuseScreen(Player by) {
 		displayMediator.displayForcedToAccuseScreen(this,by);
 	}
+	@Override
+	public void requestStealCardFromScreen(Player stolenPlayer) {
+		displayMediator.displayStealCardScreen(this,stolenPlayer);
+	};
 	//GETTERS
 	public String getName() {
 		return this.name;

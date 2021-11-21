@@ -49,6 +49,10 @@ public class CardValueMap {
 	private static List<Integer> getSubValues(Map<RumourCard,CardValue> M, ToIntFunction<CardValue> subValueGetter ){
 		return M.values().stream().mapToInt(v -> subValueGetter.applyAsInt(v)).boxed().toList();
 	}
+	public double getAverageHuntValue(RumourCardsPile rcp) {
+		List <Integer> huntValues = getSubValues(this.filter(rcp),(ToIntFunction<CardValue>) cv -> cv.getHuntValue() );
+		return huntValues.stream().reduce(0,Integer::sum) / (double) huntValues.stream().count();
+	}
 	
 	private List<RumourCard> getCardsWithSubValue(Map<RumourCard,CardValue> M, ToIntFunction<CardValue> subValueGetter, int lookingFor){
 		Map <RumourCard,CardValue> submap = M.entrySet().stream().filter( e -> (subValueGetter.applyAsInt(e.getValue())==lookingFor) ).collect(Collectors.toMap(e -> (e.getKey()), Map.Entry::getValue) );
@@ -82,5 +86,13 @@ public class CardValueMap {
 		List<Integer> overallValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getOverallValue()) ;
 		int max = Collections.max(overallValues);
 		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getOverallValue(), max));
+	}
+
+
+	public RumourCardsPile getCardsWithMaxHuntValue(RumourCardsPile rcp) {
+		Map<RumourCard,CardValue> M = this.filter(rcp);
+		List<Integer> huntValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getHuntValue()) ;
+		int max = Collections.max(huntValues);
+		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getHuntValue(), max));
 	}
 }

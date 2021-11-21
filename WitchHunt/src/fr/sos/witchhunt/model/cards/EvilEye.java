@@ -9,6 +9,8 @@ public final class EvilEye extends RumourCard {
 	 *and even more if you are a witch,
 	 *as it allows you to choose the player right before you and thus let you accuse the last remaining player.*/
 	public EvilEye () {
+		this.isOffensive=true;
+		
 		this.witchEffect = new WitchEffect("Choose next player.\n"
 				+ "/+/On their turn, they must accuse a player other than you, if possible.",2) {
 			@Override

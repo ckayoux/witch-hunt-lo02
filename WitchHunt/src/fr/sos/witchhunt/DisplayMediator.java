@@ -41,4 +41,5 @@ public interface DisplayMediator {
 	public void displayPlayTurnAgainScreen(Player p);
 	public void freezeDisplay(int duration);
 	public void displayForcedToAccuseScreen(Player theOneWhoMustAccuse, Player theOneWhoForcedThem);
+	public void displayStealCardScreen(Player thief, Player stolenPlayer);
 }

@@ -11,23 +11,17 @@ import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
 
-public final class ExploringStrategy implements PlayStrategy {
-	/*Default strategy.
+public final class ExploringStrategy extends CPUStrategy { //CPUStrategy implements PlayStrategy
+	/*Default strategy, chosen by most cpu players at the start of the game.
 	 * Most choices are done randomly.
 	 * The player will avoid spending its best cards.
 	 */
 	
-	CardValueMap map = new CardValueMap();
-	
 	@Override
 	public Identity selectIdentity() {
+		//selects an identity randomly
 		int n = (int) Math.round(Math.random());
 		return (n==0) ? Identity.VILLAGER : Identity.WITCH;
-	}
-
-	@Override
-	public TurnAction selectTurnAction() {
-		return TurnAction.ACCUSE; //TODO do better
 	}
 
 	@Override
@@ -36,21 +30,11 @@ public final class ExploringStrategy implements PlayStrategy {
 		return accusablePlayersList.get((int) (Math.random() * accusablePlayersList.size()) );
 	}
 
-	@Override
-	public RumourCard selectWorstCard(RumourCardsPile rcp) {
-		/*useful when choosing a card to discard.
-		returns a random card among the ones with the lowest witchEffectValue + huntEffectValue sum.*/
-		return map.getCardsWithMinOverallValue(rcp).getRandomCard();
-	}
 
 	@Override
 	public RumourCard selectWitchCard(RumourCardsPile rcp) {
-		RumourCardsPile worstWitchCards = map.getCardsWithMinWitchValue(rcp);
-		/*returns a random card among the ones with the lowest huntEffectValue among the ones with the lowest witchEffectValue.
-		this is not the same as taking the cards with the lowest overall value !
-		since this is a groping strategy, we want to avoid spending the best witch effects at the start of the game.*/
-		
-		return worstWitchCards.getRandomCard(); 
+		//selects the cards with the worse witch effects (groping strategy)
+		return super.selectWitchCard(rcp);
 	}
 
 	@Override
@@ -60,22 +44,13 @@ public final class ExploringStrategy implements PlayStrategy {
 	}
 
 	@Override
-	public RumourCard selectBestCard(RumourCardsPile rcp, boolean seeUnrevealedCards) {
-		//Selects a random card in a list made of the cards with the best overall value + the unrevealed cards if we can't see them
-		RumourCardsPile selection;
-		if(seeUnrevealedCards) {
-			selection = new RumourCardsPile(map.getCardsWithMaxOverallValue(rcp).getCards());
-		}
-		else {
-			selection = new RumourCardsPile(map.getCardsWithMaxOverallValue(rcp.getRevealedSubpile()).getCards());
-			rcp.getUnrevealedSubpile().getCards().forEach(c -> selection.addCard(c));
-		}
-		return selection.getRandomCard();
+	public CardValueMap getCardValueMap() {
+		return cvm;
 	}
 
 	@Override
-	public CardValueMap getCardValueMap() {
-		return map;
+	public RumourCard selectHuntCard(RumourCardsPile rcp) {
+		return rcp.getRandomCard();
 	}
 
 

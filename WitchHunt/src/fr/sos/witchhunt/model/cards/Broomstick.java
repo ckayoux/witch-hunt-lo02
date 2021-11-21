@@ -6,8 +6,6 @@ import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
 
 public final class Broomstick extends RumourCard {
 	//done, must test
-	//ToutDoux : set this value to 0 in CardValueMap if AngryMob is revealed
-	
 	public Broomstick() {
 		super("While revealed, you cannot be chosen by the Angry Mob.",1);
 		

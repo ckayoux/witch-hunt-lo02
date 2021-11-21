@@ -8,9 +8,11 @@ public abstract class RumourCard extends Card {
 	protected Effect huntEffect;
 	protected String additionnalEffectDescription="";
 	protected int defaultAdditionnalValue=0;
+	protected boolean givesCards=false;
+	protected boolean isRisked=false;
+	protected boolean isOffensive=false;
 	
 	public RumourCard() {
-		
 	}
 	
 	public RumourCard(String additionnalEffectDescription,int defaultAdditionnalValue) {
@@ -40,12 +42,17 @@ public abstract class RumourCard extends Card {
 		}
 	}
 	public CardValue getDefaultValue() {
+		CardValue cv;
 		if(this.defaultAdditionnalValue<=0) {
-			return new CardValue(witchEffect.getValue(),huntEffect.getValue());
+			cv= new CardValue(witchEffect.getValue(),huntEffect.getValue());
 		}
 		else {
-			return new CardValue(witchEffect.getValue(),huntEffect.getValue(),this.defaultAdditionnalValue);
+			cv= new CardValue(witchEffect.getValue(),huntEffect.getValue(),this.defaultAdditionnalValue);
 		}
+		if(this.isOffensive) cv.setOffensive(true);
+		if(this.isRisked) cv.setRisked(true);
+		if(this.givesCards) cv.setGivesCards(true);
+		return cv;
 	};
 	
 	public boolean grantsImmunityAgainst(RumourCard rc) {
