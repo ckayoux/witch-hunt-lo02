@@ -27,7 +27,7 @@ public final class BlackCat extends RumourCard {
 				Player me = getMyself();
 				RumourCard chosen = me.chooseAnyCard(pile,false);
 				if(chosen != null) { //the pile may contain no cards
-					me.reset();
+					chosen.reset();
 					me.takeRumourCard(chosen, pile);
 					me.requestHasChosenCardScreen(chosen,false);
 				}

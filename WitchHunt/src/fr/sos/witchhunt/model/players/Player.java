@@ -147,7 +147,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		Identity returnedIdentity = p.defend();
 		if(returnedIdentity != null) {
 			switch(returnedIdentity) {
-			case VILLAGER:
+			case VILLAGER: 
 				this.addScore(1);
 				p.takeNextTurn();
 				break;
