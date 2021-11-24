@@ -202,8 +202,12 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	
 	public Player chooseHuntedTarget(List<Player> eligiblePlayersList) {
 		Player chosenTarget = chooseTarget(eligiblePlayersList.stream().filter(p->p!=this).toList());
-		Tabletop.getInstance().setHuntedPlayer(chosenTarget);
+		chosenTarget.beHunted();
 		return chosenTarget;
+	}
+	
+	public void beHunted() {
+		Tabletop.getInstance().setHuntedPlayer(this);
 	}
 	
 	public abstract Player chooseNextPlayer();

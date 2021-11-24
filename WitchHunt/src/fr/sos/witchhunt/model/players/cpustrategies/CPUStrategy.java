@@ -5,12 +5,14 @@ import java.util.List;
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.cards.AngryMob;
+import fr.sos.witchhunt.model.cards.BlackCat;
 import fr.sos.witchhunt.model.cards.Broomstick;
 import fr.sos.witchhunt.model.cards.Cauldron;
 import fr.sos.witchhunt.model.cards.DuckingStool;
 import fr.sos.witchhunt.model.cards.ExistingRumourCards;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.cards.Toad;
 import fr.sos.witchhunt.model.cards.Wart;
 import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
@@ -23,21 +25,21 @@ public abstract class CPUStrategy implements PlayStrategy {
 	protected int goodEffectThresold=2; //When a cards' effect is $ or above, the effect is considered like valuable
 	protected int goodCardThresold=4; //When a cards' total value is $ or above, it is considered like a valuable card
 	protected int gameIsTightThresold=3; //When $ or less players are remaining, the game is considered tight
-	protected int acceptableCardsLimit=1; //When the player has $ or less remaining, they will consider they lack cards
+	protected int acceptableCardsLimit=2; //When the player has $ or less remaining, they will consider they lack cards
 	
 	protected CardValueMap cvm = new CardValueMap();
 
 
 	
 	protected boolean isOkayToReveal (Identity identity,RumourCardsPile rcp) {
-		if(Tabletop.getInstance().getActivePlayersList().size()>2 && identity==Identity.VILLAGER && 
-				rcp.getPlayableHuntSubpile().getCardsCount()>=1 && 
-				cvm.getAverageHuntValue(rcp.getUnrevealedSubpile())>=goodEffectThresold) return true;
+		if(Tabletop.getInstance().getUnrevealedPlayersList().size()>2 && identity==Identity.VILLAGER && 
+				cvm.getAverageHuntValue(rcp.getUnrevealedSubpile())>=goodEffectThresold&&
+				rcp.getUnrevealedSubpile().getCardsCount()<=acceptableCardsLimit) return true;
 		else return false;
 	}
 
 	protected boolean wantsCards(RumourCardsPile rcp) {
-		if( rcp.getCardsCount() <= getAcceptableCardsNumberLimit() ) return true;
+		if( rcp.getUnrevealedSubpile().getCardsCount() <= getAcceptableCardsNumberLimit() ) return true;
 		else return false;
 	}
 	
@@ -63,14 +65,11 @@ public abstract class CPUStrategy implements PlayStrategy {
 		}
 	}
 	
-	public boolean isConfident() {
-		return true;
-		//TODO : return false if you are the third player or below
-	}
 	public double getAverageUnrevealedCardsNumber() {
 		List <Integer> cardNumbers = Tabletop.getInstance().getActivePlayersList().stream()
 				.mapToInt(p->(p.hasUnrevealedRumourCards())?p.getUnrevealedSubhand().getCardsCount():0).boxed().toList();
-		return cardNumbers.stream().reduce(0, (number,sum)->sum+=number) / (double) cardNumbers.size();
+		if(!cardNumbers.isEmpty()) return cardNumbers.stream().reduce(0, (number,sum)->sum+=number) / (double) Tabletop.getInstance().getActivePlayersList().size();
+		else return 0;
 	}
 	
 	public void updateCardValueMap(boolean iAmRevealed,Identity myIdentity, RumourCardsPile myHand) {
@@ -115,21 +114,22 @@ public abstract class CPUStrategy implements PlayStrategy {
 				}
 				
 			}
-			else if(rc==ExistingRumourCards.getInstanceByClass(Cauldron.class)) {//CAULDRON
+			else if(rc==ExistingRumourCards.getInstanceByClass(Cauldron.class)//CAULDRON
+					||rc==ExistingRumourCards.getInstanceByClass(Toad.class)) {//TOAD
 				/*the hunt effect has initially a bad value as it is risked,
 				but it becomes an acceptable card if :
 				- You are already revealed
 				- You are a villager and thing revealing your identity is not that bad
 				- You are a witch with no more playable witch cards, while the others still have some, so you cant eliminate yourselve and not give the others points*/
 				if(iAmRevealed||this.isOkayToReveal(myIdentity, myHand)
-						|| (myIdentity==Identity.WITCH && getAverageUnrevealedCardsNumber()<=1 && myHand.getPlayableWitchSubpile().isEmpty()) ){
+						|| (myIdentity==Identity.WITCH && getAverageUnrevealedCardsNumber()<=0) ){
 					cv.addHuntValue(2);
 					cv.setRisked(false);
 					M.setValueFor(rc,cv );
 					cv.lock();
 				}
 			}
-			else if(rc==ExistingRumourCards.getInstanceByClass(Cauldron.class)) {//BLACKCAT
+			else if(rc==ExistingRumourCards.getInstanceByClass(BlackCat.class)) {//BLACKCAT
 				/*the hunt effect becomes more valuable if there are cards in the pile, 
 				 * even more if you want cards,
 				 * and even more if there is a good revealed card in the pile*/
@@ -149,31 +149,52 @@ public abstract class CPUStrategy implements PlayStrategy {
 					M.setValueFor(rc,cv );
 				}
 			}
+			else if(rc==ExistingRumourCards.getInstanceByClass(BlackCat.class)) {//EVIL EYE
+				/*value becomes -1, risked if there are only 2 accusable players remaining
+				 * the card is valuable when this is not the case and the average cards number is low (chances to cause a player to have no cards on your turn)*/
+				if(Tabletop.getInstance().getActivePlayersList().size()<=2) {
+					cv.unlock();
+					cv.setHuntValue(-1);
+					cv.setWitchValue(-1);
+					cv.setDecisive(false);
+					cv.setRisked(true);
+					cv.lock();
+				}
+				else if(getAverageUnrevealedCardsNumber()<1.5) {
+					cv.setHuntValue(3);
+					cv.setDecisive(true);
+					cv.setWitchValue(3);
+					cv.lock();
+				}
+				M.setValueFor(rc,cv );
+			}
+			
 			
 		};
 	}
-	@Override
+	/*@Override
 	public Identity selectIdentity() {
 		int chooseVillagerProbability;
 		if(this.isConfident()) chooseVillagerProbability = 30;
 		else chooseVillagerProbability = 80;
 		double n = Math.random()*100;
 		return (n>100-chooseVillagerProbability) ? Identity.VILLAGER : Identity.WITCH;
-	}
+	}*/
 	@Override
 	public TurnAction selectTurnAction(Identity identity,RumourCardsPile myHand,boolean canHunt) {
+
 		if(canHunt) {
 			if(myHand.getPlayableHuntSubpile().getCards().stream()
 					.filter(c->(cvm.getValueByCard(c).getHuntValue()>0&&
-							(!cvm.getValueByCard(c).isRisked()&&
-									(identity==Identity.WITCH||Tabletop.getInstance().getActivePlayersList().size()>gameIsTightThresold))))
+							((Math.random()<0.2)||(!cvm.getValueByCard(c).isRisked()&&
+									(identity==Identity.WITCH||Tabletop.getInstance().getActivePlayersList().size()>gameIsTightThresold)))))
 					.toList().isEmpty()) {
 				return TurnAction.ACCUSE; /*if we only have cards with risked hunt effects (for a witch, or for any player when the game is not tight yet)
 				,we don't want to Hunt at all*/
 			}
 			int chooseToAccuseProbability;
 			if(identity==Identity.WITCH) {
-				if(myHand.getCardsCount()>=acceptableCardsLimit+2) {
+				if(myHand.getCardsCount()>=acceptableCardsLimit+1) {
 					chooseToAccuseProbability=60;
 				}
 				else {
@@ -181,7 +202,7 @@ public abstract class CPUStrategy implements PlayStrategy {
 				}
 			}
 			else {
-				chooseToAccuseProbability=65-myHand.getCardsCount()*10; 
+				chooseToAccuseProbability=73-myHand.getCardsCount()*10; 
 			}
 			double n = Math.random()*100;
 			return (n>100-chooseToAccuseProbability) ? TurnAction.ACCUSE : TurnAction.HUNT;
@@ -206,8 +227,6 @@ public abstract class CPUStrategy implements PlayStrategy {
 	}
 	@Override
 	public Player selectPlayerToAccuse(List<Player> accusablePlayersList) {
-		//TODO : accuse the player with the highest threat score, or weakness score if he is low on cards
-		//FOR NOW accuses a random accusable player
 		return accusablePlayersList.get((int) (Math.random() * accusablePlayersList.size()) );
 	}
 	
@@ -219,11 +238,7 @@ public abstract class CPUStrategy implements PlayStrategy {
 		
 		return worstWitchCards.getRandomCard(); 
 	}
-	@Override
-	public Player selectNextPlayer(List<Player> list) {
-		//TODO select the less threatening player instead
-		return list.get(list.size()*(int)Math.random());
-	}
+
 	@Override
 	public RumourCard selectBestCard(RumourCardsPile rcp, boolean seeUnrevealedCards) {
 		/*Selects a random card in a list made of the cards with the best overall value + the unrevealed cards if we can't see them
@@ -231,11 +246,11 @@ public abstract class CPUStrategy implements PlayStrategy {
 		 */
 		RumourCardsPile selection;
 		if(seeUnrevealedCards) {
-			selection = new RumourCardsPile(cvm.getCardsWithMaxOverallValue(rcp).getCards());
+			selection = cvm.getCardsWithMaxOverallValue(rcp);
 		}
 		else {
 			if(!rcp.getRevealedSubpile().isEmpty()) {
-				selection = new RumourCardsPile(cvm.getCardsWithMaxOverallValue(rcp.getRevealedSubpile()).getCards());
+				selection = cvm.getCardsWithMaxOverallValue(rcp.getRevealedSubpile());
 				rcp.getUnrevealedSubpile().getCards().forEach(c -> selection.addCard(c));
 			}
 			else selection = rcp;
@@ -264,14 +279,18 @@ public abstract class CPUStrategy implements PlayStrategy {
 		return this.cvm;
 	};
 	
-	public DefenseAction selectDefenseAction(boolean canWitch,RumourCardsPile myHand) {
-		if (this.isOkayToReveal(Identity.VILLAGER, myHand)||!canWitch) return DefenseAction.REVEAL;
+	public DefenseAction selectDefenseAction(boolean canWitch,RumourCardsPile myHand,Identity myIdentity) {
+		if (this.isOkayToReveal(myIdentity, myHand)||!canWitch) return DefenseAction.REVEAL;
 		else return DefenseAction.WITCH;
 	}
 	public RumourCard selectWorstCard(RumourCardsPile rcp) {
 		/*useful when choosing a card to discard.
 		returns a random card among the ones with the lowest witchEffectValue + huntEffectValue sum.*/
 		return cvm.getCardsWithMinOverallValue(rcp).getRandomCard();
+	}
+	@Override
+	public void updateBehavior(boolean amIRevealed, Identity myIdentity, RumourCardsPile myHand) {
+		this.updateCardValueMap(amIRevealed,myIdentity,myHand);
 	}
 	
 

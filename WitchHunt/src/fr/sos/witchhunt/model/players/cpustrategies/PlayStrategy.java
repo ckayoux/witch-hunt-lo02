@@ -19,7 +19,7 @@ public interface PlayStrategy {
 	public Identity selectIdentity();
 	public TurnAction selectTurnAction(Identity identity, RumourCardsPile myHand,boolean canHunt);
 	public Player selectPlayerToAccuse(List<Player> accusablePlayersList);
-	public DefenseAction selectDefenseAction(boolean canWitch,RumourCardsPile myHand);
+	public DefenseAction selectDefenseAction(boolean canWitch,RumourCardsPile myHand,Identity myIdentity);
 	public default Player selectTarget(List<Player> eligiblePlayers) {
 		return selectPlayerToAccuse(eligiblePlayers);
 	}
@@ -30,6 +30,7 @@ public interface PlayStrategy {
 	public Player selectNextPlayer(List<Player> list);
 	public RumourCard selectBestCard(RumourCardsPile rcp, boolean seeUnrevealedCards);
 	public DefenseAction revealOrDiscard(Identity identity,RumourCardsPile rcp);
+	public void updateBehavior(boolean amIRevealed, Identity myIdentity, RumourCardsPile myHand);
 
 	
 

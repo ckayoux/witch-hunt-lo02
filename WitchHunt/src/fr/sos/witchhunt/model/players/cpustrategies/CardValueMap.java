@@ -51,7 +51,8 @@ public class CardValueMap {
 	}
 	public double getAverageHuntValue(RumourCardsPile rcp) {
 		List <Integer> huntValues = getSubValues(this.filter(rcp),(ToIntFunction<CardValue>) cv -> cv.getHuntValue() );
-		return huntValues.stream().reduce(0,Integer::sum) / (double) huntValues.stream().count();
+		if(!huntValues.isEmpty()) return huntValues.stream().reduce(0,Integer::sum) / (double) huntValues.stream().count();
+		else return 0;
 	}
 	
 	private List<RumourCard> getCardsWithSubValue(Map<RumourCard,CardValue> M, ToIntFunction<CardValue> subValueGetter, int lookingFor){
@@ -94,5 +95,21 @@ public class CardValueMap {
 		List<Integer> huntValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getHuntValue()) ;
 		int max = Collections.max(huntValues);
 		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getHuntValue(), max));
+	}
+
+
+	public RumourCardsPile getCardsWithMaxWitchValue(RumourCardsPile rcp) {
+		Map<RumourCard,CardValue> M = this.filter(rcp);
+		List<Integer> witchEffectValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getWitchValue()) ;
+		int max = Collections.max(witchEffectValues);
+		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getWitchValue(), max));
+	}
+
+
+	public RumourCardsPile getCardsWithMaxAdditionnalValue(RumourCardsPile rcp) {
+		Map<RumourCard,CardValue> M = this.filter(rcp);
+		List<Integer> additionnalValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getAdditionnalValue()) ;
+		int max = Collections.max(additionnalValues);
+		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getAdditionnalValue(), max));
 	}
 }

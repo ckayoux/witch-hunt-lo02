@@ -12,7 +12,8 @@ import fr.sos.witchhunt.model.players.cpustrategies.*;
 
 public final class CPUPlayer extends Player {
 	
-	private PlayStrategy chosenStrategy= new ExploringStrategy();
+	private PlayStrategy chosenStrategy=new DefensiveStrategy();// new GropingStrategy();
+	private Player knownWitch=null;
 	
 	public CPUPlayer(int id, int cpuNumberHowMuch) {
 		super(id);
@@ -21,6 +22,7 @@ public final class CPUPlayer extends Player {
 	
 	@Override
 	public void playTurn() {
+		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		super.playTurn();		
 	}
 	
@@ -33,12 +35,19 @@ public final class CPUPlayer extends Player {
 
 	@Override
 	protected Player choosePlayerToAccuse() {
-		return chosenStrategy.selectPlayerToAccuse(getAccusablePlayers());
+		if(knownWitch==null) return chosenStrategy.selectPlayerToAccuse(getAccusablePlayers());
+		else {
+			Player output = knownWitch;
+			this.knownWitch=null;
+			return output;
+		}
 	}
 	
 	@Override
 	public Player chooseTarget(List<Player> eligiblePlayers) {
-		return chosenStrategy.selectTarget(eligiblePlayers);
+		if(knownWitch==null||!eligiblePlayers.contains(knownWitch)) return chosenStrategy.selectTarget(eligiblePlayers);
+		else return knownWitch;
+		
 	}
 
 	@Override
@@ -54,11 +63,15 @@ public final class CPUPlayer extends Player {
 	@Override
 	public DefenseAction chooseDefenseAction() {
 		//must initialize Tabletop's hunter with canHunt, as the player will look at its playable hunt cards to make their decision
-		this.canHunt();
-		return chosenStrategy.selectDefenseAction(this.canWitch(),this.hand);
+		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
+		return chosenStrategy.selectDefenseAction(this.canWitch(),this.hand,this.getIdentity());
 	}
 
-
+	@Override
+	public void beHunted() {
+		super.beHunted();
+		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
+	}
 	@Override
 	public RumourCard selectWitchCard() {
 		return this.chosenStrategy.selectWitchCard(this.hand.getPlayableWitchSubpile());
@@ -66,6 +79,7 @@ public final class CPUPlayer extends Player {
 
 	@Override
 	public RumourCard selectCardToDiscard(RumourCardsPile in) {
+		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		if(this.hasUnrevealedRumourCards()) {
 			return chosenStrategy.selectCardToDiscard(in.getUnrevealedSubpile());
 		}
@@ -79,6 +93,7 @@ public final class CPUPlayer extends Player {
 
 	@Override
 	public RumourCard chooseAnyCard(RumourCardsPile rcp, boolean seeUnrevealedCards) {
+		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		if(targetPileContainsCards(rcp)) {
 			return chosenStrategy.selectBestCard(rcp,seeUnrevealedCards);
 		}
@@ -87,6 +102,7 @@ public final class CPUPlayer extends Player {
 	
 	@Override
 	public RumourCard chooseRevealedCard(RumourCardsPile from) {
+		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		if(targetPileContainsCards(from.getRevealedSubpile())) {
 			return chosenStrategy.selectBestCard(from.getRevealedSubpile(),false);
 		}
@@ -96,15 +112,13 @@ public final class CPUPlayer extends Player {
 	@Override
 	public Identity lookAtPlayersIdentity(Player target) {
 		Identity id = super.lookAtPlayersIdentity(target);
-		/*Tout doux : remember the players identity and accuse him the next time
-		 * not necessarely if it is a villager and there is another very suspicious and weak player,
-		 * necessarely otherwise
-		 */
+		if(id==Identity.WITCH) this.knownWitch=target;
 		return id;
 	}
 
 	@Override
 	public DefenseAction revealOrDiscard() {
+		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		if(this.hasRumourCards()&&!this.isRevealed()) {
 			return chosenStrategy.revealOrDiscard(this.getIdentity(),this.getHand());
 		}
@@ -119,5 +133,7 @@ public final class CPUPlayer extends Player {
 	}
 
 
-
+	public void chooseStrategy() {
+		
+	}
 }

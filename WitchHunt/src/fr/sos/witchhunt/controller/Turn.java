@@ -14,10 +14,10 @@ public final class Turn {
 	public Turn (Player p) {
 		Tabletop.getInstance().getCurrentRound().setCurrentTurn(this);
 		turnNumber++;
-		Application.displayController.crlf();
 		p.playTurn();
 		Application.displayController.crlf();
 		Application.displayController.drawWeakDashedLine();
+		Application.displayController.crlf();
 	}
 	
 	//GETTERS

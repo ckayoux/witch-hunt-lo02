@@ -73,6 +73,7 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		while (!gameIsOver()){
 			Application.displayController.displayScoreTable(scoreCounter);
 			Application.inputController.wannaContinue();
+			Application.displayController.crlf();
 			resetStates();
 			currentRound = null;
 			currentRound = new Round();

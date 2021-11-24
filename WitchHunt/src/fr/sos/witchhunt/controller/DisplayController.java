@@ -120,6 +120,7 @@ public final class DisplayController implements DisplayMediator {
 		int distributedCardsCount = (int)Math.floor( totalRumourCardsCount / (float)playersCount );
 		int discardedCardsCount = totalRumourCardsCount % playersCount;
 		console.logHandDistributionMessage(distributedCardsCount,discardedCardsCount);
+		console.crlf();
 		//TODO : equivalent for gui
 	}
 
@@ -377,18 +378,19 @@ public final class DisplayController implements DisplayMediator {
 	public void displayPlayTurnAgainScreen(Player p) {
 		console.logPlayTurnAgainMessage(p.getName());
 	}
-	@Override
 	public void freezeDisplay(int duration) {
 		if(Game.getInstance().sleepingIsAllowed()) {
-			//FIX
+			/*try{
+				Application.inputController.wait(duration);
+				this.wait(duration);
+				Application.inputController.notify();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}*/
 		}
-		/*try {
-			//TimeUnit.SECONDS.sleep(duration);//temporary
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}//temporary*/
+		
 	}
-
+	
 	@Override
 	public void displayForcedToAccuseScreen(Player theOneWhoMustAccuse, Player theOneWhoForcedThem) {
 		console.logForcedToAccuseMessage(theOneWhoMustAccuse.getName(),theOneWhoForcedThem.getName(),theOneWhoForcedThem.isImmunized());
@@ -399,4 +401,5 @@ public final class DisplayController implements DisplayMediator {
 		console.logStealCardMessage(thief.getName(),stolenPlayer.getName());
 		
 	}
+	
 }

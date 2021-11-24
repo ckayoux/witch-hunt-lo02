@@ -159,6 +159,16 @@ public final class InputController implements InputMediator {
 		}	
 	}
 	
+	public void sleepStdInput() {
+		if(this.stdInputThread.isAlive()) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}	
+	}
+	
 	public void wake() {
 		this.latch.countDown();
 	}

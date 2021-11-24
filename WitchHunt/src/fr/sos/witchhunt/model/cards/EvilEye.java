@@ -23,7 +23,7 @@ public final class EvilEye extends RumourCard {
 		};
 		
 		this.huntEffect = new HuntEffect("Choose next player.\n"
-				+ "/+/On their turn, they must accuse a player other than you, if possible.",1) {
+				+ "/+/On their turn, they must accuse a player other than you, if possible.",2) {
 			@Override
 			public void perform() {
 				Player me = getMyself();

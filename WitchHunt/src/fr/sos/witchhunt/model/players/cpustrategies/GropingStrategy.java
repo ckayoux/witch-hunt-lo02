@@ -11,12 +11,14 @@ import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
 
-public final class ExploringStrategy extends CPUStrategy { //CPUStrategy implements PlayStrategy
+public final class GropingStrategy extends CPUStrategy { //CPUStrategy implements PlayStrategy
 	/*Default strategy, chosen by most cpu players at the start of the game.
 	 * Most choices are done randomly.
 	 * The player will avoid spending its best cards.
 	 */
-	
+	public GropingStrategy() {
+		this.gameIsTightThresold=2;
+	}
 	@Override
 	public Identity selectIdentity() {
 		//selects an identity randomly
@@ -41,11 +43,6 @@ public final class ExploringStrategy extends CPUStrategy { //CPUStrategy impleme
 	public Player selectNextPlayer(List<Player> list) {
 		//this strategy selects the next player randomly
 		return list.get(list.size()*(int)Math.random());
-	}
-
-	@Override
-	public CardValueMap getCardValueMap() {
-		return cvm;
 	}
 
 	@Override

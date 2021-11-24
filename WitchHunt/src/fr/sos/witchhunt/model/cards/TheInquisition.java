@@ -13,7 +13,7 @@ public final class TheInquisition extends RumourCard {
 		cardInstance = this;
 		
 		this.witchEffect = new WitchEffect("Discard a card from your hand.\n"
-				+ "/+/Take next turn.",0) {
+				+ "/+/Take next turn.",1) {
 			
 			@Override
 			public void perform() {
@@ -35,7 +35,7 @@ public final class TheInquisition extends RumourCard {
 		
 		this.huntEffect = new HuntEffect("(Only playable if you've been revealed as a Villager)\n"
 				+ "/+/Choose next player.\n"
-				+ "/+/Before their turn, secretly look at their identity.", 3) {
+				+ "/+/Before their turn, secretly look at their identity.", 1) {
 			Player me;
 			@Override
 			public void perform() {

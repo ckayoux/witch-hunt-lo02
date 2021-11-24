@@ -16,8 +16,16 @@ public final class StdView {
 	
 	//CONSTRUCTORS
 	public StdView() {
-		log("Welcome to Witch Hunt !");
 		logStarsLine();
+		increaseTabulation();
+		increaseTabulation();
+		logSplash();
+		crlf();
+		logStarsLine();
+		crlf();
+		tabbedLog("Welcome to Witch Hunt !");
+		decreaseTabulation();
+		decreaseTabulation();
 	}
 	
 	public void tabbedLog(String msg) {
@@ -80,7 +88,7 @@ public final class StdView {
 	public void makeMenu(Menu m) {
 		crlf();
 		logHardLine();
-		log(m.getName().toUpperCase());
+		log("  "+m.getName().toUpperCase());
 		logHardLine();
 		int n=0;
 		for (String str : m.getOptions()) {
@@ -98,6 +106,17 @@ public final class StdView {
 			log("\t\t "+Integer.toString(n)+" - "+ str);
 		}
 		crlf();
+	}
+
+	public void logSplash() {
+		tabbedLog(" _     _         \n"
+				+ "/+/' )   / _/_    /    \n"
+				+ "/+/ / / /o /  _. /_  \n"
+				+ "/+/(_(_/<_<__(__/ /_");
+		tabbedLog(" _    ,                  \n"
+				+ "/+/' )  /          _/_  \n"
+				+ "/+/ /--/ . . ____  /   \n"
+				+ "/+//  (_(_/_/ / <_<__");
 	}
 	
 	public void logMatchStartMessage() {
@@ -374,5 +393,7 @@ public final class StdView {
 	public void logStealCardMessage(String thiefName,String stolenName) {
 		log("\t"+thiefName+" is subtilizing a card from "+stolenName+" !");
 	}
+	
+	
 
 }
