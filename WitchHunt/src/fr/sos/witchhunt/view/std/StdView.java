@@ -109,14 +109,15 @@ public final class StdView {
 	}
 
 	public void logSplash() {
-		tabbedLog(" _     _         \n"
-				+ "/+/' )   / _/_    /    \n"
-				+ "/+/ / / /o /  _. /_  \n"
-				+ "/+/(_(_/<_<__(__/ /_");
-		tabbedLog(" _    ,                  \n"
-				+ "/+/' )  /          _/_  \n"
+		tabbedPrint(" _     _         	\n"
+				+ "/+/' )   / _/_    /    \n" 
+				+ "/+/ / / /o /  _. /_       _   ,_,   _\n"
+				+ "/+/(_(_/<_<__(__/ /_     / `'=) (='` \\\\ \n");
+		tabbedLog(" _    ,             /.-.-.\\\\ /.-.-.\\\\ \n"
+				+ "/+/' )  /          _/_  `      \\\"      `\n"
 				+ "/+/ /--/ . . ____  /   \n"
 				+ "/+//  (_(_/_/ / <_<__");
+
 	}
 	
 	public void logMatchStartMessage() {
@@ -208,6 +209,19 @@ public final class StdView {
 	public void logVillagerRevealMessage(String playerName) {
 		log("\t"+playerName+" was only a villager.\n");
 	}
+	public void logWitchEliminatedMessage(String playerName) {
+		increaseTabulation();
+		tabbedLog("           (                      )      ____ \n"
+				+ "/+/ (  (      )\\ )  *   )   (     ( /(     |   / \n"
+				+ "/+/ )\\))(   '(()/(` )  /(   )\\    )\\())    |  /  \n"
+				+ "/+/((_)()\\ )  /(_))( )(_))(((_)  ((_)\\     | /   \n"
+				+ "/+/_(())\\_)()(_)) (_(_()) )\\___   _((_)    |/    \n"
+				+ "/+/\\ \\((_)/ /|_ _||_   _|((/ __| | || |   (      \n"
+				+ "/+/ \\ \\/\\/ /  | |   | |   | (__  | __ |   )\\     \n"
+				+ "/+/  \\_/\\_/  |___|  |_|    \\___| |_||_|  ((_)    \n");
+		decreaseTabulation();
+		//log("\t"+playerName+" was a witch !\n");
+	}
 	public void logWitchRevealMessage(String playerName) {
 		log("\t"+playerName+" was a witch !\n");
 	}
@@ -230,7 +244,7 @@ public final class StdView {
 
 	public void logEliminationMessage(String eliminatorName, String victimName) {
 		if(eliminatorName!=victimName)
-			log("\t"+eliminatorName + " has eliminated " + victimName + ".");
+			log("\t"+eliminatorName + " has sentenced " + victimName + " to the stake !");
 		else 
 			log("\t"+eliminatorName+" has eliminated themselve.");
 	}

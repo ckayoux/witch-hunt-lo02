@@ -157,7 +157,10 @@ public final class DisplayController implements DisplayMediator {
 					console.logVillagerRevealMessage(p.getName());
 					break;
 				case WITCH:
-					console.logWitchRevealMessage(p.getName());
+					if(Tabletop.getInstance().getLastUnrevealedPlayer()==p)
+						console.logWitchRevealMessage(p.getName());
+					else
+						console.logWitchEliminatedMessage(p.getName());
 					break;
 			}
 		}
