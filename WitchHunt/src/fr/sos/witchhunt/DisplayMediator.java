@@ -4,8 +4,10 @@ import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.players.CPUPlayer;
 import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
+import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
 
 public interface DisplayMediator {
 	public void passLog(String msg);
@@ -44,4 +46,5 @@ public interface DisplayMediator {
 	public void displayForcedToAccuseScreen(Player theOneWhoMustAccuse, Player theOneWhoForcedThem);
 	public void displayStealCardScreen(Player thief, Player stolenPlayer);
 	public void displayRanking(Player p);
+	public void displayStrategyChange(Player p,PlayStrategy strat);
 }

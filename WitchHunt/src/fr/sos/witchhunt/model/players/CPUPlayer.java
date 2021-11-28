@@ -13,7 +13,7 @@ import fr.sos.witchhunt.model.players.cpustrategies.*;
 public final class CPUPlayer extends Player {
 	
 	private PlayStrategy chosenStrategy=new GropingStrategy();
-	//private PlayStrategy oldStrategy = chosenStrategy;
+	private PlayStrategy oldStrategy = chosenStrategy;
 	private Player knownWitch=null;
 	
 	public CPUPlayer(int id, int cpuNumberHowMuch) {
@@ -166,8 +166,7 @@ public final class CPUPlayer extends Player {
 				&&this.score<3)
 				this.chosenStrategy=new GropingStrategy();
 		else this.chosenStrategy=new DefensiveStrategy();
-		//if(chosenStrategy.getClass()!=oldStrategy.getClass()) System.out.println("I, "+name+" have chosen "+this.chosenStrategy.getClass().getSimpleName());
-		
-		//oldStrategy=chosenStrategy;
+		if(chosenStrategy.getClass()!=oldStrategy.getClass()) displayMediator.displayStrategyChange(this,this.chosenStrategy);
+		oldStrategy=chosenStrategy;
 	}
 }

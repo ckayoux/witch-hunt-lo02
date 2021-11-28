@@ -49,6 +49,10 @@ public final class GropingStrategy extends CPUStrategy { //CPUStrategy implement
 	public RumourCard selectHuntCard(RumourCardsPile rcp) {
 		return cvm.getCardsWithPositiveHuntValue(rcp).getRandomCard();
 	}
-
+	
+	@Override
+	public String toString() {
+		return "a groping playstyle";
+	}
 
 }

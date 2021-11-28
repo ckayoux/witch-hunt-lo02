@@ -129,4 +129,8 @@ public class DefensiveStrategy extends CPUStrategy {
 		}
 		return selection.getRandomCard();
 	}
+	@Override
+	public String toString() {
+		return "a careful playstyle";
+	}
 }

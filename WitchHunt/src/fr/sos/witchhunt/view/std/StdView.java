@@ -436,6 +436,10 @@ public final class StdView {
 	public void logPlayerRankingMessage(boolean exAequo, int rank, int score) {
 		tabbedLog("You are ranked n°"+rank+" "+((exAequo)?"(ex aequo) ":"")+"with a score of "+score+".");
 	}
+
+	public void logStrategyChange(String name, String playstyleDesc) {
+		/*log("\t"+name+" opts for "+playstyleDesc+".");*/
+	}
 	
 	
 

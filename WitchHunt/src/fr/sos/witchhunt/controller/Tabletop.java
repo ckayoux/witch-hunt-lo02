@@ -90,6 +90,7 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 			currentRound = null;
 			currentRound = new Round();
 		}
+		resetStates();
 		this.gameIsTied=false;
 		currentRound.setRoundNumber(0);
 		currentRound = null;

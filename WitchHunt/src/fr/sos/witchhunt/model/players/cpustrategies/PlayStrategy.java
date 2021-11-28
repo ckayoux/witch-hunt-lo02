@@ -32,6 +32,6 @@ public interface PlayStrategy {
 	public DefenseAction revealOrDiscard(Identity identity,RumourCardsPile rcp);
 	public void updateBehavior(boolean amIRevealed, Identity myIdentity, RumourCardsPile myHand);
 
-	
+	public String toString();
 
 }

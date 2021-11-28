@@ -12,6 +12,7 @@ import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;
+import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
 import fr.sos.witchhunt.view.std.StdView;
 
 public final class DisplayController implements DisplayMediator {
@@ -444,6 +445,11 @@ public final class DisplayController implements DisplayMediator {
 
 	public void displayGameIsTiedScreen(List<Player> potentialWinners) {
 		console.logGameIsTiedScreen(potentialWinners.get(0).getScore(),potentialWinners.stream().map(p->p.getName()).toList());
+	}
+
+	@Override
+	public void displayStrategyChange(Player p, PlayStrategy strat) {
+		/*if(Game.getInstance().cpuPlayersDisplayChangesOfStrategy())*/ console.logStrategyChange(p.getName(),strat.toString());
 	}
 
 	

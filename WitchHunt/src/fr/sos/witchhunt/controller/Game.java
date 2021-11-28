@@ -12,7 +12,8 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	//ATTRIBUTES
 	private static volatile Game instance = null;
 	private Tabletop tabletop;
-	private boolean sleepingAllowed=true;
+	private boolean sleepingAllowed=false;
+	private boolean displayCPUStrategyChange=false;
 	private final static int minPlayersNumber = 3;
 	private final static int maxPlayersNumber = 6;
 	private final static int totalRumourCardsCount = 12;
@@ -35,20 +36,22 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
     }
 	
 	public void gotoMainMenu() {
-		Menu mainMenu = new Menu("main menu","Start new game","Options","Exit");
+		
+		Menu mainMenu = new Menu("main menu","Start new game"/*,"Options"*/,"Exit");
 		Application.displayController.displayMenu(mainMenu);
 		switch (Application.inputController.makeChoice(mainMenu)) {
-			case 1:
-				this.cpuPlayersNumber=0;
-				startGame();
-				break;
-			case 2:
-				options();
-				break;
-			case 3:
-				exit();
-				break;
+				case 1:
+					this.cpuPlayersNumber=0;
+					startGame();
+					break;
+				/*case 2:
+					options();
+					break;*/
+				case 2:
+					exit();
+					break;
 		}
+		
 	}
 	
 
@@ -98,6 +101,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 
 	private void options() {
 		String[] options = {((sleepingAllowed)?"Disable":"Enable")+" delay between CPU players' actions",
+			((displayCPUStrategyChange)?"Disable":"Enable")+" displaying CPU players' changes of strategy",
 			"Main menu"};
 
 		Menu optionsMenu = new Menu("game options",options);
@@ -110,13 +114,20 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 				options();
 				break;
 			case 2:
-				gotoMainMenu();
+				Application.displayController.passLog("CPU players will "+((displayCPUStrategyChange)?"NOT ":"")+ "display their changes of strategy.");
+				displayCPUStrategyChange=!displayCPUStrategyChange;
+				options();
+				break;
+			case 3:
 				break;
 				
 		}
 	}
 	public boolean sleepingIsAllowed() {
 		return this.sleepingAllowed;
+	}
+	public boolean cpuPlayersDisplayChangesOfStrategy() {
+		return this.displayCPUStrategyChange;
 	}
 	
 }

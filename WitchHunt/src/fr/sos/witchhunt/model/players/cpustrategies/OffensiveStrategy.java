@@ -156,6 +156,10 @@ public class OffensiveStrategy extends CPUStrategy {
 			else return false;
 		}
 	}
+	@Override
+	public String toString() {
+		return "an agressive playstyle";
+	}
 	
 	
 	
