@@ -39,6 +39,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		Application.displayController.displayMenu(mainMenu);
 		switch (Application.inputController.makeChoice(mainMenu)) {
 			case 1:
+				this.cpuPlayersNumber=0;
 				startGame();
 				break;
 			case 2:

@@ -12,7 +12,8 @@ import fr.sos.witchhunt.model.players.cpustrategies.*;
 
 public final class CPUPlayer extends Player {
 	
-	private PlayStrategy chosenStrategy=new DefensiveStrategy();// new GropingStrategy();
+	private PlayStrategy chosenStrategy=new GropingStrategy();
+	//private PlayStrategy oldStrategy = chosenStrategy;
 	private Player knownWitch=null;
 	
 	public CPUPlayer(int id, int cpuNumberHowMuch) {
@@ -22,8 +23,14 @@ public final class CPUPlayer extends Player {
 	
 	@Override
 	public void playTurn() {
+		this.chooseStrategy();
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		super.playTurn();		
+	}
+	@Override
+	public void reset() {
+		super.reset();
+		this.chooseStrategy();
 	}
 	
 	@Override
@@ -62,6 +69,7 @@ public final class CPUPlayer extends Player {
 
 	@Override
 	public DefenseAction chooseDefenseAction() {
+		this.chooseStrategy();
 		//must initialize Tabletop's hunter with canHunt, as the player will look at its playable hunt cards to make their decision
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		return chosenStrategy.selectDefenseAction(this.canWitch(),this.hand,this.getIdentity());
@@ -69,6 +77,7 @@ public final class CPUPlayer extends Player {
 
 	@Override
 	public void beHunted() {
+		this.chooseStrategy();
 		super.beHunted();
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 	}
@@ -134,6 +143,31 @@ public final class CPUPlayer extends Player {
 
 
 	public void chooseStrategy() {
+		Player leadingPlayer = Tabletop.getInstance().getRanking().get(0);
+		List<Player> lastPlayersList = Tabletop.getInstance().getLastPlayers();
+		List<Player> leadingPlayersList = Tabletop.getInstance().getLeadingPlayers();
 		
+		if((this!=leadingPlayer)
+			&&(Tabletop.getInstance().getLastPlayers().contains(this)
+				|| (leadingPlayer.getScore()>=this.score+1 && this.score<=3 )
+				||(this.getHand().isEmpty()&&this.getIdentity()!=null)
+				||Tabletop.getInstance().gameIsTied()
+				||(this.identity==Identity.WITCH&&this.score<=3&&this.getHand().getCardsCount()<=4)
+			)){
+			this.chosenStrategy = new DefensiveStrategy();
+		}	
+		else if(Tabletop.getInstance().getLeadingPlayers().contains(this)
+				||this.score >=3
+				|| (this.hand.getCardsCount()>=2 && Math.random()<0.2)
+				|| this.hand.getCardsCount()>=5 && this.score>=1) {
+			this.chosenStrategy=new OffensiveStrategy();
+		}
+		else if(Tabletop.getInstance().getPlayersList().stream().filter(p->!lastPlayersList.contains(p)&&!leadingPlayersList.contains(p)).toList().contains(this)
+				&&this.score<3)
+				this.chosenStrategy=new GropingStrategy();
+		else this.chosenStrategy=new DefensiveStrategy();
+		//if(chosenStrategy.getClass()!=oldStrategy.getClass()) System.out.println("I, "+name+" have chosen "+this.chosenStrategy.getClass().getSimpleName());
+		
+		//oldStrategy=chosenStrategy;
 	}
 }

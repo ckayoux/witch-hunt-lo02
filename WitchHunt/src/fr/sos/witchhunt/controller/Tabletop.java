@@ -1,6 +1,7 @@
 package fr.sos.witchhunt.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private ScoreCounter scoreCounter;
 	private RumourCardsPile allCardsPile;
 	private Player lastUnrevealedPlayer=null;
+	private boolean gameIsTied=false;
 	
 	//CONSTRUCTOR
 	private Tabletop () {
@@ -56,11 +58,15 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		instance.playersList.add(p);
 	}
 	private boolean gameIsOver() {
-		return (getRoundNumber() < 5)?false:true; //TEMPORARY
+		return scoreCounter.hasWinner();
 	}
 	private void resetStates() {
+		int playersCount = this.playersList.size();
 		allCardsPile.getCards().forEach(rc -> rc.reset());
-		playersList.forEach(p -> p.reset());
+		for(int i=0; i<playersCount; i++) {
+			playersList.get(i).reset();
+		}
+		//playersList.stream().forEach(p -> p.reset());
 	}
 	
 	//GAME ACTION METHODS
@@ -71,20 +77,27 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		
 		new Round();
 		while (!gameIsOver()){
-			Application.displayController.displayScoreTable(scoreCounter);
+			Application.displayController.displayScoreBoard(scoreCounter.getScoreBoard());
 			Application.inputController.wannaContinue();
 			Application.displayController.crlf();
 			resetStates();
+			List<Player> potentialWinners = scoreCounter.getPotentialWinners();
+			if(!potentialWinners.isEmpty()) {
+				playersList.stream().filter(p->!potentialWinners.contains(p)).forEach(p->p.setActive(false));
+				Application.displayController.displayGameIsTiedScreen(potentialWinners);
+				this.gameIsTied=true;
+			}
 			currentRound = null;
 			currentRound = new Round();
 		}
+		this.gameIsTied=false;
 		currentRound.setRoundNumber(0);
 		currentRound = null;
 		
 		Application.displayController.displayMatchEndScreen();
-		Application.displayController.displayWinner("winner's name",5); //TODO : use real values
-		Application.displayController.displayClassment(scoreCounter.getClassment());
-		Application.displayController.displayScoreTable(scoreCounter);
+		Application.displayController.displayScoreBoard(scoreCounter.getScoreBoard());
+		Application.displayController.displayWinnerScreen(scoreCounter.getWinner());
+		
 		
 		scoreCounter=null;
 		playersList = null;
@@ -146,18 +159,29 @@ public final class Tabletop {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	}
 	
 	public List<Player> getAccusablePlayersList() {
-		return this.playersList.stream().filter(p -> p.isAccusable()).collect(Collectors.toList());
+		return this.getActivePlayersList().stream().filter(p -> p.isAccusable()).collect(Collectors.toList());
 	}
 	
 	public List<Player> getUnrevealedPlayersList() {
-		return this.playersList.stream().filter(p -> !p.isRevealed()).collect(Collectors.toList());
+		return getActivePlayersList().stream().filter(p -> !p.isRevealed()).collect(Collectors.toList());
 	}
 	
 	public Player getLastUnrevealedPlayer() {
 		return this.lastUnrevealedPlayer;
 	}
 	
-
+	public List<Player> getLeadingPlayers() {
+		return this.scoreCounter.getLeadingPlayers();
+	}
+	public List<Player> getLastPlayers() {
+		return this.scoreCounter.getLastPlayers();
+	}
+	public List<Player> getRanking(){
+		return this.scoreCounter.getRanking();
+	}
+	public boolean gameIsTied() {
+		return this.gameIsTied;
+	}
 	
 	//SETTERS
 	public void setCurrentRound(Round r) {

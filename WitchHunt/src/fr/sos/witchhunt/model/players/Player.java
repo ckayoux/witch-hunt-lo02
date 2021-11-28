@@ -4,6 +4,8 @@ import java.util.List;
 
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.PlayerDisplayObservable;
+import fr.sos.witchhunt.Visitable;
+import fr.sos.witchhunt.Visitor;
 import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
@@ -12,12 +14,12 @@ import fr.sos.witchhunt.model.cards.IdentityCard;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 
-public abstract class Player implements PlayerDisplayObservable, Resettable {
+public abstract class Player implements PlayerDisplayObservable, Resettable, Visitable {
 	
 	//ATTRIBUTES
 	protected String name;
 	protected int id;
-	protected int score;
+	protected int score=0;
 	protected RumourCardsPile hand;
 	protected Identity identity;
 	protected IdentityCard identityCard;
@@ -226,6 +228,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 		}
 	}
 	
+	
+	
 	public void reset() {
 		this.identity = null;
 		this.identityCard.reset();
@@ -386,6 +390,9 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public int getScore() {
 		return this.score;
 	}
+	public int getId() {
+		return this.id;
+	}
 	public boolean isImmunized() {
 		//EvilEye immunizes a player against accusation for the next time an accusation occurs.
 		return this.immunized;
@@ -409,9 +416,14 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	}
 	
 	//SETTERS
+	public void setActive(boolean active) {
+		this.active=active;
+	}
+	
 	public void addScore(int pts) {
 		this.score += pts;
 		requestScoreUpdateScreen(pts);
+		Tabletop.getInstance().getScoreCounter().visit(this);
 	}
 	
 	public void immunize() {
@@ -492,5 +504,15 @@ public abstract class Player implements PlayerDisplayObservable, Resettable {
 	public void forceToAccuseNextTurn(Player target) {
 		target.setForcedToAccuseNextTurnBy(this);
 	}
+	
+	
+	public void accept(Visitor visitor) {
+		visitor.visit(this);	
+	}
+	
+	public boolean equals (Player p) {
+		return this.id == p.getId();
+	}
+	
 	
 }

@@ -1,5 +1,8 @@
 package fr.sos.witchhunt;
 
+import fr.sos.witchhunt.model.players.Player;
+
 public interface Visitor {
-	public void visit(Visitable v);
+	void visit(Visitable  v);
+	void visit(Player p);
 }

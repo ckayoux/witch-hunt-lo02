@@ -19,11 +19,19 @@ public final class Round {
 	public Round() {
 		Tabletop.getInstance().setCurrentRound(this);
 		//For the first round, a random player begins.
-		if(roundNumber == 0) currentPlayer=Tabletop.getInstance().getPlayersList().get((int)Math.random()*Tabletop.getInstance().getPlayersCount());
+		if(roundNumber == 0) currentPlayer=Tabletop.getInstance().getActivePlayersList().get((int)(Math.random()*Tabletop.getInstance().getActivePlayersList().size()));
 		//For all other rounds, the last unrevealed player begins.
-		else currentPlayer=Tabletop.getInstance().getLastUnrevealedPlayer();
+		else {
+			currentPlayer=Tabletop.getInstance().getLastUnrevealedPlayer();
+			if(Tabletop.getInstance().gameIsTied()) {
+				if(!Tabletop.getInstance().getActivePlayersList().contains(currentPlayer)) {
+					currentPlayer=Tabletop.getInstance().getActivePlayersList().get((int)(Math.random()*Tabletop.getInstance().getActivePlayersList().size()));
+				}
+			}
+		}
 		
 		roundNumber++;
+		Tabletop.getInstance().getScoreCounter().addRound();
 		Turn.setTurnNumber(0);
 		
 		Application.displayController.displayRoundStartScreen(roundNumber);
@@ -53,14 +61,14 @@ public final class Round {
 	//UTILS METHODS
 	private void distributeIdentity() {
 		Application.displayController.chooseIdentityScreen();
-		for(Player p : getPlayersList()) {
+		for(Player p : Tabletop.getInstance().getActivePlayersList()) {
 			p.chooseIdentity();
 		}
 		Application.displayController.crlf();
 		Application.displayController.drawWeakDashedLine();
 	}
-	private void distributeHand() {
-		int playersNumber = Tabletop.getInstance().getPlayersCount();
+	private void distributeHand() {	
+		int playersNumber = Tabletop.getInstance().getActivePlayersList().size();
 		int totalCardsCount = Game.getTotalRumourCardsCount();
 		int distributedCardsNumber = (int) Math.floor(totalCardsCount / (float)playersNumber);
 		int discardedCardsNumber = totalCardsCount % playersNumber;
@@ -71,7 +79,7 @@ public final class Round {
 			RumourCard givenCard = allCardsPile.getCards().get(i);
 			allCardsPile.giveCard(givenCard, commonPile);
 		}
-		for (Player p : Tabletop.getInstance().getPlayersList()) {
+		for (Player p : Tabletop.getInstance().getActivePlayersList()) {
 			for(int i=0; i<distributedCardsNumber; i++) {
 				RumourCard givenCard = allCardsPile.getCards().get(0);
 				p.takeRumourCard(givenCard, allCardsPile);
@@ -107,7 +115,7 @@ public final class Round {
 	
 	private void recycleRumourCards() {
 		Tabletop.getInstance().getAllCardsPile().eat(commonPile); //returning the common pile to the main cards pile
-		for(Player p : getPlayersList()) Tabletop.getInstance().getAllCardsPile().eat(p.getHand());
+		for(Player p : Tabletop.getInstance().getPlayersList()) Tabletop.getInstance().getAllCardsPile().eat(p.getHand());
 	}
 	
 	//GETTERS
@@ -123,9 +131,7 @@ public final class Round {
 	public Turn getCurrentTurn() {
 		return currentTurn;
 	}
-	private List<Player> getPlayersList() {
-		return Tabletop.getInstance().getPlayersList();
-	}
+
 	public RumourCardsPile getPile() {
 		return this.commonPile;
 	}

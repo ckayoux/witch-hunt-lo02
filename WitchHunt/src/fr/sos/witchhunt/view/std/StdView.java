@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import fr.sos.witchhunt.controller.Application;
 import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.Menu;
 
 
@@ -144,32 +145,19 @@ public final class StdView {
 		crlf();
 	}
 	
-	public void logWinner(String name, int score) {
+	public void logWinnerMessage(String name, int score) {
 		//TEMPORARY
 		crlf();
-		log("\tWINNER :");
-		log("\t\t!--Sorry, but my developpers are very lazy and \n\tI have yet no clue who the winner might possibly be.--!");
+		log("\t~ "+name+ " has won the game with a score of "+score+" ! ~");
 		crlf();
 	}
 	
-	public void logScoreTable(String [][] table ) {
-		//TEMPORARY
-		logWeakDashedLine();
-		crlf();
-		log("\tSCOREBOARD :");
-		log("\t\t!--This feature is not avaliable yet--!"); //TEMPORARY
-		crlf();
-	}
 
 	public void yesNoQuestion(String q) {
 		log(q+" (y/n) :");
 	}
 
-	public void logClassment(List <String> names, List <Integer> scores) {
-		log("\tCLASSMENT :"); 
-		log("\t\t!--This feature is not avaliable yet--!"); //TEMPORARY
-		crlf();
-	}
+	
 
 	public void logChooseIdentityMessage() {
 		logWeakDashedLine();
@@ -406,6 +394,47 @@ public final class StdView {
 
 	public void logStealCardMessage(String thiefName,String stolenName) {
 		log("\t"+thiefName+" is subtilizing a card from "+stolenName+" !");
+	}
+
+	public void logScoreBoard(String scoreBoardAsString) {
+		tabbedLog("SCOREBOARD :\n");
+		addOffset("   ");
+		tabbedLog(scoreBoardAsString);
+		resetOffset();
+	}
+
+	public void logGameIsTiedScreen(int score, List<String> duelists) {
+		crlf();
+		logDashedLine();
+		log("\t~ The game is tied ! ~");
+		StringBuffer sb = new StringBuffer("\t");
+		for(int i=0; i<duelists.size(); i++) {
+			sb.append(duelists.get(i));
+			if(i<duelists.size()-2) sb.append(", ");
+			else if(i==duelists.size()-2) sb.append(" and ");
+		}
+		sb.append((duelists.size()>2)?" all":" both");
+		sb.append(" have a score of ");
+		sb.append(score);
+		sb.append(" and must compete for the first place !");
+		log(sb.toString());
+	}
+
+	public void logPlayerAndTheirScore(int ranking, boolean exAequo, String name, int score) {
+		StringBuffer sb = new StringBuffer();
+		if(ranking!=-1) {
+			sb.append(ranking);
+			sb.append((exAequo)?" (ex aequo)":"");
+			sb.append(" : ");
+			
+		}
+		sb.append(name);
+		sb.append(' ');
+		tabbedLog(sb.toString()+"-".repeat(45-sb.toString().length())+" "+score);
+	}
+
+	public void logPlayerRankingMessage(boolean exAequo, int rank, int score) {
+		tabbedLog("You are ranked n°"+rank+" "+((exAequo)?"(ex aequo) ":"")+"with a score of "+score+".");
 	}
 	
 	

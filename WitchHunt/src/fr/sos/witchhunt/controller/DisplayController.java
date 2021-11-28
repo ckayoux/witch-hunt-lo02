@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import fr.sos.witchhunt.DisplayMediator;
+import fr.sos.witchhunt.controller.ScoreCounter.ScoreBoard;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.Menu;
@@ -83,30 +84,60 @@ public final class DisplayController implements DisplayMediator {
 	}
 	
 	
-	public void displayScoreTable(ScoreCounter sc) {
-		String [][] table = new String[1][];//TODO
-		console.logScoreTable(table); 
-		//TODO : equivalent for gui view
-	}
-	
-	public void displayWinner(String name, int score) {
-		console.logWinner(name, score);
-		//TODO : equivalent for gui view
+	public void displayWinnerScreen(Player winner) {
+		console.logWinnerMessage(winner.getName(), winner.getScore());
 	}
 	
 	public void setConsole(StdView console) {
 		this.console=console;
 	}
 	
-	public void displayClassment(List<Player> classment) {
-		List<String> names = new ArrayList<String>();
-		List<Integer> scores = new ArrayList<Integer>();
-		for (Player p : classment) {
-			names.add(p.getName());
-			scores.add(p.getScore());
+	public void displayRanking(List <Player> ranking) {
+		console.increaseTabulation();
+		if(ranking.stream().filter(p->p.getScore()==0).count()==ranking.size()) {
+			ranking.forEach(p->console.logPlayerAndTheirScore(-1, false , p.getName(), 0));
 		}
-		console.logClassment(names,scores);
-		//TODO : equivalent for gui view
+		else {
+			int rank=1;
+			for(Player p : ranking) {
+				boolean exAequo = (ranking.stream().filter(p2->p.getScore()==p2.getScore()).count()>1);
+				console.logPlayerAndTheirScore(rank, exAequo , p.getName(), p.getScore());
+				if(!exAequo) {
+					rank++;
+				}
+			};
+		}
+		console.crlf();
+		console.decreaseTabulation();
+	}
+	public void displayRanking(Player P) {
+		int rank=1;
+		int pSRank=-1;
+		boolean pIsExAequo=false;
+		List<Player> ranking = Tabletop.getInstance().getScoreCounter().getRanking();
+		console.increaseTabulation();
+		if(ranking.stream().filter(p->p.getScore()==0).count()==ranking.size()) {
+			ranking.forEach(p->console.logPlayerAndTheirScore(-1, false , p.getName(), 0));
+		}
+		else {
+			for(Player p : ranking) {
+				boolean exAequo = (ranking.stream().filter(p2->p.getScore()==p2.getScore()).count()>1);
+				console.logPlayerAndTheirScore(rank, exAequo , p.getName(), p.getScore());
+				if(p==P) {
+					pIsExAequo=exAequo;
+					pSRank=rank;
+				}
+				if(!exAequo) {
+					rank++;
+				}
+			};
+		}
+		if(pSRank>0) {
+			console.crlf();
+			console.logPlayerRankingMessage(pIsExAequo,pSRank,P.getScore());
+		}
+		console.crlf();
+		console.decreaseTabulation();
 	}
 
 	public void chooseIdentityScreen() {
@@ -116,7 +147,7 @@ public final class DisplayController implements DisplayMediator {
 
 	public void distributeHandScreen() {
 		int totalRumourCardsCount = Game.getTotalRumourCardsCount();
-		int playersCount = Tabletop.getInstance().getPlayersCount();
+		int playersCount = Tabletop.getInstance().getActivePlayersList().size();
 		int distributedCardsCount = (int)Math.floor( totalRumourCardsCount / (float)playersCount );
 		int discardedCardsCount = totalRumourCardsCount % playersCount;
 		console.logHandDistributionMessage(distributedCardsCount,discardedCardsCount);
@@ -404,5 +435,16 @@ public final class DisplayController implements DisplayMediator {
 		console.logStealCardMessage(thief.getName(),stolenPlayer.getName());
 		
 	}
+	
+	public void displayScoreBoard(ScoreBoard sb) {
+		console.increaseTabulation();
+		console.logScoreBoard(sb.toString());
+		console.decreaseTabulation();
+	}
+
+	public void displayGameIsTiedScreen(List<Player> potentialWinners) {
+		console.logGameIsTiedScreen(potentialWinners.get(0).getScore(),potentialWinners.stream().map(p->p.getName()).toList());
+	}
+
 	
 }

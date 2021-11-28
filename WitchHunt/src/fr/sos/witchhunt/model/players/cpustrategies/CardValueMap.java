@@ -97,7 +97,11 @@ public class CardValueMap {
 		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getHuntValue(), max));
 	}
 
-
+	public RumourCardsPile getCardsWithPositiveHuntValue(RumourCardsPile rcp) {
+		Map<RumourCard,CardValue> M = this.filter(rcp);
+		List<RumourCard> cardsWithPositiveHuntValues = M.entrySet().stream().filter(e->e.getValue().getHuntValue()>0).map(e->e.getKey()).toList();
+		return new RumourCardsPile(cardsWithPositiveHuntValues);
+	}
 	public RumourCardsPile getCardsWithMaxWitchValue(RumourCardsPile rcp) {
 		Map<RumourCard,CardValue> M = this.filter(rcp);
 		List<Integer> witchEffectValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getWitchValue()) ;

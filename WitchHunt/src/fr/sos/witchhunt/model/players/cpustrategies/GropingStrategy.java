@@ -47,7 +47,7 @@ public final class GropingStrategy extends CPUStrategy { //CPUStrategy implement
 
 	@Override
 	public RumourCard selectHuntCard(RumourCardsPile rcp) {
-		return rcp.getRandomCard();
+		return cvm.getCardsWithPositiveHuntValue(rcp).getRandomCard();
 	}
 
 

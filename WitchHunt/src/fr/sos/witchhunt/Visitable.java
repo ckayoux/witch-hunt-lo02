@@ -1,5 +1,5 @@
 package fr.sos.witchhunt;
 
 public interface Visitable {
-	public void accept(Visitor v);
+	public void accept(Visitor visitor);
 }

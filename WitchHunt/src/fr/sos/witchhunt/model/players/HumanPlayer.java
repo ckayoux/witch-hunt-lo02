@@ -113,7 +113,8 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 			possibilities = new Menu("Choose one of these actions :",
 										"Accuse another player",
 										"Play the Hunt! effect of a Rumour card from your hand",
-										"Show your cards");
+										"Show your cards",
+										"Show players ranking");
 			requestDisplayPossibilities(possibilities);
 			switch(makeChoice(possibilities)) {
 				case 1:
@@ -123,17 +124,25 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 				case 3:
 					this.showHand();
 					return this.chooseTurnAction();
+				case 4:
+					this.showRanking();
+					return this.chooseTurnAction();
 			}
 		}
 		else {
 			possibilities = new Menu("You have no more avaliable Hunt! effects.",
-										"Accuse another player","Show your cards");
+										"Accuse another player",
+										"Show your cards",
+										"Show players ranking");
 			requestDisplayPossibilities(possibilities);
 			switch(makeChoice(possibilities)) {
 				case 1:
 					return TurnAction.ACCUSE;
 				case 2:
 					this.showHand();
+					return this.chooseTurnAction();
+				case 3:
+					this.showRanking();
 					return this.chooseTurnAction();
 			}
 		}
@@ -168,6 +177,10 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 
 	public void showHand() {
 		displayMediator.showCards(this);
+	}
+	
+	private void showRanking() {
+		displayMediator.displayRanking(this);
 	}
 	@Override
 	public RumourCard selectCardToDiscard(RumourCardsPile in) {

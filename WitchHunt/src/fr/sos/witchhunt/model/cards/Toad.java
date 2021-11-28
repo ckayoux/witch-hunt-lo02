@@ -18,7 +18,7 @@ public final class Toad extends RumourCard {
 		
 		this.huntEffect = new HuntEffect("Reveal your identity\n"
 				+ "/+/W -> Player to your left takes next turn.\n"
-				+ "/+/V -> Choose next player.",0) {
+				+ "/+/V -> Choose next player.",-1) {
 			//same effect as Toad
 			/*this card must gain value if you are : 
 			 * an unrevealed villager with other hunt cards that can be played only by villagers,

@@ -4,6 +4,7 @@ import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
 
 public interface DisplayMediator {
@@ -42,4 +43,5 @@ public interface DisplayMediator {
 	public void freezeDisplay(int duration);
 	public void displayForcedToAccuseScreen(Player theOneWhoMustAccuse, Player theOneWhoForcedThem);
 	public void displayStealCardScreen(Player thief, Player stolenPlayer);
+	public void displayRanking(Player p);
 }
