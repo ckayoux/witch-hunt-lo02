@@ -100,12 +100,15 @@ public final class DisplayController implements DisplayMediator {
 		}
 		else {
 			int rank=1;
+			int lastScore = ranking.get(0).getScore();
 			for(Player p : ranking) {
 				boolean exAequo = (ranking.stream().filter(p2->p.getScore()==p2.getScore()).count()>1);
-				console.logPlayerAndTheirScore(rank, exAequo , p.getName(), p.getScore());
-				if(!exAequo) {
+				if(p.getScore()!=lastScore) {
 					rank++;
+					lastScore=p.getScore();
 				}
+				console.logPlayerAndTheirScore(rank, exAequo , p.getName(), p.getScore());
+				
 			};
 		}
 		console.crlf();
@@ -116,6 +119,8 @@ public final class DisplayController implements DisplayMediator {
 		int pSRank=-1;
 		boolean pIsExAequo=false;
 		List<Player> ranking = Tabletop.getInstance().getScoreCounter().getRanking();
+		int lastScore = ranking.get(0).getScore();
+		
 		console.increaseTabulation();
 		if(ranking.stream().filter(p->p.getScore()==0).count()==ranking.size()) {
 			ranking.forEach(p->console.logPlayerAndTheirScore(-1, false , p.getName(), 0));
@@ -123,14 +128,17 @@ public final class DisplayController implements DisplayMediator {
 		else {
 			for(Player p : ranking) {
 				boolean exAequo = (ranking.stream().filter(p2->p.getScore()==p2.getScore()).count()>1);
+				if(p.getScore()!=lastScore) {
+					rank++;
+					lastScore=p.getScore();
+				}
 				console.logPlayerAndTheirScore(rank, exAequo , p.getName(), p.getScore());
 				if(p==P) {
 					pIsExAequo=exAequo;
 					pSRank=rank;
 				}
-				if(!exAequo) {
-					rank++;
-				}
+				
+				
 			};
 		}
 		if(pSRank>0) {
