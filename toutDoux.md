@@ -10,7 +10,11 @@
 + ~~Flux du jeu~~ _tours, rounds_
 + ~~Distribution de l'identité~~
 + ~~Distribution des cartes~~
++ ~~ _**ScoreCounter**_ et conditions de victoire dans Tabletop ~~
 ###  model
++ ~~ corriger un bug sur la carte EvilEye qui fait qu'on peut se retrouver avec aucun joueur à accuser s'il reste que celui qui a joué la carte et la cible ~~
++ ~~ faire le Hunt des CPUPlayers ~~
++ ~~ IA (stratégies, attribuer des valeurs aux cartes selon la situation et la stratégie, choisir telle ou telle victime ...) ~~
 + ~~Caractéristiques d'un joueur~~
 + ~~Elimination d'un joueur~~
 + ~~Carte AngryMob~~
@@ -28,14 +32,11 @@
 + ~~ after accusing accused takes next turn if villager, accusator takes next turn if witch~~
 ## toutDoux :
 ### appli
-+ Commentaires
++ Commentaires, doc
 + Rangement
 + Gestion des erreurs
 + + de modularité, généralité (changer nombre de joueurs max, min ...)
 ### controller
-+ _**ScoreCounter**_ et conditions de victoire dans Tabletop
 ### model
-+ corriger un bug sur la carte EvilEye qui fait qu'on peut se retrouver avec aucun joueur à accuser s'il reste que celui qui a joué la carte et la cible
-+ faire le Hunt des CPUPlayers
-+ IA (stratégies, attribuer des valeurs aux cartes selon la situation et la stratégie, choisir telle ou telle victime ...)
+
 
