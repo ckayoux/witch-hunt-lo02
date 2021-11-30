@@ -150,12 +150,11 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		if(returnedIdentity != null) {
 			switch(returnedIdentity) {
 			case VILLAGER: 
-				this.addScore(1);
 				p.takeNextTurn();
 				break;
 			case WITCH:
 				eliminate(p);
-				this.addScore(2);
+				this.addScore(1);
 				this.playTurnAgain();
 				break;
 			}
