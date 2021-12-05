@@ -1,11 +1,20 @@
 package fr.sos.witchhunt;
 
 import fr.sos.witchhunt.DisplayMediator;
+
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;
-
+/**
+ * <p><b>Interface implemented by Player and its daughter classes.</b></p>
+ * <p>Specifies a set of methods allowing the players to communicate with a display controller implementing {@link DisplayMediator}.</p>
+ * 
+ * @see DisplayMediator
+ * @see fr.sos.witchhunt.model.players.Player
+ * @see fr.sos.witchhunt.model.players.CPUPlayer
+ * @see fr.sos.witchhunt.model.players.HumanPlayer
+ */
 public interface PlayerDisplayObservable {
 
 	public void requestLog(String msg);

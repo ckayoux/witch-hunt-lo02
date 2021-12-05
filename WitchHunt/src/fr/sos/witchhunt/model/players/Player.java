@@ -54,9 +54,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		return this.identity;
 	}
 	
-	/*public void addRumourCard(RumourCard rc) {
-		hand.addCard(rc);
-	}*/
+
 	public void takeRumourCard(RumourCard rc,RumourCardsPile from) {
 		from.giveCard(rc, this.hand);
 	}
