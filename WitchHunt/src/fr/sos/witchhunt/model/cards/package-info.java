@@ -1,0 +1,1 @@
+package fr.sos.witchhunt.model.cards;

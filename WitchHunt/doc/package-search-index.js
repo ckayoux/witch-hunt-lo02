@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"WitchHunt","l":"fr.sos.witchhunt"}];updateSearchResults();

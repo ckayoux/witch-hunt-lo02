@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","u":"allclasses-index.html"},{"p":"fr.sos.witchhunt","l":"DisplayMediator"},{"p":"fr.sos.witchhunt","l":"InputMediator"},{"p":"fr.sos.witchhunt","l":"PlayerDisplayObservable"},{"p":"fr.sos.witchhunt","l":"PlayerInputObservable"},{"p":"fr.sos.witchhunt","l":"Visitable"},{"p":"fr.sos.witchhunt","l":"Visitor"}];updateSearchResults();
