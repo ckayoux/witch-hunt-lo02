@@ -1,7 +1,7 @@
 package fr.sos.witchhunt;
 
 import fr.sos.witchhunt.model.Menu;
-import fr.sos.witchhunt.model.Menu;
+
 /**
  * <p><b>Interface implemented by the central input controller</b></p>
  * <p>Makes the link between the Model's components and the View's components..</p>
