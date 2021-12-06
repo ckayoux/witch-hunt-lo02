@@ -8,6 +8,7 @@ import fr.sos.witchhunt.model.players.CPUPlayer;
 import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
+
 /**
  * <p><b>Interface implemented by the central display controller</b></p>
  * <p>Makes the link between the Model (<i>Player</i> and <i>RumourCardsPile</i>) and the View (<i>StdView</i> and <i>GuiView</i>).</p>

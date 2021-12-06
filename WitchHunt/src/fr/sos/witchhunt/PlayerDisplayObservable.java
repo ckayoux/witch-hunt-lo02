@@ -12,9 +12,9 @@ import fr.sos.witchhunt.model.players.Player;
  * <p>Specifies a set of methods allowing the players to communicate with a display controller implementing {@link DisplayMediator}.</p>
  * <p>All methods specified this interface are meant to trigger their counterpart from the DisplayMediator interface.</p>
  * @see DisplayMediator
- * @see fr.sos.witchhunt.model.players.Player
- * @see fr.sos.witchhunt.model.players.CPUPlayer
- * @see fr.sos.witchhunt.model.players.HumanPlayer
+ * @see fr.sos.witchhunt.model.players.Player Player
+ * @see fr.sos.witchhunt.model.players.CPUPlayer CPUPlayer
+ * @see fr.sos.witchhunt.model.players.HumanPlayer HumanPlayer
  */
 public interface PlayerDisplayObservable {
 
