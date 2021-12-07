@@ -14,5 +14,5 @@
 ### fr.sos.witchhunt.controller
     [X] Tabletop
     [ ] ScoreCounter
-	[ ] Round
+	[X] Round
 	[ ] Turn

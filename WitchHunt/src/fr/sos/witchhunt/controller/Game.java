@@ -16,7 +16,6 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private boolean displayCPUStrategyChange=false;
 	private final static int minPlayersNumber = 3;
 	private final static int maxPlayersNumber = 6;
-	private final static int totalRumourCardsCount = 12;
 	private static int cpuPlayersNumber=0;
 	
 	private Game() {		
@@ -79,10 +78,6 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		Application.displayController.passLog("\nAll "+Integer.toString(n)+" players have been successfully added.");
 		Application.displayController.drawDashedLine();
 		Application.displayController.crlf();
-	}
-	
-	public static int getTotalRumourCardsCount() {
-		return totalRumourCardsCount;
 	}
 	
 	public static int getCPUPlayersNumber() {

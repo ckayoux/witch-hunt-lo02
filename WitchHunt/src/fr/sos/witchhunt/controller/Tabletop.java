@@ -282,6 +282,9 @@ public final class Tabletop {
 	public boolean gameIsTied() {
 		return this.gameIsTied;
 	}
+	public int getTotalRumourCardsCount() {
+		return ExistingRumourCards.getInstance().getSet().size();
+	}
 	
 	//SETTERS
 	public void setCurrentRound(Round r) {

@@ -155,7 +155,7 @@ public final class DisplayController implements DisplayMediator {
 	}
 
 	public void distributeHandScreen() {
-		int totalRumourCardsCount = Game.getTotalRumourCardsCount();
+		int totalRumourCardsCount = Tabletop.getInstance().getTotalRumourCardsCount();
 		int playersCount = Tabletop.getInstance().getActivePlayersList().size();
 		int distributedCardsCount = (int)Math.floor( totalRumourCardsCount / (float)playersCount );
 		int discardedCardsCount = totalRumourCardsCount % playersCount;

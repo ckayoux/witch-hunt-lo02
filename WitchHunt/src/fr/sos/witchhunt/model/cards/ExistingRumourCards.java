@@ -58,5 +58,4 @@ public final class ExistingRumourCards {
 	public Set <RumourCard> getSet(){
 		return this.existingCardsSet;
 	}
-	
 }
