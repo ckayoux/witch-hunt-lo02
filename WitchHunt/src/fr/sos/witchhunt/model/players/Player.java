@@ -129,7 +129,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 			forcedToAccuseBy=null;
 			clearImmunities();
 		}
-		
+		requestEndOfTurnScreen();
 		
 	}
 	
@@ -246,6 +246,11 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	@Override
 	public void requestPlayTurnScreen() {
 		displayMediator.displayPlayTurnScreen(name);
+	}
+	
+	@Override
+	public void requestEndOfTurnScreen() {
+		displayMediator.displayEndOfTurnScreen();
 	}
 	
 	@Override

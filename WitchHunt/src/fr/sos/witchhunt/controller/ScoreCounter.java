@@ -7,27 +7,56 @@ import fr.sos.witchhunt.Visitable;
 import fr.sos.witchhunt.Visitor;
 import fr.sos.witchhunt.model.players.Player;
 
+/**
+ * <p><b>Class responsible for counting each player's score using the {@link https://refactoringguru.cn/design-patterns/visitor Visitor} design pattern.</b></p>
+ * <p>Keeps the accounts of the points obtained at each round by each player. Able to produce a scoreboard.</p>
+ * <p>Can produce a ranking ordered by descending number of points.</p>
+ * <p>Used to check whether the victory conditions are met.</p>
+ * <p>Also polled by the AIs in order to choose a strategy based on their ranking and that of other players.</p>
+ * @see fr.sos.witchhunt.Visitor
+ */
 public final class ScoreCounter implements Visitor {
 	
+	/**
+	 * An object representing the score board, which keeps the accounts of the score obtained at each round by each player.
+	 */
 	private ScoreBoard sb;
 	
 	public ScoreCounter() {
 		sb = new ScoreBoard(Tabletop.getInstance().getPlayersList());
 	}
-	
+	/**
+	 * @deprecated the <i>visit</i> method is not defined for a visitable of an unknown class.
+	 * @param v A visitable whose class is not handled by this Visitor.
+	 * @see fr.sos.witchhunt.Visitable Visitable
+	 */
+	@Override
 	public void visit(Visitable v) {
 
 	}
-	
-	public void addRound() {
-		this.sb.addRound();
-	}
-
+	/**
+	 * <b>When visiting an instance of {@link fr.sos.witchhunt.model.players.Player Player}, updates the {@link #ScoreBoard score board} by calling its own <i>visit</i> method.</b>
+	 * @param p The player accepting a visit from the score counter.
+	 * @see fr.sos.witchhunt.model.players.Player#accept(Visitor) Player::accept(Visitor)
+	 * @see fr.sos.witchhunt.Visitable Visitable
+	 */
 	@Override
 	public void visit(Player p) {
 		sb.visit(p);
 	}
-			
+	/**
+	 * Add a column to the {@link ScoreBoard score board}. Called when a new {@link Round round} starts.
+	 * @see Round
+	 */
+	public void addRound() {
+		this.sb.addRound();
+	}
+
+	
+	/**
+	 * @return A list of all participating players, order by descending score.
+	 * @see Tabletop#getPlayersList()
+	 */
 	public List<Player> getRanking(){
 		List<Player> ranking = new ArrayList<Player>( );
 		ranking=Tabletop.getInstance().getPlayersList();
@@ -35,24 +64,40 @@ public final class ScoreCounter implements Visitor {
 		return ranking;				//retourne la liste des joueurs classée par ordre décroissant de score 
 	}
 	
+	/**
+	 * @return A list of the players having the maximum score.
+	 * @see fr.sos.witchhunt.model.players.CPUPlayer#chooseStrategy() CPUPlayer::chooseStrategy()
+	 */
 	public List<Player> getLeadingPlayers(){
 		List<Player> playersList = Tabletop.getInstance().getPlayersList();
 		int maxScore = Collections.max(playersList.stream().mapToInt(p->p.getScore()).boxed().toList());
 		return playersList.stream().filter(p->p.getScore()==maxScore&&p.getScore()>0).toList();
 	}
 	
+	/**
+	 * @return A list of the players having the lowest score.
+	 * @see fr.sos.witchhunt.model.players.CPUPlayer#chooseStrategy() CPUPlayer::chooseStrategy()
+	 */
 	public List<Player> getLastPlayers(){
 		List<Player> playersList = Tabletop.getInstance().getPlayersList();
 		int minScore = Collections.min(playersList.stream().mapToInt(p->p.getScore()).boxed().toList());
 		return playersList.stream().filter(p->p.getScore()==minScore&&p.getScore()>0).toList();
 	}
 	
-	
+	/**
+	 * <b>Checks whether the victory conditions are met or not.</b>
+	 * @return true if {@link #getWinner()} returns an instance of {@link fr.sos.model.players.Player Player}.
+	 * @see #getWinner()
+	 */
 	public boolean hasWinner() {
 		return(this.getWinner()!=null);
 	}
 	
-	
+	/**
+	 * <b>Returns the winning player if there is one, null otherwise.</b>
+	 * @return true if there is only one potential winner (one player having the maximum score, the latter one being 5 or higher).
+	 * @see #getPotentialWinners()
+	 */
 	public Player getWinner() {
 		if (this.getPotentialWinners().size()==1) {
 			return this.getPotentialWinners().get(0);
@@ -60,13 +105,11 @@ public final class ScoreCounter implements Visitor {
 		else return null;	
 	}
 	
-	
-	
-	public ScoreBoard  getScoreBoard() {		
-		return this.sb;
-	}
-	
-	
+	/**
+	 * <b>Used to determine whether there is a winning player, or if the game is tied, or if nobody is close to the victory.</b>
+	 * @return A list of all players sharing the maximum score, the latter one being 5 or higher
+	 * @see Tabletop#gameIsTied()
+	 */
 	public List<Player> getPotentialWinners(){
 		List<Player> playersList = Tabletop.getInstance().getPlayersList();
 		int maxScore = Collections.max(playersList.stream().mapToInt(p->p.getScore()).boxed().toList());
@@ -74,11 +117,28 @@ public final class ScoreCounter implements Visitor {
 		return potentialWinners;
 	}
 	
+	public ScoreBoard  getScoreBoard() {		
+		return this.sb;
+	}
 	
+	
+	/**
+	 * <p><b>Internal class of {@link ScoreCounter}.</b></p>
+	 * <p>In charge of keeping accounts of the score obtained at each round by each player.</p>
+	 * <p>Update itselfs using the {@link https://refactoringguru.cn/design-patterns/visitor Visitor} design pattern.</p>
+	 * @see fr.sos.witchhunt.Visitor
+	 */
 	public class ScoreBoard implements Visitor  {
+		/**
+		 * <b>The accounts are kept using a map associating each player with the list of the scores they obtained at each round.</b>
+		 */
 		private HashMap<Player,ArrayList<Integer>> playerScoreByRound;
 		private int roundsCount = 0;
 		
+		/**
+		 * <b>At instanciation, adds each players to the map and associates them with a yet-empty scores list.</b>
+		 * @param playersList The list of all players participating to the match.
+		 */
 		public ScoreBoard (List<Player> playersList) {
 			playerScoreByRound = new HashMap<Player,ArrayList<Integer>>();
 			playersList.forEach(p->{
@@ -86,13 +146,25 @@ public final class ScoreCounter implements Visitor {
 			});
 
 		}
-
+		
+		/**
+		 * <b>Adds a column (with each player's obtained score initialized to 0) to the score board. Called when a new {@link Round round} starts.</b>
+		 * @see Round
+		 */
 		public void addRound() {
 			if(Tabletop.getInstance().getCurrentRound().getRoundNumber()>roundsCount) {
 				this.roundsCount++;
 				playerScoreByRound.forEach((p,l)->l.add(0));
 			}
 		}
+		
+		/**
+		 * When visiting an instance of {@link fr.sos.witchhunt.model.players.Player Player}, 
+		 * updates this player's list of score replacing the value found at the index corresponding 
+		 * to the current round with the player's new score minus the {@link #computeAnteriorRoundsTotal(Player) score obtained at previous rounds}. 
+		 * @param p {@link fr.sos.witchhunt.model.players.Player Player} whose score has changed.
+		 * @see fr.sos.witchhunt.model.players.Player#addScore(int) Player::addScore(int)
+		 */
 		public void visit(Player p) {
 
 			if(roundsCount>0) {
@@ -101,7 +173,10 @@ public final class ScoreCounter implements Visitor {
 				
 			
 		}
-
+		/**
+		 * <b>Computes the total score obtained by a {@link fr.sos.witchhunt.model.players.Player player}, ignoring the score obtained during the current round.</b>
+		 * @param p {@link fr.sos.witchhunt.model.players.Player Player} of which the previous rounds' score total is computed.
+		 */
 		private int computeAnteriorRoundsTotal(Player p) {
 			int total = 0;
 			if(roundsCount>1) {
@@ -111,12 +186,19 @@ public final class ScoreCounter implements Visitor {
 			return total;
 		}
 		
-
+		/**
+		 * @deprecated the <i>visit</i> method is not defined for a visitable of an unknown class.
+		 * @param v A visitable whose class is not handled by this Visitor.
+		 * @see fr.sos.witchhunt.Visitable Visitable
+		 */
 		@Override
 		public void visit(Visitable v) {
 
 		}
 		
+		/**
+		 * @return A string representing the score board, with normalized cells size.
+		 */
 		public String toString() {
 			int maxPNameLength = Collections.max(playerScoreByRound.keySet().stream().mapToInt(p->p.getName().length()).boxed().toList());
 			StringBuffer sb = new StringBuffer(" ".repeat(maxPNameLength+2));

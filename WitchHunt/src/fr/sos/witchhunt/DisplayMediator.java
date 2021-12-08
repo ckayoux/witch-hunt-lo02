@@ -26,8 +26,13 @@ public interface DisplayMediator {
  * @see fr.sos.witchhunt.model.players.Player#playTurn() Player::playTurn
  * @param playerName the name of the player starting their turn.
  */
+public void displayPlayTurnScreen(String playerName);
 	
-	public void displayPlayTurnScreen(String playerName);
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the end of a turn.</b>
+	 * @see fr.sos.witchhunt.model.players.Player#playTurn() Player::playTurn
+	 */
+	public void displayEndOfTurnScreen();
 /**
  * 	<p><b>Requests the DM to display the screen corresponding to the accusation of a player by another.</b></p>
  * @param accusator the player who accused.

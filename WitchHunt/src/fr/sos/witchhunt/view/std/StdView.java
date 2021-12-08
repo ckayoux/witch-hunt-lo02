@@ -178,6 +178,13 @@ public final class StdView {
 		log("\tIt is " + playerName + (playerName.charAt(playerName.length()-1)!='s'?"'s":"'") + " turn.");
 	}
 
+	public void logEndOfTurnMessage() {
+		crlf();
+		logWeakDashedLine();
+		crlf();
+	}
+	
+	
 	public void logAccusationMessage(String accusatorName, String accusedName) {
 		log("\n\t"+accusedName + ", " + accusatorName + " accused you of practicing witchcraft !");
 	}
@@ -238,7 +245,7 @@ public final class StdView {
 	}
 
 	public void logLastUnrevealedMessage(String playerName) {
-		log("\n\t" + playerName + " is the last unrevealed player remaining. It turns out...");
+		log("\t" + playerName + " is the last unrevealed player remaining. It turns out...");
 	}
 
 	public void logNoCardsMessage(String playerName) {
@@ -440,7 +447,8 @@ public final class StdView {
 	public void logStrategyChange(String name, String playstyleDesc) {
 		/*log("\t"+name+" opts for "+playstyleDesc+".");*/
 	}
-	
+
+
 	
 
 }

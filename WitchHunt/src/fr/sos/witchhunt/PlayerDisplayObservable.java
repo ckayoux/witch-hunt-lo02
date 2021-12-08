@@ -25,6 +25,7 @@ public interface PlayerDisplayObservable {
 	public void setDisplayMediator(DisplayMediator dm);
 	
 	public void requestPlayTurnScreen();
+	public void requestEndOfTurnScreen();
 	public void requestAccusationScreen(Player accused);
 	public void requestChooseDefenseScreen();
 	public void requestForcedToRevealScreen();

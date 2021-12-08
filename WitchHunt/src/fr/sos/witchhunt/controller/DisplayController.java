@@ -170,6 +170,13 @@ public final class DisplayController implements DisplayMediator {
 		
 	}
 
+
+	@Override
+	public void displayEndOfTurnScreen() {
+		console.logEndOfTurnMessage();
+		
+	}
+	
 	@Override
 	public void displayAccusationScreen(Player accusator, Player accused) {
 		console.logAccusationMessage(accusator.getName(),accused.getName());
@@ -459,6 +466,7 @@ public final class DisplayController implements DisplayMediator {
 	public void displayStrategyChange(Player p, PlayStrategy strat) {
 		/*if(Game.getInstance().cpuPlayersDisplayChangesOfStrategy())*/ console.logStrategyChange(p.getName(),strat.toString());
 	}
+
 
 	
 }

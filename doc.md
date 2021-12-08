@@ -13,6 +13,8 @@
 
 ### fr.sos.witchhunt.controller
     [X] Tabletop
-    [ ] ScoreCounter
+    [X] ScoreCounter
 	[X] Round
-	[ ] Turn
+	[X] Turn
+	[ ] InputController
+	[ ] DisplayController
