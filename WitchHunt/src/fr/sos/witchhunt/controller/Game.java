@@ -14,9 +14,8 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private Tabletop tabletop;
 	private boolean sleepingAllowed=false;
 	private boolean displayCPUStrategyChange=false;
-	private final static int minPlayersNumber = 3;
-	private final static int maxPlayersNumber = 6;
-	private static int cpuPlayersNumber=0;
+	public final static int minPlayersNumber = 3;
+	public final static int maxPlayersNumber = 6;
 	
 	private Game() {		
 		tabletop = Tabletop.getInstance();
@@ -40,8 +39,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		Application.displayController.displayMenu(mainMenu);
 		switch (Application.inputController.makeChoice(mainMenu)) {
 				case 1:
-					this.cpuPlayersNumber=0;
-					startGame();
+					Tabletop.getInstance().startMatch();
 					break;
 				/*case 2:
 					options();
@@ -54,38 +52,6 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	}
 	
 
-	public void startGame () {
-		addPlayers();
-		Application.inputController.wannaContinue();
-		Tabletop.getInstance().startPlaying();
-	}
-	
-	private void addPlayers() {
-		Application.displayController.drawDashedLine();
-		int n=0;
-		Application.displayController.passLog("~ Add "+minPlayersNumber+" to "+maxPlayersNumber+" players : ~\n");
-		List <String> takenNames = new ArrayList<String> ();
- 		while(n<minPlayersNumber) {
-			n++;
-			tabletop.addPlayer(Application.inputController.createPlayer(n,takenNames));
-		}
-		Application.displayController.displayYesNoQuestion("\tWould you like to add another player ?");
-		while(n<maxPlayersNumber && Application.inputController.answerYesNoQuestion()) {
-			n++;
-			tabletop.addPlayer(Application.inputController.createPlayer(n,takenNames));
-			Application.displayController.displayYesNoQuestion("\tWould you like to add another player ?");
-		}
-		Application.displayController.passLog("\nAll "+Integer.toString(n)+" players have been successfully added.");
-		Application.displayController.drawDashedLine();
-		Application.displayController.crlf();
-	}
-	
-	public static int getCPUPlayersNumber() {
-		return cpuPlayersNumber;
-	}
-	public static void incrementCPUPlayersNumber() {
-		cpuPlayersNumber++;
-	}
 	
 	public static void exit() {
 		Application.displayController.crlf();

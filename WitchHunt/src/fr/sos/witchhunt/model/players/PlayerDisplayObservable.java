@@ -1,11 +1,10 @@
-package fr.sos.witchhunt;
+package fr.sos.witchhunt.model.players;
 
 import fr.sos.witchhunt.DisplayMediator;
 
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
-import fr.sos.witchhunt.model.players.Player;
 
 /**
  * <p><b>Interface implemented by Player and its daughter classes.</b></p>

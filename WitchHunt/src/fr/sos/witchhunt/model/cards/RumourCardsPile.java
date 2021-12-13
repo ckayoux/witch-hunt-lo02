@@ -7,10 +7,11 @@ import java.util.stream.Collectors;
 
 import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.controller.Tabletop;
+import fr.sos.witchhunt.model.Resettable;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
 
-public final class RumourCardsPile {
+public final class RumourCardsPile implements Resettable {
 	private List <RumourCard> cards = new ArrayList <RumourCard> ();
 	private Player owner=null;
 
@@ -93,6 +94,12 @@ public final class RumourCardsPile {
 
 	public Player getOwner() {
 		return this.owner;
+	}
+
+	@Override
+	public void reset() {
+		this.cards.forEach(c->c.reset());
+		Tabletop.getInstance().getAllCardsPile().eat(this);
 	}
 	
 }

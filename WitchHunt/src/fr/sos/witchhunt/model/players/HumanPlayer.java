@@ -3,7 +3,6 @@ package fr.sos.witchhunt.model.players;
 import java.util.List;
 
 import fr.sos.witchhunt.InputMediator;
-import fr.sos.witchhunt.PlayerInputObservable;
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;

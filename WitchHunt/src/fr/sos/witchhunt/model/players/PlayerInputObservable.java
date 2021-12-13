@@ -1,5 +1,6 @@
-package fr.sos.witchhunt;
+package fr.sos.witchhunt.model.players;
 
+import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.Menu;
 
 /**

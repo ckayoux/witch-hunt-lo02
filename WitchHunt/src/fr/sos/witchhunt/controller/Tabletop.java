@@ -30,6 +30,14 @@ public final class Tabletop {
 	 */
 	private static volatile Tabletop instance = null;
 	
+	/**
+	 * The number of cpu players for this match.
+	 */
+	private int cpuPlayersNumber=0;
+	
+	private static int minPlayersNumber=3;
+	private static int maxPlayersNumber=6;
+	
 	private Round currentRound;
 	/**
 	 * Reference to an instance of ScoreCounter
@@ -55,6 +63,8 @@ public final class Tabletop {
 	 * when two players of more have the same score, the latter one being 5 or higher.
 	 */
 	private boolean gameIsTied=false;
+
+
 	
 	//CONSTRUCTOR
 	/**
@@ -83,24 +93,41 @@ public final class Tabletop {
 	
 	//UTILS METHODS
 	/**
-	 * <b>Adds a player permanently to the list of all participating players.</b>
-	 * @param p The player to be added.
+	 * <p><b>Creates and adds players permanently to the list of all participating players.</b></p>
+	 * <p>First, the user specifies whether the player is going to be human-controlled or not.</p>
+	 * <p>If they are, the user chooses a name.</p>
+	 * <p>The {@link #minPlayersNumber minimum} and {@link #maxPlayersNumber maximum} players numbers are attributes of this class.</p>
 	 */
-	public static void addPlayer(Player p) {
-		instance.playersList.add(p);
+	private void addPlayers() {
+		Application.displayController.drawDashedLine();
+		int n=0;
+		Application.displayController.passLog("~ Add "+minPlayersNumber+" to "+maxPlayersNumber+" players : ~\n");
+		List <String> takenNames = new ArrayList<String> ();
+ 		while(n<minPlayersNumber) {
+			n++;
+			instance.playersList.add(Application.inputController.createPlayer(n,takenNames));
+		}
+		Application.displayController.displayYesNoQuestion("\tWould you like to add another player ?");
+		while(n<maxPlayersNumber && Application.inputController.answerYesNoQuestion()) {
+			n++;
+			instance.playersList.add(Application.inputController.createPlayer(n,takenNames));
+			Application.displayController.displayYesNoQuestion("\tWould you like to add another player ?");
+		}
+		Application.displayController.passLog("\nAll "+Integer.toString(n)+" players have been successfully added.");
+		Application.displayController.drawDashedLine();
+		Application.displayController.crlf();
+		Application.inputController.wannaContinue();
 	}
 
 	/**
-	 * <p><b>Reset the states of every player and card in the match.</b></p>
-	 * <p>Calls the {@link fr.sos.witchhunt.model.Resettable#reset() reset} method of all known {@link fr.sos.witchhunt.model.Resettable} entities.
+	 * <p><b>Reset the states of every player in the match.</b></p>
+	 * <p>Calls the {@link fr.sos.witchhunt.model.Resettable#reset() reset} method of all players in the match.
 	 * @see fr.sos.witchhunt.model.Resettable
 	 * @see fr.sos.witchhunt.model.Resettable#reset()
 	 * @see fr.sos.witchhunt.model.players.Player#reset()
-	 * @see fr.sos.witchhunt.model.cards.RumourCard#reset()
 	 */
 	private void resetStates() {
 		int playersCount = this.playersList.size();
-		allCardsPile.getCards().forEach(rc -> rc.reset());
 		for(int i=0; i<playersCount; i++) {
 			/*Classic for loop required here : it is not possible to iterate directly on playersList,
 			 * As CPU Players' changes of strategy are considered as a modification of the list, which will throw an Exception.
@@ -116,7 +143,7 @@ public final class Tabletop {
 	 * @return Depends on the victory conditions defined at {@link ScoreCounter#hasWinner()}.
 	 * @see ScoreCounter
 	 * @see ScoreCounter#hasWinner()
-	 * @see #startPlaying()
+	 * @see #startMatch()
 	 */
 	private boolean gameIsOver() {
 		return scoreCounter.hasWinner();
@@ -124,12 +151,14 @@ public final class Tabletop {
 	
 	/**
 	 * <p><b>Game-loop method. Handles game flow from the match's start to its end.</b></p>
-	 * <p>Not in charge of the match's configuration, only of its flow.</p>
+	 * <p>First, sets up the match by requesting the users to add players.</p>
 	 * <p>While the game has no unique winner, resets the states of every player and card and creates a new round.</p>
 	 * <p>Creates a special round containing only leading players if the game is tied ({@link #gameIsTied}</p>
 	 * <p>Instanciates the match's {@link ScoreCounter score counter}.</p>
 	 */
-	public void startPlaying() {
+	public void startMatch() {
+		this.addPlayers();
+		
 		Application.displayController.displayMatchStartScreen();
 
 		scoreCounter = new ScoreCounter(); //Instanciating the score counter
@@ -164,6 +193,8 @@ public final class Tabletop {
 		playersList = new ArrayList<Player>();
 		
 		Application.inputController.wannaContinue();
+		cpuPlayersNumber=0;
+		this.instance=null;
 		Game.getInstance().gotoMainMenu(); //Going back to the game's main menu at the end of a round.
 	}
 	
@@ -186,6 +217,10 @@ public final class Tabletop {
 	
 	public Turn getCurrentTurn() {
 		return currentRound.getCurrentTurn();
+	}
+
+	public int getCPUPlayersNumber() {
+		return this.cpuPlayersNumber;
 	}
 	
 	/**
@@ -287,6 +322,9 @@ public final class Tabletop {
 	}
 	
 	//SETTERS
+	public void incrementCPUPlayersNumber() {
+		this.cpuPlayersNumber++;
+	}
 	public void setCurrentRound(Round r) {
 		currentRound = r;
 	}
@@ -317,4 +355,5 @@ public final class Tabletop {
 	public void setLastUnrevealedPlayer(Player p) {
 		this.lastUnrevealedPlayer=p;
 	}
+
 }

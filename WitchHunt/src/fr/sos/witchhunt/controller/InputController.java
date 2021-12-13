@@ -85,9 +85,9 @@ public final class InputController implements InputMediator {
 			output=(Player) temp;
 		}
 		else {
-			Game.incrementCPUPlayersNumber();
+			Tabletop.getInstance().incrementCPUPlayersNumber();
 			Application.displayController.crlf();
-			output = new CPUPlayer(id,Game.getCPUPlayersNumber());
+			output = new CPUPlayer(id,Tabletop.getInstance().getCPUPlayersNumber());
 		}
 		output.setDisplayMediator(Application.displayController);
 		return output;

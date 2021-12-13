@@ -18,6 +18,8 @@
 	[X] Turn
 	[ ] InputController
 	[ ] DisplayController
+	[ ] Application
+	[ ] Game
 
 ### fr.sos.witchhunt.model
 	[X] Identity
@@ -30,7 +32,7 @@
 	[ ] IdentityCard
 
 ### fr.sos.witchhunt.model.players
-	[ ] Player
+	[o] Player - à partir de defend
 	[ ] CPUPlayer
 	[ ] HumanPlayer 
 

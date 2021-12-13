@@ -42,7 +42,7 @@ public final class Round {
 	 * <p>The round will keep creating {@link Turn turns} played by the {@link #nextPlayer next player} until it detects only one player's identity has not been revealed.</p> 
 	 * <p>By default, the {@link #nextPlayer next player} is the one standing to the left of the current player ({@link #setNextPlayerClockwise() clockwise}). Cards and accusations change it.</p>
 	 * <p>The {@link ScoreCounter score counter} will save the score obtained at the end of each round for each player.</p>
-	 * <p>At the end of the round, the score board is displayed and every Rumour Card is returned to Tabletop's list of existing cards. Afterwise, the object's life ends and it is ready to get collected by the GC.</p>
+	 * <p>At the end of the round, the score board is displayed and every Rumour Card of the pile is returned to Tabletop's list of existing cards. Afterwise, the object's life ends and it is ready to get collected by the GC.</p>
 	 */
 	public Round() {
 		Tabletop.getInstance().setCurrentRound(this);
@@ -81,7 +81,7 @@ public final class Round {
 			currentPlayer=nextPlayer; 
 		}while(!isOver()); //We keep starting new turns until the round is over.
 		
-		recycleRumourCards(); //returning all rumourCards to the main pile, of Tabletop's instance
+		commonPile.reset(); //returning all rumourCards to the main pile, of Tabletop's instance
 		
 		Application.displayController.displayRoundEndScreen(roundNumber);
 	}
@@ -160,16 +160,6 @@ public final class Round {
 			return false;
 		}
 
-	}
-	
-	/**
-	 * Returns the hand of every player of the round to Tabletop's list of existing cards.
-	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#eat(RumourCardsPile) RumourCardsPile::eat(RumourCardsPile)
-	 * @see Tabletop#getAllCardsPile() 
-	 */
-	private void recycleRumourCards() {
-		Tabletop.getInstance().getAllCardsPile().eat(commonPile); //returning the common pile to the main cards pile
-		for(Player p : Tabletop.getInstance().getPlayersList()) Tabletop.getInstance().getAllCardsPile().eat(p.getHand());
 	}
 	
 	//GETTERS
