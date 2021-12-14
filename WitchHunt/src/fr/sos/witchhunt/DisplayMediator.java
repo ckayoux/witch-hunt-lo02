@@ -24,10 +24,22 @@ public interface DisplayMediator {
 /**
  * <b>Requests the DM to display the screen corresponding to the beginning of a turn.</b>
  * @see fr.sos.witchhunt.model.players.Player#playTurn() Player::playTurn
- * @param playerName the name of the player starting their turn.
+ * @param p The player taking the current turn.
  */
-public void displayPlayTurnScreen(String playerName);
-	
+public void displayPlayTurnScreen(Player p);
+
+/**
+ * <b>Requests the DM to notify the view that a player has taken the next turn.</b>
+ * @param p the player taking the next turn.
+ * @see fr.sos.witchhunt.model.players.Player#takeNextTurn() Player::takeNextTurn
+ */
+	public void displayTakeNextTurnScreen(Player p);
+/**
+ * <b>Requests the DM to notify the view that a player is authorized to play one turn again.</b>
+ * @param p the player taking another turn.
+ * @see fr.sos.witchhunt.model.players.Player#playTurnAgain() Player::playTurnAgain
+ */
+	public void displayPlayTurnAgainScreen(Player p);
 	/**
 	 * <b>Requests the DM to display the screen corresponding to the end of a turn.</b>
 	 * @see fr.sos.witchhunt.model.players.Player#playTurn() Player::playTurn
@@ -184,18 +196,7 @@ public void displayPlayTurnScreen(String playerName);
  * @param chosenCard the card that the player will be able to use again.
  */
 	public void displayPlayerHasResetCardScreen(Player player, RumourCard chosenCard);
-/**
- * <b>Requests the DM to notify the view that a player has taken the next turn.</b>
- * @param p the player taking the next turn.
- * @see fr.sos.witchhunt.model.players.Player#takeNextTurn() Player::takeNextTurn
- */
-	public void displayTakeNextTurnScreen(Player p);
-/**
- * <b>Requests the DM to notify the view that a player is authorized to play one turn again.</b>
- * @param p the player taking another turn.
- * @see fr.sos.witchhunt.model.players.Player#playTurnAgain() Player::playTurnAgain
- */
-	public void displayPlayTurnAgainScreen(Player p);
+
 /**
  * <b>Requests the DM to notify the view that a player was forced to accuse another player.</b>
  * @param theOneWhoMustAccuse the player who got forced to accuse a player.

@@ -67,44 +67,6 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		return choose(Tabletop.getInstance().getActivePlayersList().stream().filter(p->p!=this).toList(),"\n\tSelect the next player to play :");
 	}
 	
-	
-	/*@Override
-	protected Player choosePlayerToAccuse() {
-		List<Player> accusablePlayersList = getAccusablePlayers();
-		String [] accusablePlayersNames = new String [accusablePlayersList.size()];
-		for (int i=0; i<accusablePlayersList.size(); i++) {
-			accusablePlayersNames[i] = accusablePlayersList.get(i).getName(); 
-		}
-		Menu m = new Menu("Select the player you want to accuse :", accusablePlayersNames);
-		displayObserver.displayPossibilities(m);
-		return accusablePlayersList.get(inputObserver.makeChoice(m)-1);
-	}
-	
-	@Override
-	public Player chooseTarget(List<Player> eligiblePlayersList) {
-		eligiblePlayersList.remove(this); //so you can't target yourself
-		String [] eligiblePlayersNames = new String [eligiblePlayersList.size()];
-		for (int i=0; i<eligiblePlayersList.size(); i++) {
-			eligiblePlayersNames[i] = eligiblePlayersList.get(i).getName(); 
-		}
-		Menu m = new Menu("Select the player you want to target :", eligiblePlayersNames);
-		displayObserver.displayPossibilities(m);
-		return eligiblePlayersList.get(inputObserver.makeChoice(m)-1);
-	}
-	
-	@Override
-	public Player chooseNextPlayer() {
-		List<Player> activePlayersList = Tabletop.getInstance().getActivePlayersList();
-		activePlayersList.remove(this);
-		String [] activePlayersNames = new String [activePlayersList.size()];
-		for (int i=0; i<activePlayersList.size(); i++) {
-			activePlayersNames[i] = activePlayersList.get(i).getName(); 
-		}
-		Menu m = new Menu("Select the next player to play :", activePlayersNames);
-		displayObserver.displayPossibilities(m);
-		return activePlayersList.get(inputObserver.makeChoice(m)-1);
-	}*/
-	
 	@Override
 	public TurnAction chooseTurnAction() {
 		Menu possibilities;

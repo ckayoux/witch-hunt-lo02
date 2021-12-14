@@ -165,8 +165,8 @@ public final class DisplayController implements DisplayMediator {
 	}
 
 	@Override
-	public void displayPlayTurnScreen(String playerName) {
-		console.logPlayTurnMessage(playerName);
+	public void displayPlayTurnScreen(Player p) {
+		console.logPlayTurnMessage(p.getName());
 		
 	}
 

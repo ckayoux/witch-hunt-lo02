@@ -290,6 +290,62 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		
 	}
 	/**
+	 * <b>Elects this player to take the next turn again, and requests for the display of a suitable notification.</b>
+	 * @see #playTurn()
+	 * @see #takeNextTurn()
+	 */
+	public void playTurnAgain() {
+		takeNextTurn();
+		requestPlayTurnAgainScreen();
+	}
+	
+	/**
+	 * <p><b>Elects the player who is going to take the next turn.</b></p>
+	 * <p>Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.</p>
+	 * <p>Called by certain {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}'s {@link fr.sos.witchhunt.model.cards.Effect effect}, 
+	 * like {@link fr.sos.witchhunt.model.cards.DuckingStool the Ducking Stool's} Witch? effect for example.</p>
+	 * @see #takeNextTurn()
+	 * @see HumanPlayer#chooseNextPlayer()
+	 * @see CPUPlayer#chooseNextPlayer()
+	 * @see fr.sos.witchhunt.controller.Round#setNextPlayer(Player)
+	 */
+	public abstract Player chooseNextPlayer();
+	
+	/**
+	 * <b>Elect this player to play the next turn.</b>
+	 * Requests for the display of a suitable notification.
+	 * @see fr.sos.witchhunt.controller.Round#setNextPlayer(Player) Round::setNextPlayer(Player)
+	 */
+	public void takeNextTurn() {
+		Tabletop.getInstance().getCurrentRound().setNextPlayer(this);
+		requestTakeNextTurnScreen();
+	}
+
+	/**
+	 * <p><b>The player wins the {@link fr.sos.witchhunt.controller.Round current round} as they are the last whose {@link fr.sos.witchhunt.model.Identity identity} wasn't revealed.</b></p>
+	 * <p>Lets them {@link #addScore(int) score} 2 points if they were playing as a <i>Witch</i>, or 1 point if they were playing as a <i>Villager</i>.</p>
+	 * <p>If another round is to be played, this player will start.</p>
+	 * @see #addScore(int)
+	 * @see fr.sos.witchhunt.controller.Tabletop#setLastUnrevealedPlayer(Player) Tabletop::setLastUnrevealedPlayer
+	 * @see fr.sos.witchhunt.model.Identity Identity
+	 * @see #isRevealed()
+	 * @see fr.sos.witchhunt.controller.Round Round
+	 */
+	public void winRound() {
+		Tabletop.getInstance().setLastUnrevealedPlayer(this);
+		requestLastUnrevealedPlayerScreen();
+		switch (this.identity) {
+			case WITCH:
+				this.addScore(2);
+				break;
+				
+			case VILLAGER:
+				this.addScore(1);
+				break;
+		}
+	}
+	
+	/**
 	 * <p><b>Accuses another player of practicing witchcraft.</b></p>
 	 * <p>Requests a display for this event.</p>
 	 * <p>Calls the {@link #defend()} method on the target, allowing them to choose between {@link DefenseAction revealing their identity and playing the witch effect of a Rumour card in their hand}.</p>
@@ -363,6 +419,18 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	public abstract DefenseAction chooseDefenseAction();
 	
+	/**
+	 * <b>Respond to an {@link #accuse(Player) accusation}, {@link #revealIdentity() revealing the player's identity} or playing a {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect.</b>
+	 * If the player has no cards with playable witch effects left, they are {@link #forcedReveal()} forced to reveal their identity.
+	 * @return The accused player's disclosed identity, if they revealed it. Otherwise, <i>null</i>.
+	 * @see fr.sos.witchhunt.model.Identity Identity
+	 * @see #accuse(Player)
+	 * @see #chooseDefenseAction()
+	 * @see #canWitch()
+	 * @see #witch()
+	 * @see #revealIdentity()
+	 * @see #forcedReveal()
+	 */
 	public Identity defend() {
 		if(this.canWitch()) {
 			requestChooseDefenseScreen();
@@ -378,13 +446,24 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		return null;
 	}
 	
-
+	/**
+	 * <b>{@link #selectWitchCard() Selects from the player's hand a Rumour Card with a playable Witch? effect} and triggers it.</b>
+	 * @see #selectWitchCard()
+	 * @see fr.sos.witchhunt.model.cards.RumourCard RumourCard
+	 * fr.sos.witchhunt.model.cards.WitchEffect WitchEffect
+	 */
 	protected void witch () {
 		RumourCard chosen = selectWitchCard();
 		requestPlayerPlaysWitchEffectScreen(chosen);
 		chosen.witch();
 	}
 	
+	/**
+	 * <b>{@link #selectHuntCard() Selects from the player's hand a Rumour Card with a playable Hunt! effect} and triggers it.</b>
+	 * @see #selectHuntCard()
+	 * @see fr.sos.witchhunt.model.cards.RumourCard RumourCard
+	 * fr.sos.witchhunt.model.cards.HuntEffect HuntEffect
+	 */
 	protected void hunt() {
 		Tabletop.getInstance().setHunter(this);
 		RumourCard chosen = selectHuntCard();
@@ -392,14 +471,37 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		chosen.hunt();
 	};
 	
+	/**
+	 * <b>Chooses a target among a list of eligible players.</b>
+	 * Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.	
+	 * @param eligiblePlayers A list of eligible players.
+	 * @return The chosen player.
+	 * @see #chooseHuntedTarget(List)
+	 * @see HumanPlayer#chooseTarget(List)
+	 * @see CPUPlayer#chooseTarget(List)
+	 */
 	public abstract Player chooseTarget(List<Player> eligiblePlayers);
 	
+	/**
+	 * <b>{@link #chooseTarget(List) chooses a target among a list of eligible players} and {@link #beHunted() marks them as "hunted"} at the game's scale.</b>
+	 * @param eligiblePlayersList A list of eligible players.
+	 * @return The chosen player, who was beforehand marked as the 'current hunted player'.
+	 * @see #chooseTarget(List)
+	 * @see #hunt()
+	 * @see #canHunt()
+	 * @see #beHunted()
+	 */
 	public Player chooseHuntedTarget(List<Player> eligiblePlayersList) {
 		Player chosenTarget = chooseTarget(eligiblePlayersList.stream().filter(p->p!=this).toList());
 		chosenTarget.beHunted();
 		return chosenTarget;
 	}
 	
+	/**
+	 * <b>Marks the player as the "currently hunted player" at the game's scale.</b>
+	 * @see fr.sos.witchhunt.controller.Tabletop#setHuntedPlayer(Player) 
+	 * @see #canHunt()
+	 */
 	public void beHunted() {
 		Tabletop.getInstance().setHuntedPlayer(this);
 	}
@@ -414,7 +516,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		from.giveCard(rc, this.hand);
 	}
 	/**
-	 * <b>Adds a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} belonging to a given adversary to the player's {@link #hand}.</b>
+	 * <p><b>Adds a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} belonging to a given adversary to the player's {@link #hand}.</b></p>
+	 * <p>Requests for a display of this event.</p>
 	 * @param rc The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} added to the player's {@link #hand}.
 	 * @param from The player from which a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} is subtilized.
 	 */
@@ -424,26 +527,74 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	}
 	
 	/**
-	 * 
-	 * @param in
-	 * @return
+	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} to {@link #discard(RumourCard) discard from the given {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}.</b>
+	 * Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.
+	 * @param in A {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}.
+	 * @return The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} that was chosen to be {@link #discard(RumourCard) discarded}.
+	 * @see #discard(RumourCard)
+	 * @see fr.sos.witchhunt.model.cards.RumourCard Rumour card
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile
+	 * @see HumanPlayer#selectCardToDiscard(RumourCardsPile)
+	 * @see CPUPlayer#selectCardToDiscard(RumourCardsPile)
 	 */
 	public abstract RumourCard selectCardToDiscard(RumourCardsPile in) ;
+	
+	/**
+	 * <b>{@link #selectCardToDiscard(RumourCardsPile) Select a card to discard} from the player's {@link #hand}.</b>
+	 * @return The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} that was chosen to be {@link #discard(RumourCard) discarded}.
+	 * @see #selectCardToDiscard(RumourCardsPile)
+	 * @see #hand
+	 * @see #discard(RumourCard)
+	 * @see fr.sos.witchhunt.model.cards.RumourCard Rumour card
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile
+	 */
 	public  RumourCard selectCardToDiscard() {
 		return selectCardToDiscard(this.getHand());
 	};
+	
+	/**
+	 * <p><b>Sends a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} from the player's {@link #hand} to the {@link fr.sos.witchhunt.controller.Tabletop#getPile() pile}.</b></p>
+	 * <p>Requests for a display of this event.</p>
+	 * <p>Caused by certain {@link fr.sos.witchhunt.model.cards.RumourCard Rumour cards'} effects, like the {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} of 
+	 * {@link fr.sos.witchhunt.model.cards.DuckingStool the Ducking Stool}.</p>
+	 * @param rc A {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} coming from the player's {@link #hand}.
+	 * @see fr.sos.witchhunt.model.cards.RumourCard Rumour card
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#giveCard(RumourCard, RumourCardsPile) RumourCardsPile::giveCard(RumourCard, RumourCardsPile)
+	 * @see fr.sos.witchhunt.controller.Tabletop#getPile() Tabletop::getPile()
+	 * @see fr.sos.witchhunt.model.cards.DuckingStool DuckingStool
+	 */
 	public void discard(RumourCard rc) {
 		requestDiscardCardScreen(rc);
 		this.hand.giveCard(rc, Tabletop.getInstance().getPile());
 	}
+	
+	/**
+	 * <b>{@link #selectCardToDiscard() Selects a Rumour card to discard from the player's hand} and {@link #discard(RumourCard) discards} it.</b>
+	 * @see #selectCardToDiscard()
+	 * @see #discard(RumourCard)
+	 */
 	public void discard() {
 		discard(selectCardToDiscard());
 	}
+	
+	/**
+	 * <b>{@link #selectCardToDiscard(RumourCardsPile) Selects a Rumour card to discard from the given RumourCardsPile} and {@link #discard(RumourCard) discards} it.</b>
+	 * @see #selectCardToDiscard(RumourCardsPile)
+	 * @see #discard(RumourCard)
+	 */
 	public void discard(RumourCardsPile in) {
 		if(in!=null) discard(selectCardToDiscard(in));
 		else selectCardToDiscard();
 	}
 	
+	/**
+	 * <p><b>{@link #discard(RumourCard) Discards} a random card from the player's hand.</b></p>
+	 * <p>Caused by certain {@link fr.sos.witchhunt.model.cards.RumourCard Rumour cards'} effects, like the {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} of 
+	 * {@link fr.sos.witchhunt.model.cards.Cauldron Cauldron}.</p>
+	 * <p>Requests for the display of a suitable message if the player has no cards left.</p>
+	 * @see #discard(RumourCard)
+	 * @see fr.sos.witchhunt.model.cards.Cauldron Cauldron
+	 */
 	public void discardRandomCard() {
 		//let's assume we can only discard unrevealed cards, unless all the cards are revealed
 		RumourCard chosenCard;
@@ -460,35 +611,105 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		else requestNoCardsScreen();
 	}
 	
-	public boolean hasUnrevealedRumourCards() {
-		return !this.getRevealedSubhand().equals(this.hand);
-	}
+	/**
+	 * <b>Chooses a card (revealed or not) within a pile of cards.</b>
+	 * Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.
+	 * @param from The {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards} within which a card must be chosen.
+	 * @param seeUnrevealedCards If this boolean is <i>true</i>, unrevealed cards will be shown as if they were not.
+	 * @return The chosen {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}.
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile RumourCardsPile
+	 * @see fr.sos.witchhunt.model.cards.RumourCard RumourCard
+	 * @see HumanPlayer#chooseAnyCard(RumourCardsPile, boolean)
+	 * @see CPUPlayer#chooseAnyCard(RumourCardsPile, boolean)
+	 */
+	public abstract RumourCard chooseAnyCard(RumourCardsPile from,boolean seeUnrevealedCards);
 	
-	public boolean hasRevealedRumourCards() {
-		return !this.getRevealedSubhand().isEmpty();
-	}
-	
-	
+	/**
+	 * <b>Chooses a revealed card within a pile of cards.</b>
+	 * Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.
+	 * @param from The {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards} within which a revealed card must be chosen.
+	 * @return The chosen revealed {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}.
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile RumourCardsPile
+	 * @see fr.sos.witchhunt.model.cards.RumourCard RumourCard
+	 * @see fr.sos.witchhunt.model.cards.RumourCard#isRevealed() RumourCard::isRevealed()
+	 * @see HumanPlayer#chooseRevealedCard(RumourCardsPile)
+	 * @see CPUPlayer#chooseRevealedCard(RumourCardsPile)
+	 */
+	public abstract RumourCard chooseRevealedCard(RumourCardsPile from);
+
+	/**
+	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} based on its {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect}.</b>
+	 * Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.	
+	 * @return A {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} chosen for its {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} in particular.
+	 * @see fr.sos.witchhunt.model.cards.RumourCard RumourCard
+	 * @see fr.sos.witchhunt.model.cards.WitchEffect WitchEffect
+	 * @see HumanPlayer#selectWitchCard()
+	 * @see CPUPlayer#selectWitchCard()
+	 */
 	public abstract RumourCard selectWitchCard();
+	/**
+	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} based on its {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect}.</b>
+	 * Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.	
+	 * @return A {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} chosen for its {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} in particular.
+	 * @see fr.sos.witchhunt.model.cards.RumourCard RumourCard
+	 * @see fr.sos.witchhunt.model.cards.HuntEffect HuntEffect
+	 * @see HumanPlayer#selectHuntCard()
+	 * @see CPUPlayer#selectHuntCard()
+	 */
 	public abstract RumourCard selectHuntCard();
 	
-	
-	public abstract Player chooseNextPlayer();
-	
-	public void winRound() {
-		Tabletop.getInstance().setLastUnrevealedPlayer(this);
-		requestLastUnrevealedPlayerScreen();
-		switch (this.identity) {
-			case WITCH:
-				this.addScore(2);
-				break;
-				
-			case VILLAGER:
-				this.addScore(1);
-				break;
-		}
+	/**
+	 * <b>Looks at a given player's {@link #identity}.</b>
+	 * Called when using card {@link fr.sos.witchhunt.model.cards.TheInquisition The Inquisiton}.
+	 * @param target The player of which the identity is going to be looked at.
+	 * @return The targetted player's identity
+	 * @see fr.sos.witchhunt.model.Identity Identity
+	 * @see fr.sos.witchhunt.model.cards.TheInquisition TheInquisiton
+	 * @see CPUPlayer CPUPlayers will remember their target is a witch it is the case.
+	 */
+	public Identity lookAtPlayersIdentity(Player target) {
+		requestLookAtPlayersIdentityScreen(target);
+		return target.getIdentity();
 	}
 	
+	/**
+	 * <b>Chooses an {@link DefenseAction action} between {@link #revealIdentity() revealing your identity} and {@link #discard(RumourCard) discarding a Rumour card from your hand}.</b>
+	 * Called when using the {@link fr.sos.witchhunt.model.cards.DuckingStool Ducking Stool} card.
+	 * @see DefenseAction
+	 * @see #revealIdentity()
+	 * @see #discard(RumourCard)
+	 * @see fr.sos.witchhunt.model.cards.DuckingStool DuckingStool
+	 * @return Either {@link DefenseAction#REVEAL} or {@link DefenseAction#DISCARD}
+	 */
+	public abstract DefenseAction revealOrDiscard();
+	
+	/**
+	 * <b>Force another player to accuse another opponent than you on their turn, if possible.</b>
+	 * Called when using the {@link fr.sos.witchhunt.model.cards.EvilEye Evil Eye} card.
+	 * @see #forcedToAccuseBy
+	 * @see #playTurn()
+	 * @see #accuse(Player)
+	 * @param target The player who is going to be forced to accuse another player than this one on their turn.
+	 */
+	public void forceToAccuseNextTurn(Player target) {
+		target.setForcedToAccuseNextTurnBy(this);
+	}
+		
+	/**
+	 * <p><b>Resets some of the player's attributes to their initial states.</b></p>
+	 * <p>Called after the end of each {@link fr.sos.witchhunt.controller.Round round} by class {@link fr.sos.witchhunt.controller.Tabletop Tabletop}.</p>
+	 * <p>The player's {@link #identity identity} is set back to <i>null</i> and their {@link fr.sos.witchhunt.model.cards.IdentityCard#reset() Identity card is reset}.
+	 * Their {@link #hand} is also {@link fr.sos.witchhunt.model.cards.RumourCardsPile#reset() reset}.
+	 * The player becomes {@link #active} again.</p>
+	 * @see fr.sos.witchhunt.model.Resettable;
+	 * @see #identity
+	 * @see #identityCard
+	 * @see fr.sos.witchhunt.model.cards.IdentityCard#reset() resetting an Identity card
+	 * @see #hand
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#reset() resetting an instance of RumourCardsPile
+	 * @see #active
+	 * @see fr.sos.witchhunt.controller.Tabletop
+	 */
 	public void reset() {
 		this.hand.reset();
 		this.identity = null;
@@ -496,140 +717,279 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		this.active = true;
 	}
 	
+	/**
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#isEmpty() RumourCardsPile::isEmpty()
+	 * @see #chooseAnyCard(RumourCardsPile, boolean)
+	 * @see #chooseRevealedCard(RumourCardsPile)
+	 */
+	public boolean targetPileContainsCards(RumourCardsPile rcp) {
+		if(rcp.isEmpty()) {
+			requestEmptyRCPScreen(rcp);
+			return false;
+		}
+		return true;
+	}
+	
 	//DISPLAY METHODS
+	/**
+	 * @see #displayMediator
+	 */
 	@Override
 	public void setDisplayMediator(DisplayMediator dm) {
 		this.displayMediator=dm;
 	}
+	
+	/**
+	 * @see DisplayMediator#passLog(String)
+	 * @deprecated Used for debugging purposes
+	 */
 	@Override
 	public void requestLog(String msg) {
 		displayMediator.passLog(msg);
 	}
 	
 	@Override
+	/**
+	 * @see DisplayMediator#displayPlayTurnScreen(Player)
+	 * @see #playTurn()
+	 */
 	public void requestPlayTurnScreen() {
-		displayMediator.displayPlayTurnScreen(name);
+		displayMediator.displayPlayTurnScreen(this);
 	}
 	
+	/**
+	 * @see DisplayMediator#displayPlayTurnAgainScreen(Player)
+	 * @see #playTurnAgain()
+	 */
+	@Override
+	public void requestPlayTurnAgainScreen() {
+		if(Tabletop.getInstance().getUnrevealedPlayersList().size()>1) displayMediator.displayPlayTurnAgainScreen(this);
+		//the message isn't displayed if there is only one unrevealed player remaining (as the round is going to end).
+	}
+	
+	/**
+	 * @see DisplayMediator#displayTakeNextTurnScreen(Player)
+	 * @see #takeNextTurn()
+	 */
+	@Override
+	public void requestTakeNextTurnScreen() {
+		displayMediator.displayTakeNextTurnScreen(this);
+	}
+
+	/**
+	 * @see DisplayMediator#displayEndOfTurnScreen()
+	 * @see #playTurn()
+	 */
 	@Override
 	public void requestEndOfTurnScreen() {
 		displayMediator.displayEndOfTurnScreen();
 	}
 	
+	/**
+	 * @see DisplayMediator#displayAccusationScreen(Player, Player)
+	 * @param p The accused player.
+	 * @see #accuse(Player)
+	 */
 	@Override
 	public void requestAccusationScreen(Player p) {
 		displayMediator.displayAccusationScreen(this,p);
 	}	
 	
 	@Override
+	/**
+	 * <b>Requests the display (only) of a {@link fr.sos.witchhunt.model.Menu Menu}.</b>
+	 * Does not collect any input (this is achieved using {@link fr.sos.witchhunt.InputMediator#makeChoice(Menu)}).
+	 * @see DisplayMediator#displayPossibilities(Menu)
+	 * @see fr.sos.witchhunt.model.Menu Menu
+	 * @see HumanPlayer
+	 */
 	public void requestDisplayPossibilities(Menu m) {
 		displayMediator.displayPossibilities(m);
 	}
 	
-
+	/**
+	 * @see DisplayMediator#displayChooseDefenseScreen()
+	 * @see #defend()
+	 */
 	@Override
 	public void requestChooseDefenseScreen() {
 		displayMediator.displayChooseDefenseScreen();
 	}
 	
+	/**
+	 * @see DisplayMediator#displayForcedToRevealScreen()
+	 * @see #forcedReveal()
+	 */
 	@Override
 	public void requestForcedToRevealScreen() {
 		displayMediator.displayForcedToRevealScreen();
 	}
-	
+	/**
+	 * @see DisplayMediator#displayIdentityRevealScreen(Player)
+	 * @see #revealIdentity()
+	 */
 	@Override
 	public void requestIdentityRevealScreen() {
 		displayMediator.displayIdentityRevealScreen(this);
 	}
 	
+	/**
+	 * @see DisplayMediator#displayScoreUpdateScreen(Player, int)
+	 * @see #addScore(int)
+	 */
 	@Override
 	public void requestScoreUpdateScreen(int scoreUpdatedBy) {
 		displayMediator.displayScoreUpdateScreen(this,scoreUpdatedBy);
 	}
 	
+	/**
+	 * @see DisplayMediator#displayEliminationScreen(Player, Player)
+	 * @see #eliminate(Player)
+	 */
 	@Override
 	public void requestEliminationScreen(Player victim) {
 		displayMediator.displayEliminationScreen(this,victim);
 	}
 	
+	/**
+	 * @see DisplayMediator#displayLastUnrevealedPlayerScreen(Player)
+	 * @see #winRound()
+	 */
 	@Override
 	public void requestLastUnrevealedPlayerScreen() {
 		displayMediator.displayLastUnrevealedPlayerScreen(this);
 	}
 	
+	/**
+	 * @see DisplayMediator#displayNoCardsScreen(Player)
+	 * @see #discardRandomCard()
+	 */
 	@Override
 	public void requestNoCardsScreen() {
 		displayMediator.displayNoCardsScreen(this);
 	}
 	
+	/**
+	 * @see DisplayMediator#displaySelectCardScreen()
+	 */
 	@Override
 	public void requestSelectCardScreen() {
 		displayMediator.displaySelectCardScreen();
 	}
 
+	/**
+	 * @see DisplayMediator#displaySelectUnrevealedCardScreen()
+	 */
 	@Override
 	public void requestSelectUnrevealedCardScreen() {
 		displayMediator.displaySelectUnrevealedCardScreen();
 	}
 	
+	/**
+	 * @see DisplayMediator#displaySelectRevealedCardScreen()
+	 */
 	@Override
 	public void requestSelectRevealedCardScreen() {
 		displayMediator.displaySelectRevealedCardScreen();
 	}
 	
+	/**
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#show(DisplayMediator, boolean)
+	 * @param forcedReveal If this boolean is true, unrevealed cards will be shown as if they were revealed (for example, when a player looks at their own cards, they should be allowed to see the details of their unrevealed cards).
+	 */
 	public void showHand(boolean forcedReveal) {
 		this.hand.show(displayMediator, forcedReveal);
 	}
-	
+	/**
+	 * @see DisplayMediator#displayPlayerPlaysWitchEffectScreen(Player, RumourCard)
+	 * @see #witch()
+	 * @param The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} is played.
+	 */
 	@Override
 	public void requestPlayerPlaysWitchEffectScreen(RumourCard rc) {
 		displayMediator.displayPlayerPlaysWitchEffectScreen(this,rc);
 	}
+	/**
+	 * @see DisplayMediator#displayPlayerPlaysHuntEffectScreen(Player, RumourCard)
+	 * @see #hunt()
+	 * @param The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} is played.
+	 */
 	@Override
 	public void requestPlayerPlaysHuntEffectScreen(RumourCard rc) {
 		displayMediator.displayPlayerPlaysHuntEffectScreen(this,rc);
 	}
+	/**
+	 * @see DisplayMediator#displayHasChosenCardScreen(Player, RumourCard, boolean)
+	 * @param chosen The chosen {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}.
+	 * @param forcedReveal If this boolean is true, the chosen card will be shown as if it was revealed even if it is not.
+	 */
 	@Override
 	public void requestHasChosenCardScreen(RumourCard chosen,boolean forceReveal) {
 		displayMediator.displayHasChosenCardScreen(this,chosen,forceReveal);
 	}
+	/**
+	 * @see DisplayMediator#displayNoCardsInPileScreen(RumourCardsPile)
+	 * @param rcp An empty {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}.
+	 */
 	@Override
 	public void requestEmptyRCPScreen(RumourCardsPile rcp) {
 		displayMediator.displayNoCardsInPileScreen(rcp);
 	};
+	/**
+	 * @see DisplayMediator#displayDiscardCardScreen(Player, RumourCard)
+	 * @see #discard(RumourCard)
+	 * @param rc The discarded {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}
+	 */
 	@Override
 	public void requestDiscardCardScreen(RumourCard rc) {
 		displayMediator.displayDiscardCardScreen(this,rc);
 	}
+	
+	/**
+	 * @see DisplayMediator#displayLookAtPlayersIdentityScreen(Player, Player)
+	 * @see #lookAtPlayersIdentity(Player)
+	 * @param target The player whose identity is being looked at
+	 */
 	@Override
 	public void requestLookAtPlayersIdentityScreen(Player target) {
 		displayMediator.displayLookAtPlayersIdentityScreen(this,target);
 	}
+	/**
+	 * @see DisplayMediator#displayPlayerHasResetCardScreen(Player, RumourCard)
+	 * @see fr.sos.witchhunt.model.cards.PointedHat PointedHat
+	 * @param chosen The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} that was chosen to be playable again.
+	 */
 	@Override
 	public void requestHasResetCardScreen(RumourCard chosen) {
 		displayMediator.displayPlayerHasResetCardScreen(this,chosen);
 	}
-	@Override
-	public void requestTakeNextTurnScreen() {
-		displayMediator.displayTakeNextTurnScreen(this);
-	}
-	@Override
-	public void requestPlayTurnAgainScreen() {
-		if(Tabletop.getInstance().getUnrevealedPlayersList().size()>1) displayMediator.displayPlayTurnAgainScreen(this);
-		//the message isn't displayed if there is only one unrevealed player remaining (as the round is going to end).
-	}
-	@Override
-	public void sleep(int ms) {
-		displayMediator.freezeDisplay(ms);
-	}
+
+	/**
+	 * @see DisplayMediator#displayForcedToAccuseScreen(Player, Player)
+	 * @see #forceToAccuseNextTurn(Player)
+	 * @param by The player who forced this one to accuse another one.
+	 */
 	@Override
 	public void requestForcedToAccuseScreen(Player by) {
 		displayMediator.displayForcedToAccuseScreen(this,by);
 	}
+	/**
+	 * @see DisplayMediator#displayStealCardScreen(Player, Player)
+	 * @param stolenPlayer The player whose {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} was stolen. 
+	 */
 	@Override
 	public void requestStealCardFromScreen(Player stolenPlayer) {
 		displayMediator.displayStealCardScreen(this,stolenPlayer);
 	};
+	
+	/**
+	 * @see DisplayMediator#freezeDisplay(int)
+	 */
+	@Override
+	public void sleep(int ms) {
+		displayMediator.freezeDisplay(ms);
+	}
+	
 	//GETTERS
 	public String getName() {
 		return this.name;
@@ -643,6 +1003,14 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	public RumourCardsPile getRevealedSubhand() {
 		return this.hand.getRevealedSubpile();
 	}
+	public boolean hasUnrevealedRumourCards() {
+		return !this.getRevealedSubhand().equals(this.hand);
+	}
+	
+	public boolean hasRevealedRumourCards() {
+		return !this.getRevealedSubhand().isEmpty();
+	}
+	
 	public Identity getIdentity() {
 		return this.identity;
 	}
@@ -658,17 +1026,38 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	public int getId() {
 		return this.id;
 	}
+	/**
+	 * @see #immunized
+	 */
 	public boolean isImmunized() {
 		//EvilEye immunizes a player against accusation for the next time an accusation occurs.
 		return this.immunized;
 	}
+	/**
+	 * <b>A player is accusable if they are {@link #isRevealed() not revealed yet} and {@link #isImmunized() not immunized}.</b>
+	 * @see #immunized
+	 * @see #isRevealed()
+	 * @see fr.sos.witchhunt.controller.Tabletop#getAccusablePlayersList()
+	 * @see #accuse(Player)
+	 */
 	public boolean isAccusable() {
 		if(!this.isRevealed() && !this.immunized) return true;
 		else return false;
 	}
+
 	public boolean isActive() {
 		return this.active;
 	}
+	/**
+	 * <b>Certain {@link fr.sos.witchhunt.model.cards.RumourCard Rumour cards} can immunize a player against other Rumour cards.</b>
+	 * Example : {@link fr.sos.witchhunt.model.cards.Wart the Wart} card {@link fr.sos.witchhunt.model.cards.Wart#grantsImmunityAgainst(RumourCard) grants immunity against}
+	 * {@link fr.sos.witchhunt.model.cards.DuckingStool the Ducking Stool} card, once it has been revealed.
+	 * @see fr.sos.witchhunt.model.cards.RumourCard#grantsImmunityAgainst(RumourCard)
+	 * @see fr.sos.witchhunt.model.cards.Wart Wart
+	 * @see fr.sos.witchhunt.model.cards.Broomstick Broomstick
+	 * @param rc The Rumour card against which we test whether the player is immunized or not.
+	 * @return <i>true</i> if the player is immunized against this card, <i>false</i> otherwise.
+	 */
 	public boolean isImmunizedAgainstRumourCard(RumourCard rc) {
 		//some cards grant immunity against the huntEffect of others. Example : Broomstick prevents from being targeted by the huntEffect of AngryMob
 		for(RumourCard card : this.hand.getCards()) {
@@ -685,94 +1074,132 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		this.active=active;
 	}
 	
+	/**
+	 * <p><b>Adds the given number of points to the {@link #score player's score} and notifies the 
+	 * {@link fr.sos.witchhunt.controller.ScoreCounter score counter} of a change in the player's score using the {@link #accept(Visitor)} method.</b></p>
+	 * <p>@param pts The number of points by which the {@link #score player's score} is updated <b>(can be negative, as some cards can make a player loose points)</b></p>
+	 * <p>Requests for the display of a suitable notification.</p>
+	 * <p>A player can score by {@link #accuse() accusing} or {@link #hunt hunting} their opponents, or by being the round's {@link #winRound() last unrevealed player}.</p>
+	 * @see #score
+	 * @see fr.sos.witchhunt.Visitable
+	 * @see #accept(Visitor)
+	 * @see fr.sos.witchhunt.controller.ScoreCounter#visit(Player)
+	 * 
+	 * @see #accuse()
+	 * @see #hunt()
+	 * @see #winRound()
+	 * @see fr.sos.witchhunt.controller.Tabletop#getLastUnrevealedPlayer()
+	 */
 	public void addScore(int pts) {
 		this.score += pts;
 		requestScoreUpdateScreen(pts);
-		Tabletop.getInstance().getScoreCounter().visit(this);
+		this.accept(Tabletop.getInstance().getScoreCounter());
 	}
-	
+	/**
+	 * @see #immunized
+	 */
 	public void immunize() {
 		this.immunized = true;
 	}
 	
+	/**
+	 * @see #immunized
+	 */
 	public void looseImmunity() {
 		this.immunized = false;
 	}
+	/**
+	 * <b>Removes everyone's immunity after an accusation</b>
+	 * Called at the end of the {@link #accuse()} method, as the immunity is supposed to be only one-use.
+	 * @see #immunized
+	 * @see #accuse()
+	 * @see #looseImmunity()
+	 */
 	private void clearImmunities() {
 		Tabletop.getInstance().getPlayersList().forEach(p -> {if(p.isImmunized()) p.looseImmunity();});
-		/*is called at the end of the accuse method.
-		will remove everyone's immunity after an accusation excepted for the accused - because he could have just immunized itselfs with the witch effect of Evil Eye.*/
+
 	}
 	
+	/**
+	 * <b>This player will be out of the current {@link fr.sos.witchhunt.controller.Round round}.</b>
+	 * @see #active
+	 * @see fr.sos.witchhunt.controller.Tabletop#getActivePlayersList() Tabletop::getActivePlayersList()
+	 */
 	public void eliminate() {
 		this.active = false;
 	}
 	
+	/**
+	 * <b>Eliminates a given player from the current {@link fr.sos.witchhunt.controller.Round round}.</b>
+	 * Requests the display of a suitable message.
+	 * @see #eliminate()
+	 * @see #accuse(Player)
+	 * @param victim The player to eliminate
+	 */
 	public void eliminate(Player victim) {
 		victim.eliminate();
 		requestEliminationScreen(victim);
 	}
 	
-	
+	/**
+	 * @see #forcedToAccuseBy
+	 * @param player The opponent forcing this player to accuse on their turn.
+	 */
 	public void setForcedToAccuseNextTurnBy(Player player) {
 		this.forcedToAccuseBy=player;
 	};
 	
 	
 	//UTILS
+	/**
+	 * @see #isAccusable()
+	 */
 	public List<Player> getAccusablePlayers() {
 		List <Player> l = Tabletop.getInstance().getAccusablePlayersList();
 		l.remove(this);
 		return l;
 	}
 	
+	/**
+	 * <b>Tests if the player has unrevealed cards with {@link fr.sos.witchhunt.model.cards.HuntEffect#isAllowed() a playable Hunt! effect} in their {@link #hand}.</b>
+	 * <p>Indirectly calls the {@link fr.sos.witchhunt.model.cards.HuntEffect#isAllowed() HuntEffect::isAllowed()} method, which requires the player to be
+	 * {@link fr.sos.witchhunt.controller.Tabletop#setHunter(Player) as the "currently hunting player" at the scale of the game}.</p>
+	 * @return <i>true</i> if the player can play a Hunt! effect.
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#getPlayableHuntSubpile() RumourCardsPile::getPlayableHuntSubpile() 
+	 * @see fr.sos.witchhunt.model.cards.HuntEffect HuntEffect
+	 * @see fr.sos.witchhunt.model.cards.HuntEffect#isAllowed() HuntEffect::isAllowed()
+	 * @see #chooseTurnAction()
+	 * @see fr.sos.witchhunt.controller.Tabletop#setHunter(Player) Tabletop::setHunter(Player)
+	 */
 	protected boolean canHunt() {
 		Tabletop.getInstance().setHunter(this);
 		return (!this.hand.getPlayableHuntSubpile().isEmpty());
 	}
 	
+	/**
+	 * <b>Tests if the player has unrevealed cards with {@link fr.sos.witchhunt.model.cards.WitchEffect#isAllowed() a playable Witch? effect} in their {@link #hand}.</b>
+	 * <p>Calls the {@link fr.sos.witchhunt.model.cards.WitchEffect#isAllowed() HuntEffect::isAllowed()} method.</p>
+	 * <p>Indirectly calls the {@link fr.sos.witchhunt.model.cards.WitchEffect#isAllowed() WitchEffect::isAllowed()} method, which requires the player to be
+	 * {@link fr.sos.witchhunt.controller.Tabletop#setAccusator(Player) as the "current accusator" at the scale of the game}.</p>
+	 * @return <i>true</i> if the player can play a Witch? effect.
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#getPlayableWitchSubpile() RumourCardsPile::getPlayableWitchSubpile() 
+	 * @see fr.sos.witchhunt.model.cards.WitchEffect WitchEffect
+	 * @see fr.sos.witchhunt.model.cards.WitchEffect#isAllowed() WitchEffect::isAllowed()
+	 * @see #defend()
+	 * @see fr.sos.witchhunt.controller.Tabletop#setHunter(Player) Tabletop::setAccusator(Player)
+	 */
 	public boolean canWitch() {
 		return (!this.hand.getPlayableWitchSubpile().isEmpty());
+	}
+
+
+	
+	public void accept(Visitor visitor) {
+		visitor.visit(this);	
 	}
 	
 	public String toString() {
 		return this.name;
-	}
-	
-	public abstract RumourCard chooseAnyCard(RumourCardsPile from,boolean seeUnrevealedCards);
-	public abstract RumourCard chooseRevealedCard(RumourCardsPile from);
-	
-	public boolean targetPileContainsCards(RumourCardsPile rcp) {
-		if(rcp.isEmpty()) {
-			requestEmptyRCPScreen(rcp);
-			return false;
-		}
-		return true;
-	}
-	public Identity lookAtPlayersIdentity(Player target) {
-		requestLookAtPlayersIdentityScreen(target);
-		return target.getIdentity();
-	}
-	
-	public void takeNextTurn() {
-		Tabletop.getInstance().getCurrentRound().setNextPlayer(this);
-		requestTakeNextTurnScreen();
-	}
-	
-	public void playTurnAgain() {
-		Tabletop.getInstance().getCurrentRound().setNextPlayer(this);
-		requestPlayTurnAgainScreen();
-	}
-	
-	public abstract DefenseAction revealOrDiscard();
-	
-	public void forceToAccuseNextTurn(Player target) {
-		target.setForcedToAccuseNextTurnBy(this);
-	}
-	
-	
-	public void accept(Visitor visitor) {
-		visitor.visit(this);	
 	}
 	
 	public boolean equals (Player p) {

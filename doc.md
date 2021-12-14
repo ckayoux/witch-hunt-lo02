@@ -32,7 +32,7 @@
 	[ ] IdentityCard
 
 ### fr.sos.witchhunt.model.players
-	[o] Player - à partir de defend
+	[X] Player
 	[ ] CPUPlayer
 	[ ] HumanPlayer 
 
