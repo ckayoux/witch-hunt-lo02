@@ -28,6 +28,7 @@ public interface PlayerDisplayObservable {
 	public void requestAccusationScreen(Player accused);
 	public void requestChooseDefenseScreen();
 	public void requestForcedToRevealScreen();
+	public void requestHasChosenIdentityScreen();
 	public void requestIdentityRevealScreen();
 	public void requestScoreUpdateScreen(int scoreUpdatedBy);
 	public void requestEliminationScreen(Player victim);

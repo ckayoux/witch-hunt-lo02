@@ -467,6 +467,11 @@ public final class DisplayController implements DisplayMediator {
 		/*if(Game.getInstance().cpuPlayersDisplayChangesOfStrategy())*/ console.logStrategyChange(p.getName(),strat.toString());
 	}
 
+	@Override
+	public void displayHasChosenIdentityScreen(Player p) {
+		console.logHasChosenIdentityMessage(p.getName());
+	}
+
 
 	
 }

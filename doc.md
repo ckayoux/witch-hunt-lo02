@@ -23,20 +23,23 @@
 
 ### fr.sos.witchhunt.model
 	[X] Identity
-	[X] TurnAction
+	
 	[X] Resettable
-	[X] DefenseAction
+
 	[ ] Menu
 
 ### fr.sos.witchhunt.model.cards
-	[ ] IdentityCard
+	[ ] TOUT
 
 ### fr.sos.witchhunt.model.players
 	[X] Player
-	[ ] CPUPlayer
-	[o] HumanPlayer Jusqu'à showRanking
+	[o] CPUPlayer reste à faire chooseStrategy
+	[X] HumanPlayer
+	[X] DefenseAction
+	[X] TurnAction
 
 ### fr.sos.witchhunt.model.cpustrategies
+	[ ] TOUT
 
 ### fr.sos.witchhunt.view
-	[ ] Everything
+	[ ] TOUT

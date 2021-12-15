@@ -236,11 +236,21 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 * <p><b>Requests the {@link fr.sos.witchhunt.DisplayMediator Display Mediator} to show players ranking.</b></p>
 	 * <p>Specific information about this player's score and position in the ranking can be displayed.</p>
 	 * @see fr.sos.witchhunt.DisplayMediator#displayRanking(Player) DisplayMediator::displayRanking(Player)
+	 * @see fr.sos.witchhunt.controller.ScoreCounter#getRanking() ScoreCounter::getRanking() 
 	 */
 	private void showRanking() {
 		displayMediator.displayRanking(this);
 	}
 	
+	/**
+	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} to {@link #discard(RumourCard) discard from the given {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}, based on user-input</b>
+	 * @param in A {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}.
+	 * @return The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} that was chosen to be {@link #discard(RumourCard) discarded}.
+	 * @see #discard(RumourCard)
+	 * @see fr.sos.witchhunt.model.cards.RumourCard Rumour card
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile
+	 * @see Player#selectCardToDiscard(RumourCardsPile)
+	 */
 	@Override
 	public RumourCard selectCardToDiscard(RumourCardsPile in) {
 		if(this.hasRumourCards()) {
@@ -258,8 +268,13 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		
 	}
 	
-	private RumourCard chooseCard(RumourCardsPile from,boolean forcedReveal){
-		//this method must not be used alone.
+	/**
+	 * <b>Chooses a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} among a given {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour card}, based on user-input.</b>
+	 * <p>Collects user-input but does not display anything except input error messages.</p>
+	 * @param from The {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour card} within which a card must be chosen
+	 * @return The chosen {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}
+	 */
+	private RumourCard chooseCard(RumourCardsPile from){
 		String [] options = new String [from.getCardsCount()];
 		for(int i=0; i<from.getCardsCount(); i++) {
 			options[i] = from.getCards().get(i).getName();
@@ -267,55 +282,85 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		Menu m = new Menu("",options);
 		return from.getCards().get(makeChoice(m)-1);
 	}
-	
+
+
+	/**
+	 * <b>Chooses a card (revealed or not) within a pile of cards, based on user-input.</b>
+	 * @see Player#chooseAnyCard(RumourCardsPile, boolean) 
+	 */
 	@Override
 	public RumourCard chooseAnyCard(RumourCardsPile from,boolean forcedReveal){
 		if(targetPileContainsCards(from)) {
 			requestSelectCardScreen();
 			displayMediator.displayCards(from,forcedReveal);
-			return chooseCard(from,forcedReveal);
+			return chooseCard(from);
 		}
 		else return null;
 	}
+	/**
+	 * <b>Chooses an unrevealed card within a pile of cards, based on user-input.</b>
+	 */
 	public RumourCard chooseUnrevealedCard(RumourCardsPile from,boolean forcedReveal){
 		if(targetPileContainsCards(from.getUnrevealedSubpile())){
 			//the player must necessarily choose an unrevealed card
 			requestSelectUnrevealedCardScreen();
 			displayMediator.displayCards(from.getUnrevealedSubpile(),forcedReveal);
-			return chooseCard(from.getUnrevealedSubpile(),forcedReveal);
+			return chooseCard(from.getUnrevealedSubpile());
 		}
 		else return null;
 	}
+	/**
+	 * <b>Chooses a revealed card within a pile of cards, based on user-input.</b>
+	 * @see Player#chooseRevealedCard(RumourCardsPile) 
+	 */
 	@Override
 	public RumourCard chooseRevealedCard(RumourCardsPile from){
 		if(targetPileContainsCards(from.getRevealedSubpile())){
 			//the player must necessarily choose a revealed card
 			requestSelectRevealedCardScreen();
 			displayMediator.displayCards(from.getRevealedSubpile(),false);
-			return chooseCard(from.getRevealedSubpile(),false);
+			return chooseCard(from.getRevealedSubpile());
 		}
 		else return null;
 	}
 	
+	/**
+	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} valued for its {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect}, based on user-input.</b>
+	 * @see Player#selectWitchCard()
+	 */
 	@Override
 	public RumourCard selectWitchCard() {
 		requestSelectCardScreen();
 		displayMediator.displayWitchEffects(this.hand.getPlayableWitchSubpile());
-		return chooseCard(this.hand.getPlayableWitchSubpile(),true);
+		return chooseCard(this.hand.getPlayableWitchSubpile());
 	}
-	
+	/**
+	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} valued for its {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect}, based on user-input.</b>
+	 * @see Player#selectHuntCard()
+	 */
 	@Override
 	public RumourCard selectHuntCard() {
 		requestSelectCardScreen();
 		displayMediator.displayHuntEffects(this.hand.getPlayableHuntSubpile());
-		return chooseCard(this.hand.getPlayableHuntSubpile(),true);
+		return chooseCard(this.hand.getPlayableHuntSubpile());
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * <p>When a human player looks at their target's identity, they also request it to be displayed on the screen.</p>
+	 */
 	@Override
 	public void requestLookAtPlayersIdentityScreen(Player target) {
 		super.requestLookAtPlayersIdentityScreen(target);
 		displayMediator.secretlyDisplayIdentity(target);
 	}
+	/**
+	 * <p><b>Chooses an {@link DefenseAction action} between {@link #revealIdentity() revealing your identity} and {@link #discard(RumourCard) discarding a Rumour card from your hand}.</b></p>
+	 * <p>Called when targetted by the {@link fr.sos.witchhunt.model.cards.DuckingStool Ducking Stool} card's Hunt! effect.</p>
+	 * <p>For human controlled players, specific messages are requested to be displayed if one of these options is not available.</p>
+	 * @see Player#revealOrDiscard()
+	 * @return Either {@link DefenseAction#REVEAL} or {@link DefenseAction#DISCARD}
+	 */
 	@Override
 	public DefenseAction revealOrDiscard() {
 		Menu ultimatum;

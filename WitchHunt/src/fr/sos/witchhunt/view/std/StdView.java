@@ -448,6 +448,10 @@ public final class StdView {
 		/*log("\t"+name+" opts for "+playstyleDesc+".");*/
 	}
 
+	public void logHasChosenIdentityMessage(String playerName) {
+		log("\t"+playerName+" has chosen their identity.");
+	}
+
 
 	
 

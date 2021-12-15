@@ -641,7 +641,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	public abstract RumourCard chooseRevealedCard(RumourCardsPile from);
 
 	/**
-	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} based on its {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect}.</b>
+	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} valued for its {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect}.</b>
 	 * Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.	
 	 * @return A {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} chosen for its {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} in particular.
 	 * @see fr.sos.witchhunt.model.cards.RumourCard RumourCard
@@ -651,7 +651,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	public abstract RumourCard selectWitchCard();
 	/**
-	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} based on its {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect}.</b>
+	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} valued for its {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect}.</b>
 	 * Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.	
 	 * @return A {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} chosen for its {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} in particular.
 	 * @see fr.sos.witchhunt.model.cards.RumourCard RumourCard
@@ -662,7 +662,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	public abstract RumourCard selectHuntCard();
 	
 	/**
-	 * <b>Looks at a given player's {@link #identity}.</b>
+	 * <b>Sneakily looks at a given player's {@link #identity}.</b>
 	 * Called when using card {@link fr.sos.witchhunt.model.cards.TheInquisition The Inquisiton}.
 	 * @param target The player of which the identity is going to be looked at.
 	 * @return The targetted player's identity
@@ -677,7 +677,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	
 	/**
 	 * <b>Chooses an {@link DefenseAction action} between {@link #revealIdentity() revealing your identity} and {@link #discard(RumourCard) discarding a Rumour card from your hand}.</b>
-	 * Called when using the {@link fr.sos.witchhunt.model.cards.DuckingStool Ducking Stool} card.
+	 * Called when targetted by the {@link fr.sos.witchhunt.model.cards.DuckingStool Ducking Stool} card's Hunt! effect.
 	 * @see DefenseAction
 	 * @see #revealIdentity()
 	 * @see #discard(RumourCard)
@@ -786,6 +786,15 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	@Override
 	public void requestEndOfTurnScreen() {
 		displayMediator.displayEndOfTurnScreen();
+	}
+	
+	/**
+	 * @see DisplayMediator#displayHasChosenIdentityScreen(Player)
+	 * @see CPUPlayer#chooseIdentity()
+	 */
+	@Override
+	public void requestHasChosenIdentityScreen() {
+		displayMediator.displayHasChosenIdentityScreen(this);
 	}
 	
 	/**

@@ -45,6 +45,12 @@ public void displayPlayTurnScreen(Player p);
 	 * @see fr.sos.witchhunt.model.players.Player#playTurn() Player::playTurn
 	 */
 	public void displayEndOfTurnScreen();
+	/**
+	 * <b>Requests the DM to display the suited screen when a player has chosen their identity.</b>
+	 * @see fr.sos.witchhunt.model.players.CPUPlayer#chooseIdentity()
+	 * @param p The player who has chosen their identity
+	 */
+	public void displayHasChosenIdentityScreen(Player p);
 /**
  * 	<p><b>Requests the DM to display the screen corresponding to the accusation of a player by another.</b></p>
  * @param accusator the player who accused.
@@ -248,4 +254,6 @@ public void displayPlayTurnScreen(Player p);
  */
 	public void displayRanking(Player p);
 
+
+	
 }

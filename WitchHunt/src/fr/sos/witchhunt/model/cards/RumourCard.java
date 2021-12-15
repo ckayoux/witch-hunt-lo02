@@ -81,7 +81,7 @@ public abstract class RumourCard extends Card {
 		}
 		return sb.toString();
 	}
-	
+
 	public String getWitchEffectDescription() {
 		return this.witchEffect.getDescription();
 	}
