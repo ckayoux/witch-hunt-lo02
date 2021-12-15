@@ -34,7 +34,7 @@
 ### fr.sos.witchhunt.model.players
 	[X] Player
 	[ ] CPUPlayer
-	[ ] HumanPlayer 
+	[o] HumanPlayer Jusqu'à showRanking
 
 ### fr.sos.witchhunt.model.cpustrategies
 

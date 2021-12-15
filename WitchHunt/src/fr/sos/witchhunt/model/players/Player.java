@@ -243,10 +243,12 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	}
 	
 	/**
-	 * <p><b>Chooses an action to perform during the player's turn.</b></p>
+	 * <p><b>Chooses an {@link TurnAction action} to perform during the player's turn.</b></p>
 	 * <p>Based on user input for {@link HumanPlayer human players}, done by artificial intelligence for {@link CPUPlayer CPUPlayers}.</p> 
-	 * @return The selected action : {@link TurnAction can be either <i>{@link #accuse(Player) ACCUSE}</i> or <i>{@link #hunt() HUNT}</i>.
+	 * @return The selected action : {@link TurnAction can be either <i>{@link #accuse(Player) ACCUSE}</i> or <i>{@link #hunt() HUNT}}</i>.
 	 * @see TurnAction
+	 * @see #accuse(Player)
+	 * @see #hunt()
 	 * @see HumanPlayer#chooseTurnAction()
 	 * @see CPUPlayer#chooseTurnAction()
 	 */
@@ -302,7 +304,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	/**
 	 * <p><b>Elects the player who is going to take the next turn.</b></p>
 	 * <p>Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.</p>
-	 * <p>Called by certain {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}'s {@link fr.sos.witchhunt.model.cards.Effect effect}, 
+	 * <p>Called by certain {@link fr.sos.witchhunt.model.cards.RumourCard Rumour cards}' {@link fr.sos.witchhunt.model.cards.Effect effects}, 
 	 * like {@link fr.sos.witchhunt.model.cards.DuckingStool the Ducking Stool's} Witch? effect for example.</p>
 	 * @see #takeNextTurn()
 	 * @see HumanPlayer#chooseNextPlayer()
@@ -407,13 +409,14 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * <p><b>Chooses an action to respond to an {@link #accuse(Player) accusation} or a {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect}.</b></p>
 	 * <p>When a player is accused, they can choose between {@link #witch() playing a Witch? effect}, {@link #canWitch() if they can}, and {@link #revealIdentity() revealing their identity}.</p>
 	 * <p>When a player is targetted by certain {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} like that of {@link fr.sos.witchhunt.model.cards.DuckingStool}, 
-	 * they can choose between {@link #revealIdentity() revealing their identity} and {@link #discard(RumourCard) discarding one of their Rumour cards}.</p>
+	 * they can choose between {@link #revealOrDiscard() revealing their identity and discarding one of their Rumour cards}.</p>
 	 * Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.
 	 * @return A {@link DefenseAction response among <i>ACCUSE</i>, <i>REVEAL</i> and <i>DISCARD</i>}.
 	 * @see DefenseAction
 	 * @see #revealIdentity()
 	 * @see #witch()
 	 * @see #discard(RumourCard)
+	 * @see #revealOrDiscard()
 	 * @see HumanPlayer#chooseDefenseAction()
 	 * @see CPUPlayer#chooseDefenseAction()
 	 */
