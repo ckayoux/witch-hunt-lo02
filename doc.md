@@ -33,7 +33,7 @@
 
 ### fr.sos.witchhunt.model.players
 	[X] Player
-	[o] CPUPlayer reste à faire chooseStrategy
+	[X] CPUPlayer reste à faire chooseStrategy
 	[X] HumanPlayer
 	[X] DefenseAction
 	[X] TurnAction

@@ -14,8 +14,10 @@ import fr.sos.witchhunt.model.cards.*;
 
 public interface PlayStrategy {
 	
-	
-	
+	/**
+	 * 
+	 * @return
+	 */
 	public Identity selectIdentity();
 	public TurnAction selectTurnAction(Identity identity, RumourCardsPile myHand,boolean canHunt);
 	public Player selectPlayerToAccuse(List<Player> accusablePlayersList);

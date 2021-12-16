@@ -310,7 +310,46 @@ public final class CPUPlayer extends Player {
 		}
 	}
 
-
+	/**
+	 * <p><b>Chooses a {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy strategy} based on the player's current situation.</b><p>
+	 * 
+	 * <p>If the player is in relatively good position (score close to 5, is leading or has many cards), the player will opt for an {@link fr.sos.witchhunt.model.players.cpustrategies.OffensiveStrategy offensive strategy},
+	 * allowing them to take more risks, {@link #hunt()} more often, to focus the weakest players, to value the cards with offensive effects and causes them to be more likely to choose 
+	 * to play as {@link fr.sos.witchhunt.model.Identity#VILLAGER villagers}.</p>
+	 * 
+	 * <p>If the {@link fr.sos.witchhunt.controller.Tabletop#gameIsTied() game is tied}, or if the leading players are far above in score, or if this player has no cards left,
+	 * or if this player plays as a {@link fr.sos.witchhunt.model.Identity#WITCH witch} and is not too close to victory,
+	 * they will opt for a {@link fr.sos.witchhunt.model.players.cpustrategies.DefensiveStrategy defensive strategy},
+	 * making them more likely to play as witches, stingier on cards and valuing cards based on their {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} above all,
+	 * focus the leading players (or players with no cards left), and more likely to choose to play as {@link fr.sos.witchhunt.model.Identity#WITCH witches}.</p>
+	 * 
+	 * <p>By default at game start, or if they are not in a situation where they can choose to play offensively or defensively,
+	 * the player will opt for a {@link fr.sos.witchhunt.model.players.cpustrategies.GropingStrategy groping strategy}, with which
+	 * the chosen identity and the accused players are chosen randomly, the cards are considered for their overall value, and with which
+	 * the player tries to keep their best cards for later, when he can choose a more defined strategy.</p>
+	 * 
+	 * <p>The {@link #chosenStrategy} will then be used for making every choice the CPU-controlled player has to make.</p>
+	 * 
+	 * <p>The chosen strategy's behavior can be {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#updateBehavior(boolean, Identity, RumourCardsPile) updated} to 
+	 * actualize {@link fr.sos.witchhunt.model.players.cpustrategies.CardValue the value given to each card}.</p>
+	 * 
+	 * @see fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy PlayStrategy
+	 * @see #chosenStrategy
+	 * 
+	 * @see fr.sos.witchhunt.model.players.cpustrategies.OffensiveStrategy OffensiveStrategy
+	 * @see fr.sos.witchhunt.model.players.cpustrategies.DefensiveStrategy DefensiveStrategy
+	 * @see fr.sos.witchhunt.model.players.cpustrategies.GropingStrategy GropingStrategy
+	 * 
+	 * @see Tabletop.getInstance().getRanking() Tabletop::getRanking()
+	 * @see Tabletop.getInstance().getLeadingPlayers() Tabletop::getLeadingPlayers()
+	 * @see Tabletop.getInstance().getLastPlayers() Tabletop::getLastPlayers()
+	 * @see #getScore()
+	 * @see #getIdentity()
+	 * @see #getHand()
+	 * 
+	 * @see fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#updateBehavior(boolean, Identity, RumourCardsPile) PlayStrategy:updateBehavior(boolean, Identity, RumourCardsPile)
+	 * @see fr.sos.witchhunt.model.players.cpustrategies.CardValue CardValue
+	 */
 	public void chooseStrategy() {
 		Player leadingPlayer = Tabletop.getInstance().getRanking().get(0);
 		List<Player> lastPlayersList = Tabletop.getInstance().getLastPlayers();
@@ -335,7 +374,7 @@ public final class CPUPlayer extends Player {
 				&&this.score<3)
 				this.chosenStrategy=new GropingStrategy();
 		else this.chosenStrategy=new DefensiveStrategy();
-		if(chosenStrategy.getClass()!=oldStrategy.getClass()) displayMediator.displayStrategyChange(this,this.chosenStrategy);
+		if(chosenStrategy.getClass()!=oldStrategy.getClass()) displayMediator.displayStrategyChange(this,this.chosenStrategy); //no effect
 		oldStrategy=chosenStrategy;
 	}
 	
