@@ -24,7 +24,7 @@ public abstract class CPUStrategy implements PlayStrategy {
 	
 	protected int goodEffectThresold=2; //When a cards' effect is $ or above, the effect is considered like valuable
 	protected int goodCardThresold=4; //When a cards' total value is $ or above, it is considered like a valuable card
-	protected int gameIsTightThresold=3; //When $ or less players are remaining, the game is considered tight
+	protected int gameIsTightThresold=2; //When $ or less players are remaining, the game is considered tight
 	protected int acceptableCardsLimit=2; //When the player has $ or less remaining, they will consider they lack cards
 	
 	protected CardValueMap cvm = new CardValueMap();
@@ -279,7 +279,7 @@ public abstract class CPUStrategy implements PlayStrategy {
 		return this.cvm;
 	};
 	
-	public DefenseAction selectDefenseAction(boolean canWitch,RumourCardsPile myHand,Identity myIdentity) {
+	public DefenseAction selectDefenseAction(Identity myIdentity,RumourCardsPile myHand,boolean canWitch) {
 		if (this.isOkayToReveal(myIdentity, myHand)||!canWitch) return DefenseAction.REVEAL;
 		else return DefenseAction.WITCH;
 	}

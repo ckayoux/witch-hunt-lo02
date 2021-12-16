@@ -154,17 +154,17 @@ public final class CPUPlayer extends Player {
 	}
 
 	/**
-	 * <p><b>Selects an action to perform when accused or targetted by a {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect}, {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#selectDefenseAction(boolean, RumourCardsPile, Identity) based on the chosen strategy}.</b>
+	 * <p><b>Selects an action to perform when accused or targetted by a {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect}, {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#selectDefenseAction(Identity, RumourCardsPile, boolean) based on the chosen strategy}.</b>
 	 * @see DefenseAction
 	 * @see Player#chooseDefenseAction()
-	 * @see fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#selectDefenseAction(boolean, RumourCardsPile, Identity) PlayStrategy#selectDefenseAction(Identity, RumourCardsPile, boolean)
+	 * @see fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#selectDefenseAction(Identity, RumourCardsPile, boolean) PlayStrategy#selectDefenseAction(Identity, RumourCardsPile, boolean)
 	 */
 	@Override
 	public DefenseAction chooseDefenseAction() {
 		this.chooseStrategy();
 		//must initialize Tabletop's hunter with canHunt, as the player will look at its playable hunt cards to make their decision
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
-		return chosenStrategy.selectDefenseAction(this.canWitch(),this.hand,this.getIdentity());
+		return chosenStrategy.selectDefenseAction(this.getIdentity(),this.hand,this.canWitch());
 	}
 
 	/**
@@ -283,8 +283,8 @@ public final class CPUPlayer extends Player {
 	}
 
 	/**
-	 * <p><b>Chooses an {@link DefenseAction action} between {@link #revealIdentity() revealing your identity} and {@link #discard(RumourCard) discarding a Rumour card from your hand},</p>
-	 * {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#revealOrDiscard(Identity, RumourCardsPile) based on the chosen strategy}.</b>
+	 * <p><b>Chooses an {@link DefenseAction action} between {@link #revealIdentity() revealing your identity} and {@link #discard(RumourCard) discarding a Rumour card from your hand},
+	 * {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#revealOrDiscard(Identity, RumourCardsPile) based on the chosen strategy}.</b></p>
 	 * <p>Called when targetted by the {@link fr.sos.witchhunt.model.cards.DuckingStool Ducking Stool} card's Hunt! effect.</p>
 	 * <p>If the player has no cards to discard, or if they are already revealed, they will directly choose their only option and will request the view to display suitable screens.</p>
 	 * @see fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#revealOrDiscard(Identity, RumourCardsPile) PlayStrategy::revealOrDiscard(Identity, RumourCardsPile) 
@@ -317,8 +317,8 @@ public final class CPUPlayer extends Player {
 	 * allowing them to take more risks, {@link #hunt()} more often, to focus the weakest players, to value the cards with offensive effects and causes them to be more likely to choose 
 	 * to play as {@link fr.sos.witchhunt.model.Identity#VILLAGER villagers}.</p>
 	 * 
-	 * <p>If the {@link fr.sos.witchhunt.controller.Tabletop#gameIsTied() game is tied}, or if the leading players are far above in score, or if this player has no cards left,
-	 * or if this player plays as a {@link fr.sos.witchhunt.model.Identity#WITCH witch} and is not too close to victory,
+	 * <p>If the {@link fr.sos.witchhunt.controller.Tabletop#gameIsTied() game is tied}, if the leading players are far above in score,
+	 *  if this player has no cards left, if this player plays as a {@link fr.sos.witchhunt.model.Identity#WITCH witch} and is not close to victory,
 	 * they will opt for a {@link fr.sos.witchhunt.model.players.cpustrategies.DefensiveStrategy defensive strategy},
 	 * making them more likely to play as witches, stingier on cards and valuing cards based on their {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} above all,
 	 * focus the leading players (or players with no cards left), and more likely to choose to play as {@link fr.sos.witchhunt.model.Identity#WITCH witches}.</p>
