@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.Scanner;
 
 import fr.sos.witchhunt.controller.Application;
+import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.model.cards.RumourCard;
+import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
+import fr.sos.witchhunt.model.players.TurnAction;
 import fr.sos.witchhunt.model.Menu;
 
 
@@ -86,25 +90,80 @@ public final class StdView {
 		log("\tPress ENTER to continue:");
 	}
 	
+	public String stringifyMenuOption(Object o) {
+		if (o instanceof String) {
+			String str = (String) o;
+			return str.replaceFirst("^/c/", ""); //console only
+		}
+		else if (o instanceof Identity) {
+			Identity i = (Identity) o;
+			switch (i) {
+			case VILLAGER:
+				return "Villager";
+			case WITCH:
+				return "Witch";
+			}
+		}
+		else if (o instanceof TurnAction) {
+			TurnAction ta = (TurnAction) o;
+			switch (ta) {
+				case ACCUSE:
+					return "Accuse another player";
+				case HUNT:
+					return "Play the Hunt! effect of a Rumour card from your hand";
+			}
+		}
+		else if (o instanceof DefenseAction) {
+			DefenseAction da = (DefenseAction) o;
+			switch (da) {
+				case REVEAL:
+					return "Reveal your identity";
+				case WITCH:
+					return "Play the Witch? effect of a Rumour card from your hand";
+				case DISCARD:
+					return "Discard a card";
+			}
+		}
+		else if (o instanceof Player) {
+			Player p = (Player) o;
+			return p.getName();
+		}
+		else if (o instanceof RumourCard) {
+			RumourCard rc = (RumourCard) o;
+			return rc.getName();
+		}
+		return o.toString();
+	}
+	
 	public void makeMenu(Menu m) {
+		//used for main menus
 		crlf();
 		logHardLine();
 		log("  "+m.getName().toUpperCase());
 		logHardLine();
-		int n=0;
-		for (String str : m.getOptions()) {
+		int n=1;
+		for (Object o : m.getOptions()) {
+			StringBuffer sb = new StringBuffer("\t ");
+			sb.append(n);
+			sb.append(" - ");
+			sb.append(stringifyMenuOption(o));
+			log(sb.toString());
 			n++;
-			log("\t "+Integer.toString(n)+" - "+ str);
 		}
 		crlf();
 	}
 	
 	public void logPossibilities(Menu possibilities) {
+		//used for making choices within a match
 		log("\t"+possibilities.getName());
-		int n=0;
-		for (String str : possibilities.getOptions()) {
+		int n=1;
+		for (Object o : possibilities.getOptions()) {
+			StringBuffer sb = new StringBuffer("\t\t ");
+			sb.append(n);
+			sb.append(" - ");
+			sb.append(stringifyMenuOption(o));
+			log(sb.toString());
 			n++;
-			log("\t\t "+Integer.toString(n)+" - "+ str);
 		}
 		crlf();
 	}
@@ -450,6 +509,41 @@ public final class StdView {
 
 	public void logHasChosenIdentityMessage(String playerName) {
 		log("\t"+playerName+" has chosen their identity.");
+	}
+
+	public void logAddPlayersScreen(int minPlayersNumber,int maxPlayersNumber) {
+		logDashedLine();
+		log("~ Add "+minPlayersNumber+" to "+maxPlayersNumber+" players : ~\n");
+	}
+
+	public void logWrongMenuChoiceMessage(int timesWrong, String helperMsg, int optionsCount) {
+		if(timesWrong==2) {
+			log("\tAre you doing it on purpose ?");
+			log(helperMsg);
+		}
+		else if (timesWrong==3) {
+			log("\tCome on ! I believe in you ! You can do it !");
+			if(optionsCount!=1)log(helperMsg);
+		}
+		else {
+			if(optionsCount==1) {
+				log("\tYou can only choose option #1 here !");
+			}
+			else log("Invalid choice. "+helperMsg);
+		}
+	}
+
+	public void logAddedPlayersScreen(int n) {
+		crlf();
+		log("All "+Integer.toString(n)+" players have been successfully added.");
+		logDashedLine();
+		crlf();
+	}
+
+	public void logExitingGameScreen() {
+		crlf();
+		logStarsLine();
+		log("See you soon !");
 	}
 
 

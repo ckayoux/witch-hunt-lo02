@@ -1,7 +1,8 @@
 package fr.sos.witchhunt.model.cards;
 
-import fr.sos.witchhunt.controller.Tabletop;
 import java.util.List;
+
+import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.players.Player;
 

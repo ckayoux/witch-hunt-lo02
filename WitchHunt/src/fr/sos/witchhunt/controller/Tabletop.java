@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import fr.sos.witchhunt.DisplayMediator;
+import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.cards.ExistingRumourCards;
 
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
@@ -24,11 +26,14 @@ import fr.sos.witchhunt.model.players.Player;
  */
 public final class Tabletop {
 	
-	//ATTRIBUTES
+	//FIELDS
 	/**
 	 * Unique instance of this class. Initialized and returned by {@link #getInstance()}.
 	 */
 	private static volatile Tabletop instance = null;
+	
+	private DisplayMediator displayMediator;
+	private InputMediator inputMediator;
 	
 	/**
 	 * The number of cpu players for this match.
@@ -99,24 +104,25 @@ public final class Tabletop {
 	 * <p>The {@link #minPlayersNumber minimum} and {@link #maxPlayersNumber maximum} players numbers are attributes of this class.</p>
 	 */
 	private void addPlayers() {
-		Application.displayController.drawDashedLine();
+		displayMediator.displayAddPlayersScreen(minPlayersNumber, maxPlayersNumber);
 		int n=0;
-		Application.displayController.passLog("~ Add "+minPlayersNumber+" to "+maxPlayersNumber+" players : ~\n");
 		List <String> takenNames = new ArrayList<String> ();
  		while(n<minPlayersNumber) {
 			n++;
-			instance.playersList.add(Application.inputController.createPlayer(n,takenNames));
+			Player newPlayer = inputMediator.createPlayer(n,takenNames);
+			newPlayer.setDisplayMediator(this.displayMediator);
+			instance.playersList.add(newPlayer);
 		}
-		Application.displayController.displayYesNoQuestion("\tWould you like to add another player ?");
-		while(n<maxPlayersNumber && Application.inputController.answerYesNoQuestion()) {
+		displayMediator.logYesNoQuestion("\tWould you like to add another player ?");
+		while(n<maxPlayersNumber && inputMediator.answerYesNoQuestion()) {
 			n++;
-			instance.playersList.add(Application.inputController.createPlayer(n,takenNames));
-			Application.displayController.displayYesNoQuestion("\tWould you like to add another player ?");
+			Player newPlayer = inputMediator.createPlayer(n,takenNames);
+			newPlayer.setDisplayMediator(this.displayMediator);
+			instance.playersList.add(newPlayer);
+			displayMediator.logYesNoQuestion("\tWould you like to add another player ?");
 		}
-		Application.displayController.passLog("\nAll "+Integer.toString(n)+" players have been successfully added.");
-		Application.displayController.drawDashedLine();
-		Application.displayController.crlf();
-		Application.inputController.wannaContinue();
+		displayMediator.displayAddedPlayersScreen(n);
+		inputMediator.wannaContinue();
 	}
 
 	/**
@@ -164,35 +170,36 @@ public final class Tabletop {
 		scoreCounter = new ScoreCounter(); //Instanciating the score counter
 		
 		new Round(); //Starting a first round.
+		displayMediator.displayRoundEndScreen(Round.getRoundNumber());
 		while (!gameIsOver()){ //Looping while the game has no unique winner at the end of a round.
-			Application.displayController.displayScoreBoard(scoreCounter.getScoreBoard()); //Displays the scoreboard at the end of each round
-			Application.inputController.wannaContinue(); //Pauses the game until user-input is received
-			Application.displayController.crlf();
+			displayMediator.displayScoreBoard(scoreCounter.getScoreBoard()); //Displays the scoreboard at the end of each round
+			inputMediator.wannaContinue(); //Pauses the game until user-input is received
 			resetStates(); //After a round, reset the states of all known cards and players.
 			List<Player> potentialWinners = scoreCounter.getPotentialWinners(); //List of leading players having score >=5
 			if(!potentialWinners.isEmpty()) {
 				playersList.stream().filter(p->!potentialWinners.contains(p)).forEach(p->p.setActive(false));
-				Application.displayController.displayGameIsTiedScreen(potentialWinners);
+				displayMediator.displayGameIsTiedScreen(potentialWinners);
 				this.gameIsTied=true; //preparing a special round with only the leading players.
 			}
 			currentRound = null;
 			currentRound = new Round(); //Starting new rounds until the victory conditions are finally met.
+			displayMediator.displayRoundEndScreen(Round.getRoundNumber());
 		}
 		resetStates();
 		this.gameIsTied=false;
 		currentRound.setRoundNumber(0);
 		currentRound = null;
 		
-		Application.displayController.displayMatchEndScreen();
-		Application.displayController.displayScoreBoard(scoreCounter.getScoreBoard());
-		Application.displayController.displayWinnerScreen(scoreCounter.getWinner()); //Requests for a display of the winning player.
+		displayMediator.displayMatchEndScreen();
+		displayMediator.displayScoreBoard(scoreCounter.getScoreBoard());
+		displayMediator.displayWinnerScreen(scoreCounter.getWinner()); //Requests for a display of the winning player.
 		
 		
 		scoreCounter=null;
 		playersList = null;
 		playersList = new ArrayList<Player>();
 		
-		Application.inputController.wannaContinue();
+		inputMediator.wannaContinue();
 		cpuPlayersNumber=0;
 		this.instance=null;
 		Game.getInstance().gotoMainMenu(); //Going back to the game's main menu at the end of a round.
@@ -354,6 +361,13 @@ public final class Tabletop {
 	}
 	public void setLastUnrevealedPlayer(Player p) {
 		this.lastUnrevealedPlayer=p;
+	}
+	
+	public void setDisplayMediator(DisplayMediator dm) {
+		this.displayMediator=dm;
+	}
+	public void setInputMediator(InputMediator im) {
+		this.inputMediator=im;
 	}
 
 }

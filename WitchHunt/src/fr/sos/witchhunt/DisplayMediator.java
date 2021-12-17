@@ -1,5 +1,8 @@
 package fr.sos.witchhunt;
 
+import java.util.List;
+
+import fr.sos.witchhunt.controller.ScoreCounter.ScoreBoard;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
@@ -19,8 +22,53 @@ import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
  * 
  */
 public interface DisplayMediator {
+	
+	/**
+	 * <b>Requests the DM to display the "add players" screen.</b>
+	 * @param minPlayersNumber The minimal number of players to add
+	 * @param maxPlayersNumber The maximal number of players a match can have
+	 */
+	public void displayAddPlayersScreen(int minPlayersNumber,int maxPlayersNumber) ;
+	
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation where all players have been added to the match.</b>
+	 * @param n The number of added players
+	 */
+	public void displayAddedPlayersScreen(int n);
+
+	/**
+	 * <b>Requests the DM to display a yes-no question.</b>
+	 * Not in charge of getting the answer.
+	 * @param yesnoq The yes-no question
+	 */
+	public void logYesNoQuestion(String yesnoq);
 
 //GAME FLOW DISPLAY METHODS
+	
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation where the game is tied.</b>
+	 * @param potentialWinners The list of all players all players with the highest score, that score being higher than 5.
+	 */
+	public void displayGameIsTiedScreen(List<Player> potentialWinners);
+	
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the end of a round.</b>
+	 * @param roundNumber The number of the round that just ended.
+	 */
+	public void displayRoundEndScreen(int roundNumber);
+	
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation where the game is over.</b>
+	 */
+	public void displayMatchEndScreen();
+	
+	/**
+	 * <b>Requests the DM to display a screen to congratulate the winning player.</b>
+	 * @param winner The player who has won the game
+	 */
+	public void displayWinnerScreen(Player winner);
+
+	
 /**
  * <b>Requests the DM to display the screen corresponding to the beginning of a turn.</b>
  * @see fr.sos.witchhunt.model.players.Player#playTurn() Player::playTurn
@@ -226,19 +274,8 @@ public void displayPlayTurnScreen(Player p);
 * @param msg a String.
 */
 	public void passLog(String msg);
-	/**
-* <p><b>Given an instance of Menu, resquests the DM to display its title and its choices.</b></p>
-* <p>This method only manages the display of that Menu, user input is obtained using {@link InputMediator#makeChoice InputMediator::makeChoice}.</p>
-* @param possibilities an instance of Menu
-* @see Menu
-*/
-	public void displayPossibilities(Menu possibilities);
-/**
- * <p><b>Requests the DM to pause the view for a given duration</b></p>
- * <p>Initially meant to be used to mark a short break between each CPU player's actions.</p>
- * @deprecated abandonned with the GUI's development
- * @param duration the duration of the pause in milliseconds
- */
+
+	
 	public void freezeDisplay(int duration);
 /**
  * <b>Requests the DM to notify the view of a change of strategy by a CPU player</b>
@@ -253,7 +290,32 @@ public void displayPlayTurnScreen(Player p);
  * @see fr.sos.witchhunt.model.players.HumanPlayer#showRanking() HumanPlayer::showRanking() 
  */
 	public void displayRanking(Player p);
-
-
 	
+	/**
+	 * <b>Requests the DM to display a score board.</b>
+	 * @param scoreBoard The score board to be displayed.
+	 * @see fr.sos.witchhunt.controller.ScoreCounter#getScoreBoard() ScoreBoard;
+	 */
+	public void displayScoreBoard(ScoreBoard scoreBoard);
+
+	//MENUS
+	/**
+	* <p><b>Given an instance of Menu representing a choice to be made for the game to continue, requests the DM to display its title and its choices.</b></p>
+	* <p>This method only manages the display of that Menu, user input is obtained using {@link InputMediator#makeChoice InputMediator::makeChoice}.</p>
+	* @param possibilities An instance of Menu, representing a choice to be made by a player for the game to continue
+	* @see Menu
+	*/
+	public void displayPossibilities(Menu possibilities);
+
+	/**
+	 * <b>Given an instance of Menu representing one of the application's menus, resquests the DM to display its title and choices.</b>
+	 * @param m An instance of Menu, representing one of the application's menus
+	 */
+	public void displayMenu(Menu m);
+
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation where the user chooses to exit the application.</b>
+	 */
+	public void displayExitingGameScreen();
+
 }

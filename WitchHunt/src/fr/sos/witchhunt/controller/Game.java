@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fr.sos.witchhunt.DisplayMediator;
+import fr.sos.witchhunt.InputMediator;
+import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Menu;
 
 public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
@@ -12,15 +15,12 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	//ATTRIBUTES
 	private static volatile Game instance = null;
 	private Tabletop tabletop;
+	private DisplayMediator displayMediator;
+	private InputMediator inputMediator;
 	private boolean sleepingAllowed=false;
 	private boolean displayCPUStrategyChange=false;
 	public final static int minPlayersNumber = 3;
 	public final static int maxPlayersNumber = 6;
-	
-	private Game() {		
-		tabletop = Tabletop.getInstance();
-		gotoMainMenu();
-	}
 	
 	public final static Game getInstance() {
         if (Game.instance == null) {
@@ -36,10 +36,13 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	public void gotoMainMenu() {
 		
 		Menu mainMenu = new Menu("main menu","Start new game"/*,"Options"*/,"Exit");
-		Application.displayController.displayMenu(mainMenu);
-		switch (Application.inputController.makeChoice(mainMenu)) {
+		displayMediator.displayMenu(mainMenu);
+		switch (inputMediator.makeChoice(mainMenu)) {
 				case 1:
-					Tabletop.getInstance().startMatch();
+					tabletop = Tabletop.getInstance();
+					tabletop.setDisplayMediator(this.displayMediator);
+					tabletop.setInputMediator(this.inputMediator);
+					tabletop.startMatch();
 					break;
 				/*case 2:
 					options();
@@ -53,10 +56,8 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	
 
 	
-	public static void exit() {
-		Application.displayController.crlf();
-		Application.displayController.drawStarsLine();
-		Application.displayController.passLog("See you soon !");
+	public void exit() {
+		displayMediator.displayExitingGameScreen();
 		System.exit(0);
 	}
 
@@ -89,6 +90,16 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	}
 	public boolean cpuPlayersDisplayChangesOfStrategy() {
 		return this.displayCPUStrategyChange;
+	}
+	
+	//SETTERS
+	
+	public void setDisplayMediator(DisplayMediator dm) {
+		this.displayMediator = dm;
+	}
+
+	public void setInputMediator(InputMediator im) {
+		this.inputMediator = im;
 	}
 	
 }

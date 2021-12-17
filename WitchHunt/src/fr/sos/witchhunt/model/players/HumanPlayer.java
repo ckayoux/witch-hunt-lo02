@@ -45,8 +45,8 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	public void chooseIdentity() {
 		Menu possibilities;
 		possibilities = new Menu(name+" , make your choice (others, don't look !) :",
-									"Villager",
-									"Witch");
+									Identity.VILLAGER,
+									Identity.WITCH);
 		requestDisplayPossibilities(possibilities);
 		switch(makeChoice(possibilities)) {
 			case 1:
@@ -77,13 +77,13 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		/*this method is made for the human players to select an element from a list.
 		 * it will display the $prompt, then ask to select an option among the toString of each element of $from
 		 */
-		String [] options = new String [from.size()];
+		Object [] options = new Object [from.size()];
 		for(int i=0; i<from.size(); i++) {
-			options[i] = from.get(i).toString();
+			options[i] = from.get(i);
 		}
 		Menu m = new Menu(prompt,options);
 		requestDisplayPossibilities(m);
-		return from.get(makeChoice(m)-1);
+		return (T) m.getNthOption(makeChoice(m));
 	}
 	
 	/**
@@ -140,10 +140,10 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		Menu possibilities;
 		if(this.canHunt()) {
 			possibilities = new Menu("Choose one of these actions :",
-										"Accuse another player",
-										"Play the Hunt! effect of a Rumour card from your hand",
-										"Show your cards",
-										"Show players ranking");
+										TurnAction.ACCUSE,
+										TurnAction.HUNT,
+										"/c/Show your cards",
+										"/c/Show players ranking");
 			requestDisplayPossibilities(possibilities);
 			switch(makeChoice(possibilities)) {
 				case 1:
@@ -160,9 +160,9 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		}
 		else {
 			possibilities = new Menu("You have no more avaliable Hunt! effects.",
-										"Accuse another player",
-										"Show your cards",
-										"Show players ranking");
+										TurnAction.ACCUSE,
+										"/c/Show your cards",
+										"/c/Show players ranking");
 			requestDisplayPossibilities(possibilities);
 			switch(makeChoice(possibilities)) {
 				case 1:
@@ -212,7 +212,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	@Override
 	public DefenseAction chooseDefenseAction() {
 		Menu m = new Menu("Select your answer to this utterly slanderous and unfounded accusation",
-							"Play the Witch? effect of a Rumour card from your hand","Reveal your identity");
+				DefenseAction.WITCH,DefenseAction.REVEAL);
 		requestDisplayPossibilities(m);
 		switch(makeChoice(m)) {
 			case 1:
@@ -275,12 +275,8 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 * @return The chosen {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}
 	 */
 	private RumourCard chooseCard(RumourCardsPile from){
-		String [] options = new String [from.getCardsCount()];
-		for(int i=0; i<from.getCardsCount(); i++) {
-			options[i] = from.getCards().get(i).getName();
-		}
-		Menu m = new Menu("",options);
-		return from.getCards().get(makeChoice(m)-1);
+		Menu m = new Menu ("",from.getCards().toArray());
+		return (RumourCard) m.getNthOption(makeChoice(m));
 	}
 
 
@@ -366,19 +362,21 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		Menu ultimatum;
 		DefenseAction choice=DefenseAction.DISCARD;
 		if(this.hasRumourCards()&&!this.isRevealed()) {
-			ultimatum = new Menu(this.getName()+", choose an action :","Discard a card","Reveal your identity");
+			ultimatum = new Menu(this.getName()+", choose an action :",DefenseAction.DISCARD,DefenseAction.REVEAL);
 			requestDisplayPossibilities(ultimatum);
-			if(makeChoice(ultimatum)==2) choice=DefenseAction.REVEAL;
+			choice=(DefenseAction) ultimatum.getNthOption(makeChoice(ultimatum));
 		}
 		else if(!this.hasRumourCards()&&!this.isRevealed()) {
-			ultimatum = new Menu(this.getName()+", you have no cards to discard. You have only one choice :","Reveal your identity");
+			ultimatum = new Menu(this.getName()+", you have no cards to discard. You have only one choice :",DefenseAction.REVEAL);
 			requestDisplayPossibilities(ultimatum);
 			makeChoice(ultimatum);
+			choice=DefenseAction.REVEAL;
 		}
 		else if(this.hasRumourCards()) {
-			ultimatum = new Menu(this.getName()+", you are already revealed. You have only one choice :","Discard a card");
+			ultimatum = new Menu(this.getName()+", you are already revealed. You have only one choice :",DefenseAction.DISCARD);
 			requestDisplayPossibilities(ultimatum);
 			makeChoice(ultimatum);
+			choice=DefenseAction.DISCARD;
 		}
 		//cannot be chosen by ducking stool if is revealed and has no rumour cards
 		return choice;

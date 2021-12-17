@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import java.util.concurrent.CountDownLatch;
 
+import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.players.CPUPlayer;
@@ -17,79 +18,67 @@ public final class InputController implements InputMediator {
 
 	//ATTRIBUTES
 	private CountDownLatch latch = new CountDownLatch(1) ;
+	private StdView console;
 	private Thread stdInputThread;
 	private String receivedString;
+	private int timesWrong=0;
 	
 	public int makeChoice(Menu m) {
 		int choice;
 		boolean correct;
-		int n = m.getOptionsNumber();
-		int timesWrong=0;
+		int n = m.getOptionsCount();
 		choice = getIntInput();
 		if(!(1 <= choice && choice <= n)) {
 				correct = false;
 				timesWrong++;
 				String helperMsg = "Please enter an integer in the range 1.."+Integer.toString(n)+" :" ;
-				if(timesWrong==2) {
-					Application.displayController.passLog("\tAre you doing it on purpose ?");
-					if(n!=1)Application.displayController.passLog("helperMsg");
-				}
-				else if (timesWrong==3) {
-					Application.displayController.passLog("\tCome on ! I believe in you ! You can do it !");
-					if(n!=1)Application.displayController.passLog("helperMsg");
-				}
-				else {
-					if(n==1) {
-						Application.displayController.passLog("\tYou can only choose option #1 here !");
-					}
-					else Application.displayController.passLog("Invalid choice. "+helperMsg);
-				}
+				console.logWrongMenuChoiceMessage(timesWrong,helperMsg,n);
 				return makeChoice(m);
 		}else {
-			Application.displayController.crlf();
+			timesWrong=0;
+			console.crlf();;
 			return choice;
 		}
 		
 	}
 	
 	public Player createPlayer(int id,List<String> chosenNames) {
-		Application.displayController.passLog("\tPlayer "+Integer.toString(id)+" : ");
-		Application.displayController.displayYesNoQuestion("\tHuman-controlled ?");
+		console.log("\tPlayer "+Integer.toString(id)+" : ");
+		console.log("\tHuman-controlled ?");
 		boolean human = answerYesNoQuestion();
 		Player output;
 		if(human) {
 			HumanPlayer temp;
-			Application.displayController.passLog("\tName :");
+			console.log("\tName :");
 			String name = "";
 			boolean correct;
 			do {
 				name = getStringInput();
 				if(chosenNames.contains(name)) {
-					Application.displayController.passLog("\tThis name is already taken.");
+					console.log("\tThis name is already taken.");
 					correct=false;
 				}
 				else if (name.contains("CPU")) {
-					Application.displayController.passLog("\tThis name is reserved.");
+					console.log("\tThis name is reserved.");
 					correct=false;
 				}
 				else {
 					correct=true;
 				}
-				if(!correct) Application.displayController.passLog("\tPlease choose another one :");
+				if(!correct) console.log("\tPlease choose another one :");
 			}
 			while(!correct);
 			chosenNames.add(name);
-			Application.displayController.crlf();
+			console.crlf();
 			temp = new HumanPlayer(name,id);
-			temp.setInputMediator(Application.inputController);
+			temp.setInputMediator(this);
 			output=(Player) temp;
 		}
 		else {
 			Tabletop.getInstance().incrementCPUPlayersNumber();
-			Application.displayController.crlf();
+			console.crlf();
 			output = new CPUPlayer(id,Tabletop.getInstance().getCPUPlayersNumber());
 		}
-		output.setDisplayMediator(Application.displayController);
 		return output;
 	}
 	
@@ -105,7 +94,7 @@ public final class InputController implements InputMediator {
 	public String getStringInput() {
 		getInput();
 		if (receivedString.equals("")) {
-			Application.displayController.passLog("\tPlease make your choice.");
+			console.log("\tPlease make your choice.");
 			return getStringInput();
 		}
 		else return receivedString;
@@ -129,7 +118,7 @@ public final class InputController implements InputMediator {
 			return false;
 		}
 		else {
-			Application.displayController.passLog("\tInvalid answer. Please type in whether 'y' or 'n' :"); 
+			console.log("\tInvalid answer. Please type in whether 'y' or 'n' :"); 
 			return answerYesNoQuestion();
 		}
 	}
@@ -146,8 +135,9 @@ public final class InputController implements InputMediator {
 	}
 	
 	public void wannaContinue() {
-		Application.displayController.displayContinueMessage();
+		console.logContinueMessage();
 		getInput();
+		console.crlf();
 	}
 	
 	public void interruptStdInput() {
@@ -173,4 +163,7 @@ public final class InputController implements InputMediator {
 		this.latch.countDown();
 	}
 
+	public void setConsole(StdView console) {
+		this.console=console;
+	}
 }

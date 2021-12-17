@@ -8,25 +8,31 @@ public class Menu {
 	
 	//ATTRIBUTES
 	private String name;
-	private String [] options;
-	private int optionsNumber;
+	private Object [] options;
+	private int optionsCount;
 	
-	//SETTERS
-	public Menu(String name, String ... options) {
+	public Menu(String name, Object ... options) {
 		this.name = name;
 		this.options=options;
-		this.optionsNumber=options.length;
+		this.optionsCount=options.length;
 	}
+
 	
 	//GETTERS
 	public String getName() {
 		return name;
 	}
-	public String[] getOptions() {
+	public Object[] getOptions() {
 		return options;
 	}
-	public int getOptionsNumber() {
-		return optionsNumber;
+	public int getOptionsCount() {
+		return optionsCount;
+	}
+	public Object getNthOption(int n) {
+		if (n>=1 && n<= optionsCount) {
+			return options[n-1];
+		}
+		else return null;
 	}
 
 }

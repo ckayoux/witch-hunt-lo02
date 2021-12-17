@@ -19,18 +19,23 @@ public final class DisplayController implements DisplayMediator {
 	
 	private StdView console;
 	
-	
 	public void displayMenu(Menu m) {
 		console.makeMenu(m);
 		//T0D0 : makeMenu for GUI view
 	}
 	
+	@Override
+	public void displayAddedPlayersScreen(int n) {
+		console.logAddedPlayersScreen(n);
+	}
+	
+	@Override
 	public void displayPossibilities(Menu possibilities) {
 		console.logPossibilities(possibilities);
 		//T0D0 : makeMenu for GUI view
 	}
 	
-	public void displayYesNoQuestion(String q) {
+	public void logYesNoQuestion(String q) {
 		console.yesNoQuestion(q);
 		//T0D0 : makeMenu for GUI view
 	}
@@ -58,6 +63,10 @@ public final class DisplayController implements DisplayMediator {
 	
 	public void crlf() {
 		console.crlf();
+	}
+	
+	public void displayAddPlayersScreen(int minPlayersNumber,int maxPlayersNumber) {
+		console.logAddPlayersScreen(minPlayersNumber, maxPlayersNumber);
 	}
 	
 	public void displayContinueMessage() {
@@ -470,6 +479,16 @@ public final class DisplayController implements DisplayMediator {
 	@Override
 	public void displayHasChosenIdentityScreen(Player p) {
 		console.logHasChosenIdentityMessage(p.getName());
+	}
+
+	
+	public StdView getConsole() {
+		return this.console;
+	}
+
+	@Override
+	public void displayExitingGameScreen() {
+		console.logExitingGameScreen();
 	}
 
 

@@ -2,6 +2,8 @@ package fr.sos.witchhunt.controller;
 
 import java.util.List;
 
+import fr.sos.witchhunt.DisplayMediator;
+import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;
@@ -15,7 +17,10 @@ import fr.sos.witchhunt.model.players.Player;
  */
 public final class Round {
 	
-	//ATTRIBUTES
+	//FIELDS
+	private DisplayMediator displayMediator;
+	private InputMediator inputMediator;
+	
 	/**
 	 * The {@link fr.sos.witchhunt.model.players.Player player} playing their turn.
 	 */
@@ -82,8 +87,6 @@ public final class Round {
 		}while(!isOver()); //We keep starting new turns until the round is over.
 		
 		commonPile.reset(); //returning all rumourCards to the main pile, of Tabletop's instance
-		
-		Application.displayController.displayRoundEndScreen(roundNumber);
 	}
 	
 	//UTILS METHODS
@@ -163,8 +166,8 @@ public final class Round {
 	}
 	
 	//GETTERS
-	public int getRoundNumber() {
-		return this.roundNumber;
+	public static int getRoundNumber() {
+		return roundNumber;
 	}
 	public static Player getCurrentPlayer() {
 		return currentPlayer;

@@ -26,8 +26,12 @@ public class Application {
 		displayController.setConsole(console);
 		
 		inputController = new InputController();
+		inputController.setConsole(console);
 		
-		Game.getInstance();
+		Game game = Game.getInstance();
+		game.setDisplayMediator(displayController);
+		game.setInputMediator(inputController);
+		game.gotoMainMenu();
 	}
 	
 	public final static Application getInstance(){
