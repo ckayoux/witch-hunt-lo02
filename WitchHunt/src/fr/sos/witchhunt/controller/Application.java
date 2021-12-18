@@ -9,7 +9,7 @@ public class Application {
 	private static volatile Application instance = null;
 		
 	public static StdView console;
-	//public static GUIView gui;
+	public static GUIView gui;
 	public static DisplayController displayController;
 	public static InputController inputController;
 		
@@ -18,14 +18,15 @@ public class Application {
 	}
 	
 	private Application() {
-		console = new StdView();
 		
-		//gui = new GUIView();
 		
 		displayController = new DisplayController();
-		displayController.setConsole(console);
-		
 		inputController = new InputController();
+		
+		console = new StdView();
+		gui = new GUIView(inputController);
+		
+		displayController.setConsole(console);
 		inputController.setConsole(console);
 		
 		Game game = Game.getInstance();

@@ -44,7 +44,7 @@ public final class InputController implements InputMediator {
 	
 	public Player createPlayer(int id,List<String> chosenNames) {
 		console.log("\tPlayer "+Integer.toString(id)+" : ");
-		console.log("\tHuman-controlled ?");
+		console.yesNoQuestion("\tHuman-controlled ?");
 		boolean human = answerYesNoQuestion();
 		Player output;
 		if(human) {
@@ -94,7 +94,7 @@ public final class InputController implements InputMediator {
 	public String getStringInput() {
 		getInput();
 		if (receivedString.equals("")) {
-			console.log("\tPlease make your choice.");
+			console.logInputWasExpectedMessage();
 			return getStringInput();
 		}
 		else return receivedString;
@@ -118,17 +118,23 @@ public final class InputController implements InputMediator {
 			return false;
 		}
 		else {
-			console.log("\tInvalid answer. Please type in whether 'y' or 'n' :"); 
+			console.logInvalidYesNoQuestionAnswerMessage(); 
 			return answerYesNoQuestion();
 		}
 	}
 	
-
+	@Override
 	public void receive(String str) {
+		this.wake();
 		latch = new CountDownLatch(1);
 		this.receivedString=str;
 		interruptStdInput();
 	}
+	@Override
+	public void receive(int i) {
+		this.receive(Integer.toString(i));
+	}
+	@Override
 	public void receive() {
 		latch = new CountDownLatch(1);
 		interruptStdInput();

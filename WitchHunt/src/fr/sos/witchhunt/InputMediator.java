@@ -4,6 +4,7 @@ import java.util.List;
 
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.players.Player;
+import fr.sos.witchhunt.view.InputSource;
 
 /**
  * <p><b>Interface implemented by the central input controller</b></p>
@@ -43,5 +44,21 @@ public interface InputMediator {
 	 * @return A positive <i>int</i> corresponding to the position of the selected option in the given Menu's array of choices.
 	 */
 	public int makeChoice(Menu possibilities);
+	
+	/**
+	 * <p><b>Sends an empty signal to the input mediator.</b></p>
+	 * @see fr.sos.witchhunt.view.InputSource InputSource
+	 */
+	void receive();
+	/**
+	 * <p><b>Sends an integer to the input mediator.</b></p>
+	 * @see fr.sos.witchhunt.view.InputSource InputSource
+	 */
+	void receive(int i);
+	/**
+	 * <p><b>Sends a string to the input mediator.</b></p>
+	 * @see fr.sos.witchhunt.view.InputSource InputSource
+	 */
+	void receive(String str);
 	
 }

@@ -519,17 +519,17 @@ public final class StdView {
 	public void logWrongMenuChoiceMessage(int timesWrong, String helperMsg, int optionsCount) {
 		if(timesWrong==2) {
 			log("\tAre you doing it on purpose ?");
-			log(helperMsg);
+			log("\t"+helperMsg);
 		}
 		else if (timesWrong==3) {
 			log("\tCome on ! I believe in you ! You can do it !");
-			if(optionsCount!=1)log(helperMsg);
+			if(optionsCount!=1)log("\t"+helperMsg);
 		}
 		else {
 			if(optionsCount==1) {
 				log("\tYou can only choose option #1 here !");
 			}
-			else log("Invalid choice. "+helperMsg);
+			else log("\tInvalid choice. "+helperMsg);
 		}
 	}
 
@@ -544,6 +544,14 @@ public final class StdView {
 		crlf();
 		logStarsLine();
 		log("See you soon !");
+	}
+
+	public void logInputWasExpectedMessage() {
+		log("\tPlease make your choice.");
+	}
+
+	public void logInvalidYesNoQuestionAnswerMessage() {
+		log("\tInvalid answer. Please type in whether 'y' or 'n' :");
 	}
 
 
