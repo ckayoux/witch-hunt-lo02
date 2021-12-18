@@ -35,9 +35,11 @@ public interface PlayerDisplayObservable {
 	public void requestLastUnrevealedPlayerScreen();
 	
 	public void requestNoCardsScreen();
-	public void requestSelectCardScreen();
-	public void requestSelectUnrevealedCardScreen();
-	public void requestSelectRevealedCardScreen();
+	public void requestSelectCardScreen(RumourCardsPile from, boolean forcedReveal);
+	public void requestSelectUnrevealedCardScreen(RumourCardsPile from, boolean forcedReveal);
+	public void requestSelectRevealedCardScreen(RumourCardsPile from, boolean forcedReveal);
+	public void requestSelectWitchCardScreen(RumourCardsPile from);
+	public void requestSelectHuntCardScreen(RumourCardsPile from);
 	public void requestPlayerPlaysWitchEffectScreen(RumourCard rc);
 	public void requestPlayerPlaysHuntEffectScreen(RumourCard rc);
 	public void requestEmptyRCPScreen(RumourCardsPile rcp);

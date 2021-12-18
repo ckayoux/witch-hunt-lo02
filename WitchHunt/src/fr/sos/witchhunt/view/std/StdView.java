@@ -382,17 +382,9 @@ public final class StdView {
 	public void logShowPlayersCardsMessage(String playerName) {
 		log("\t"+playerName + ", here are all the cards in your possession (others, don't look !) :");
 	}
-
-	public void logSelectCardMessage() {
-		log("\tSelect a card among these ones :");
-	}
-
-	public void logSelectUnrevealedCardMessage() {
-		log("\tSelect an unrevealed card among these ones :");
-	}
-
-	public void logSelectRevealedCardMessage() {
-		log("\tSelect a revealed card among these ones :");
+	
+	public void logSelectCardsMessage(String cardAdjective) {
+		log("\tSelect any "+((cardAdjective!=null)?cardAdjective+" ":"")+"card among these ones :");
 	}
 
 	public void logPlayerPlaysEffectMessage(String playerName,String cardName, String effectDescription) {

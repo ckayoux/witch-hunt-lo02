@@ -289,8 +289,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	@Override
 	public RumourCard chooseAnyCard(RumourCardsPile from,boolean forcedReveal){
 		if(targetPileContainsCards(from)) {
-			requestSelectCardScreen();
-			displayMediator.displayCards(from,forcedReveal);
+			requestSelectCardScreen(from,forcedReveal);
 			return chooseCard(from);
 		}
 		else return null;
@@ -301,8 +300,8 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	public RumourCard chooseUnrevealedCard(RumourCardsPile from,boolean forcedReveal){
 		if(targetPileContainsCards(from.getUnrevealedSubpile())){
 			//the player must necessarily choose an unrevealed card
-			requestSelectUnrevealedCardScreen();
-			displayMediator.displayCards(from.getUnrevealedSubpile(),forcedReveal);
+			requestSelectUnrevealedCardScreen(from,forcedReveal);
+			//displayMediator.displayCards(from.getUnrevealedSubpile(),forcedReveal);
 			return chooseCard(from.getUnrevealedSubpile());
 		}
 		else return null;
@@ -315,8 +314,8 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	public RumourCard chooseRevealedCard(RumourCardsPile from){
 		if(targetPileContainsCards(from.getRevealedSubpile())){
 			//the player must necessarily choose a revealed card
-			requestSelectRevealedCardScreen();
-			displayMediator.displayCards(from.getRevealedSubpile(),false);
+			requestSelectRevealedCardScreen(from,true);
+			//displayMediator.displayCards(from.getRevealedSubpile(),false);
 			return chooseCard(from.getRevealedSubpile());
 		}
 		else return null;
@@ -328,8 +327,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 */
 	@Override
 	public RumourCard selectWitchCard() {
-		requestSelectCardScreen();
-		displayMediator.displayWitchEffects(this.hand.getPlayableWitchSubpile());
+		requestSelectWitchCardScreen(this.hand.getPlayableWitchSubpile());
 		return chooseCard(this.hand.getPlayableWitchSubpile());
 	}
 	/**
@@ -338,8 +336,8 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 */
 	@Override
 	public RumourCard selectHuntCard() {
-		requestSelectCardScreen();
-		displayMediator.displayHuntEffects(this.hand.getPlayableHuntSubpile());
+		//requestSelectCardScreen();
+		requestSelectHuntCardScreen(this.hand.getPlayableHuntSubpile());
 		return chooseCard(this.hand.getPlayableHuntSubpile());
 	}
 	

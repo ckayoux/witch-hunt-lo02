@@ -232,18 +232,7 @@ public void displayPlayTurnScreen(Player p);
  * @see fr.sos.witchhunt.model.players.HumanPlayer#showHand() HumanPlayer::showHand()
  */
 	public void showCards(Player p);
-/**
- * <b>Requests the DM to display the screen corresponding to the situation when a player has to select a card.</b>
- */
-	public void displaySelectCardScreen();
-/**
- * 	<b>Requests the DM to display the screen corresponding to the situation when a player has to select a card among unrevealed cards only.</b>
- */
-	public void displaySelectUnrevealedCardScreen();
-/**
-* 	<b>Requests the DM to display the screen corresponding to the situation when a player has to select a card among revealed cards only.</b>
-*/	
-	public void displaySelectRevealedCardScreen();
+
 /**
  * <b>Requests the DM to display the screen corresponding to the use of the Witch effect of a Rumour Card by a player.</b>
  * @param player the player triggering a Witch effect.
@@ -367,12 +356,37 @@ public void displayPlayTurnScreen(Player p);
 	 */
 	public void displayNoAvailableHuntEffectsScreen();
 
+	//ADD DOCUMENTATION!!
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to select a card.</b>
+	 * @param from The pile of Rumour cards within which any card must be selected.
+	 * @param forcedReveal If <i>true</i>, even unrevealed cards' properties will be shown.
+	 */
+	public void displaySelectCardScreen(RumourCardsPile from, boolean forcedReveal);
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to select an unrevealed card.</b>
+	 * @param from A pile of Rumour cards containing only unrevealed cards.
+	 * @param forcedReveal If <i>true</i>, even unrevealed cards' properties will be shown.
+	 */
+	public void displaySelectUnrevealedCardScreen(RumourCardsPile from, boolean forcedReveal);
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to select a revealed card.</b>
+	 * @param from from A pile of Rumour cards containing only revealed cards.
+	 * @param forcedReveal If <i>true</i>, even unrevealed cards' properties will be shown.
+	 */
+	public void displaySelectRevealedCardScreen(RumourCardsPile from, boolean forcedReveal);
 
-
-
-
-
-
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to select a card with a valid Witch effect.</b>
+	 * @param from A pile of Rumour cards containing only cards with a playable Witch? effect.
+	 */
+	public void displaySelectWitchCardScreen(RumourCardsPile from);
+	
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to select a card with a valid Hunt effect.</b>
+	 * @param from A pile of Rumour cards containing only cards with a playable Hunt! effect.
+	 */
+	public void displaySelectHuntCardScreen(RumourCardsPile from);
 
 
 }

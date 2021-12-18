@@ -902,28 +902,51 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	}
 	
 	/**
-	 * @see DisplayMediator#displaySelectCardScreen()
+	 * @param forcedReveal If <i>true</i>, unrevealed cards' properties will be shown as well 
+	 * @param from  The pile of Rumour cards within which a card has to be chosen
+	 * @see DisplayMediator#displaySelectCardScreen(RumourCardsPile,boolean)
 	 */
 	@Override
-	public void requestSelectCardScreen() {
-		displayMediator.displaySelectCardScreen();
-	}
-
-	/**
-	 * @see DisplayMediator#displaySelectUnrevealedCardScreen()
-	 */
-	@Override
-	public void requestSelectUnrevealedCardScreen() {
-		displayMediator.displaySelectUnrevealedCardScreen();
+	public void requestSelectCardScreen(RumourCardsPile from, boolean forcedReveal) {
+		displayMediator.displaySelectCardScreen(from, forcedReveal);
 	}
 	
 	/**
-	 * @see DisplayMediator#displaySelectRevealedCardScreen()
+	 * @param forcedReveal If <i>true</i>, unrevealed cards' properties will be shown as well 
+	 * @param from  A pile of unrevealed Rumour cards
+	 * @see DisplayMediator#displaySelectUnrevealedCardScreen(RumourCardsPile,boolean)
 	 */
 	@Override
-	public void requestSelectRevealedCardScreen() {
-		displayMediator.displaySelectRevealedCardScreen();
+	public void requestSelectUnrevealedCardScreen(RumourCardsPile from, boolean forcedReveal) {
+		displayMediator.displaySelectUnrevealedCardScreen(from, forcedReveal);
 	}
+	
+	/**
+	 * @param forcedReveal If <i>true</i>, unrevealed cards' properties will be shown as well 
+	 * @param from  A pile of revealed Rumour cards
+	 * @see DisplayMediator#displaySelectRevealedCardScreen(RumourCardsPile,boolean)
+	 */
+	@Override
+	public void requestSelectRevealedCardScreen(RumourCardsPile from, boolean forcedReveal) {
+		displayMediator.displaySelectRevealedCardScreen( from, forcedReveal);
+	}
+	/**
+	 * @param from  A pile of Rumour cards with playable Witch? effects
+	 * @see DisplayMediator#displaySelectWitchCardScreen(RumourCardsPile)
+	 */
+	@Override
+	public void requestSelectWitchCardScreen(RumourCardsPile from) {
+		displayMediator.displaySelectWitchCardScreen(from);
+	}
+	/**
+	 * @param from  A pile of Rumour cards with playable Hunt! effects
+	 * @see DisplayMediator#displaySelectHuntCardScreen(RumourCardsPile)
+	 */
+	@Override
+	public void requestSelectHuntCardScreen(RumourCardsPile from) {
+		displayMediator.displaySelectHuntCardScreen(from);
+	}
+	
 	
 	/**
 	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#show(DisplayMediator, boolean)

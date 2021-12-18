@@ -22,7 +22,7 @@ public class ActionButton extends JButton {
 		String buttonText=null;
 		if (o instanceof String) {
 			String str = (String) o;
-			if(str.matches("^/c/")) {
+			if(str.matches("^/c/.*")) {
 				buttonText=null;//console only
 			}
 			else {

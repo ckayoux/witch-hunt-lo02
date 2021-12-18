@@ -360,20 +360,51 @@ public final class DisplayController implements DisplayMediator {
 	
 
 	@Override
-	public void displaySelectCardScreen() {
-		console.logSelectCardMessage();
+	public void displaySelectCardScreen(RumourCardsPile from, boolean forcedReveal) {
+		console.logSelectCardsMessage(null);
+		this.displayCards(from, forcedReveal);
+		
+		Menu guiVersion = new Menu("Select any card",from.getCards().toArray());
+		gui.displayMenu(guiVersion);
 	}
 
 	@Override
-	public void displaySelectUnrevealedCardScreen() {
-		console.logSelectUnrevealedCardMessage();
+	public void displaySelectUnrevealedCardScreen(RumourCardsPile from, boolean forcedReveal) {
+		console.logSelectCardsMessage("unrevealed");
+		this.displayCards(from, forcedReveal);
+		
+		Menu guiVersion = new Menu("Select an unrevealed card",from.getCards().toArray());
+		gui.displayMenu(guiVersion);
+	}
+	
+	@Override
+	public void displaySelectRevealedCardScreen(RumourCardsPile from, boolean forcedReveal) {
+		console.logSelectCardsMessage("revealed");
+		this.displayCards(from, forcedReveal);
+		
+		Menu guiVersion = new Menu("Select a revealed card",from.getCards().toArray());
+		gui.displayMenu(guiVersion);
 		
 	}
 	
 	@Override
-	public void displaySelectRevealedCardScreen() {
-		console.logSelectRevealedCardMessage();
+	public void displaySelectWitchCardScreen(RumourCardsPile from) {
+		console.logSelectCardsMessage(null);
+		this.displayWitchEffects(from);
 		
+		Menu guiVersion = new Menu("Select a card with a valid Witch? effect",from.getCards().toArray());
+		gui.displayMenu(guiVersion);
+	}
+	
+
+	
+	@Override
+	public void displaySelectHuntCardScreen(RumourCardsPile from) {
+		console.logSelectCardsMessage(null);
+		this.displayHuntEffects(from);
+		
+		Menu guiVersion = new Menu("Select a card witha valid Hunt! effect",from.getCards().toArray());
+		gui.displayMenu(guiVersion);
 	}
 
 
@@ -505,6 +536,7 @@ public final class DisplayController implements DisplayMediator {
 	public void displayNoAvailableHuntEffectsScreen() {
 		console.logNoAvailableHuntEffectsMessage();
 	}
+
 
 	
 }
