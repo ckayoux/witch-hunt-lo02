@@ -52,6 +52,44 @@ public interface DisplayMediator {
 	public void displayGameIsTiedScreen(List<Player> potentialWinners);
 	
 	/**
+	 * <b>Requests the DM to display the screen corresponding to the match's start.</b>
+	 */
+	public void displayMatchStartScreen();
+	
+	/**
+	 * <b>Requests the DM to display the screen corresponding to a Round's start.</b>
+	 * @see fr.sos.witchhunt.controller.Round Round
+	 * @param roundNumber
+	 */
+	public void displayRoundStartScreen(int roundNumber);
+	
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the "choose an identity" screen.</b>
+	 */
+	public void displayChooseIdentityScreen();
+	
+	/**
+	 * <b>Requests the DM to display the suited screen when a player has chosen their identity.</b>
+	 * @see fr.sos.witchhunt.model.players.CPUPlayer#chooseIdentity()
+	 * @param p The player who has chosen their identity
+	 */
+	public void displayHasChosenIdentityScreen(Player p);
+
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation where all players have chosen their identity.</b>
+	 */
+	public void displayAllPlayersHaveChosenTheirIdentityScreen();
+	
+
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation where all cards have been distributed at the start of a Round.</b>
+	 * @param distributedCardsCount The number of Rumour cards given to each player
+	 * @param discardedCardsCount The number of cards directly put into the pile
+	 */
+	public void distributeHandScreen(int distributedCardsCount, int discardedCardsCount);
+
+	
+	/**
 	 * <b>Requests the DM to display the screen corresponding to the end of a round.</b>
 	 * @param roundNumber The number of the round that just ended.
 	 */
@@ -93,12 +131,7 @@ public void displayPlayTurnScreen(Player p);
 	 * @see fr.sos.witchhunt.model.players.Player#playTurn() Player::playTurn
 	 */
 	public void displayEndOfTurnScreen();
-	/**
-	 * <b>Requests the DM to display the suited screen when a player has chosen their identity.</b>
-	 * @see fr.sos.witchhunt.model.players.CPUPlayer#chooseIdentity()
-	 * @param p The player who has chosen their identity
-	 */
-	public void displayHasChosenIdentityScreen(Player p);
+
 /**
  * 	<p><b>Requests the DM to display the screen corresponding to the accusation of a player by another.</b></p>
  * @param accusator the player who accused.
@@ -117,6 +150,13 @@ public void displayPlayTurnScreen(Player p);
  * @see fr.sos.witchhunt.model.players.Player#forcedReveal() Player::forcedReveal()
  */
 	public void displayForcedToRevealScreen();
+	
+	/**
+	 * <b>Requests the DM to display a notification informing a player is going to reveal their identity.</b>
+	 * @param p The player going to reveal their identity.
+	 */
+	public void displayGoingToRevealIdentityScreen(Player p);
+
 /**
  * <b>Requests the DM to display the screen corresponding to the case where someone reveals their identity.</b>
  * @param p the player revealing their identity.
@@ -137,6 +177,11 @@ public void displayPlayTurnScreen(Player p);
  * @see fr.sos.witchhunt.model.players.Player#eliminate(Player) Player::eliminate(int)
  */
 	public void displayEliminationScreen(Player eliminator,Player victim);	
+	
+	/**
+	 * <b>Requests the DM to display an alert informing that there are only two unrevealed players left.</b>
+	 */
+	public void displayOnlyTwoUnrevealedRemainingScreen();
 /**
 * <b>Requests the DM to display the screen corresponding to the situation when there is only one unrevealed player left.</b>
 * @param p the last unrevelead player
@@ -276,7 +321,6 @@ public void displayPlayTurnScreen(Player p);
 	public void passLog(String msg);
 
 	
-	public void freezeDisplay(int duration);
 /**
  * <b>Requests the DM to notify the view of a change of strategy by a CPU player</b>
  * @deprecated Initially meant to be used for debugging and improving the AIs' behaviour 
@@ -317,5 +361,18 @@ public void displayPlayTurnScreen(Player p);
 	 * <b>Requests the DM to display the screen corresponding to the situation where the user chooses to exit the application.</b>
 	 */
 	public void displayExitingGameScreen();
+
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation where a player has no available hunt effects</b>
+	 */
+	public void displayNoAvailableHuntEffectsScreen();
+
+
+
+
+
+
+
+
 
 }

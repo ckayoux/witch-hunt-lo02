@@ -42,7 +42,8 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 					tabletop = Tabletop.getInstance();
 					tabletop.setDisplayMediator(this.displayMediator);
 					tabletop.setInputMediator(this.inputMediator);
-					tabletop.startMatch();
+					Thread matchThread = new Thread(tabletop);
+					matchThread.start();
 					break;
 				/*case 2:
 					options();

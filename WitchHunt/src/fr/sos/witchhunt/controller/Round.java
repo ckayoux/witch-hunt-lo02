@@ -19,7 +19,6 @@ public final class Round {
 	
 	//FIELDS
 	private DisplayMediator displayMediator;
-	private InputMediator inputMediator;
 	
 	/**
 	 * The {@link fr.sos.witchhunt.model.players.Player player} playing their turn.
@@ -50,6 +49,8 @@ public final class Round {
 	 * <p>At the end of the round, the score board is displayed and every Rumour Card of the pile is returned to Tabletop's list of existing cards. Afterwise, the object's life ends and it is ready to get collected by the GC.</p>
 	 */
 	public Round() {
+		displayMediator=Tabletop.getInstance().getDisplayMediator();
+		
 		Tabletop.getInstance().setCurrentRound(this);
 		//For the first round, a random player begins.
 		if(roundNumber == 0) currentPlayer=Tabletop.getInstance().getActivePlayersList().get((int)(Math.random()*Tabletop.getInstance().getActivePlayersList().size()));
@@ -67,7 +68,7 @@ public final class Round {
 		Tabletop.getInstance().getScoreCounter().addRound(); //adding an entry to the scoreboard
 		Turn.setTurnNumber(0);
 		
-		Application.displayController.displayRoundStartScreen(roundNumber);
+		displayMediator.displayRoundStartScreen(roundNumber);
 		//at the start of a round, before the first turn, each player has to choose an Identity and Rumour cards.
 		distributeIdentity();
 		commonPile = new RumourCardsPile();
@@ -78,7 +79,7 @@ public final class Round {
 			new Turn(currentPlayer); //creating a new turn.
 			if(nextPlayer==null) {
 				setNextPlayerClockwise(); 
-				System.out.println("!--Error, next player was null.--!");
+				System.err.println("!--Error, next player was null.--!");
 			}
 			else {
 				if(!nextPlayer.isActive());
@@ -87,6 +88,9 @@ public final class Round {
 		}while(!isOver()); //We keep starting new turns until the round is over.
 		
 		commonPile.reset(); //returning all rumourCards to the main pile, of Tabletop's instance
+		
+		displayMediator.displayRoundEndScreen(roundNumber);
+		Tabletop.getInstance().freeze(500);
 	}
 	
 	//UTILS METHODS
@@ -97,12 +101,11 @@ public final class Round {
 	 * @see fr.sos.witchhunt.model.players.Player#chooseIdentity() Player::chooseIdentity()
 	 */
 	private void distributeIdentity() {
-		Application.displayController.chooseIdentityScreen();
+		displayMediator.displayChooseIdentityScreen();
 		for(Player p : Tabletop.getInstance().getActivePlayersList()) {
 			p.chooseIdentity();
 		}
-		Application.displayController.crlf();
-		Application.displayController.drawWeakDashedLine();
+		displayMediator.displayAllPlayersHaveChosenTheirIdentityScreen();
 	}
 	/**
 	 * <p><b>Distribute their hand to each of the round's players.</b></p>
@@ -128,7 +131,7 @@ public final class Round {
 			}
 		}
 		
-		Application.displayController.distributeHandScreen();
+		displayMediator.distributeHandScreen(distributedCardsNumber,discardedCardsNumber);
 		
 	}
 	
@@ -154,11 +157,9 @@ public final class Round {
 		case 1:
 			Player lastManStanding = unrevealedPlayersList.get(0);
 			lastManStanding.winRound();
-			Application.displayController.crlf();
-			Application.displayController.drawWeakDashedLine();
 			return true;
 		case 2:
-			Application.displayController.displayOnlyTwoUnrevealedRemainingScreen();
+			displayMediator.displayOnlyTwoUnrevealedRemainingScreen();
 		default:
 			return false;
 		}

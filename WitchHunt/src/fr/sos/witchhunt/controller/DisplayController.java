@@ -13,15 +13,18 @@ import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
+import fr.sos.witchhunt.view.gui.GUIView;
 import fr.sos.witchhunt.view.std.StdView;
 
 public final class DisplayController implements DisplayMediator {
 	
 	private StdView console;
+	private GUIView gui;
 	
 	public void displayMenu(Menu m) {
 		console.makeMenu(m);
-		//T0D0 : makeMenu for GUI view
+		gui.gotoMainMenuPanel();
+		gui.displayMenu(m);
 	}
 	
 	@Override
@@ -32,6 +35,7 @@ public final class DisplayController implements DisplayMediator {
 	@Override
 	public void displayPossibilities(Menu possibilities) {
 		console.logPossibilities(possibilities);
+		gui.displayMenu(possibilities);
 		//T0D0 : makeMenu for GUI view
 	}
 	
@@ -67,6 +71,7 @@ public final class DisplayController implements DisplayMediator {
 	
 	public void displayAddPlayersScreen(int minPlayersNumber,int maxPlayersNumber) {
 		console.logAddPlayersScreen(minPlayersNumber, maxPlayersNumber);
+		gui.gotoMatchSetupPanel();
 	}
 	
 	public void displayContinueMessage() {
@@ -75,7 +80,7 @@ public final class DisplayController implements DisplayMediator {
 	
 	public void displayMatchStartScreen() {
 		console.logMatchStartMessage();
-		//TODO : equivalent for gui view
+		gui.gotoGamePanel();
 	}
 
 	public void displayMatchEndScreen() {
@@ -83,9 +88,10 @@ public final class DisplayController implements DisplayMediator {
 		//TODO : equivalent for gui view
 	}
 	
+	@Override
 	public void displayRoundStartScreen(int roundNumber) {
 		console.logRoundStartMessage(roundNumber);
-		//TODO : equivalent for gui view
+		gui.displayRoundStartScreen(roundNumber);
 	}
 
 	public void displayRoundEndScreen(int roundNumber) {
@@ -98,9 +104,7 @@ public final class DisplayController implements DisplayMediator {
 		console.logWinnerMessage(winner.getName(), winner.getScore());
 	}
 	
-	public void setConsole(StdView console) {
-		this.console=console;
-	}
+
 	
 	public void displayRanking(List <Player> ranking) {
 		console.increaseTabulation();
@@ -158,18 +162,15 @@ public final class DisplayController implements DisplayMediator {
 		console.decreaseTabulation();
 	}
 
-	public void chooseIdentityScreen() {
+	@Override
+	public void displayChooseIdentityScreen() {
 		console.logChooseIdentityMessage();
 		//TODO : equivalent for gui
 	}
 
-	public void distributeHandScreen() {
-		int totalRumourCardsCount = Tabletop.getInstance().getTotalRumourCardsCount();
-		int playersCount = Tabletop.getInstance().getActivePlayersList().size();
-		int distributedCardsCount = (int)Math.floor( totalRumourCardsCount / (float)playersCount );
-		int discardedCardsCount = totalRumourCardsCount % playersCount;
+	@Override
+	public void distributeHandScreen(int distributedCardsCount,int discardedCardsCount) {
 		console.logHandDistributionMessage(distributedCardsCount,discardedCardsCount);
-		console.crlf();
 		//TODO : equivalent for gui
 	}
 
@@ -205,9 +206,14 @@ public final class DisplayController implements DisplayMediator {
 	}
 
 	@Override
+	public void displayGoingToRevealIdentityScreen(Player p) {
+		console.logGoingToRevealMessage(p.getName());
+	}
+	
+	@Override
 	public void displayIdentityRevealScreen(Player p) {
 		if(!p.isRevealed()){
-			console.logGoingToRevealMessage(p.getName());
+			
 			switch(p.getIdentity()) {
 				case VILLAGER:
 					console.logVillagerRevealMessage(p.getName());
@@ -220,7 +226,7 @@ public final class DisplayController implements DisplayMediator {
 					break;
 			}
 		}
-		else console.logWasAlreadyRevealedAs(p.getName(),p.getIdentity().toString());
+		//else console.logWasAlreadyRevealedAs(p.getName(),p.getIdentity().toString());
 		// Tout doux : equivalent for gui
 	}
 
@@ -245,6 +251,8 @@ public final class DisplayController implements DisplayMediator {
 				console.logVillagerRevealMessage(lastUnrevealedPlayer.getName());
 				break;
 		}
+		console.crlf();
+		console.logWeakDashedLine();
 		// Tout doux : equivalent for gui
 	}
 	
@@ -437,18 +445,6 @@ public final class DisplayController implements DisplayMediator {
 	public void displayPlayTurnAgainScreen(Player p) {
 		console.logPlayTurnAgainMessage(p.getName());
 	}
-	public void freezeDisplay(int duration) {
-		if(Game.getInstance().sleepingIsAllowed()) {
-			/*try{
-				Application.inputController.wait(duration);
-				this.wait(duration);
-				Application.inputController.notify();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}*/
-		}
-		
-	}
 	
 	@Override
 	public void displayForcedToAccuseScreen(Player theOneWhoMustAccuse, Player theOneWhoForcedThem) {
@@ -480,17 +476,35 @@ public final class DisplayController implements DisplayMediator {
 	public void displayHasChosenIdentityScreen(Player p) {
 		console.logHasChosenIdentityMessage(p.getName());
 	}
+	
+	@Override
+	public void displayAllPlayersHaveChosenTheirIdentityScreen() {
+		console.logAllPlayersHaveChosenTheirIdentityMessage();
+	}
 
 	
-	public StdView getConsole() {
-		return this.console;
-	}
 
 	@Override
 	public void displayExitingGameScreen() {
 		console.logExitingGameScreen();
 	}
 
+	public void setConsole(StdView console) {
+		this.console=console;
+	}
+	
+	public void setGUI(GUIView gui) {
+		this.gui=gui;
+	}
+
+	public StdView getConsole() {
+		return this.console;
+	}
+
+	@Override
+	public void displayNoAvailableHuntEffectsScreen() {
+		console.logNoAvailableHuntEffectsMessage();
+	}
 
 	
 }

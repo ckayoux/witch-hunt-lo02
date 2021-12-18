@@ -50,7 +50,6 @@ public interface PlayerDisplayObservable {
 	public void requestStealCardFromScreen(Player stolenPlayer);
 	public void requestTakeNextTurnScreen();
 	public void requestPlayTurnAgainScreen();
-	public void sleep(int ms);
 	public void requestLog(String msg);
 	public void requestDisplayPossibilities(Menu m);
 

@@ -6,13 +6,16 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
 
+import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.controller.Application;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.view.InputSource;
 
 public class InterruptibleStdInput implements Callable<String>, Runnable, InputSource {
-	public InterruptibleStdInput() {
-		
+	private InputMediator inputMediator;
+	
+	public InterruptibleStdInput(InputMediator im) {
+		this.inputMediator=im;
 	}
 	
 	public String call() throws IOException {
@@ -44,5 +47,15 @@ public class InterruptibleStdInput implements Callable<String>, Runnable, InputS
 		}
 		if(input != null) post(input);
 		
+	}
+
+	@Override
+	public void post(String str) {
+		inputMediator.receive(str);
+	}
+
+	@Override
+	public void post() {
+		inputMediator.receive();
 	}
 }

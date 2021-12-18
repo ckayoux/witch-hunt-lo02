@@ -48,6 +48,12 @@ public final class CPUPlayer extends Player {
 	private Player knownWitch=null;
 	
 	/**
+	 * <p><b>A short delay is added between all actions performed by CPU Players to let the users keep the track of what happens during their turns.</b></p>
+	 * <p>Expressed in milliseconds.</p>
+	 */
+	private int actionsDelay = 750;
+	
+	/**
 	 * CPU players' default name is determined by the number of existing CPU Players at instanciation.
 	 * @param nthCpuPlayer This CPUPlayer will be the nth one
 	 * @see Player#Player(int)
@@ -67,9 +73,10 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public void playTurn() {
+		this.delayGame(2*actionsDelay);
 		this.chooseStrategy();
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
-		super.playTurn();		
+		super.playTurn();
 	}
 	
 	/**
@@ -95,6 +102,7 @@ public final class CPUPlayer extends Player {
 		this.identity = chosenStrategy.selectIdentity();
 		this.identityCard.setChosenIdentity(this.identity);
 		requestHasChosenIdentityScreen();
+		this.delayGame(actionsDelay);
 	}
 	
 	/**
@@ -106,6 +114,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	protected Player choosePlayerToAccuse() {
+		this.delayGame(actionsDelay);
 		if(knownWitch==null) return chosenStrategy.selectPlayerToAccuse(getAccusablePlayers());
 		else if(!knownWitch.isRevealed()) {
 			Player output = knownWitch;
@@ -127,6 +136,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public Player chooseTarget(List<Player> eligiblePlayers) {
+		this.delayGame(actionsDelay);
 		if(knownWitch==null||!eligiblePlayers.contains(knownWitch)) return chosenStrategy.selectTarget(eligiblePlayers);
 		else return knownWitch;
 		
@@ -139,6 +149,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public Player chooseNextPlayer() {
+		this.delayGame(actionsDelay);
 		return chosenStrategy.selectNextPlayer(Tabletop.getInstance().getActivePlayersList().stream().filter(p->p!=this).toList());
 	}
 	
@@ -150,6 +161,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public TurnAction chooseTurnAction() {
+		this.delayGame(actionsDelay);
 		return chosenStrategy.selectTurnAction(this.identity,this.hand,this.canHunt());
 	}
 
@@ -161,6 +173,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public DefenseAction chooseDefenseAction() {
+		this.delayGame(actionsDelay);
 		this.chooseStrategy();
 		//must initialize Tabletop's hunter with canHunt, as the player will look at its playable hunt cards to make their decision
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
@@ -176,6 +189,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public void beHunted() {
+		this.delayGame(actionsDelay);
 		this.chooseStrategy();
 		super.beHunted();
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
@@ -190,6 +204,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public RumourCard selectWitchCard() {
+		this.delayGame(actionsDelay);
 		return this.chosenStrategy.selectWitchCard(this.hand.getPlayableWitchSubpile());
 	}
 
@@ -202,6 +217,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public RumourCard selectHuntCard() {
+		this.delayGame(actionsDelay);
 		return this.chosenStrategy.selectHuntCard(this.hand.getPlayableHuntSubpile());
 	}
 	
@@ -217,6 +233,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public RumourCard selectCardToDiscard(RumourCardsPile in) {
+		this.delayGame(actionsDelay);
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		if(this.hasUnrevealedRumourCards()) {
 			return chosenStrategy.selectCardToDiscard(in.getUnrevealedSubpile());
@@ -238,6 +255,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public RumourCard chooseAnyCard(RumourCardsPile rcp, boolean seeUnrevealedCards) {
+		this.delayGame(actionsDelay);
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		if(targetPileContainsCards(rcp)) {
 			return chosenStrategy.selectBestCard(rcp,seeUnrevealedCards);
@@ -255,6 +273,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public RumourCard chooseRevealedCard(RumourCardsPile from) {
+		this.delayGame(actionsDelay);
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		if(targetPileContainsCards(from.getRevealedSubpile())) {
 			return chosenStrategy.selectBestCard(from.getRevealedSubpile(),false);
@@ -277,6 +296,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public Identity lookAtPlayersIdentity(Player target) {
+		this.delayGame(actionsDelay);
 		Identity id = super.lookAtPlayersIdentity(target);
 		if(id==Identity.WITCH) this.knownWitch=target;
 		return id;
@@ -296,6 +316,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public DefenseAction revealOrDiscard() {
+		this.delayGame(actionsDelay);
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		if(this.hasRumourCards()&&!this.isRevealed()) {
 			return chosenStrategy.revealOrDiscard(this.getIdentity(),this.getHand());
@@ -308,6 +329,26 @@ public final class CPUPlayer extends Player {
 		else { //cannot be chosen by ducking stool if is revealed and has no rumour cards
 			return DefenseAction.DISCARD;
 		}
+	}
+	
+	/**
+	 * Simulates a delay after winning the round.
+	 * @see Player#winRound()
+	 */
+	@Override
+	public void winRound() {
+		super.winRound();
+		this.delayGame(2*actionsDelay);
+	}
+	
+	/**
+	 * Simulates a delay after stealing a card
+	 * @see Player#requestStealCardFromScreen(Player)
+	 */
+	@Override
+	public void takeRumourCard(RumourCard rc,Player stolenPlayer) {
+		super.takeRumourCard(rc, stolenPlayer);
+		this.delayGame(actionsDelay);
 	}
 
 	/**

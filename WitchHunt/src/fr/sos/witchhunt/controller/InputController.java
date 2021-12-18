@@ -11,6 +11,7 @@ import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.players.CPUPlayer;
 import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
+import fr.sos.witchhunt.view.gui.GUIView;
 import fr.sos.witchhunt.view.std.InterruptibleStdInput;
 import fr.sos.witchhunt.view.std.StdView;
 
@@ -19,6 +20,7 @@ public final class InputController implements InputMediator {
 	//ATTRIBUTES
 	private CountDownLatch latch = new CountDownLatch(1) ;
 	private StdView console;
+	private GUIView gui;
 	private Thread stdInputThread;
 	private String receivedString;
 	private int timesWrong=0;
@@ -26,15 +28,17 @@ public final class InputController implements InputMediator {
 	public int makeChoice(Menu m) {
 		int choice;
 		boolean correct;
+		gui.makeChoice(m);
 		int n = m.getOptionsCount();
 		choice = getIntInput();
 		if(!(1 <= choice && choice <= n)) {
-				correct = false;
-				timesWrong++;
-				String helperMsg = "Please enter an integer in the range 1.."+Integer.toString(n)+" :" ;
-				console.logWrongMenuChoiceMessage(timesWrong,helperMsg,n);
-				return makeChoice(m);
+			correct = false;
+			timesWrong++;
+			String helperMsg = "Please enter an integer in the range 1.."+Integer.toString(n)+" :" ;
+			console.logWrongMenuChoiceMessage(timesWrong,helperMsg,n);
+			return makeChoice(m);
 		}else {
+			this.gui.resetActionsPanel();
 			timesWrong=0;
 			console.crlf();;
 			return choice;
@@ -83,7 +87,7 @@ public final class InputController implements InputMediator {
 	}
 	
 	public void getInput() {
-		stdInputThread= new Thread( new InterruptibleStdInput());
+		stdInputThread= new Thread( new InterruptibleStdInput(this));
 		stdInputThread.start();
 		try{latch.await();}
 		catch(InterruptedException e) {
@@ -93,7 +97,7 @@ public final class InputController implements InputMediator {
 	
 	public String getStringInput() {
 		getInput();
-		if (receivedString.equals("")) {
+		if (receivedString==null||receivedString.equals("")) {
 			console.logInputWasExpectedMessage();
 			return getStringInput();
 		}
@@ -128,7 +132,6 @@ public final class InputController implements InputMediator {
 		this.wake();
 		latch = new CountDownLatch(1);
 		this.receivedString=str;
-		interruptStdInput();
 	}
 	@Override
 	public void receive(int i) {
@@ -136,13 +139,15 @@ public final class InputController implements InputMediator {
 	}
 	@Override
 	public void receive() {
+		this.wake();
 		latch = new CountDownLatch(1);
-		interruptStdInput();
 	}
 	
 	public void wannaContinue() {
 		console.logContinueMessage();
+		gui.wannaContinue(this);
 		getInput();
+		this.gui.resetActionsPanel();
 		console.crlf();
 	}
 	
@@ -167,9 +172,13 @@ public final class InputController implements InputMediator {
 	
 	public void wake() {
 		this.latch.countDown();
+		this.interruptStdInput();
 	}
 
 	public void setConsole(StdView console) {
 		this.console=console;
+	}
+	public void setGui(GUIView gui) {
+		this.gui= gui;
 	}
 }

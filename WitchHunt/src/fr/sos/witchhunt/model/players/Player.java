@@ -169,6 +169,11 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	protected DisplayMediator displayMediator;
 
+	/**
+	 * <p><b>Adds a little delay before sending certain display notifications to the view.</b></p>
+	 * <p>Expressed in milliseconds.</p>
+	 */
+	private int shortDelay = 500;
 	
 	//CONSTRUCTORS
 	/**
@@ -526,7 +531,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	public void takeRumourCard(RumourCard rc,Player stolenPlayer) {
 		requestStealCardFromScreen(stolenPlayer);
-		stolenPlayer.getHand().giveCard(rc, this.hand);
+		takeRumourCard(rc,stolenPlayer.getHand());
 	}
 	
 	/**
@@ -819,6 +824,10 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		displayMediator.displayPossibilities(m);
 	}
 	
+	public void requestDisplayNoAvailableHuntEffectsScreen() {
+		displayMediator.displayNoAvailableHuntEffectsScreen();
+	}
+	
 	/**
 	 * @see DisplayMediator#displayChooseDefenseScreen()
 	 * @see #defend()
@@ -834,23 +843,31 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	@Override
 	public void requestForcedToRevealScreen() {
+		this.delayGame(shortDelay);
 		displayMediator.displayForcedToRevealScreen();
 	}
 	/**
+	 * <p>Sends a notification informing the view that the player is going to display their identity.</p>
+	 * <p>Then, simulates a delay depending on the player's identity (longer for a witch).</p>
+	 * <p>Finally, sends the notification informing the view that it has to display the screen corresponding to the player's identity reveal.</p>
 	 * @see DisplayMediator#displayIdentityRevealScreen(Player)
 	 * @see #revealIdentity()
 	 */
 	@Override
 	public void requestIdentityRevealScreen() {
+		displayMediator.displayGoingToRevealIdentityScreen(this);
+		this.delayGame((this.identity==Identity.WITCH)?shortDelay*3:shortDelay);
 		displayMediator.displayIdentityRevealScreen(this);
 	}
 	
 	/**
+	 * Simulates a little delay before sending the score update notification to the view.
 	 * @see DisplayMediator#displayScoreUpdateScreen(Player, int)
 	 * @see #addScore(int)
 	 */
 	@Override
 	public void requestScoreUpdateScreen(int scoreUpdatedBy) {
+		this.delayGame(shortDelay);
 		displayMediator.displayScoreUpdateScreen(this,scoreUpdatedBy);
 	}
 	
@@ -860,6 +877,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	@Override
 	public void requestEliminationScreen(Player victim) {
+		this.delayGame(shortDelay);
 		displayMediator.displayEliminationScreen(this,victim);
 	}
 	
@@ -873,11 +891,13 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	}
 	
 	/**
+	 * Adds a short delay before sending a notification informing the view that this player has no cards left.
 	 * @see DisplayMediator#displayNoCardsScreen(Player)
 	 * @see #discardRandomCard()
 	 */
 	@Override
 	public void requestNoCardsScreen() {
+		this.delayGame(shortDelay);
 		displayMediator.displayNoCardsScreen(this);
 	}
 	
@@ -913,6 +933,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		this.hand.show(displayMediator, forcedReveal);
 	}
 	/**
+	 * Sends a notification informing the view of the played Witch? effect, and simulates a long delay afterwise.
 	 * @see DisplayMediator#displayPlayerPlaysWitchEffectScreen(Player, RumourCard)
 	 * @see #witch()
 	 * @param The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} is played.
@@ -920,8 +941,10 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	@Override
 	public void requestPlayerPlaysWitchEffectScreen(RumourCard rc) {
 		displayMediator.displayPlayerPlaysWitchEffectScreen(this,rc);
+		this.delayGame(shortDelay*3);
 	}
 	/**
+	 * Sends a notification informing the view of the played Hunt! effect, and simulates a long delay afterwise.
 	 * @see DisplayMediator#displayPlayerPlaysHuntEffectScreen(Player, RumourCard)
 	 * @see #hunt()
 	 * @param The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} is played.
@@ -929,8 +952,11 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	@Override
 	public void requestPlayerPlaysHuntEffectScreen(RumourCard rc) {
 		displayMediator.displayPlayerPlaysHuntEffectScreen(this,rc);
+		this.delayGame(shortDelay*3);
 	}
 	/**
+	 * Sends a notification informing the view of the chosen Rumour Card, then simulates a long delay to let the users
+	 * read the card's information.
 	 * @see DisplayMediator#displayHasChosenCardScreen(Player, RumourCard, boolean)
 	 * @param chosen The chosen {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}.
 	 * @param forcedReveal If this boolean is true, the chosen card will be shown as if it was revealed even if it is not.
@@ -938,16 +964,21 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	@Override
 	public void requestHasChosenCardScreen(RumourCard chosen,boolean forceReveal) {
 		displayMediator.displayHasChosenCardScreen(this,chosen,forceReveal);
+		this.delayGame(shortDelay*3);
 	}
 	/**
+	 * Adds a short delay before sending a notification informing the view there are no cards in the given pile.
 	 * @see DisplayMediator#displayNoCardsInPileScreen(RumourCardsPile)
 	 * @param rcp An empty {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}.
 	 */
 	@Override
 	public void requestEmptyRCPScreen(RumourCardsPile rcp) {
+		this.delayGame(shortDelay);
 		displayMediator.displayNoCardsInPileScreen(rcp);
 	};
 	/**
+	 * Sends a notification informing of the discarded card to the view, then, adds a delay depending on the 
+	 * reveal status of the discarded card.
 	 * @see DisplayMediator#displayDiscardCardScreen(Player, RumourCard)
 	 * @see #discard(RumourCard)
 	 * @param rc The discarded {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}
@@ -955,6 +986,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	@Override
 	public void requestDiscardCardScreen(RumourCard rc) {
 		displayMediator.displayDiscardCardScreen(this,rc);
+		this.delayGame((rc.isRevealed())?3*shortDelay:shortDelay);
 	}
 	
 	/**
@@ -967,6 +999,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		displayMediator.displayLookAtPlayersIdentityScreen(this,target);
 	}
 	/**
+	 * Sends a notification informing the view a card has been taken back by the player,
+	 * then simulates a long delay to let the users read this card's information.
 	 * @see DisplayMediator#displayPlayerHasResetCardScreen(Player, RumourCard)
 	 * @see fr.sos.witchhunt.model.cards.PointedHat PointedHat
 	 * @param chosen The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} that was chosen to be playable again.
@@ -974,6 +1008,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	@Override
 	public void requestHasResetCardScreen(RumourCard chosen) {
 		displayMediator.displayPlayerHasResetCardScreen(this,chosen);
+		this.delayGame(shortDelay*3);
 	}
 
 	/**
@@ -994,12 +1029,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		displayMediator.displayStealCardScreen(this,stolenPlayer);
 	};
 	
-	/**
-	 * @see DisplayMediator#freezeDisplay(int)
-	 */
-	@Override
-	public void sleep(int ms) {
-		displayMediator.freezeDisplay(ms);
+	public void delayGame(int ms) {
+		Tabletop.getInstance().freeze(ms);
 	}
 	
 	//GETTERS

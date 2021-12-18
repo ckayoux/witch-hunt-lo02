@@ -44,7 +44,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	@Override
 	public void chooseIdentity() {
 		Menu possibilities;
-		possibilities = new Menu(name+" , make your choice (others, don't look !) :",
+		possibilities = new Menu(name+" , choose your identity :",
 									Identity.VILLAGER,
 									Identity.WITCH);
 		requestDisplayPossibilities(possibilities);
@@ -159,7 +159,8 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 			}
 		}
 		else {
-			possibilities = new Menu("You have no more avaliable Hunt! effects.",
+			requestDisplayNoAvailableHuntEffectsScreen();
+			possibilities = new Menu("Choose one of these actions :",
 										TurnAction.ACCUSE,
 										"/c/Show your cards",
 										"/c/Show players ranking");
@@ -278,6 +279,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		Menu m = new Menu ("",from.getCards().toArray());
 		return (RumourCard) m.getNthOption(makeChoice(m));
 	}
+
 
 
 	/**

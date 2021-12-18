@@ -3,6 +3,7 @@ package fr.sos.witchhunt.controller;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import fr.sos.witchhunt.DisplayMediator;
@@ -20,11 +21,13 @@ import fr.sos.witchhunt.model.players.Player;
  * <p>Interacts with an instance of {@link ScoreCounter} to check whether victory conditions are met or not.</p>
  * <p>Instanciated as a {@link https://refactoringguru.cn/design-patterns/singleton Singleton} using the {@link this#getInstance() static method}.
  * Can be accessed globally, exposing its public and non-static members, using the same method.</p>
+ * <p>Implements Runnable. The whole match is supposed to stand within one thread, 
+ * which can then {@link #freeze(int) frozen to simulate a delay} between players' actions.</p>
  * @see #getInstance()
  * @see #playersList
  * @see Round
  */
-public final class Tabletop {
+public final class Tabletop implements Runnable {
 	
 	//FIELDS
 	/**
@@ -122,7 +125,6 @@ public final class Tabletop {
 			displayMediator.logYesNoQuestion("\tWould you like to add another player ?");
 		}
 		displayMediator.displayAddedPlayersScreen(n);
-		inputMediator.wannaContinue();
 	}
 
 	/**
@@ -165,12 +167,13 @@ public final class Tabletop {
 	public void startMatch() {
 		this.addPlayers();
 		
-		Application.displayController.displayMatchStartScreen();
+		displayMediator.displayMatchStartScreen();
+		freeze(1000);
 
 		scoreCounter = new ScoreCounter(); //Instanciating the score counter
-		
+
 		new Round(); //Starting a first round.
-		displayMediator.displayRoundEndScreen(Round.getRoundNumber());
+
 		while (!gameIsOver()){ //Looping while the game has no unique winner at the end of a round.
 			displayMediator.displayScoreBoard(scoreCounter.getScoreBoard()); //Displays the scoreboard at the end of each round
 			inputMediator.wannaContinue(); //Pauses the game until user-input is received
@@ -183,7 +186,6 @@ public final class Tabletop {
 			}
 			currentRound = null;
 			currentRound = new Round(); //Starting new rounds until the victory conditions are finally met.
-			displayMediator.displayRoundEndScreen(Round.getRoundNumber());
 		}
 		resetStates();
 		this.gameIsTied=false;
@@ -327,6 +329,10 @@ public final class Tabletop {
 	public int getTotalRumourCardsCount() {
 		return ExistingRumourCards.getInstance().getSet().size();
 	}
+	public DisplayMediator getDisplayMediator() {
+		return displayMediator;
+	}
+
 	
 	//SETTERS
 	public void incrementCPUPlayersNumber() {
@@ -368,6 +374,23 @@ public final class Tabletop {
 	}
 	public void setInputMediator(InputMediator im) {
 		this.inputMediator=im;
+	}
+	
+	
+	@Override
+	public void run() {
+		this.startMatch();
+	}
+	
+	public void freeze(int duration) {
+		if (Game.getInstance().sleepingIsAllowed()) {
+			try {
+				TimeUnit.MILLISECONDS.sleep(duration);
+			} catch (InterruptedException e) {
+				System.out.println("!-- The match's thread has been interrupted --!");
+				System.exit(-1);
+			}
+		}
 	}
 
 }

@@ -224,6 +224,16 @@ public final class StdView {
 		log("\t~ Please choose your identity for this round ~");
 		crlf();
 	}
+	
+	public void logHasChosenIdentityMessage(String playerName) {
+		log("\t"+playerName+" has chosen their identity.");
+	}
+	
+	public void logAllPlayersHaveChosenTheirIdentityMessage() {
+		crlf();
+		logWeakDashedLine();
+	}
+
 
 	public void logHandDistributionMessage(int cardsNumber,int discardedCardsNumber) {
 		crlf();
@@ -231,6 +241,7 @@ public final class StdView {
 		if(discardedCardsNumber > 0) log("\t~ "+ discardedCardsNumber +" were put into the pile. ~");
 		crlf();
 		logWeakDashedLine();
+		crlf();
 	}
 
 	public void logPlayTurnMessage(String playerName) {
@@ -507,10 +518,6 @@ public final class StdView {
 		/*log("\t"+name+" opts for "+playstyleDesc+".");*/
 	}
 
-	public void logHasChosenIdentityMessage(String playerName) {
-		log("\t"+playerName+" has chosen their identity.");
-	}
-
 	public void logAddPlayersScreen(int minPlayersNumber,int maxPlayersNumber) {
 		logDashedLine();
 		log("~ Add "+minPlayersNumber+" to "+maxPlayersNumber+" players : ~\n");
@@ -553,6 +560,11 @@ public final class StdView {
 	public void logInvalidYesNoQuestionAnswerMessage() {
 		log("\tInvalid answer. Please type in whether 'y' or 'n' :");
 	}
+
+	public void logNoAvailableHuntEffectsMessage() {
+		log("\tYou have no more available Hunt! effects.");
+	}
+
 
 
 	

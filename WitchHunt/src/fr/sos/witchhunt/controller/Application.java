@@ -27,7 +27,9 @@ public class Application {
 		gui = new GUIView(inputController);
 		
 		displayController.setConsole(console);
+		displayController.setGUI(gui);
 		inputController.setConsole(console);
+		inputController.setGui(gui);
 		
 		Game game = Game.getInstance();
 		game.setDisplayMediator(displayController);

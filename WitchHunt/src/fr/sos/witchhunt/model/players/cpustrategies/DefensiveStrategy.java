@@ -213,8 +213,7 @@ public class DefensiveStrategy extends CPUStrategy {
 	 * <p><b>This strategy will consider as the best cards, the ones with the {@link CardValueMap#getCardsWithMaxOverallValue(RumourCardsPile) best overall values},
 	 * among the ones with the {@link CardValueMap#getCardsWithMinWitchValue(RumourCardsPile) best Witch? effects} (priority is 
 	 * given on Witch? effects).</b></p>
-	 * <p>If unrevealed cards are hidden to the strategy, and if no revealed "good card" can be found,
-	 * these unrevealed cards will have equal chances than the best revealed ones to be selected.</p>
+	 * <p>Unrevealed cards will have equal chances than the best reveal cards to be chosen.</p>
 	 */
 	@Override
 	public RumourCard selectBestCard(RumourCardsPile rcp, boolean seeUnrevealedCards) {
@@ -228,12 +227,8 @@ public class DefensiveStrategy extends CPUStrategy {
 		else {
 			if(!rcp.getRevealedSubpile().isEmpty()) {
 				selection = cvm.getCardsWithMaxOverallValue(cvm.getCardsWithMaxWitchValue(rcp.getRevealedSubpile()));
-				if (selection.getCards().stream().filter(c->{
-					CardValue val = cvm.getValueByCard(c);
-					return (val.getOverallValue()>=this.goodCardThresold) && (val.getWitchValue()>=this.goodEffectThresold);
-				}).toList().isEmpty()) {
-					rcp.getUnrevealedSubpile().getCards().forEach(c -> selection.addCard(c));
-				}			
+				rcp.getUnrevealedSubpile().getCards().forEach(c -> selection.addCard(c));
+		
 			}
 			else selection = rcp;
 		}
