@@ -3,12 +3,9 @@ package fr.sos.witchhunt;
 import java.util.List;
 
 import fr.sos.witchhunt.controller.ScoreCounter.ScoreBoard;
-import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
-import fr.sos.witchhunt.model.players.CPUPlayer;
-import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
 
@@ -142,9 +139,10 @@ public void displayPlayTurnScreen(Player p);
 	
 /**
  * <b>Requests the DM to display the screen corresponding to the choice of an answer to an accusation.</b>
+ * @param p The player who must prove they aren't a witch, or burn on the stake
  * @see fr.sos.witchhunt.model.players.Player#defend() Player::defend()
  */
-	public void displayChooseDefenseScreen();
+	public void displayChooseDefenseScreen(Player p);
 /**
  * <b>Requests the DM to display the screen corresponding to the case where someone is forced to reveal their identity.</b>
  * @see fr.sos.witchhunt.model.players.Player#forcedReveal() Player::forcedReveal()
@@ -307,6 +305,7 @@ public void displayPlayTurnScreen(Player p);
 * @deprecated
 * @param msg a String.
 */
+	@Deprecated
 	public void passLog(String msg);
 
 	
@@ -316,6 +315,7 @@ public void displayPlayTurnScreen(Player p);
  * @param p the player who changed their strategy
  * @param strat the strategy newly chosen
  */
+	@Deprecated
 	public void displayStrategyChange(Player p,PlayStrategy strat);
 /**
  * <b>Requests the DM to display the players' ranking with their current score.</b> 

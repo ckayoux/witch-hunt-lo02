@@ -18,7 +18,7 @@ public final class TheInquisition extends RumourCard {
 			@Override
 			public void perform() {
 				Player me = getMyself();
-				if(me.getHand().getCardsCount()>1) {
+				if(!me.getHand().getCards().stream().filter(c->c!=cardInstance).toList().isEmpty()) {
 					me.discard(new RumourCardsPile(
 							me.getHand().getCards().stream().filter(c->c!=cardInstance).toList()
 							)); //select a card to discard from your hand, except this one itselfs
@@ -32,6 +32,7 @@ public final class TheInquisition extends RumourCard {
 				takeNextTurn();
 			}
 		};
+		
 		
 		this.huntEffect = new HuntEffect("(Only playable if you've been revealed as a Villager)\n"
 				+ "/+/Choose next player.\n"

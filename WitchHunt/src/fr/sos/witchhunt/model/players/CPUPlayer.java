@@ -1,14 +1,15 @@
 package fr.sos.witchhunt.model.players;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
-import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
-import fr.sos.witchhunt.model.players.cpustrategies.*;
+import fr.sos.witchhunt.model.players.cpustrategies.DefensiveStrategy;
+import fr.sos.witchhunt.model.players.cpustrategies.GropingStrategy;
+import fr.sos.witchhunt.model.players.cpustrategies.OffensiveStrategy;
+import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
 
 /**
  * <p><b>This class represents a CPU-controlled player.</b></p>
@@ -33,6 +34,7 @@ public final class CPUPlayer extends Player {
 	 * @deprecated This attribute was used to notify the view of a change of strategy. The notifications are still sent but the view does not take it into account anymore.
 	 * @see #chooseStrategy() 
 	 */
+	@Deprecated
 	private PlayStrategy oldStrategy = chosenStrategy;
 	/**
 	 * <p><b>A reference to a player known as a {@link fr.sos.witchhunt.model.Identity#WITCH Witch}.</b></p>
@@ -235,7 +237,7 @@ public final class CPUPlayer extends Player {
 	public RumourCard selectCardToDiscard(RumourCardsPile in) {
 		this.delayGame(actionsDelay);
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
-		if(this.hasUnrevealedRumourCards()) {
+		if(!in.getUnrevealedSubpile().isEmpty()) {
 			return chosenStrategy.selectCardToDiscard(in.getUnrevealedSubpile());
 		}
 		else return chosenStrategy.selectCardToDiscard(in);

@@ -1,17 +1,13 @@
 package fr.sos.witchhunt.view.std;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-import fr.sos.witchhunt.controller.Application;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
-import fr.sos.witchhunt.model.Menu;
 
 
 public final class StdView {
@@ -260,7 +256,7 @@ public final class StdView {
 	}
 	
 	public void logChooseDefenseMessage() {
-		log("\tWhat do you have to say in your defense ?\n");
+		log("\tThe village's pyre has been lit up.\n");
 	}
 
 	public void logForcedToRevealMessage() {
@@ -344,8 +340,8 @@ public final class StdView {
 	public void logRumourCard(String name, boolean revealed, String additionnalEffectDescription, String witchEffectDescription,
 		String huntEffectDescription) {
 		tabbedLog(name + ((revealed)?"\t(Revealed)":""));
-		String off=" ".repeat(offset.length())+"  ";
-
+		String off=" ".repeat(offset.length());//+"  ";
+		
 			setOffset(off);
 			tabbedLog("*" + additionnalEffectDescription + "*");
 			setOffset(off+"Witch : ");
@@ -357,7 +353,7 @@ public final class StdView {
 	}
 	public void logRumourCard(String name, boolean revealed, String witchEffectDescription, String huntEffectDescription) {
 		tabbedLog(name + ((revealed)?"\t(Revealed)":""));
-		String off=" ".repeat(offset.length())+"  ";
+		String off=" ".repeat(offset.length());//+"  ";
 			setOffset(off+"Witch : ");
 			tabbedLog(witchEffectDescription);
 			setOffset(off+"Hunt  : ");
@@ -416,13 +412,13 @@ public final class StdView {
 
 	public void logHasChosenCardMessage(String playerName,String cardName,boolean revealed,String additionnalEffectDescription,
 			String witchEffectDescription,String huntEffectDescription) {
-		setOffset("\t"+playerName + " has chosen ");
+		setOffset("\t"+playerName + " has taken ");
 		logRumourCard(cardName,revealed,additionnalEffectDescription,witchEffectDescription,huntEffectDescription);
 		resetOffset();
 		crlf();
 	}
 	public void logHasChosenCardMessage(String playerName,String cardName,boolean revealed,String witchEffectDescription,String huntEffectDescription) {
-		setOffset("\t"+playerName + " has chosen ");
+		setOffset("\t"+playerName + " has taken ");
 		logRumourCard(cardName,revealed,witchEffectDescription,huntEffectDescription);
 		resetOffset();
 		crlf();

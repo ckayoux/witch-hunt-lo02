@@ -1,13 +1,9 @@
 package fr.sos.witchhunt.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.controller.ScoreCounter.ScoreBoard;
-import fr.sos.witchhunt.model.Identity;
-import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
@@ -21,6 +17,7 @@ public final class DisplayController implements DisplayMediator {
 	private StdView console;
 	private GUIView gui;
 	
+	@Override
 	public void displayMenu(Menu m) {
 		console.makeMenu(m);
 		gui.gotoMainMenuPanel();
@@ -39,11 +36,11 @@ public final class DisplayController implements DisplayMediator {
 		//T0D0 : makeMenu for GUI view
 	}
 	
+	@Override
 	public void logYesNoQuestion(String q) {
 		console.yesNoQuestion(q);
-		//T0D0 : makeMenu for GUI view
 	}
-	
+/*	
 	public void drawStarsLine() {
 		console.logStarsLine();
 	}
@@ -58,7 +55,7 @@ public final class DisplayController implements DisplayMediator {
 	
 	public void drawWeakDashedLine() {
 		console.logWeakDashedLine();
-	}
+	}*/
 	
 	@Override
 	public void passLog(String msg) {
@@ -69,6 +66,7 @@ public final class DisplayController implements DisplayMediator {
 		console.crlf();
 	}
 	
+	@Override
 	public void displayAddPlayersScreen(int minPlayersNumber,int maxPlayersNumber) {
 		console.logAddPlayersScreen(minPlayersNumber, maxPlayersNumber);
 		gui.gotoMatchSetupPanel();
@@ -78,11 +76,13 @@ public final class DisplayController implements DisplayMediator {
 		console.logContinueMessage();
 	}
 	
+	@Override
 	public void displayMatchStartScreen() {
 		console.logMatchStartMessage();
 		gui.gotoGamePanel();
 	}
 
+	@Override
 	public void displayMatchEndScreen() {
 		console.logMatchEndMessage();
 		//TODO : equivalent for gui view
@@ -94,14 +94,17 @@ public final class DisplayController implements DisplayMediator {
 		gui.displayRoundStartScreen(roundNumber);
 	}
 
+	@Override
 	public void displayRoundEndScreen(int roundNumber) {
 		console.logRoundEndMessage(roundNumber);
-		//TODO : equivalent for gui view
+		gui.displayRoundEndScreen(roundNumber);
 	}
 	
 	
+	@Override
 	public void displayWinnerScreen(Player winner) {
 		console.logWinnerMessage(winner.getName(), winner.getScore());
+		gui.displayWinnerScreen(winner);
 	}
 	
 
@@ -127,6 +130,7 @@ public final class DisplayController implements DisplayMediator {
 		console.crlf();
 		console.decreaseTabulation();
 	}
+	@Override
 	public void displayRanking(Player P) {
 		int rank=1;
 		int pSRank=-1;
@@ -165,49 +169,53 @@ public final class DisplayController implements DisplayMediator {
 	@Override
 	public void displayChooseIdentityScreen() {
 		console.logChooseIdentityMessage();
-		//TODO : equivalent for gui
+		gui.displayChooseIdentityScreen();
 	}
 
 	@Override
 	public void distributeHandScreen(int distributedCardsCount,int discardedCardsCount) {
 		console.logHandDistributionMessage(distributedCardsCount,discardedCardsCount);
-		//TODO : equivalent for gui
+		gui.displayHandDistributionScreen(distributedCardsCount,discardedCardsCount);
+		//todo : start displaying their cards in the cards panel
 	}
 
 	@Override
 	public void displayPlayTurnScreen(Player p) {
 		console.logPlayTurnMessage(p.getName());
-		
+		gui.displayPlayTurnScreen(p);
+		gui.setCurrentPlayer(p);
 	}
 
 
 	@Override
 	public void displayEndOfTurnScreen() {
 		console.logEndOfTurnMessage();
-		
+		gui.unsetCurrentPlayer();
 	}
 	
 	@Override
 	public void displayAccusationScreen(Player accusator, Player accused) {
 		console.logAccusationMessage(accusator.getName(),accused.getName());
-		// TODO equivalent for gui
+		gui.displayAccusationScreen(accusator,accused);
+		gui.setAccusedPlayer(accused);
 	}
 	
 	@Override
-	public void displayChooseDefenseScreen() {
+	public void displayChooseDefenseScreen(Player p) {
 		console.logChooseDefenseMessage();
-		//ToutDoux : équivalent for gui
+		gui.displayChooseDefenseMessage(p);
 	}
 
 	@Override
 	public void displayForcedToRevealScreen() {
 		console.logForcedToRevealMessage();
-		//ToutDoux : equivalent for gui
+		gui.displayForcedToRevealScreen();
 	}
 
 	@Override
 	public void displayGoingToRevealIdentityScreen(Player p) {
 		console.logGoingToRevealMessage(p.getName());
+		gui.displayGoingToRevealScreen(p);
 	}
 	
 	@Override
@@ -217,12 +225,17 @@ public final class DisplayController implements DisplayMediator {
 			switch(p.getIdentity()) {
 				case VILLAGER:
 					console.logVillagerRevealMessage(p.getName());
+					gui.displayVillagerRevealScreen(p);
 					break;
 				case WITCH:
-					if(Tabletop.getInstance().getLastUnrevealedPlayer()==p)
+					if(Tabletop.getInstance().getLastUnrevealedPlayer()==p) {
 						console.logWitchRevealMessage(p.getName());
-					else
+						gui.displayWitchRevealScreen(p);
+					}
+					else {
 						console.logWitchEliminatedMessage(p.getName());
+						gui.displayWitchEliminatedScreen(p);
+					}
 					break;
 			}
 		}
@@ -233,37 +246,43 @@ public final class DisplayController implements DisplayMediator {
 	@Override
 	public void displayScoreUpdateScreen(Player p, int points) {
 		console.logUpdateScreenMessage(p.getName(),points,p.getScore());
+		gui.displayScoreUpdateScreen(p,points);
 	}
 
 	@Override
 	public void displayEliminationScreen(Player eliminator, Player victim) {
 		console.logEliminationMessage(eliminator.getName(),victim.getName());
-		// Tout doux : equivalent for gui
+		gui.displayEliminationScreen(eliminator,victim);
 	}
 
+	@Override
 	public void displayLastUnrevealedPlayerScreen(Player lastUnrevealedPlayer) {
 		console.logLastUnrevealedMessage(lastUnrevealedPlayer.getName());
+		gui.displayLastUnrevealedScreen(lastUnrevealedPlayer);
 		switch(lastUnrevealedPlayer.getIdentity()) {
 			case WITCH:
 				console.logWitchRevealMessage(lastUnrevealedPlayer.getName());
+				gui.displayWitchRevealScreen(lastUnrevealedPlayer);
 				break;
 			case VILLAGER:
 				console.logVillagerRevealMessage(lastUnrevealedPlayer.getName());
+				gui.displayVillagerRevealScreen(lastUnrevealedPlayer);
 				break;
 		}
-		console.crlf();
 		console.logWeakDashedLine();
-		// Tout doux : equivalent for gui
+		console.crlf();
 	}
 	
+	@Override
 	public void displayNoCardsScreen(Player p) {
 		console.logNoCardsMessage(p.getName());
-		//ToutDoux : equivalent for gui
+		gui.displayNoCardsScreen(p);
 	}
 
+	@Override
 	public void displayOnlyTwoUnrevealedRemainingScreen() {
 		console.logOnlyTwoUnrevealedRemainingMessage();
-		//ToutDoux : equivalent for gui
+		gui.displayOnlyTwoUnrevealedRemainingScreen();
 	}
 
 	@Override
@@ -403,17 +422,18 @@ public final class DisplayController implements DisplayMediator {
 		console.logSelectCardsMessage(null);
 		this.displayHuntEffects(from);
 		
-		Menu guiVersion = new Menu("Select a card witha valid Hunt! effect",from.getCards().toArray());
+		Menu guiVersion = new Menu("Select a card with a valid Hunt! effect",from.getCards().toArray());
 		gui.displayMenu(guiVersion);
 	}
 
 
 	@Override
 	public void displayPlayerPlaysWitchEffectScreen(Player p,RumourCard rc) {
-		if(rc.getAdditionnalEffectDescription()=="")
+		if(rc.getAdditionnalEffectDescription()=="") 
 			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getWitchEffectDescription());
 		else
 			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getWitchEffectDescription(),rc.getAdditionnalEffectDescription());
+		gui.displayPlayerPlaysWitchEffectScreen(p,rc);
 	}
 	
 	@Override
@@ -422,6 +442,7 @@ public final class DisplayController implements DisplayMediator {
 			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getHuntEffectDescription());
 		else
 			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getHuntEffectDescription(),rc.getAdditionnalEffectDescription());
+		gui.displayPlayerPlaysHuntEffectScreen(p, rc);
 	}
 
 	@Override
@@ -432,16 +453,20 @@ public final class DisplayController implements DisplayMediator {
 		else 
 			console.logHasChosenCardMessage(p.getName(),chosen.getName(),(chosen.isRevealed()||forceReveal),chosen.getAdditionnalEffectDescription(),
 					chosen.getWitchEffectDescription(),chosen.getHuntEffectDescription());
+		gui.displayPlayerHasChosenCardScreen(p, chosen,forceReveal);
 	}
 	
 	@Override
 	public void displayNoCardsInPileScreen(RumourCardsPile rcp) {
 		if(rcp.getOwner()!=null) {
 			console.logEmptyHandMessage(rcp.getOwner().getName());
+			gui.displayEmptyHandMessage(rcp.getOwner());
 		}
 		else if(rcp.isThePile()) {
 			console.logEmptyPileMessage();
+			gui.displayNoCardsInPileScreen();
 		}
+		
 	}
 
 	@Override
@@ -449,16 +474,20 @@ public final class DisplayController implements DisplayMediator {
 		console.printPlayerDiscardedCardMessage(owner.getName());
 		displayCard(rc, false);
 		console.resetOffset();
+		
+		gui.displayPlayerHasDiscardedCardScreen(owner,rc);
 	}
 
 	@Override
 	public void displayLookAtPlayersIdentityScreen(Player me, Player target) {
 		console.logLookAtPlayersIdentityMessage(me.getName(),target.getName());
+		gui.displayLookAtPlayersIdentityScreen(me,target);
 	}
 
 	@Override
 	public void secretlyDisplayIdentity(Player target) {
 		console.logSecretIdentityRevealMessage(target.getName(), target.getIdentity().toString());
+		gui.displaySecretlyDisplayIdentity(target);
 	}
 
 	@Override
@@ -466,36 +495,52 @@ public final class DisplayController implements DisplayMediator {
 		console.logPlayerHasResetCardMessage(player.getName());
 		displayCard(chosenCard, true);
 		console.resetOffset();
+		
+		gui.displayPlayerHasResetCardScreen(player,chosenCard);
 	}
 	
 	@Override
 	public void displayTakeNextTurnScreen(Player p) {
-		console.logTakeNextTurnMessage(p.getName());;
+		console.logTakeNextTurnMessage(p.getName());
+		
+		gui.displayTakeNextTurnScreen(p);
 	}
 	@Override
 	public void displayPlayTurnAgainScreen(Player p) {
 		console.logPlayTurnAgainMessage(p.getName());
+		
+		gui.displayPlayTurnAgainScreen(p);
 	}
 	
 	@Override
 	public void displayForcedToAccuseScreen(Player theOneWhoMustAccuse, Player theOneWhoForcedThem) {
 		console.logForcedToAccuseMessage(theOneWhoMustAccuse.getName(),theOneWhoForcedThem.getName(),theOneWhoForcedThem.isImmunized());
+		
+		gui.displayForcedToAccuseScreen(theOneWhoMustAccuse,theOneWhoForcedThem);
 	}
 
 	@Override
 	public void displayStealCardScreen(Player thief, Player stolenPlayer) {
 		console.logStealCardMessage(thief.getName(),stolenPlayer.getName());
 		
+		gui.displayStealCardScreen(thief,stolenPlayer);
+		
 	}
 	
+	@Override
 	public void displayScoreBoard(ScoreBoard sb) {
 		console.increaseTabulation();
 		console.logScoreBoard(sb.toString());
 		console.decreaseTabulation();
+		
+		//DISPLAY SCORE BOARD IN GUI INSTEAD OF CARDS
 	}
 
+	@Override
 	public void displayGameIsTiedScreen(List<Player> potentialWinners) {
 		console.logGameIsTiedScreen(potentialWinners.get(0).getScore(),potentialWinners.stream().map(p->p.getName()).toList());
+		
+		gui.displayGameIsTiedScreen(potentialWinners.get(0).getScore(),potentialWinners);
 	}
 
 	@Override

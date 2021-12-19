@@ -2,13 +2,12 @@ package fr.sos.witchhunt.model.players;
 
 import java.util.List;
 
-import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.Visitable;
 import fr.sos.witchhunt.Visitor;
-import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.controller.Tabletop;
-import fr.sos.witchhunt.controller.Turn;
 import fr.sos.witchhunt.model.Identity;
+import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.Resettable;
 import fr.sos.witchhunt.model.cards.IdentityCard;
 import fr.sos.witchhunt.model.cards.RumourCard;
@@ -718,6 +717,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * @see #active
 	 * @see fr.sos.witchhunt.controller.Tabletop
 	 */
+	@Override
 	public void reset() {
 		this.hand.reset();
 		this.identity = null;
@@ -751,6 +751,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * @see DisplayMediator#passLog(String)
 	 * @deprecated Used for debugging purposes
 	 */
+	@Deprecated
 	@Override
 	public void requestLog(String msg) {
 		displayMediator.passLog(msg);
@@ -834,7 +835,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	@Override
 	public void requestChooseDefenseScreen() {
-		displayMediator.displayChooseDefenseScreen();
+		displayMediator.displayChooseDefenseScreen(this);
 	}
 	
 	/**
@@ -1070,7 +1071,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		return this.hand.getRevealedSubpile();
 	}
 	public boolean hasUnrevealedRumourCards() {
-		return !this.getRevealedSubhand().equals(this.hand);
+		return !this.getUnrevealedSubhand().isEmpty();
 	}
 	
 	public boolean hasRevealedRumourCards() {
@@ -1260,10 +1261,12 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 
 
 	
+	@Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);	
 	}
 	
+	@Override
 	public String toString() {
 		return this.name;
 	}

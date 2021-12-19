@@ -29,10 +29,10 @@ public class Notification {
 					fg=new Color(147,112,219);
 					break;
 				case TURN:
-					fg=new Color(41,128,185);
+					fg=Color.green;
 					break;
 				case SCORE:
-					fg=Color.green;
+					fg=new Color(41,128,185);
 					break;
 				case SEPARATOR:
 					fg=Color.BLACK;

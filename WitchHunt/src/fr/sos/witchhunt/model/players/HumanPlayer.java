@@ -8,7 +8,6 @@ import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
-import fr.sos.witchhunt.model.cards.TheInquisition;
 
 /**
  * <p><b>This class represents a human-controlled player.</b></p>
@@ -212,7 +211,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 */
 	@Override
 	public DefenseAction chooseDefenseAction() {
-		Menu m = new Menu("Select your answer to this utterly slanderous and unfounded accusation",
+		Menu m = new Menu(name+", what can you say in your defence ?",
 				DefenseAction.WITCH,DefenseAction.REVEAL);
 		requestDisplayPossibilities(m);
 		switch(makeChoice(m)) {

@@ -1,44 +1,27 @@
 package fr.sos.witchhunt.view.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.controller.ActionsPanelController;
-import fr.sos.witchhunt.model.Menu;
-
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.awt.Dimension;
-import java.awt.Component;
-import java.awt.Color;
-
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
-import javax.swing.text.StyledDocument;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Document;
-import javax.swing.text.Element;  
+import fr.sos.witchhunt.model.Menu;  
 
 public class GamePanel extends JPanel {
 	
@@ -202,6 +185,7 @@ public class GamePanel extends JPanel {
 			this.notificationsBox.eraseContent();
 		}
 		
+		@Override
 		public void init() {
 			notificationsBox = new NotificationsBox();
 			notificationsBox.setPreferredSize(getPan().getPreferredSize());
@@ -223,6 +207,7 @@ public class GamePanel extends JPanel {
 		}
 		
 		
+		@Override
 		public void init() {
 			this.getPan().setPreferredSize(this.getPan().getPreferredSize());
 			this.prompt.setPreferredSize(this.getPan().getPreferredSize());
@@ -329,6 +314,7 @@ public class GamePanel extends JPanel {
 			//this.getPan().add(textBox);
 		}
 		
+		@Override
 		public void init() {
 			notificationsBox = new NotificationsBox();
 			notificationsBox.setPreferredSize(getPan().getPreferredSize());

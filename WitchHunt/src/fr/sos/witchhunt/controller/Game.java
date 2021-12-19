@@ -1,13 +1,7 @@
 package fr.sos.witchhunt.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.InputMediator;
-import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Menu;
 
 public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON

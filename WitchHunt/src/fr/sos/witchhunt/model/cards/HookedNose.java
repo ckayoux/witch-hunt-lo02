@@ -19,8 +19,8 @@ public final class HookedNose extends RumourCard {
 				if(accusator.hasRumourCards()) {
 					RumourCard chosen = me.chooseAnyCard(accusator.getHand(), false);
 					chosen.reset();
-					me.requestHasChosenCardScreen(chosen,false);
 					me.takeRumourCard(chosen, accusator);
+					me.requestHasChosenCardScreen(chosen,false);
 				}
 				else {
 					accusator.requestNoCardsScreen();
@@ -39,8 +39,8 @@ public final class HookedNose extends RumourCard {
 				if(target.hasRumourCards()) {
 					RumourCard chosen = me.chooseAnyCard(target.getHand(), false);
 					chosen.reset();
-					me.requestHasChosenCardScreen(chosen,false);
 					me.takeRumourCard(chosen, target);
+					me.requestHasChosenCardScreen(chosen,false);
 				}
 				else {
 					target.requestNoCardsScreen()

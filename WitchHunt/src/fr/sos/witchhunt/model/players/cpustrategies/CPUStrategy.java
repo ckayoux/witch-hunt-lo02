@@ -68,7 +68,7 @@ public abstract class CPUStrategy implements PlayStrategy {
 	public double getAverageUnrevealedCardsNumber() {
 		List <Integer> cardNumbers = Tabletop.getInstance().getActivePlayersList().stream()
 				.mapToInt(p->(p.hasUnrevealedRumourCards())?p.getUnrevealedSubhand().getCardsCount():0).boxed().toList();
-		if(!cardNumbers.isEmpty()) return cardNumbers.stream().reduce(0, (number,sum)->sum+=number) / (double) Tabletop.getInstance().getActivePlayersList().size();
+		if(!cardNumbers.isEmpty()) return cardNumbers.stream().reduce(0, Integer::sum) / (double) Tabletop.getInstance().getActivePlayersList().size();
 		else return 0;
 	}
 	
@@ -279,6 +279,7 @@ public abstract class CPUStrategy implements PlayStrategy {
 		return this.cvm;
 	};
 	
+	@Override
 	public DefenseAction selectDefenseAction(Identity myIdentity,RumourCardsPile myHand,boolean canWitch) {
 		if (this.isOkayToReveal(myIdentity, myHand)||!canWitch) return DefenseAction.REVEAL;
 		else return DefenseAction.WITCH;
