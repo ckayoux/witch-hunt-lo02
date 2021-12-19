@@ -53,7 +53,7 @@ public final class CPUPlayer extends Player {
 	 * <p><b>A short delay is added between all actions performed by CPU Players to let the users keep the track of what happens during their turns.</b></p>
 	 * <p>Expressed in milliseconds.</p>
 	 */
-	private int actionsDelay = 750;
+	private int actionsDelay = 1250;
 	
 	/**
 	 * CPU players' default name is determined by the number of existing CPU Players at instanciation.
@@ -95,7 +95,7 @@ public final class CPUPlayer extends Player {
 	
 	/**
 	 * <b>Chooses the player's identity for the current {@link fr.sos.witchhunt.controller.Round round}, {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#selectIdentity() based on the chosen strategy}.</b>
-	 * <p>Also requests for the display of a special screen notifying the view that the CPUPlayer has chosen their identity.</p>
+	 * <p>Also requests for the display of a screen notifying the view that the CPUPlayer has chosen their identity.</p>
 	 * @see Player#chooseIdentity()
 	 * @see fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#selectIdentity() PlayStrategy::selectIdentity()
 	 */

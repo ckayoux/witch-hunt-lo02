@@ -77,10 +77,12 @@ public final class DisplayController implements DisplayMediator {
 	}
 	
 	@Override
-	public void displayMatchStartScreen() {
+	public void displayMatchStartScreen(Tabletop tabletop) {
 		console.logMatchStartMessage();
+		gui.setTabletop(tabletop);
 		gui.gotoGamePanel();
 	}
+
 
 	@Override
 	public void displayMatchEndScreen() {
@@ -109,7 +111,7 @@ public final class DisplayController implements DisplayMediator {
 	
 
 	
-	public void displayRanking(List <Player> ranking) {
+	/*public void displayRanking(List <Player> ranking) {
 		console.increaseTabulation();
 		if(ranking.stream().filter(p->p.getScore()==0).count()==ranking.size()) {
 			ranking.forEach(p->console.logPlayerAndTheirScore(-1, false , p.getName(), 0));
@@ -129,13 +131,12 @@ public final class DisplayController implements DisplayMediator {
 		}
 		console.crlf();
 		console.decreaseTabulation();
-	}
+	}*/
 	@Override
-	public void displayRanking(Player P) {
+	public void displayRanking(Player P,List<Player> ranking) {
 		int rank=1;
 		int pSRank=-1;
 		boolean pIsExAequo=false;
-		List<Player> ranking = Tabletop.getInstance().getScoreCounter().getRanking();
 		int lastScore = ranking.get(0).getScore();
 		
 		console.increaseTabulation();
@@ -190,6 +191,7 @@ public final class DisplayController implements DisplayMediator {
 	@Override
 	public void displayEndOfTurnScreen() {
 		console.logEndOfTurnMessage();
+		gui.displayEndOfTurnScreen();
 		gui.unsetCurrentPlayer();
 	}
 	
@@ -219,7 +221,7 @@ public final class DisplayController implements DisplayMediator {
 	}
 	
 	@Override
-	public void displayIdentityRevealScreen(Player p) {
+	public void displayIdentityRevealScreen(Player p,Player lastUnrevealedPlayer) {
 		if(!p.isRevealed()){
 			
 			switch(p.getIdentity()) {
@@ -228,7 +230,7 @@ public final class DisplayController implements DisplayMediator {
 					gui.displayVillagerRevealScreen(p);
 					break;
 				case WITCH:
-					if(Tabletop.getInstance().getLastUnrevealedPlayer()==p) {
+					if(lastUnrevealedPlayer==p) {
 						console.logWitchRevealMessage(p.getName());
 						gui.displayWitchRevealScreen(p);
 					}
@@ -551,11 +553,13 @@ public final class DisplayController implements DisplayMediator {
 	@Override
 	public void displayHasChosenIdentityScreen(Player p) {
 		console.logHasChosenIdentityMessage(p.getName());
+		gui.displayHasChosenIdentityScreen(p);
 	}
 	
 	@Override
 	public void displayAllPlayersHaveChosenTheirIdentityScreen() {
 		console.logAllPlayersHaveChosenTheirIdentityMessage();
+		gui.displayAllPlayersHaveChosenTheirIdentityScreen();
 	}
 
 	

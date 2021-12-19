@@ -1,21 +1,21 @@
 package fr.sos.witchhunt.view.gui;
 
-import javax.swing.JButton;
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.Insets;
 
-import fr.sos.witchhunt.InputMediator;
+import javax.swing.JButton;
+
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
-import fr.sos.witchhunt.view.InputSource;
 
 public class ActionButton extends JButton {
 	
 	public ActionButton(String str) {
 		super(str);
+		this.setAlignmentX(CENTER_ALIGNMENT);
+		this.setMargin(new Insets(10, 10, 10, 10));
 	}
 	
 	public static String makeButtonText(Object o) {

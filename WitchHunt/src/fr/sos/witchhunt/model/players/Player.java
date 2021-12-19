@@ -172,7 +172,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * <p><b>Adds a little delay before sending certain display notifications to the view.</b></p>
 	 * <p>Expressed in milliseconds.</p>
 	 */
-	private int shortDelay = 500;
+	private int shortDelay = 1000;
 	
 	//CONSTRUCTORS
 	/**
@@ -851,14 +851,14 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * <p>Sends a notification informing the view that the player is going to display their identity.</p>
 	 * <p>Then, simulates a delay depending on the player's identity (longer for a witch).</p>
 	 * <p>Finally, sends the notification informing the view that it has to display the screen corresponding to the player's identity reveal.</p>
-	 * @see DisplayMediator#displayIdentityRevealScreen(Player)
+	 * @see DisplayMediator#displayIdentityRevealScreen(Player,Player)
 	 * @see #revealIdentity()
 	 */
 	@Override
 	public void requestIdentityRevealScreen() {
 		displayMediator.displayGoingToRevealIdentityScreen(this);
-		this.delayGame((this.identity==Identity.WITCH)?shortDelay*3:shortDelay);
-		displayMediator.displayIdentityRevealScreen(this);
+		this.delayGame((this.identity==Identity.WITCH)?shortDelay*3:shortDelay*2);
+		displayMediator.displayIdentityRevealScreen(this,Tabletop.getInstance().getLastUnrevealedPlayer());
 	}
 	
 	/**
@@ -997,8 +997,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	@Override
 	public void requestEmptyRCPScreen(RumourCardsPile rcp) {
-		this.delayGame(shortDelay);
 		displayMediator.displayNoCardsInPileScreen(rcp);
+		this.delayGame(shortDelay);
 	};
 	/**
 	 * Sends a notification informing of the discarded card to the view, then, adds a delay depending on the 
@@ -1010,7 +1010,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	@Override
 	public void requestDiscardCardScreen(RumourCard rc) {
 		displayMediator.displayDiscardCardScreen(this,rc);
-		this.delayGame((rc.isRevealed())?3*shortDelay:shortDelay);
+		this.delayGame((rc.isRevealed())?3*shortDelay:2*shortDelay);
 	}
 	
 	/**

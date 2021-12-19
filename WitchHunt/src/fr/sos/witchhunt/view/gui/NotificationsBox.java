@@ -38,13 +38,16 @@ public class NotificationsBox extends JScrollPane{
 			printNotification(n);
 		}
 		public void eraseContent() {
+
 			Element root = doc.getDefaultRootElement();
 			Element previous = root.getElement(0);
 			try {
-				doc.remove(previous.getStartOffset(),previous.getEndOffset());
+				doc.remove(previous.getStartOffset(),doc.getLength());
 			} catch (BadLocationException e) {
 				
 			}
+			
+			//while()
 		}
 		
 		

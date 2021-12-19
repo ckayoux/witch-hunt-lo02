@@ -56,6 +56,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 				break;
 		}
 		this.identityCard.setChosenIdentity(this.identity);
+		requestHasChosenIdentityScreen();
 	}
 	
 	/**
@@ -239,7 +240,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 * @see fr.sos.witchhunt.controller.ScoreCounter#getRanking() ScoreCounter::getRanking() 
 	 */
 	private void showRanking() {
-		displayMediator.displayRanking(this);
+		displayMediator.displayRanking(this,Tabletop.getInstance().getRanking());
 	}
 	
 	/**

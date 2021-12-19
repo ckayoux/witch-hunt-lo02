@@ -20,26 +20,30 @@ public class Notification {
 					fg=Color.BLACK;
 					break;
 				case OFFENSIVE:
-					fg=Color.RED;
+					fg=new Color(240,0,32); //Red
 					break;
 				case HUNT :
-					fg=Color.ORANGE;
+					fg=new Color(255, 79, 0); //Orange
 					break;
 				case WITCH:
-					fg=new Color(147,112,219);
+					fg=new Color(147,112,219); //Purple
 					break;
 				case TURN:
-					fg=Color.green;
+					fg=new Color(52,201,36); //Green
 					break;
 				case SCORE:
-					fg=new Color(41,128,185);
+					fg=new Color(41,128,185); //Blue
 					break;
-				case SEPARATOR:
-					fg=Color.BLACK;
-					text="-----------------------------------\n";
+				case HARD_SEPARATOR:
+					fg=new Color(156,147,135); //Grey
+					text="----------------------------------------------------------------------\n";
+					break;
+				case LIGHT_SEPARATOR:
+					fg=new Color(156,147,135); //Grey
+					text="     - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
 					break;
 				case CRLF:
-					fg=null;
+					fg=Color.BLACK;
 					text="\n";		
 		}
 	}

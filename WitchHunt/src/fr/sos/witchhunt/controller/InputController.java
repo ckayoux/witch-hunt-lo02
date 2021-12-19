@@ -1,11 +1,8 @@
 package fr.sos.witchhunt.controller;
 
 import java.util.List;
-import java.util.Scanner;
-
 import java.util.concurrent.CountDownLatch;
 
-import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.players.CPUPlayer;
@@ -25,6 +22,7 @@ public final class InputController implements InputMediator {
 	private String receivedString;
 	private int timesWrong=0;
 	
+	@Override
 	public int makeChoice(Menu m) {
 		int choice;
 		boolean correct;
@@ -46,6 +44,7 @@ public final class InputController implements InputMediator {
 		
 	}
 	
+	@Override
 	public Player createPlayer(int id,List<String> chosenNames) {
 		console.log("\tPlayer "+Integer.toString(id)+" : ");
 		console.yesNoQuestion("\tHuman-controlled ?");
@@ -76,7 +75,7 @@ public final class InputController implements InputMediator {
 			console.crlf();
 			temp = new HumanPlayer(name,id);
 			temp.setInputMediator(this);
-			output=(Player) temp;
+			output=temp;
 		}
 		else {
 			Tabletop.getInstance().incrementCPUPlayersNumber();
@@ -113,6 +112,7 @@ public final class InputController implements InputMediator {
 		}
 			
 	}
+	@Override
 	public boolean answerYesNoQuestion() {
 		char input = getStringInput().toLowerCase().charAt(0);
 		if(input=='y') {
@@ -143,6 +143,7 @@ public final class InputController implements InputMediator {
 		latch = new CountDownLatch(1);
 	}
 	
+	@Override
 	public void wannaContinue() {
 		console.logContinueMessage();
 		gui.wannaContinue(this);

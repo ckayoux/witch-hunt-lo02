@@ -1,7 +1,6 @@
 package fr.sos.witchhunt.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -9,9 +8,7 @@ import java.util.stream.Collectors;
 import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.cards.ExistingRumourCards;
-
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
-
 import fr.sos.witchhunt.model.players.Player;
 
 /**
@@ -167,8 +164,8 @@ public final class Tabletop implements Runnable {
 	public void startMatch() {
 		this.addPlayers();
 		
-		displayMediator.displayMatchStartScreen();
-		freeze(1000);
+		displayMediator.displayMatchStartScreen(this);
+		freeze(1500);
 
 		scoreCounter = new ScoreCounter(); //Instanciating the score counter
 

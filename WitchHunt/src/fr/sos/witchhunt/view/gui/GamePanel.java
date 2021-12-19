@@ -16,12 +16,15 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.controller.ActionsPanelController;
-import fr.sos.witchhunt.model.Menu;  
+import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.players.Player;  
 
 public class GamePanel extends JPanel {
 	
@@ -37,7 +40,7 @@ public class GamePanel extends JPanel {
 	
 	private TopNotificationsPanel topNotificationsPanel;
 	private ActionsPanel actionsPanel;
-	private PlayersPanel playersPanel;
+	private DeckSelectorPanel deckSelectorPanel;
 	private CardsPanel cardsPanel;
 	private BotNotificationsPanel botNotificationsPanel;
 	private ScorePanel scorePanel;
@@ -49,7 +52,7 @@ public class GamePanel extends JPanel {
 		this.topNotificationsPanel = new TopNotificationsPanel(0,0,8,1);
 
 		this.actionsPanel = new ActionsPanel(8,0,2,7);
-		this.playersPanel = new PlayersPanel(0,1,2,6);
+		this.deckSelectorPanel = new DeckSelectorPanel(0,1,2,6);
 		this.cardsPanel = new CardsPanel(2,1,6,6);
 		this.botNotificationsPanel = new BotNotificationsPanel (0,7,8,3);
 		this.scorePanel = new ScorePanel(8,7,2,3);
@@ -88,6 +91,12 @@ public class GamePanel extends JPanel {
 	
 	public void resetActionPanel() {
 		if(actionsPanel.isRendered) actionsPanel.resetPane();
+	}
+	
+	public void renderPlayers(List<Player> pList,RumourCardsPile pile) {
+		pList.forEach(p->this.deckSelectorPanel.addPlayerButton(p));
+		this.deckSelectorPanel.makePileButton(pile);
+		this.deckSelectorPanel.renderPane();
 	}
 	
 	@Override
@@ -189,6 +198,7 @@ public class GamePanel extends JPanel {
 		public void init() {
 			notificationsBox = new NotificationsBox();
 			notificationsBox.setPreferredSize(getPan().getPreferredSize());
+			notificationsBox.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 			this.getPan().add(notificationsBox);
 		}
 	}
@@ -290,11 +300,66 @@ public class GamePanel extends JPanel {
 		
 	}
 	
-	private class PlayersPanel extends CustomGridBagCell {
-		public PlayersPanel(int x, int y,int w, int h) {
+	private class DeckSelectorPanel extends CustomGridBagCell {
+		private int marginHeight=39;
+		private List<DeckSelectorButton> playersBList = new ArrayList<DeckSelectorButton>();
+		private JPanel playersPart = new JPanel() {
+			@Override
+			public Insets getInsets() {
+				return new Insets(marginHeight/2,0,0,0);
+			}
+		};
+		
+		private DeckSelectorButton pileButton;
+		private JPanel pilePart = new JPanel() {
+			@Override
+			public Insets getInsets() {
+			return new Insets(0,0,marginHeight/4,0);
+		}
+	} ;
+		
+		public DeckSelectorPanel(int x, int y,int w, int h) {
 			super(x,y,w,h);
 			this.getPan().setBorder(null);
-			this.getPan().setBackground(Color.GREEN);
+			this.getPan().setLayout(new BoxLayout(this.getPan(),BoxLayout.PAGE_AXIS));
+			//this.getPan().setBackground(Color.GREEN);
+		}
+		
+		@Override
+		public void init() {
+			this.getPan().setLayout(new BorderLayout());
+			this.getPan().setPreferredSize(this.getPan().getPreferredSize());
+			
+			this.playersPart.setLayout(new BoxLayout(this.playersPart,BoxLayout.PAGE_AXIS));
+			this.getPan().add(playersPart,BorderLayout.CENTER);
+			this.getPan().add(pilePart,BorderLayout.SOUTH);
+			
+			//this.playersSpace.add(Box.createRigidArea(new Dimension(0, marginHeight))); //empty space above prompt
+			//this.getPan().add(Box.createRigidArea(new Dimension(0, 50)),BorderLayout.NORTH);//empty space under prompt
+		}
+		
+		public void addPlayerButton(Player p) {
+			this.playersBList.add(new DeckSelectorButton(p));
+		}
+		
+		public void makePileButton(RumourCardsPile pile) {
+			this.pileButton=new DeckSelectorButton(pile);
+		}
+		
+		public void resetPane() {
+			this.playersPart.removeAll();
+			this.pilePart.removeAll();
+			this.playersPart.updateUI();
+			this.pilePart.updateUI();
+		}
+		
+		public void renderPane() {
+			this.playersBList.forEach(pb->{
+				this.playersPart.add(pb);
+				this.playersPart.add(Box.createRigidArea(new Dimension(0, this.marginHeight)));
+			});
+			
+			this.pilePart.add(this.pileButton);			
 		}
 	}
 	private class CardsPanel extends CustomGridBagCell {

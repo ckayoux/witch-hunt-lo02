@@ -3,7 +3,6 @@ package fr.sos.witchhunt.controller;
 import java.util.List;
 
 import fr.sos.witchhunt.DisplayMediator;
-import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;
@@ -52,6 +51,7 @@ public final class Round {
 		displayMediator=Tabletop.getInstance().getDisplayMediator();
 		
 		Tabletop.getInstance().setCurrentRound(this);
+
 		//For the first round, a random player begins.
 		if(roundNumber == 0) currentPlayer=Tabletop.getInstance().getActivePlayersList().get((int)(Math.random()*Tabletop.getInstance().getActivePlayersList().size()));
 		//For all other rounds, the last unrevealed player begins.
@@ -69,10 +69,15 @@ public final class Round {
 		Turn.setTurnNumber(0);
 		
 		displayMediator.displayRoundStartScreen(roundNumber);
+		Tabletop.getInstance().freeze(1500);
+		
+		
 		//at the start of a round, before the first turn, each player has to choose an Identity and Rumour cards.
 		distributeIdentity();
+		Tabletop.getInstance().freeze(1500);
 		commonPile = new RumourCardsPile();
 		distributeHand();
+		Tabletop.getInstance().freeze(1500);
 		
 		do {
 			setNextPlayerClockwise(); //By default, the player who takes the next turn is the one after the current player in Tabletop's players list.
@@ -90,7 +95,7 @@ public final class Round {
 		commonPile.reset(); //returning all rumourCards to the main pile, of Tabletop's instance
 		
 		displayMediator.displayRoundEndScreen(roundNumber);
-		Tabletop.getInstance().freeze(500);
+		Tabletop.getInstance().freeze(1000);
 	}
 	
 	//UTILS METHODS

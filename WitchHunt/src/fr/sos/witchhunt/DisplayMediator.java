@@ -3,6 +3,7 @@ package fr.sos.witchhunt;
 import java.util.List;
 
 import fr.sos.witchhunt.controller.ScoreCounter.ScoreBoard;
+import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
@@ -50,8 +51,10 @@ public interface DisplayMediator {
 	
 	/**
 	 * <b>Requests the DM to display the screen corresponding to the match's start.</b>
+	 * @param tabletop An instance of Tabletop, representing the match
+	 * @see Tabletop
 	 */
-	public void displayMatchStartScreen();
+	public void displayMatchStartScreen(Tabletop tabletop);
 	
 	/**
 	 * <b>Requests the DM to display the screen corresponding to a Round's start.</b>
@@ -157,10 +160,11 @@ public void displayPlayTurnScreen(Player p);
 
 /**
  * <b>Requests the DM to display the screen corresponding to the case where someone reveals their identity.</b>
- * @param p the player revealing their identity.
+ * @param p The player revealing their identity.
+ * @param lastUnrevealedPlayer The game's last remaining unrevealed player, or null.
  * @see fr.sos.witchhunt.model.players.Player#revealIdentity() Player::revealIdentity()
  */
-	public void displayIdentityRevealScreen(Player p);
+	public void displayIdentityRevealScreen(Player p,Player lastUnrevealedPlayer);
 /**
  * <b>Requests the DM to notify the view of a change in a player's score.</b>
  * @param p the player earning or loosing points.
@@ -320,9 +324,11 @@ public void displayPlayTurnScreen(Player p);
 /**
  * <b>Requests the DM to display the players' ranking with their current score.</b> 
  * @param p the (human) player requesting to display the ranking.
+ * @param ranking Players ordered by descending score.
+ * @see fr.sos.witchhunt.controller.ScoreCounter#getRanking() ScoreCounter::getRanking()
  * @see fr.sos.witchhunt.model.players.HumanPlayer#showRanking() HumanPlayer::showRanking() 
  */
-	public void displayRanking(Player p);
+	public void displayRanking(Player p,List<Player> ranking);
 	
 	/**
 	 * <b>Requests the DM to display a score board.</b>
