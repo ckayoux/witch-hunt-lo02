@@ -146,6 +146,13 @@ public void displayPlayTurnScreen(Player p);
  * @see fr.sos.witchhunt.model.players.Player#defend() Player::defend()
  */
 	public void displayChooseDefenseScreen(Player p);
+	
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation when a player is targetted by a Rumour card's Hunt! effect.</b>
+	 * @param huntedPlayer The Huntm! effect's target
+	 */
+	public void displayHuntedPlayerScreen(Player huntedPlayer);
+
 /**
  * <b>Requests the DM to display the screen corresponding to the case where someone is forced to reveal their identity.</b>
  * @see fr.sos.witchhunt.model.players.Player#forcedReveal() Player::forcedReveal()
@@ -234,7 +241,12 @@ public void displayPlayTurnScreen(Player p);
  * @see fr.sos.witchhunt.model.players.HumanPlayer#showHand() HumanPlayer::showHand()
  */
 	public void showCards(Player p);
-
+	
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation where a player chose to play a Witch? effect.</b>
+	 * @param player The player who chose to play a Witch? effect
+	 */
+	public void displayPlayerChoseToWitchScreen(Player player);
 /**
  * <b>Requests the DM to display the screen corresponding to the use of the Witch effect of a Rumour Card by a player.</b>
  * @param player the player triggering a Witch effect.
@@ -393,6 +405,7 @@ public void displayPlayTurnScreen(Player p);
 	 * @param from A pile of Rumour cards containing only cards with a playable Hunt! effect.
 	 */
 	public void displaySelectHuntCardScreen(RumourCardsPile from);
+
 
 
 }

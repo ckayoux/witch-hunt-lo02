@@ -2,6 +2,7 @@ package fr.sos.witchhunt.model.players;
 
 import java.util.List;
 
+import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.cards.RumourCard;
@@ -53,7 +54,7 @@ public final class CPUPlayer extends Player {
 	 * <p><b>A short delay is added between all actions performed by CPU Players to let the users keep the track of what happens during their turns.</b></p>
 	 * <p>Expressed in milliseconds.</p>
 	 */
-	private int actionsDelay = 1250;
+	private int actionsDelay = 1500;
 	
 	/**
 	 * CPU players' default name is determined by the number of existing CPU Players at instanciation.
@@ -75,7 +76,7 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public void playTurn() {
-		this.delayGame(2*actionsDelay);
+		this.delayGame(actionsDelay);
 		this.chooseStrategy();
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 		super.playTurn();
@@ -103,8 +104,8 @@ public final class CPUPlayer extends Player {
 	public final void chooseIdentity() {
 		this.identity = chosenStrategy.selectIdentity();
 		this.identityCard.setChosenIdentity(this.identity);
-		requestHasChosenIdentityScreen();
 		this.delayGame(actionsDelay);
+		requestHasChosenIdentityScreen();
 	}
 	
 	/**
@@ -151,7 +152,6 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public Player chooseNextPlayer() {
-		this.delayGame(actionsDelay);
 		return chosenStrategy.selectNextPlayer(Tabletop.getInstance().getActivePlayersList().stream().filter(p->p!=this).toList());
 	}
 	
@@ -191,9 +191,9 @@ public final class CPUPlayer extends Player {
 	 */
 	@Override
 	public void beHunted() {
+		super.beHunted();
 		this.delayGame(actionsDelay);
 		this.chooseStrategy();
-		super.beHunted();
 		chosenStrategy.updateBehavior(this.isRevealed(),this.identity,this.hand);
 	}
 	
@@ -352,6 +352,36 @@ public final class CPUPlayer extends Player {
 		super.takeRumourCard(rc, stolenPlayer);
 		this.delayGame(actionsDelay);
 	}
+	/**
+	 * Sends a notification informing the view of the played Witch? effect, and simulates a long delay afterwise.
+	 * @see DisplayMediator#displayPlayerPlaysWitchEffectScreen(Player, RumourCard)
+	 * @see #witch()
+	 * @param The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} is played.
+	 */
+	@Override
+	public void requestPlayerPlaysWitchEffectScreen(RumourCard rc) {
+		displayMediator.displayPlayerPlaysWitchEffectScreen(this,rc);
+	}
+	/**
+	 * Sends a notification informing the view of the played Hunt! effect, and simulates a long delay afterwise.
+	 * @see DisplayMediator#displayPlayerPlaysHuntEffectScreen(Player, RumourCard)
+	 * @see #hunt()
+	 * @param The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} is played.
+	 */
+	@Override
+	public void requestPlayerPlaysHuntEffectScreen(RumourCard rc) {
+		displayMediator.displayPlayerPlaysHuntEffectScreen(this,rc);
+	}
+	
+	/**
+	 * @see DisplayMediator#displayStealCardScreen(Player, Player)
+	 * @param stolenPlayer The player whose {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} was stolen. 
+	 */
+	@Override
+	public void requestStealCardFromScreen(Player stolenPlayer) {
+		displayMediator.displayStealCardScreen(this,stolenPlayer);
+		this.delayGame(actionsDelay);
+	};
 
 	/**
 	 * <p><b>Chooses a {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy strategy} based on the player's current situation.</b><p>

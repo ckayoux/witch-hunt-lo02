@@ -1,7 +1,6 @@
 package fr.sos.witchhunt.model.players;
 
 import fr.sos.witchhunt.DisplayMediator;
-
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
@@ -26,6 +25,7 @@ public interface PlayerDisplayObservable {
 	public void requestPlayTurnScreen();
 	public void requestEndOfTurnScreen();
 	public void requestAccusationScreen(Player accused);
+	public void requestBeHuntedScreen();
 	public void requestChooseDefenseScreen();
 	public void requestForcedToRevealScreen();
 	public void requestHasChosenIdentityScreen();
@@ -40,6 +40,7 @@ public interface PlayerDisplayObservable {
 	public void requestSelectRevealedCardScreen(RumourCardsPile from, boolean forcedReveal);
 	public void requestSelectWitchCardScreen(RumourCardsPile from);
 	public void requestSelectHuntCardScreen(RumourCardsPile from);
+	public void requestPlayerChoseToWitchScreen();
 	public void requestPlayerPlaysWitchEffectScreen(RumourCard rc);
 	public void requestPlayerPlaysHuntEffectScreen(RumourCard rc);
 	public void requestEmptyRCPScreen(RumourCardsPile rcp);

@@ -20,12 +20,14 @@ public final class InputController implements InputMediator {
 	private GUIView gui;
 	private Thread stdInputThread;
 	private String receivedString;
+	private Menu currentMenu=null;
 	private int timesWrong=0;
 	
 	@Override
 	public int makeChoice(Menu m) {
 		int choice;
 		boolean correct;
+		currentMenu=m;
 		gui.makeChoice(m);
 		int n = m.getOptionsCount();
 		choice = getIntInput();
@@ -36,9 +38,10 @@ public final class InputController implements InputMediator {
 			console.logWrongMenuChoiceMessage(timesWrong,helperMsg,n);
 			return makeChoice(m);
 		}else {
-			this.gui.resetActionsPanel();
+			this.gui.resetChoicesPanel();
 			timesWrong=0;
 			console.crlf();;
+			currentMenu=null;
 			return choice;
 		}
 		
@@ -148,7 +151,7 @@ public final class InputController implements InputMediator {
 		console.logContinueMessage();
 		gui.wannaContinue(this);
 		getInput();
-		this.gui.resetActionsPanel();
+		this.gui.resetChoicesPanel();
 		console.crlf();
 	}
 	
@@ -181,5 +184,9 @@ public final class InputController implements InputMediator {
 	}
 	public void setGui(GUIView gui) {
 		this.gui= gui;
+	}
+	
+	public Menu getCurrentMenu() {
+		return currentMenu;
 	}
 }

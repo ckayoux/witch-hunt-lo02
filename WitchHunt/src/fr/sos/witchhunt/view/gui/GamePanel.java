@@ -2,41 +2,25 @@ package fr.sos.witchhunt.view.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-import javax.swing.border.Border;
 
 import fr.sos.witchhunt.InputMediator;
-import fr.sos.witchhunt.controller.ActionsPanelController;
+import fr.sos.witchhunt.controller.DeckSelectorButtonController;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;  
 
-public class GamePanel extends JPanel {
+public class GamePanel extends GridBagPanel {
 	
 	private InputMediator inputMediator;
-	
-	private final int gridWidth = 10;
-	private final int gridHeight = 10;
-	private final Insets insets = new Insets(5,5,5,5);
-	
-	private List<CustomGridBagCell> cellsList = new ArrayList<CustomGridBagCell>();
-	
-	private final Border cellBorder = BorderFactory.createLineBorder(new Color(41,128,185));
 	
 	private TopNotificationsPanel topNotificationsPanel;
 	private ActionsPanel actionsPanel;
@@ -48,19 +32,41 @@ public class GamePanel extends JPanel {
 	
 	
 	public GamePanel() {
-
+		super(10,10);
 		this.topNotificationsPanel = new TopNotificationsPanel(0,0,8,1);
-
 		this.actionsPanel = new ActionsPanel(8,0,2,7);
 		this.deckSelectorPanel = new DeckSelectorPanel(0,1,2,6);
 		this.cardsPanel = new CardsPanel(2,1,6,6);
 		this.botNotificationsPanel = new BotNotificationsPanel (0,7,8,3);
 		this.scorePanel = new ScorePanel(8,7,2,3);
-		this.setLayout(new GridBagLayout());
 		
 		buildCustomGridBag();
 	}
+	
+	@Override
+	public void init ( ) {
+		/*TextBox textBox = new TextBox();
+		textBox.setPreferredSize(this.botNotificationsPanel.getPan().getPreferredSize());
+		this.botNotificationsPanel.getPan().add(textBox);
+		this.botNotificationsPanel.setTextBox(textBox);*/
+		cellsList.forEach(c->c.init());
+	}
+	
+	@Override
+	public Dimension getPreferredSize() {
+		return new Dimension(Window.WIDTH,Window.HEIGHT);
+	}
+	@Override
+	public Insets getInsets() {
+		return new Insets(15,7,15,7); //vertical margin is double the horizontal margin
+	}
 
+	public void setInputMediator(InputMediator inputMediator) {
+		this.inputMediator=inputMediator;
+	}
+
+
+	//DISPLAY METHODS
 	
 	public void displayMainNotification(Notification n) {
 		botNotificationsPanel.appendNotification(n);
@@ -75,6 +81,11 @@ public class GamePanel extends JPanel {
 		topNotificationsPanel.eraseContent();
 	}
 	
+	
+	
+	
+	
+	
 	public void wannaContinue(InputMediator im) {
 		actionsPanel.wannaContinue(im);
 	}
@@ -87,36 +98,107 @@ public class GamePanel extends JPanel {
 	public void makeChoice(Menu m) {
 		actionsPanel.makeChoice(m, inputMediator);
 	}
+	
+	public void setActionsPanelThemeAsForActionType(Object o) {
+		actionsPanel.setThemeAsForActionType(o);
+	}
 
 	
 	public void resetActionPanel() {
-		if(actionsPanel.isRendered) actionsPanel.resetPane();
+		if(actionsPanel.isRendered()) actionsPanel.resetPane();
 	}
 	
-	public void renderPlayers(List<Player> pList,RumourCardsPile pile) {
-		pList.forEach(p->this.deckSelectorPanel.addPlayerButton(p));
-		this.deckSelectorPanel.makePileButton(pile);
-		this.deckSelectorPanel.renderPane();
+	
+	
+	
+	
+	public void renderPlayers(List<Player> pList) {
+		pList.forEach(p->{
+			new DeckSelectorButtonController(
+					this.deckSelectorPanel.addPlayerButton(p),
+					this
+			);
+		});
+		this.deckSelectorPanel.renderPlayers();
 	}
 	
-	@Override
-	public Dimension getPreferredSize() {
-		return new Dimension(Window.WIDTH,Window.HEIGHT);
-	}
-	@Override
-	public Insets getInsets() {
-		return new Insets(15,7,15,7); //vertical margin is double the horizontal margin
+	public void renderPile(RumourCardsPile pile) {
+		new DeckSelectorButtonController(this.deckSelectorPanel.makePileButton(pile),this);
+		this.deckSelectorPanel.renderPile();
 	}
 	
+	public void updateScoreDisplay(Player p) {
+		this.deckSelectorPanel.updateScoreDisplay(p);
+	}
+	
+	public void updatePileContent() {
+		this.deckSelectorPanel.updatePileButton();
+	}
+	
+	public void updatePlayerActivityStatus(Player p) {
+		this.deckSelectorPanel.updateButtonByPlayer(p);
+	}
+	
+	public void updateActivePlayers() {
+		this.deckSelectorPanel.updatePlayerButtons();
+	}
+	
+	public void showAccusedPlayer(Player accused) {
+		deckSelectorPanel.resetAccusablePlayersEffects();
+		deckSelectorPanel.themeUpPlayerButton(accused,NotificationType.OFFENSIVE);
+	}
+
+	public void showAccusablePlayers(List<Player> accusablePlayers) {
+		deckSelectorPanel.setAccusablePlayers();
+	}
+
+	public void showHuntedPlayer(Player huntedPlayer) {
+		deckSelectorPanel.themeUpPlayerButton(huntedPlayer,NotificationType.HUNT);
+		
+	}
+	
+	public void showWitchingPlayer(Player witchingPlayer) {
+		deckSelectorPanel.themeUpPlayerButton(witchingPlayer, NotificationType.WITCH);
+	}
+
+	public void showCurrentPlayer(Player currentPlayer) {
+		deckSelectorPanel.themeUpPlayerButton(currentPlayer,NotificationType.TURN);
+	}
+	
+	public void boldenPlayer(Player p) {
+		deckSelectorPanel.boldenPlayerButton(p);
+	}
+	
+	public void unBoldenPlayer(Player p) {
+		deckSelectorPanel.unBoldenPlayerButton(p);
+	}
+	
+	public void resetPlayersEffects() {
+		deckSelectorPanel.resetPlayersEffects();
+	}
+	public void setPlayerButtonsEnabled(boolean enabled) {
+		deckSelectorPanel.setPlayerButtonsEnabled(enabled);
+	}
+	
+	public void setSelectedDeckButton(DeckSelectorButton b) {
+		deckSelectorPanel.setSelectedDeckButton(b);
+	}
+	
+	public DeckSelectorButton getSelectedDeckButton() {
+		return deckSelectorPanel.getSelectedDeckButton();
+	}
+	
+	
+	/*@Override
 	public void buildCustomGridBag () {
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.BOTH;
-		gbc.insets = this.insets;
+		gbc.insets = this.gbcInsets;
 		
-		Iterator<CustomGridBagCell> it = cellsList.iterator();
+		Iterator<GridBagCell> it = cellsList.iterator();
 		while (it.hasNext()) {
-			CustomGridBagCell cell = it.next();
+			GridBagCell cell = it.next();
 			int w = cell.getWidth();
 			int h = cell.getHeight();
 			int x = cell.getX();
@@ -130,53 +212,14 @@ public class GamePanel extends JPanel {
 			this.add(cell.getPan(),gbc);			
 		}
 	}
+	*/
 	
-	private class CustomGridBagCell{
-		private int gwidth;
-		private int gheight;
-		private int gx;
-		private int gy;
-		private JPanel pan;
-		
-		public CustomGridBagCell (int x, int y,int w, int h) {
-			pan=new JPanel();
-			pan.setBorder(cellBorder);
-			this.gx=x;
-			this.gy=y;
-			this.gwidth=w;
-			this.gheight=h;
-			cellsList.add(this);
-		}
-
-		public int getX() {
-			return gx;
-		}
-		public int getY() {
-			return gy;
-		}
-		
-		public int getWidth() {
-			return this.gwidth;
-		}
-		public int getHeight() {
-			return this.gheight;
-		}
-		public JPanel getPan() {
-			return pan;
-		}
-		
-		public void init() {
-			
-		}
-
-		
-	}
-	
-	private class TopNotificationsPanel extends CustomGridBagCell {
+//SUBPANELS
+	private class TopNotificationsPanel extends GridBagCell {
 		private NotificationsBox notificationsBox = new NotificationsBox();
 		
 		public TopNotificationsPanel(int x, int y,int w, int h)  {
-			super(	x,y,w,h);
+			super(x,y,w,h,defaultCellBorder,cellsList);
 			this.getPan().setLayout(new BorderLayout());
 			this.getPan().setBackground(Color.BLACK);
 			//this.getPan().add(textBox);
@@ -198,118 +241,27 @@ public class GamePanel extends JPanel {
 		public void init() {
 			notificationsBox = new NotificationsBox();
 			notificationsBox.setPreferredSize(getPan().getPreferredSize());
-			notificationsBox.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 			this.getPan().add(notificationsBox);
 		}
 	}
 	
-	private class ActionsPanel extends CustomGridBagCell {
-		private JLabel prompt = new JLabel("",SwingConstants.CENTER);
-		private List<ActionButton> actionButtonsList = new ArrayList<ActionButton>();
-		private List<Component> interButtonsMargins = new ArrayList<Component> ();
-		private boolean isRendered=false;
-		private ActionsPanelController controller = null;
-		
-		public ActionsPanel(int x, int y,int w, int h) {
-			super(x,y,w,h);
-			//this.getPan().setBackground(Color.RED);
-			this.getPan().setLayout(new BoxLayout(this.getPan(),BoxLayout.PAGE_AXIS));	
+	private class ActionsPanel extends ChoicesPanel{
+		public ActionsPanel(int x, int y, int w, int h) {
+			super(x,y,w,h,defaultCellBorder,cellsList);
 		}
-		
-		
-		@Override
-		public void init() {
-			this.getPan().setPreferredSize(this.getPan().getPreferredSize());
-			this.prompt.setPreferredSize(this.getPan().getPreferredSize());
-			this.getPan().add(Box.createRigidArea(new Dimension(0, 15))); //empty space above prompt
-			this.prompt.setAlignmentX(Component.CENTER_ALIGNMENT);
-			this.getPan().add(prompt);
-			this.getPan().add(Box.createRigidArea(new Dimension(0, 30)));//empty space under prompt
-			this.getPan().setAlignmentX(CENTER_ALIGNMENT);
-		}
-		public void wannaContinue(InputMediator im) {
-			this.resetPane();
-			this.prompt.setText("Wanna continue ?");
-			ActionButton continueButton =  new ActionButton("CONTINUE");
-			this.actionButtonsList.add(continueButton);
-			this.controller= new ActionsPanelController(actionButtonsList,im);
-			this.renderPane();
-		}
-		
-		public void displayMenu(Menu m) {
-			this.resetPane();
-			this.prompt.setText(m.getName());
-			for(Object o : m.getOptions()) {
-				String buttonText = ActionButton.makeButtonText(o);
-				if(buttonText!=null) {
-					ActionButton b =  new ActionButton(buttonText);
-					b.setBackground(ActionButton.getButtonColorByActionType(o));
-					this.actionButtonsList.add(b);
-				}
-			}
-			this.renderPane();
-		}
-		
-		public void makeChoice(Menu m,InputMediator im) {
-			this.controller= new ActionsPanelController(actionButtonsList,im);
-			this.renderPane();
-		}
-		
-		public void renderActionButtons() {
-			
-			Iterator<ActionButton> it = actionButtonsList.iterator();
-			while(it.hasNext()) {
-				ActionButton b = it.next();
-				this.getPan().add(b);
-				if (it.hasNext()) {
-					Component aboveMargin = Box.createRigidArea(new Dimension(0, 15));
-					this.interButtonsMargins.add(aboveMargin);
-					this.getPan().add(aboveMargin);
-				}
-			}
-			
-		}
-		
-		public void resetPane() {
-			this.prompt.setText("");
-			
-			this.actionButtonsList.forEach(b->this.getPan().remove(b));
-			this.interButtonsMargins.forEach(b->this.getPan().remove(b));
-			this.actionButtonsList.removeIf(b->true);
-			this.interButtonsMargins.removeIf(m->true);
-			this.isRendered=false;
-			this.controller=null;
-			this.getPan().updateUI();
-		}
-		public void renderPane() {
-			renderActionButtons();
-			this.isRendered=true;
-			/*double maxButtonWidth = Collections.max(actionButtonsList.stream().mapToDouble(b->b.getPreferredSize().getWidth())
-					.boxed().toList());
-			double maxButtonHeight = Collections.max(actionButtonsList.stream().mapToDouble(b->b.getPreferredSize().getHeight())
-				.boxed().toList());
-			Dimension normalizedSize = new Dimension ((int)maxButtonWidth,(int)maxButtonHeight);
-			actionButtonsList.forEach(b->{
-				b.setSize(normalizedSize);
-			});*/ //NORMALIZE BUTTON SIZES ... BUT THEN HOW TO CENTER THEM ?
-		}
-		
-		public boolean isRendered() {
-			return this.isRendered;
-		}
-		
-		
 	}
 	
-	private class DeckSelectorPanel extends CustomGridBagCell {
-		private int marginHeight=39;
+	private class DeckSelectorPanel extends GridBagCell {
+		private int marginHeight=40;
 		private List<DeckSelectorButton> playersBList = new ArrayList<DeckSelectorButton>();
 		private JPanel playersPart = new JPanel() {
 			@Override
 			public Insets getInsets() {
-				return new Insets(marginHeight/2,0,0,0);
+				return new Insets(marginHeight/4,0,0,0);
 			}
 		};
+		private boolean firstScoreUpdateDone = false;
+		private DeckSelectorButton selectedDeckButton = null;
 		
 		private DeckSelectorButton pileButton;
 		private JPanel pilePart = new JPanel() {
@@ -320,12 +272,14 @@ public class GamePanel extends JPanel {
 	} ;
 		
 		public DeckSelectorPanel(int x, int y,int w, int h) {
-			super(x,y,w,h);
+			super(x,y,w,h,defaultCellBorder,cellsList);
 			this.getPan().setBorder(null);
 			this.getPan().setLayout(new BoxLayout(this.getPan(),BoxLayout.PAGE_AXIS));
 			//this.getPan().setBackground(Color.GREEN);
 		}
-		
+
+
+
 		@Override
 		public void init() {
 			this.getPan().setLayout(new BorderLayout());
@@ -334,17 +288,64 @@ public class GamePanel extends JPanel {
 			this.playersPart.setLayout(new BoxLayout(this.playersPart,BoxLayout.PAGE_AXIS));
 			this.getPan().add(playersPart,BorderLayout.CENTER);
 			this.getPan().add(pilePart,BorderLayout.SOUTH);
-			
-			//this.playersSpace.add(Box.createRigidArea(new Dimension(0, marginHeight))); //empty space above prompt
-			//this.getPan().add(Box.createRigidArea(new Dimension(0, 50)),BorderLayout.NORTH);//empty space under prompt
 		}
 		
-		public void addPlayerButton(Player p) {
-			this.playersBList.add(new DeckSelectorButton(p));
+		
+		public void normalizeButtonsWidth() {
+			double maxButtonWidth = Collections.max(playersBList.stream().mapToDouble(b->b.getPreferredSize().getWidth())
+					.boxed().toList());
+			playersBList.forEach(b->{
+				int missingXMargin = (int) (maxButtonWidth - b.getPreferredSize().getWidth());
+				int missingLeftMargin = missingXMargin/2 + missingXMargin%2;
+				int missingRightMargin = missingXMargin - missingLeftMargin;
+				b.setInsets(new Insets(b.getMargin().top,b.getMargin().left + missingLeftMargin, b.getMargin().bottom,b.getMargin().right + missingRightMargin));
+				
+			});
+		}
+	
+		
+		public DeckSelectorButton addPlayerButton(Player p) {
+			DeckSelectorButton b = new DeckSelectorButton(p);
+			this.playersBList.add(b);
+			return b;
+
 		}
 		
-		public void makePileButton(RumourCardsPile pile) {
+		public DeckSelectorButton makePileButton(RumourCardsPile pile) {
 			this.pileButton=new DeckSelectorButton(pile);
+			return this.pileButton;
+		}
+		
+		public void updateScoreDisplay(Player p) {
+			if(!firstScoreUpdateDone) {
+				this.playersBList.forEach(b->b.updateText());
+				normalizeButtonsWidth();
+				firstScoreUpdateDone=true;
+			}
+			else {
+				this.playersBList.stream().filter(b->b.getAssociatedPlayer()==p).forEach(b->b.updateText());
+			}
+		}
+		
+		public void updatePlayerButtons() {
+			this.playersBList.forEach(b-> {
+				b.setEnabled(b.getAssociatedPlayer().isActive());
+			});
+			this.getPan().updateUI();
+		}
+		
+		public void updatePileButton() {
+			pileButton.updateText();
+			pileButton.setEnabled(!pileButton.getDeck().isEmpty());
+			this.getPan().updateUI();
+		}
+		
+		
+		public void updateButtonByPlayer(Player p) {
+			this.playersBList.stream().filter(b->b.getAssociatedPlayer()==p).forEach(b->{
+				b.setEnabled(b.getAssociatedPlayer().isActive());
+			});
+			this.getPan().updateUI();
 		}
 		
 		public void resetPane() {
@@ -352,29 +353,86 @@ public class GamePanel extends JPanel {
 			this.pilePart.removeAll();
 			this.playersPart.updateUI();
 			this.pilePart.updateUI();
+			pileButton=null;
 		}
 		
-		public void renderPane() {
+		public void renderPlayers() {
+			normalizeButtonsWidth();
 			this.playersBList.forEach(pb->{
 				this.playersPart.add(pb);
 				this.playersPart.add(Box.createRigidArea(new Dimension(0, this.marginHeight)));
 			});
-			
-			this.pilePart.add(this.pileButton);			
 		}
+		
+
+
+		public void resetPlayersEffects() {
+			playersBList.forEach(b->b.resetTheme());
+			updatePlayerButtons();
+		}
+		
+		public void setPlayerButtonsEnabled(boolean enabled) {
+			playersBList.forEach(b->b.setEnabled(enabled));
+		}
+
+		public void renderPile() {
+			if(pileButton!=null) this.pilePart.add(pileButton);
+		}
+	
+
+		public void resetAccusablePlayersEffects() {
+			//TODO
+		}
+
+		public void themeUpPlayerButton(Player p, NotificationType nt) {
+			this.playersBList.stream().filter(b->b.getAssociatedPlayer()==p).forEach(b->b.makeTheme(nt));
+		}
+		
+		public void boldenPlayerButton(Player p) {
+			this.playersBList.stream().filter(b->b.getAssociatedPlayer()==p).forEach(b->b.bolden());
+		}
+		
+		public void unBoldenPlayerButton(Player p) {
+			this.playersBList.stream().filter(b->b.getAssociatedPlayer()==p).forEach(b->b.unBolden());
+		}
+			
+		
+		public void setAccusablePlayers() {
+			// TODO Auto-generated method stub
+			
+		}
+		
+		public void setSelectedDeckButton(DeckSelectorButton b) {
+			if(this.selectedDeckButton!=null) {
+				selectedDeckButton.unBolden();
+			}
+			
+			if(b!=null) {
+				b.bolden();
+			}
+			else {
+				if(this.selectedDeckButton!=null) this.selectedDeckButton.unBolden();
+			}
+			this.selectedDeckButton=b;
+		}
+		public DeckSelectorButton getSelectedDeckButton() {
+			return selectedDeckButton;
+		}
+
+
 	}
-	private class CardsPanel extends CustomGridBagCell {
+	private class CardsPanel extends GridBagCell {
 		public CardsPanel(int x, int y,int w, int h) {
-			super(x,y,w,h);
+			super(x,y,w,h,defaultCellBorder,cellsList);
 			this.getPan().setBackground(Color.YELLOW);
 		}
 	}
-	private class BotNotificationsPanel extends CustomGridBagCell {
+	private class BotNotificationsPanel extends GridBagCell {
 		private NotificationsBox notificationsBox;// = new TextBox();
 
 		
 		public BotNotificationsPanel(int x, int y,int w, int h)  {
-			super(	x,y,w,h);
+			super(x,y,w,h,defaultCellBorder,cellsList);
 			this.getPan().setLayout(new BorderLayout());
 			this.getPan().setBackground(Color.ORANGE);
 			//this.getPan().add(textBox);
@@ -402,31 +460,13 @@ public class GamePanel extends JPanel {
 			this.notificationsBox.printNotification(n);
 		}
 	}
-	private class ScorePanel extends CustomGridBagCell{
+	private class ScorePanel extends GridBagCell{
 		public ScorePanel(int x, int y,int w, int h) {
-			super(x,y,w,h);
+			super(x,y,w,h,defaultCellBorder,cellsList);
 			this.getPan().setBackground(Color.PINK);
 		}
 	}
-
-	public void initCells ( ) {
-		/*TextBox textBox = new TextBox();
-		textBox.setPreferredSize(this.botNotificationsPanel.getPan().getPreferredSize());
-		this.botNotificationsPanel.getPan().add(textBox);
-		this.botNotificationsPanel.setTextBox(textBox);*/
-		cellsList.forEach(c->c.init());
-	}
-
-
-	public void setInputMediator(InputMediator inputMediator) {
-		this.inputMediator=inputMediator;
-	}
-
-
-
-
-
-
-
+	
+	
 	
 }

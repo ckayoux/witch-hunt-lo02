@@ -1,7 +1,6 @@
 package fr.sos.witchhunt.model.cards;
 
 import fr.sos.witchhunt.controller.Tabletop;
-import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.players.Player;
 
 public final class Toad extends RumourCard {
@@ -31,6 +30,7 @@ public final class Toad extends RumourCard {
 				switch(me.revealIdentity()) {
 					case WITCH:
 						Tabletop.getInstance().getCurrentRound().setNextPlayerCounterclockwise();
+						Tabletop.getInstance().getCurrentRound().getNextPlayer().requestBeHuntedScreen();
 						me.eliminate();
 						me.requestEliminationScreen(me);
 						break;

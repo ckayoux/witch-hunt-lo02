@@ -95,7 +95,6 @@ public final class Round {
 		commonPile.reset(); //returning all rumourCards to the main pile, of Tabletop's instance
 		
 		displayMediator.displayRoundEndScreen(roundNumber);
-		Tabletop.getInstance().freeze(1000);
 	}
 	
 	//UTILS METHODS
@@ -107,6 +106,7 @@ public final class Round {
 	 */
 	private void distributeIdentity() {
 		displayMediator.displayChooseIdentityScreen();
+		Tabletop.getInstance().freeze(1250);
 		for(Player p : Tabletop.getInstance().getActivePlayersList()) {
 			p.chooseIdentity();
 		}

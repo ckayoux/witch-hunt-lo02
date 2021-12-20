@@ -184,7 +184,6 @@ public final class DisplayController implements DisplayMediator {
 	public void displayPlayTurnScreen(Player p) {
 		console.logPlayTurnMessage(p.getName());
 		gui.displayPlayTurnScreen(p);
-		gui.setCurrentPlayer(p);
 	}
 
 
@@ -192,14 +191,17 @@ public final class DisplayController implements DisplayMediator {
 	public void displayEndOfTurnScreen() {
 		console.logEndOfTurnMessage();
 		gui.displayEndOfTurnScreen();
-		gui.unsetCurrentPlayer();
 	}
 	
 	@Override
 	public void displayAccusationScreen(Player accusator, Player accused) {
 		console.logAccusationMessage(accusator.getName(),accused.getName());
 		gui.displayAccusationScreen(accusator,accused);
-		gui.setAccusedPlayer(accused);
+	}
+	
+	@Override
+	public void displayHuntedPlayerScreen(Player huntedPlayer) {
+		gui.showHuntedPlayer(huntedPlayer);
 	}
 	
 	@Override
@@ -385,8 +387,7 @@ public final class DisplayController implements DisplayMediator {
 		console.logSelectCardsMessage(null);
 		this.displayCards(from, forcedReveal);
 		
-		Menu guiVersion = new Menu("Select any card",from.getCards().toArray());
-		gui.displayMenu(guiVersion);
+		gui.displayChooseAnyCardScreen(from);
 	}
 
 	@Override
@@ -394,8 +395,7 @@ public final class DisplayController implements DisplayMediator {
 		console.logSelectCardsMessage("unrevealed");
 		this.displayCards(from, forcedReveal);
 		
-		Menu guiVersion = new Menu("Select an unrevealed card",from.getCards().toArray());
-		gui.displayMenu(guiVersion);
+		gui.displayChooseUnrevealedCardScreen(from);
 	}
 	
 	@Override
@@ -403,29 +403,26 @@ public final class DisplayController implements DisplayMediator {
 		console.logSelectCardsMessage("revealed");
 		this.displayCards(from, forcedReveal);
 		
-		Menu guiVersion = new Menu("Select a revealed card",from.getCards().toArray());
-		gui.displayMenu(guiVersion);
+		gui.displayChooseRevealedCardScreen(from);
 		
 	}
 	
 	@Override
 	public void displaySelectWitchCardScreen(RumourCardsPile from) {
-		console.logSelectCardsMessage(null);
+		console.logSelectWitchCardMessage();
 		this.displayWitchEffects(from);
 		
-		Menu guiVersion = new Menu("Select a card with a valid Witch? effect",from.getCards().toArray());
-		gui.displayMenu(guiVersion);
+		gui.displayChooseWitchCardScreen(from);
 	}
 	
 
 	
 	@Override
 	public void displaySelectHuntCardScreen(RumourCardsPile from) {
-		console.logSelectCardsMessage(null);
+		console.logSelectHuntCardMessage();
 		this.displayHuntEffects(from);
-		
-		Menu guiVersion = new Menu("Select a card with a valid Hunt! effect",from.getCards().toArray());
-		gui.displayMenu(guiVersion);
+
+		gui.displayChooseHuntCardScreen(from);
 	}
 
 
@@ -584,6 +581,11 @@ public final class DisplayController implements DisplayMediator {
 	@Override
 	public void displayNoAvailableHuntEffectsScreen() {
 		console.logNoAvailableHuntEffectsMessage();
+	}
+
+	@Override
+	public void displayPlayerChoseToWitchScreen(Player player) {
+		gui.showWitchingPlayer(player);
 	}
 
 

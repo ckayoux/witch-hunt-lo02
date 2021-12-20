@@ -10,7 +10,10 @@ import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
+import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
+import fr.sos.witchhunt.model.players.TurnAction;
 
 public final class GUIView {
 
@@ -57,15 +60,9 @@ public final class GUIView {
 			this.mainMenuPanel=null;
 			this.gamePanel=this.w.renderGamePanel();
 			this.gamePanel.setInputMediator(inputMediator);
-			//this.gamePanel.displayMainNotification(new Notification("Let the witch hunt begin !\n",NotificationType.NORMAL));
-			SwingUtilities.invokeLater(new Runnable() {
-			    @Override
-				public void run() {
-			    	gamePanel.displayMainNotification(new Notification("Let the witch hunt begin !\n",NotificationType.NORMAL));
-			    	gamePanel.renderPlayers(tabletop.getPlayersList(),tabletop.getAllCardsPile());
-			    }
-			});
-			
+			this.gamePanel.displayMainNotification(new Notification("Let the witch hunt begin !\n",NotificationType.NORMAL));
+			this.gamePanel.renderPlayers(tabletop.getPlayersList());
+			this.gamePanel.setPlayerButtonsEnabled(false);
 		}
 	}
 
@@ -80,12 +77,12 @@ public final class GUIView {
 		});
 	}
 	
-	public void resetActionsPanel() {
+	public void resetChoicesPanel() {
 		if(this.gamePanel!=null) {
 			SwingUtilities.invokeLater(new Runnable() {
 				 @Override
 				public void run() {
-				    gamePanel.resetActionPanel();
+					 if(gamePanel!=null) gamePanel.resetActionPanel();
 				}
 			});
 		}
@@ -93,7 +90,7 @@ public final class GUIView {
 			SwingUtilities.invokeLater(new Runnable() {
 				 @Override
 				public void run() {
-				    mainMenuPanel.resetActionPanel();
+				    mainMenuPanel.resetChoicesPanel();
 				}
 			});
 		}
@@ -143,6 +140,7 @@ public final class GUIView {
 			gamePanel.resetNotificationsBoxes();
 			gamePanel.displayMainNotification(new Notification("ROUND "+roundNumber+"\n",NotificationType.NORMAL));
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.HARD_SEPARATOR));
+			gamePanel.setPlayerButtonsEnabled(false);
 		}
 		
 	}
@@ -178,6 +176,7 @@ public final class GUIView {
 					)
 			);
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			gamePanel.boldenPlayer(tabletop.getPlayersList().get(0));
 		}
 	}
 
@@ -189,6 +188,12 @@ public final class GUIView {
 							NotificationType.NORMAL
 					)
 			);
+			gamePanel.unBoldenPlayer(p);
+			gamePanel.updatePlayerActivityStatus(p);
+			int index = tabletop.getPlayersList().indexOf(p);
+			if (index+1<tabletop.getPlayersList().size()) {
+				gamePanel.boldenPlayer(tabletop.getPlayersList().get(index+1));
+			}
 		}
 	}
 	
@@ -218,6 +223,8 @@ public final class GUIView {
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.HARD_SEPARATOR));
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			gamePanel.renderPile(tabletop.getPile());
+			gamePanel.updatePileContent();
 			//COMMENCER A AFFICHER LES CARTES
 		}
 	}
@@ -232,7 +239,7 @@ public final class GUIView {
 							NotificationType.TURN
 					)
 			);
-		
+			gamePanel.showCurrentPlayer(p);
 		}
 	}
 	
@@ -245,38 +252,38 @@ public final class GUIView {
 					)
 			);
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			gamePanel.resetPlayersEffects();
 		}
 	}
 	
 	
 
-
-	public void setCurrentPlayer(Player p) {
-		//ENCADRER EN VERT LE JOUEUR
-	}
-
-
-	public void unsetCurrentPlayer() {
-		//NE PLUS L'ENCADRER EN VERT
-	}
-
-
 	public void displayAccusationScreen(Player accusator, Player accused) {
-		if(gamePanel!=null)
+		if(gamePanel!=null) {
 			gamePanel.displayMainNotification(
 					new Notification(
 							accused.getName()+", you've been accused by "+accusator.getName()+" !\n",
 							NotificationType.OFFENSIVE
 					)
 			);
+			gamePanel.showAccusedPlayer(accused);
+		}
 		
 	}
-
-
-	public void setAccusedPlayer(Player accused) {
-		// ENCADRER EN ROUGE L'ACCUSE
-		
+	
+	public void showHuntedPlayer(Player huntedPlayer) {
+		if(gamePanel!=null)  {
+			gamePanel.showHuntedPlayer(huntedPlayer);
+		}
 	}
+	
+
+	public void showWitchingPlayer(Player witchingPlayer) {
+		if(gamePanel!=null)  {
+			gamePanel.showWitchingPlayer(witchingPlayer);
+		}
+	}
+
 
 
 	public void displayChooseDefenseMessage(Player p) {
@@ -357,6 +364,7 @@ public final class GUIView {
 			sb.append(" (Total : "+ p.getScore()+")\n");
 			
 			gamePanel.displayMainNotification(new Notification(sb.toString(),NotificationType.SCORE));
+			gamePanel.updateScoreDisplay(p);
 		}
 	}
 
@@ -369,8 +377,7 @@ public final class GUIView {
 			else 
 				eliminationNotification=new Notification(eliminator.getName()+" has eliminated themselve !\n",NotificationType.OFFENSIVE);
 			gamePanel.displayMainNotification(eliminationNotification);
-			
-			//disable victim's button
+			gamePanel.updatePlayerActivityStatus(victim);
 		}
 		
 	}
@@ -380,7 +387,7 @@ public final class GUIView {
 		if(gamePanel!=null)
 			gamePanel.displaySecondaryNotification(
 					new Notification(
-							lastUnrevealedPlayer.getName()+" is the last unrevealed player remaining. It turns out ...\n",
+							lastUnrevealedPlayer.getName()+" is the last unrevealed player remaining.\n",
 							NotificationType.NORMAL
 					)
 			);
@@ -407,28 +414,28 @@ public final class GUIView {
 
 	public void displayPlayerPlaysWitchEffectScreen(Player p, RumourCard rc) {
 		if(gamePanel!=null) {
-			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 			gamePanel.displayMainNotification(
 					new Notification(
 							p.getName()+" uses "+stringifyRumourCard(rc, true,rc::getWitchEffectDescription),
 							NotificationType.WITCH
 					)
 			);
-			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 		}
 		//UPDATE REVEAL STATUS
 	}
 	
 	public void displayPlayerPlaysHuntEffectScreen(Player p, RumourCard rc) {
 		if(gamePanel!=null) {
-			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 			gamePanel.displayMainNotification(
 					new Notification(
 						p.getName()+" uses "+stringifyRumourCard(rc, true,rc::getHuntEffectDescription),
 						NotificationType.HUNT
 					)
 			);
-			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 		}
 		//UPDATE REVEAL STATUS
 	}
@@ -436,14 +443,15 @@ public final class GUIView {
 	
 	public void displayPlayerHasChosenCardScreen(Player p, RumourCard chosen, boolean forceReveal) {
 		if(gamePanel!=null) {
-			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 			gamePanel.displayMainNotification(
 					new Notification(
 							p.getName()+" has taken "+stringifyRumourCard(chosen, forceReveal, chosen::getWitchEffectDescription ,chosen::getHuntEffectDescription),
 							NotificationType.NORMAL
 					)
 			);
-			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			if(tabletop.getPile().contains(chosen)) gamePanel.updatePileContent();
+			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 		}
 		//UPDATE CARDS PANEL
 	}
@@ -451,14 +459,15 @@ public final class GUIView {
 
 	public void displayPlayerHasDiscardedCardScreen(Player owner, RumourCard rc) {
 		if(gamePanel!=null) {
-			if(!rc.isRevealed())gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			//if(rc.isRevealed())gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 			gamePanel.displayMainNotification(
 					new Notification(
 						owner.getName()+" has discarded "+stringifyRumourCard(rc, false, rc::getWitchEffectDescription ,rc::getHuntEffectDescription),
 						NotificationType.NORMAL
 					)
 			);
-			if(!rc.isRevealed())gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			//if(rc.isRevealed())gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			gamePanel.updatePileContent();
 		}
 		//UPDATE PILE AND OWNER'S HAND
 	}
@@ -511,14 +520,14 @@ public final class GUIView {
 
 	public void displayPlayerHasResetCardScreen(Player player, RumourCard rc) {
 		if(gamePanel!=null) {
-			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 			gamePanel.displayMainNotification(
 					new Notification(
 							player.getName() +" took back "+stringifyRumourCard(rc, false, rc::getWitchEffectDescription ,rc::getHuntEffectDescription),
 							NotificationType.NORMAL
 					)
 			);
-			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 		}
 		//MAKE RC UNREVEALED ON CARDS PANEL
 	}
@@ -620,11 +629,11 @@ public final class GUIView {
 			}
 			for(Supplier<String> getter : effectGetters) {
 				String off;
-				if(getter.equals((Supplier<String>)rc::getWitchEffectDescription)) {
+				if(getter.get().equals(rc.getWitchEffectDescription())&&effectGetters.length>1) {
 					sb.append("\tWitch : ");
 					off=" ".repeat("Witch : ".length());
 				}
-				else if (getter.equals((Supplier<String>)rc::getHuntEffectDescription)) {
+				else if (getter.get().equals(rc.getHuntEffectDescription())&&effectGetters.length>1) {
 					sb.append("\tHunt : ");
 					off=" ".repeat("Hunt : ".length());
 				}
@@ -646,5 +655,50 @@ public final class GUIView {
 	public void setTabletop(Tabletop tabletop) {
 		this.tabletop=tabletop;
 	}
+
+
+	public void displayChooseAnyCardScreen(RumourCardsPile from) {
+		if(gamePanel!=null) displayMenu(new Menu("Select any card",from.getCards().toArray()));
+	}
+	public void displayChooseRevealedCardScreen(RumourCardsPile from) {
+		if(gamePanel!=null) displayMenu(new Menu("Select a revealed card",from.getCards().toArray()));
+	}
+	public void displayChooseUnrevealedCardScreen(RumourCardsPile from) {
+		if(gamePanel!=null) displayMenu(new Menu("Select an unrevealed card",from.getCards().toArray()));
+	}
+
+
+	public void displayChooseWitchCardScreen(RumourCardsPile from) {
+		if(gamePanel!=null) {
+			displayMenu(new Menu("Select a card with a valid Witch? effect",from.getCards().toArray()));
+			SwingUtilities.invokeLater(new Runnable() {
+			    @Override
+				public void run() {
+			    	gamePanel.setActionsPanelThemeAsForActionType(DefenseAction.WITCH);
+			    }
+			});
+			
+		}
+	}
+
+
+	public void displayChooseHuntCardScreen(RumourCardsPile from) {
+		if(gamePanel!=null)  {
+			displayMenu(new Menu("Select a card with a valid Hunt! effect",from.getCards().toArray()));
+			SwingUtilities.invokeLater(new Runnable() {
+			    @Override
+				public void run() {
+			    	gamePanel.setActionsPanelThemeAsForActionType(TurnAction.HUNT);
+			    }
+			});
+			
+		}
+	}
+
+
+
+
+
+	
 	
 }

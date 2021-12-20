@@ -553,6 +553,15 @@ public final class StdView {
 		log("\tYou have no more available Hunt! effects.");
 	}
 
+	public void logSelectHuntCardMessage() {
+		log("\tSelect a card with a valid Hunt! effect :");
+	}
+
+	public void logSelectWitchCardMessage() {
+		log("\tSelect a card with a valid Witch? effect :");
+		
+	}
+
 
 
 	

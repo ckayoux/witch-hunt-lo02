@@ -32,8 +32,8 @@ public final class PetNewt extends RumourCard {
 						.filter(p -> (p != getMyself() && p.hasRevealedRumourCards() )).toList();
 				Player target = me.chooseHuntedTarget(eligiblePlayers);
 				RumourCard chosenCard = me.chooseRevealedCard(target.getRevealedSubhand());
-				me.requestHasChosenCardScreen(chosenCard, false);
 				me.takeRumourCard(chosenCard, target);
+				me.requestHasChosenCardScreen(chosenCard, false);
 				chosenCard.reset();
 				chooseNextPlayer();
 			}

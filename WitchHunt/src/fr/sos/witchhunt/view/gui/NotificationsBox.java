@@ -24,7 +24,7 @@ public class NotificationsBox extends JScrollPane{
 			
 			DefaultCaret caret = (DefaultCaret)this.textPane.getCaret();
 			caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-			
+		
 			this.textPane.setFont(new Font("Consolas", Font.BOLD, 16));
 		}
 
@@ -52,7 +52,7 @@ public class NotificationsBox extends JScrollPane{
 		
 		
 		public void printNotification(Notification n)  {
-			//textPane.setCharacterAttributes(n.makeAttributeSet(), true);
+	
 			try {
 				this.doc.insertString(doc.getLength(), n.getText(), n.makeAttributeSet());
 			} catch (BadLocationException e) {

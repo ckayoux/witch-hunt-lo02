@@ -34,12 +34,13 @@ public final class Cauldron extends RumourCard {
 					switch(me.revealIdentity()) {
 						case WITCH:
 							Tabletop.getInstance().getCurrentRound().setNextPlayerCounterclockwise();
+							Tabletop.getInstance().getCurrentRound().getNextPlayer().requestBeHuntedScreen();
 							me.eliminate();
 							me.requestEliminationScreen(me);
 							break;
 						
 						case VILLAGER: 
-							me.chooseNextPlayer();
+							chooseNextPlayer();
 							break;
 					}
 				}

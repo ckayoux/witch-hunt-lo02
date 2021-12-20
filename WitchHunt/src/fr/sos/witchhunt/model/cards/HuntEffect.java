@@ -11,11 +11,20 @@ public abstract class HuntEffect extends Effect {
 		super(desc,value);
 	}
 	
+	@Override
 	protected Player getMyself() {
 		return Tabletop.getInstance().getHunter();
 	}
 	private Player getTarget() {
 		return Tabletop.getInstance().getHuntedPlayer();
+	}
+	
+	@Override
+	public Player chooseNextPlayer() {
+		Player nextPlayer = getMyself().chooseNextPlayer();
+		nextPlayer.beHunted();
+		nextPlayer.takeNextTurn();
+		return nextPlayer;
 	}
 	
 }

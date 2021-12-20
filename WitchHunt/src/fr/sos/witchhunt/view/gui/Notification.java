@@ -48,6 +48,10 @@ public class Notification {
 		}
 	}
 	
+	public Color getFg() {
+		return this.fg;
+	}
+	
 	public String getText() {
 		return this.text;
 	}

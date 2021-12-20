@@ -139,7 +139,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	public TurnAction chooseTurnAction() {
 		Menu possibilities;
 		if(this.canHunt()) {
-			possibilities = new Menu("Choose one of these actions :",
+			possibilities = new Menu("Choose an action :",
 										TurnAction.ACCUSE,
 										TurnAction.HUNT,
 										"/c/Show your cards",
@@ -160,7 +160,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		}
 		else {
 			requestDisplayNoAvailableHuntEffectsScreen();
-			possibilities = new Menu("Choose one of these actions :",
+			possibilities = new Menu("You have no more playable Hunt! effects.",
 										TurnAction.ACCUSE,
 										"/c/Show your cards",
 										"/c/Show players ranking");
@@ -300,7 +300,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	public RumourCard chooseUnrevealedCard(RumourCardsPile from,boolean forcedReveal){
 		if(targetPileContainsCards(from.getUnrevealedSubpile())){
 			//the player must necessarily choose an unrevealed card
-			requestSelectUnrevealedCardScreen(from,forcedReveal);
+			requestSelectUnrevealedCardScreen(from.getUnrevealedSubpile(),forcedReveal);
 			//displayMediator.displayCards(from.getUnrevealedSubpile(),forcedReveal);
 			return chooseCard(from.getUnrevealedSubpile());
 		}
@@ -314,7 +314,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	public RumourCard chooseRevealedCard(RumourCardsPile from){
 		if(targetPileContainsCards(from.getRevealedSubpile())){
 			//the player must necessarily choose a revealed card
-			requestSelectRevealedCardScreen(from,true);
+			requestSelectRevealedCardScreen(from.getRevealedSubpile(),true);
 			//displayMediator.displayCards(from.getRevealedSubpile(),false);
 			return chooseCard(from.getRevealedSubpile());
 		}

@@ -1,20 +1,8 @@
 package fr.sos.witchhunt.view.gui;
 
-import java.awt.Button;
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-
-import fr.sos.witchhunt.InputMediator;
-import fr.sos.witchhunt.controller.Application;
-import fr.sos.witchhunt.view.InputSource;
-
-import javax.swing.JButton;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Window extends JFrame /*implements InputSource*/ {
 	
@@ -47,7 +35,7 @@ public class Window extends JFrame /*implements InputSource*/ {
 		this.setVisible(false);
 		GamePanel gp = new GamePanel();
 		this.setContentPane(gp);
-		gp.initCells();
+		gp.init();
 		this.pack();
 		this.setVisible(true);
 		return gp;
