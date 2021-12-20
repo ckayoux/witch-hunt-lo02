@@ -1,9 +1,10 @@
 package fr.sos.witchhunt.model.cards;
 
+import java.awt.image.BufferedImage;
+
 import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
-
 public abstract class RumourCard extends Card {
-
+	
 	protected Effect witchEffect;
 	protected Effect huntEffect;
 	protected String additionnalEffectDescription="";
@@ -93,5 +94,10 @@ public abstract class RumourCard extends Card {
 	public String getAdditionnalEffectDescription() {
 		return this.additionnalEffectDescription;
 	}
-	
+
+	public BufferedImage getImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -1,20 +1,28 @@
 package fr.sos.witchhunt.view.gui;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.controller.DeckSelectorButtonController;
 import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.model.cards.Card;
+import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;  
 
@@ -144,7 +152,7 @@ public class GamePanel extends GridBagPanel {
 	}
 	
 	public void showAccusedPlayer(Player accused) {
-		deckSelectorPanel.resetAccusablePlayersEffects();
+	//	deckSelectorPanel.resetAccusablePlayersEffects();
 		deckSelectorPanel.themeUpPlayerButton(accused,NotificationType.OFFENSIVE);
 	}
 
@@ -188,31 +196,7 @@ public class GamePanel extends GridBagPanel {
 		return deckSelectorPanel.getSelectedDeckButton();
 	}
 	
-	
-	/*@Override
-	public void buildCustomGridBag () {
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.insets = this.gbcInsets;
-		
-		Iterator<GridBagCell> it = cellsList.iterator();
-		while (it.hasNext()) {
-			GridBagCell cell = it.next();
-			int w = cell.getWidth();
-			int h = cell.getHeight();
-			int x = cell.getX();
-			int y = cell.getY();
-			gbc.gridx = x;
-			gbc.gridy = y;
-			gbc.gridwidth = w;
-			gbc.weightx = w/(float)this.gridWidth;
-			gbc.gridheight = h;
-			gbc.weighty = h/(float)this.gridHeight;
-			this.add(cell.getPan(),gbc);			
-		}
-	}
-	*/
+
 	
 //SUBPANELS
 	private class TopNotificationsPanel extends GridBagCell {
@@ -380,9 +364,9 @@ public class GamePanel extends GridBagPanel {
 		}
 	
 
-		public void resetAccusablePlayersEffects() {
+	/*	public void resetAccusablePlayersEffects() {
 			//TODO
-		}
+		}*/
 
 		public void themeUpPlayerButton(Player p, NotificationType nt) {
 			this.playersBList.stream().filter(b->b.getAssociatedPlayer()==p).forEach(b->b.makeTheme(nt));
@@ -422,14 +406,123 @@ public class GamePanel extends GridBagPanel {
 
 	}
 	private class CardsPanel extends GridBagCell {
+		
+		private CardLayout cl = new CardLayout();
+		private Map<RumourCardsPile,DeckPanel> M = new HashMap<RumourCardsPile,DeckPanel>();
+		
 		public CardsPanel(int x, int y,int w, int h) {
 			super(x,y,w,h,defaultCellBorder,cellsList);
 			this.getPan().setBackground(Color.YELLOW);
 		}
+		
+		@Override
+		public void init() {
+			this.getPan().setPreferredSize(this.getPan().getPreferredSize());
+			this.getPan().setLayout(cl);
+		}
+		
+		public void addDeck(RumourCardsPile rcp) {
+			M.put(rcp, new DeckPanel(rcp));
+		}
+		
+		public DeckPanel getDeck(RumourCardsPile rcp) {
+			return M.get(rcp);
+		}
+		
+		public void showDeck(RumourCardsPile rcp) {
+			cl.show(this.getPan(),getDeck(rcp).toString());
+		}
+		public void showDeck(Player p) {
+			this.showDeck(p.getHand());
+		}
+		
+		private class DeckPanel extends JPanel {
+			private String name;
+			private List<RenderedCard> renderedCardsList = new ArrayList<RenderedCard>();
+			
+			public DeckPanel(RumourCardsPile rcp) {
+				super();
+				this.setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
+				rcp.getCards().forEach(c->this.add(new JButton(c.getName())));
+				if(rcp.getOwner()!=null) {
+					this.name=Integer.toString(rcp.getOwner().getId());
+				}
+				else {
+					this.name="Pile";
+				}
+				//rcp.getCards().forEach(rc->this.addCard(rc));
+			}
+			
+			@Override
+			public String toString() {
+				return name;
+			}
+			
+			public void resetPane() {
+				this.removeAll();
+			}
+			
+			public void renderPane() {
+				resetPane();
+				this.renderedCardsList.forEach(j->this.add(j));
+			}
+			
+			public void addCard(RumourCard rc) {
+				this.renderedCardsList.add(new RenderedCard(rc));
+			}
+			
+			public void removeCard(RumourCard rc) {
+				RenderedCard jay = this.renderedCardsList.stream().filter(j->j.getAssociatedRumourCard()==rc).findAny().get();
+				if(jay!=null) {
+					this.renderedCardsList.remove(jay);
+					this.remove(jay);
+				}
+			}
+			
+			public void updateCard(RumourCard rc) {
+				this.renderedCardsList.stream().filter(j->j.getAssociatedRumourCard()==rc).forEach(j->j.update());
+			}
+		}
+		
+		private class RenderedCard extends JLabel {
+			private RumourCard represents=null;
+			private boolean revealed = false;
+			private final static ImageIcon unrevealedRenderedCard = new ImageIcon(Card.getUnrevealedCardImage());
+			private static Map<RumourCard,ImageIcon> renderedCardIconsMap = new HashMap<RumourCard,ImageIcon>();
+			
+			public RenderedCard(RumourCard rc) {
+				super();
+				this.represents=rc;
+				this.update();
+			}
+			
+			public void update() {
+				if(this.represents!=null) {
+					if(this.represents.isRevealed()&&!revealed) {
+						ImageIcon alreadyRendered = renderedCardIconsMap.get(this.represents);
+						if(alreadyRendered!=null) {
+							this.setIcon(alreadyRendered);
+						}
+						else {
+							ImageIcon i = new ImageIcon(this.represents.getImage());
+							renderedCardIconsMap.put(this.represents, i);
+							this.setIcon(i);
+						}
+					}
+					else if (!this.represents.isRevealed()&&revealed) {
+						this.setIcon(unrevealedRenderedCard);
+					}
+				}
+			}
+			
+			public RumourCard getAssociatedRumourCard() {
+				return this.represents;
+			}
+		}
+		
 	}
 	private class BotNotificationsPanel extends GridBagCell {
 		private NotificationsBox notificationsBox;// = new TextBox();
-
 		
 		public BotNotificationsPanel(int x, int y,int w, int h)  {
 			super(x,y,w,h,defaultCellBorder,cellsList);
