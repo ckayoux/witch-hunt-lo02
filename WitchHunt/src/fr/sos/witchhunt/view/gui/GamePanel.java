@@ -243,6 +243,7 @@ public class GamePanel extends JPanel {
 				String buttonText = ActionButton.makeButtonText(o);
 				if(buttonText!=null) {
 					ActionButton b =  new ActionButton(buttonText);
+					b.setBackground(ActionButton.getButtonColorByActionType(o));
 					this.actionButtonsList.add(b);
 				}
 			}

@@ -1,5 +1,6 @@
 package fr.sos.witchhunt.view.gui;
 
+import java.awt.Color;
 import java.awt.Insets;
 
 import javax.swing.JButton;
@@ -9,13 +10,45 @@ import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
-
 public class ActionButton extends JButton {
 	
 	public ActionButton(String str) {
 		super(str);
 		this.setAlignmentX(CENTER_ALIGNMENT);
 		this.setMargin(new Insets(10, 10, 10, 10));
+	}
+	
+	public static Color getButtonColorByActionType(Object o) {
+		if (o instanceof Identity) {
+			Identity i = (Identity) o;
+			switch (i) {
+			case VILLAGER:
+				return new Color(255, 142, 85);
+			case WITCH:
+				return new Color(161,132,220);
+			}
+		}
+		else if (o instanceof TurnAction) {
+			TurnAction ta = (TurnAction) o;
+			switch (ta) {
+				case ACCUSE:
+					return new Color(255,97,97);
+				case HUNT:
+					return new Color(255, 142, 85);
+			}
+		}
+		else if (o instanceof DefenseAction) {
+			DefenseAction da = (DefenseAction) o;
+			switch (da) {
+				case REVEAL:
+					return new Color(255,97,97);
+				case WITCH:
+					return new Color(161,132,220);
+				case DISCARD:
+					return new Color(156,147,135);
+			}
+		}
+		return null;
 	}
 	
 	public static String makeButtonText(Object o) {
@@ -71,6 +104,7 @@ public class ActionButton extends JButton {
 		}
 		return buttonText;
 	}
-
+	
+	
 	
 }

@@ -18,7 +18,6 @@ public class DeckSelectorButton extends JButton {
 		this.associatedPlayer=p;
 		this.associatedDeck=p.getHand();
 		this.setAlignmentX(CENTER_ALIGNMENT);
-		this.setMargin(defaultMargin);
 	}
 	
 	public DeckSelectorButton(RumourCardsPile pile) {
@@ -37,4 +36,5 @@ public class DeckSelectorButton extends JButton {
 	public RumourCardsPile getDeck () {
 		return this.associatedDeck;
 	}
+
 }

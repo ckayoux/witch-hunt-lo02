@@ -1,5 +1,6 @@
 package fr.sos.witchhunt.view.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -75,6 +75,7 @@ public class MainMenuPanel extends JPanel{
 					this.actionButtonsList.add(b);
 				}
 			}
+			
 			this.renderPane();
 		}
 		
