@@ -11,3 +11,4 @@ cat build.logs |tail +20 |lolcat -iF 0.4
 cd build
 echo "" 
 java fr.sos.witchhunt.controller.Application
+
