@@ -422,6 +422,7 @@ public final class GUIView {
 							NotificationType.WITCH
 					)
 			);
+			gamePanel.updateCardRevealStatus(rc);
 			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 		}
 		//UPDATE REVEAL STATUS
@@ -436,6 +437,7 @@ public final class GUIView {
 						NotificationType.HUNT
 					)
 			);
+			gamePanel.updateCardRevealStatus(rc);
 			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 		}
 		//UPDATE REVEAL STATUS
@@ -659,21 +661,26 @@ public final class GUIView {
 	public void setTabletop(Tabletop tabletop) {
 		this.tabletop=tabletop;
 	}
-
-
+	
 	public void displayChooseAnyCardScreen(RumourCardsPile from) {
-		if(gamePanel!=null) displayMenu(new Menu("Select any card",from.getCards().toArray()));
+		if(gamePanel!=null) { 
+			gamePanel.switchDeck(from);
+			displayMenu(new Menu("Select any card",from.getCards().toArray()));
+		}
 	}
 	public void displayChooseRevealedCardScreen(RumourCardsPile from) {
+		gamePanel.switchDeck(from);
 		if(gamePanel!=null) displayMenu(new Menu("Select a revealed card",from.getCards().toArray()));
 	}
 	public void displayChooseUnrevealedCardScreen(RumourCardsPile from) {
+		gamePanel.switchDeck(from);
 		if(gamePanel!=null) displayMenu(new Menu("Select an unrevealed card",from.getCards().toArray()));
 	}
 
 
 	public void displayChooseWitchCardScreen(RumourCardsPile from) {
 		if(gamePanel!=null) {
+			gamePanel.switchDeck(from);
 			displayMenu(new Menu("Select a card with a valid Witch? effect",from.getCards().toArray()));
 			SwingUtilities.invokeLater(new Runnable() {
 			    @Override
@@ -697,6 +704,11 @@ public final class GUIView {
 			});
 			
 		}
+	}
+
+
+	public void displayChooseCardToDiscardScreen(Player p) {
+		if(gamePanel!=null) gamePanel.switchDeck(p.getHand(), true);
 	}
 
 

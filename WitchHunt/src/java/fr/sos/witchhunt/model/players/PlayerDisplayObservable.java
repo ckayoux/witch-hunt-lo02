@@ -44,7 +44,7 @@ public interface PlayerDisplayObservable {
 	public void requestPlayerPlaysWitchEffectScreen(RumourCard rc);
 	public void requestPlayerPlaysHuntEffectScreen(RumourCard rc);
 	public void requestEmptyRCPScreen(RumourCardsPile rcp);
-	public void requestDiscardCardScreen(RumourCard rc);
+	public void requestPlayerDiscardedCardScreen(RumourCard rc);
 	public void requestHasChosenCardScreen(RumourCard chosen, RumourCardsPile from, boolean forceReveal);
 	public void requestHasResetCardScreen(RumourCard chosen);
 	
@@ -55,5 +55,4 @@ public interface PlayerDisplayObservable {
 	public void requestPlayTurnAgainScreen();
 	public void requestLog(String msg);
 	public void requestDisplayPossibilities(Menu m);
-
 }

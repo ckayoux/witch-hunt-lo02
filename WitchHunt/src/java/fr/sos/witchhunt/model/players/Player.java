@@ -574,7 +574,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	public void discard(RumourCard rc) {
 		this.hand.giveCard(rc, Tabletop.getInstance().getPile());
-		if(rc!=null) requestDiscardCardScreen(rc);
+		if(rc!=null) requestPlayerDiscardedCardScreen(rc);
 	}
 	
 	/**
@@ -1025,8 +1025,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * @param rc The discarded {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}
 	 */
 	@Override
-	public void requestDiscardCardScreen(RumourCard rc) {
-		displayMediator.displayDiscardCardScreen(this,rc);
+	public void requestPlayerDiscardedCardScreen(RumourCard rc) {
+		displayMediator.displayPlayerDiscardedCardScreen(this,rc);
 		this.delayGame((rc.isRevealed())?3*shortDelay:2*shortDelay);
 	}
 	

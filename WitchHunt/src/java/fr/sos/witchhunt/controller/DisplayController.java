@@ -469,7 +469,7 @@ public final class DisplayController implements DisplayMediator {
 	}
 
 	@Override
-	public void displayDiscardCardScreen(Player owner,RumourCard rc) {
+	public void displayPlayerDiscardedCardScreen(Player owner,RumourCard rc) {
 		console.printPlayerDiscardedCardMessage(owner.getName());
 		displayCard(rc, false);
 		console.resetOffset();
@@ -586,6 +586,11 @@ public final class DisplayController implements DisplayMediator {
 	@Override
 	public void displayPlayerChoseToWitchScreen(Player player) {
 		gui.showWitchingPlayer(player);
+	}
+
+	@Override
+	public void displayChooseCardToDiscardScreen(Player p) {
+		gui.displayChooseCardToDiscardScreen(p);
 	}
 
 

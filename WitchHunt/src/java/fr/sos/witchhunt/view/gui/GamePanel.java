@@ -26,6 +26,7 @@ import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.Card;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;  
 
 public class GamePanel extends GridBagPanel {
@@ -38,6 +39,7 @@ public class GamePanel extends GridBagPanel {
 	private CardsPanel cardsPanel;
 	private BotNotificationsPanel botNotificationsPanel;
 	private ScorePanel scorePanel;
+//	private Player currentPlayer = null;
 	
 	
 	
@@ -169,10 +171,15 @@ public class GamePanel extends GridBagPanel {
 		deckSelectorPanel.themeUpPlayerButton(witchingPlayer, NotificationType.WITCH);
 	}
 
-	public void showCurrentPlayer(Player currentPlayer) {
-		deckSelectorPanel.themeUpPlayerButton(currentPlayer,NotificationType.TURN);
+	private void forceRevealCardsIfHuman(Player p) {
+		if(p instanceof HumanPlayer) this.cardsPanel.showDeck(p.getHand(), true); //force reveal human players' cards when it's their turn
 	}
 	
+	public void showCurrentPlayer(Player currentPlayer) {
+		forceRevealCardsIfHuman(currentPlayer);
+		deckSelectorPanel.themeUpPlayerButton(currentPlayer,NotificationType.TURN);
+	}
+
 	public void boldenPlayer(Player p) {
 		deckSelectorPanel.boldenPlayerButton(p);
 	}
@@ -183,6 +190,7 @@ public class GamePanel extends GridBagPanel {
 	
 	public void resetPlayersEffects() {
 		deckSelectorPanel.resetPlayersEffects();
+		cardsPanel.backToNormalRevealMode();
 	}
 	public void setPlayerButtonsEnabled(boolean enabled) {
 		deckSelectorPanel.setPlayerButtonsEnabled(enabled);
@@ -204,6 +212,23 @@ public class GamePanel extends GridBagPanel {
 		this.cardsPanel.getDeck(rcp).updateContent();
 		this.cardsPanel.getDeck(rcp).renderPane();
 		if(rcp.isThePile()) this.deckSelectorPanel.updatePileButton();
+	}
+	
+	public void switchDeck(RumourCardsPile rcp) {
+		DeckSelectorButton selectedDeckButton = deckSelectorPanel.getSelectedDeckButton();
+		if(selectedDeckButton!=null) {
+			if(selectedDeckButton.getDeck()!=rcp) {
+				deckSelectorPanel.setSelectedDeckButton(null);
+			}
+		}
+		if(rcp.isThePile()) this.cardsPanel.showDeck(rcp);
+		else this.cardsPanel.showDeck(rcp,false);
+	}
+	public void switchDeck(RumourCardsPile rcp, boolean onlyIffHuman) {
+		if(rcp.getOwner() instanceof HumanPlayer) {
+			forceRevealCardsIfHuman(rcp.getOwner());
+			switchDeck(rcp);
+		}
 	}
 	
 //SUBPANELS
@@ -421,6 +446,7 @@ public class GamePanel extends GridBagPanel {
 		
 		private CardLayout cl = new CardLayout();
 		private Map<RumourCardsPile,DeckPanel> M = new HashMap<RumourCardsPile,DeckPanel>();
+		private List<DeckPanel> forceRevealedDecksList = new ArrayList<DeckPanel>();
 		
 		public CardsPanel(int x, int y,int w, int h) {
 			super(x,y,w,h,defaultCellBorder,cellsList);
@@ -429,18 +455,18 @@ public class GamePanel extends GridBagPanel {
 		
 		@Override
 		public void init() {
-			this.getPan().setPreferredSize(this.getPan().getPreferredSize());
+			//this.getPan().setPreferredSize(this.getPan().getPreferredSize());
 			this.getPan().setLayout(cl);
 		}
 		
 		public void addDeck(RumourCardsPile rcp) {
 			DeckPanel deckPanel = new DeckPanel(rcp);
-			//deckPanel.setPreferredSize(this.getPan().getPreferredSize());
+			deckPanel.setPreferredSize(this.getPan().getPreferredSize());
 			M.put(rcp, deckPanel);
 			deckPanel.updateContent();
 			deckPanel.renderPane();
 			JScrollPane jsp = new JScrollPane(deckPanel);
-			jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 			this.getPan().add(jsp,deckPanel.toString());
 		}
 		
@@ -456,8 +482,18 @@ public class GamePanel extends GridBagPanel {
 		public void showDeck(RumourCardsPile rcp) {
 			cl.show(this.getPan(),getDeck(rcp).toString());
 		}
-		public void showDeck(Player p) {
-			this.showDeck(p.getHand());
+		public void showDeck(RumourCardsPile rcp,boolean forceReveal) {
+			if(forceReveal) getDeck(rcp).forceReveal(forceReveal);
+			this.showDeck(rcp);
+		}
+		
+		public void backToNormalRevealMode() {
+			Iterator<DeckPanel> it = forceRevealedDecksList.iterator();
+			while(it.hasNext()) {
+				DeckPanel d = it.next();
+				d.forceReveal(false);
+				it.remove();
+			}
 		}
 		
 		private class DeckPanel extends JPanel {
@@ -510,7 +546,7 @@ public class GamePanel extends GridBagPanel {
 						toRemove.add(j.getAssociatedRumourCard());
 					}
 					else{
-						j.update();
+						j.update(false);
 					}
 				}
 				toRemove.forEach(rc->this.removeCard(rc));
@@ -531,7 +567,7 @@ public class GamePanel extends GridBagPanel {
 			
 			public RenderedCard addCard(RumourCard rc) {
 				RenderedCard j = new RenderedCard(rc);
-				j.setPreferredSize(cardsSize);
+				//j.setPreferredSize(cardsSize);
 				this.renderedCardsList.add(j);
 				return j;
 			}
@@ -549,8 +585,14 @@ public class GamePanel extends GridBagPanel {
 			}
 			
 			public void updateCardRevealStatus(RumourCard rc) {
-				this.renderedCardsList.stream().filter(j->j.getAssociatedRumourCard()==rc).forEach(j->j.update());
+				this.renderedCardsList.stream().filter(j->j.getAssociatedRumourCard()==rc).forEach(j->j.update(false));
 			}
+			
+			public void forceReveal(boolean yes) {
+				if(yes&&!forceRevealedDecksList.contains(this)) forceRevealedDecksList.add(this);
+				this.renderedCardsList.forEach(j->j.update(yes));
+			}
+
 		}
 		
 		private class RenderedCard extends JLabel {
@@ -562,13 +604,13 @@ public class GamePanel extends GridBagPanel {
 			public RenderedCard(RumourCard rc) {
 				super();
 				this.represents=rc;
-				this.update();
+				this.update(false);
 			}
 			
-			public void update() {
+			public void update(boolean forceReveal) {
 				if(this.represents!=null) {
-					if(this.represents.isRevealed()&&!revealed) {
-						this.revealed=true;
+					if((this.represents.isRevealed()&&!revealed)||forceReveal) {
+						if(!forceReveal&&this.represents.isRevealed()) this.revealed=true;
 						ImageIcon alreadyRendered = renderedCardIconsMap.get(this.represents);
 						if(alreadyRendered!=null) {
 							this.setIcon(alreadyRendered);

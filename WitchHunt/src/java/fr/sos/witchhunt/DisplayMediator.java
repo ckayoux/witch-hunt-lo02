@@ -278,7 +278,7 @@ public void displayPlayTurnScreen(Player p);
  * @param rc the Rumour Card discarded by the player.
  * @see fr.sos.witchhunt.model.players.Player#discard(RumourCard) Player::discard(RumourCard)
  */
-	public void displayDiscardCardScreen(Player owner,RumourCard rc);
+	public void displayPlayerDiscardedCardScreen(Player owner,RumourCard rc);
 /**
  * <b>Requests the DM to display the screen corresponding to the situation when a player secretly looks at another player's identity.</b>
  * @param me the player looking at the target's identity.
@@ -406,6 +406,11 @@ public void displayPlayTurnScreen(Player p);
 	 * @param from A pile of Rumour cards containing only cards with a playable Hunt! effect.
 	 */
 	public void displaySelectHuntCardScreen(RumourCardsPile from);
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to selecta  card to discard.</b>
+	 * @param p The player who has to choose a card to discard
+	 */
+	public void displayChooseCardToDiscardScreen(Player p);
 
 
 

@@ -32,8 +32,8 @@ public abstract class RumourCard extends Card {
 	//public void discard(){}
 	public boolean witch() {
 		if(this.witchEffect.isAllowed()) {
-			this.witchEffect.perform();
 			this.reveal();
+			this.witchEffect.perform();
 			return true;
 		}
 		else {

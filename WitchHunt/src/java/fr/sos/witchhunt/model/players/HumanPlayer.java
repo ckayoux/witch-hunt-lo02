@@ -256,6 +256,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	public RumourCard selectCardToDiscard(RumourCardsPile in) {
 		if(this.hasRumourCards()) {
 			if(this.hasUnrevealedRumourCards()) {
+				displayMediator.displayChooseCardToDiscardScreen(this);
 				return chooseUnrevealedCard(in.getUnrevealedSubpile(),true);
 			}
 			else {
@@ -381,4 +382,5 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		//cannot be chosen by ducking stool if is revealed and has no rumour cards
 		return choice;
 	}
+	
 }
