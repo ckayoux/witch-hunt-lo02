@@ -1,13 +1,12 @@
 package fr.sos.witchhunt.controller;
 
-import fr.sos.witchhunt.InputMediator;
-import fr.sos.witchhunt.view.InputSource;
-import fr.sos.witchhunt.view.gui.ActionButton;
-import fr.sos.witchhunt.view.gui.GUIView;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+
+import fr.sos.witchhunt.InputMediator;
+import fr.sos.witchhunt.view.InputSource;
+import fr.sos.witchhunt.view.gui.ActionButton;
 
 public class ActionsPanelController implements InputSource {
 	
@@ -22,6 +21,7 @@ public class ActionsPanelController implements InputSource {
 			ActionButton b = bList.get(i);
 			final int choice = i;
 			b.addActionListener( new ActionListener (){
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					post(Integer.toString(choice+1));
 				}
@@ -29,15 +29,18 @@ public class ActionsPanelController implements InputSource {
 		}
 	}
 
-	@Override
-	public void post(String str) {
-		inputMediator.receive(str);
+	public void destroyMouseListeners() {
 		bList.forEach(b->
 		{
 			for(ActionListener al : b.getActionListeners()) {
 				b.removeActionListener(al);
 			}
 		});
+	}
+	
+	@Override
+	public void post(String str) {
+		inputMediator.receive(str);
 	}
 
 	@Override

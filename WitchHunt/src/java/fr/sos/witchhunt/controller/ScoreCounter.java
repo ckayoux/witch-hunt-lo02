@@ -1,7 +1,11 @@
 package fr.sos.witchhunt.controller;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import fr.sos.witchhunt.Visitable;
 import fr.sos.witchhunt.Visitor;
@@ -30,6 +34,7 @@ public final class ScoreCounter implements Visitor {
 	 * @param v A visitable whose class is not handled by this Visitor.
 	 * @see fr.sos.witchhunt.Visitable Visitable
 	 */
+	@Deprecated
 	@Override
 	public void visit(Visitable v) {
 
@@ -165,6 +170,7 @@ public final class ScoreCounter implements Visitor {
 		 * @param p {@link fr.sos.witchhunt.model.players.Player Player} whose score has changed.
 		 * @see fr.sos.witchhunt.model.players.Player#addScore(int) Player::addScore(int)
 		 */
+		@Override
 		public void visit(Player p) {
 
 			if(roundsCount>0) {
@@ -191,6 +197,7 @@ public final class ScoreCounter implements Visitor {
 		 * @param v A visitable whose class is not handled by this Visitor.
 		 * @see fr.sos.witchhunt.Visitable Visitable
 		 */
+		@Deprecated
 		@Override
 		public void visit(Visitable v) {
 
@@ -199,6 +206,7 @@ public final class ScoreCounter implements Visitor {
 		/**
 		 * @return A string representing the score board, with normalized cells size.
 		 */
+		@Override
 		public String toString() {
 			int maxPNameLength = Collections.max(playerScoreByRound.keySet().stream().mapToInt(p->p.getName().length()).boxed().toList());
 			StringBuffer sb = new StringBuffer(" ".repeat(maxPNameLength+2));
@@ -249,6 +257,14 @@ public final class ScoreCounter implements Visitor {
 				sb.append('\n');
 			});
 			return sb.toString();
+		}
+		
+		public Map<Player,ArrayList<Integer>> getPlayerScoreByRound() {
+			return this.playerScoreByRound;
+		}
+		
+		public int getRoundsCount() {
+			return this.roundsCount;
 		}
 		
 	}

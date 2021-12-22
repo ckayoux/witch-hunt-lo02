@@ -324,7 +324,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	public void takeNextTurn() {
 		Tabletop.getInstance().getCurrentRound().setNextPlayer(this);
-		requestTakeNextTurnScreen();
+		if(Tabletop.getInstance().getLastUnrevealedPlayer()!=null) requestTakeNextTurnScreen();
 	}
 
 	/**
@@ -1180,8 +1180,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	public void addScore(int pts) {
 		this.score += pts;
-		requestScoreUpdateScreen(pts);
 		this.accept(Tabletop.getInstance().getScoreCounter());
+		requestScoreUpdateScreen(pts);
 	}
 	/**
 	 * @see #immunized

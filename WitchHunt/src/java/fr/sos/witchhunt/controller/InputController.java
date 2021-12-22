@@ -38,7 +38,8 @@ public final class InputController implements InputMediator {
 			console.logWrongMenuChoiceMessage(timesWrong,helperMsg,n);
 			return makeChoice(m);
 		}else {
-			this.gui.choiceHasBeenMade(choice);
+			this.gui.choiceHasBeenMade(m.getNthOption(choice));
+			System.out.println(choice + " : "+m.getNthOption(choice).toString()); //logging choice correspondance in console
 			timesWrong=0;
 			console.crlf();;
 			currentMenu=null;
@@ -133,8 +134,8 @@ public final class InputController implements InputMediator {
 	@Override
 	public void receive(String str) {
 		this.wake();
-		latch = new CountDownLatch(1);
 		this.receivedString=str;
+		latch = new CountDownLatch(1);
 	}
 	@Override
 	public void receive(int i) {

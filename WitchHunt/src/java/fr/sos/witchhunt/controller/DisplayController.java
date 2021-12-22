@@ -532,7 +532,7 @@ public final class DisplayController implements DisplayMediator {
 		console.logScoreBoard(sb.toString());
 		console.decreaseTabulation();
 		
-		//DISPLAY SCORE BOARD IN GUI INSTEAD OF CARDS
+	//	gui.displayScoreBoard(sb);
 	}
 
 	@Override

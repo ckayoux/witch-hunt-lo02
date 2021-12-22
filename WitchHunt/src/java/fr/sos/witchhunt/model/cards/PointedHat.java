@@ -20,7 +20,7 @@ public final class PointedHat extends RumourCard {
 				me=getMyself();
 				RumourCard chosen = me.chooseRevealedCard(new RumourCardsPile(
 						me.getHand().getCards().stream()
-						.filter(c -> c!=cardInstance).toList())
+						.filter(c -> c!=cardInstance).toList(),me)
 						); //so the hunter cant choose this one card
 				chosen.reset();
 				me.requestHasResetCardScreen(chosen);
@@ -45,7 +45,7 @@ public final class PointedHat extends RumourCard {
 				me=getMyself();
 				RumourCard chosen = me.chooseRevealedCard(new RumourCardsPile(
 						me.getHand().getCards().stream()
-						.filter(c -> c!=cardInstance).toList())
+						.filter(c -> c!=cardInstance).toList(),me)
 						); //so the hunter cant choose this one card
 				chosen.reset();
 				me.requestHasResetCardScreen(chosen);

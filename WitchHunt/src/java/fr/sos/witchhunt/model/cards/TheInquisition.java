@@ -20,13 +20,13 @@ public final class TheInquisition extends RumourCard {
 				Player me = getMyself();
 				if(!me.getHand().getCards().stream().filter(c->c!=cardInstance).toList().isEmpty()) {
 					me.discard(new RumourCardsPile(
-							me.getHand().getCards().stream().filter(c->c!=cardInstance).toList()
+							me.getHand().getCards().stream().filter(c->c!=cardInstance).toList(),me
 							)); //select a card to discard from your hand, except this one itselfs
 					//we assume that we can discard a revealed card
 				}
 				else {
 					me.discard(new RumourCardsPile(
-							me.getHand().getCards()
+							me.getHand().getCards(),me
 							));
 				}		
 				takeNextTurn();

@@ -92,7 +92,7 @@ public final class RumourCardsPile implements Resettable {
 		dc.displayCards(this, forcedReveal);
 	}
 	public boolean isThePile() {
-		return (this==Tabletop.getInstance().getPile());
+		return (this.owner==null);
 	}
 
 	public Player getOwner() {

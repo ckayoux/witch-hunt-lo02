@@ -5,7 +5,10 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,12 +18,17 @@ import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.controller.CardSelectorController;
 import fr.sos.witchhunt.controller.DeckSelectorButtonController;
+import fr.sos.witchhunt.controller.ScoreCounter;
+import fr.sos.witchhunt.controller.ScoreCounter.ScoreBoard;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
@@ -40,6 +48,7 @@ public class GamePanel extends GridBagPanel {
 	
 	private GamePanel gamePanelInstance;
 	
+	private Player currentPlayer;
 	
 	
 	public GamePanel() {
@@ -119,11 +128,15 @@ public class GamePanel extends GridBagPanel {
 	}
 
 	
-	public void choiceHasBeenMade(int choice) {
-		if(actionsPanel.isRendered()) 
+	public void choiceHasBeenMade(Object o) {
+		if(actionsPanel.isChoosingACard()&&o instanceof RumourCard) {
+			cardHasBeenChosen(cardsPanel.currentlyUsedForChoosingCard.choosableCards.stream().filter(j->j.getAssociatedRumourCard()==o).findFirst().get());
+		}
+		if(actionsPanel.isRendered()) {
 			actionsPanel.resetPane();
-		if(actionsPanel.isChoosingACard())
-			cardHasBeenChosen(cardsPanel.currentlyUsedForChoosingCard.choosableCards.get(choice-1));
+			actionsPanel.choiceHasBeenMade();
+		}
+		
 	}
 	
 	
@@ -142,15 +155,18 @@ public class GamePanel extends GridBagPanel {
 	}
 	
 	public void renderPile(RumourCardsPile pile) {
-		if(this.deckSelectorPanel.pileButton==null) {
-			new DeckSelectorButtonController(this.deckSelectorPanel.makePileButton(pile),this);
-			this.cardsPanel.addDeck(pile);
-		}
+		new DeckSelectorButtonController(this.deckSelectorPanel.makePileButton(pile),this);
+		this.cardsPanel.addDeck(pile);
 		this.deckSelectorPanel.renderPile();
 	}
 	
-	public void updateScoreDisplay(Player p) {
-		this.deckSelectorPanel.updateScoreDisplay(p);
+	public void hidePile() {
+		this.deckSelectorPanel.removePileButton();
+	}
+	
+	public void updateScoreDisplay(Player p,ScoreCounter sc) {
+		if(p!=null) this.deckSelectorPanel.updateScoreDisplay(p);
+		this.scorePanel.update(sc);
 	}
 
 	public void updatePlayerActivityStatus(Player p) {
@@ -185,6 +201,7 @@ public class GamePanel extends GridBagPanel {
 	}
 	
 	public void showCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer=currentPlayer;
 		switchDeck(currentPlayer.getHand(), true);
 		deckSelectorPanel.themeUpPlayerButton(currentPlayer,NotificationType.TURN);
 	}
@@ -192,7 +209,7 @@ public class GamePanel extends GridBagPanel {
 	public void boldenPlayer(Player p) {
 		deckSelectorPanel.boldenPlayerButton(p);
 	}
-	
+	 
 	public void unBoldenPlayer(Player p) {
 		deckSelectorPanel.unBoldenPlayerButton(p);
 	}
@@ -217,8 +234,8 @@ public class GamePanel extends GridBagPanel {
 		this.cardsPanel.getDeck(rc).updateCardRevealStatus(rc);
 	}
 	
-	public void updateDeckContent(RumourCardsPile rcp) {
-		this.cardsPanel.getDeck(rcp).updateContent();
+	public void updateDeckContent(RumourCardsPile rcp,boolean forceReveal) {
+		this.cardsPanel.getDeck(rcp).updateContent(rcp.getOwner()==currentPlayer);
 		this.cardsPanel.getDeck(rcp).renderPane();
 		if(rcp.isThePile()) this.deckSelectorPanel.updatePileButton();
 	}
@@ -258,6 +275,10 @@ public class GamePanel extends GridBagPanel {
 		if(whoHasToChoose instanceof HumanPlayer) {
 			this.cardsPanel.makeCardsChoosable(deck, validSubpile, theme);
 		}
+	}
+	
+	public void resetCardsPanel() {
+		this.cardsPanel.resetAllDecks();
 	}
 	
 //SUBPANELS
@@ -325,7 +346,6 @@ public class GamePanel extends GridBagPanel {
 		}
 
 
-
 		@Override
 		public void init() {
 			this.getPan().setLayout(new BorderLayout());
@@ -383,7 +403,6 @@ public class GamePanel extends GridBagPanel {
 		public void updatePileButton() {
 			pileButton.updateText();
 			pileButton.setEnabled(!pileButton.getDeck().isEmpty());
-			this.getPan().updateUI();
 		}
 		
 		
@@ -396,10 +415,8 @@ public class GamePanel extends GridBagPanel {
 		
 		public void resetPane() {
 			this.playersPart.removeAll();
-			this.pilePart.removeAll();
 			this.playersPart.updateUI();
-			this.pilePart.updateUI();
-			pileButton=null;
+			this.removePileButton();
 		}
 		
 		public void renderPlayers() {
@@ -422,8 +439,15 @@ public class GamePanel extends GridBagPanel {
 		}
 
 		public void renderPile() {
-			if(pileButton!=null) this.pilePart.add(pileButton);
-			else this.pileButton.updateText();
+			if(pileButton!=null) this.pilePart.remove(pileButton);
+			this.pilePart.add(pileButton);
+			this.pilePart.updateUI();
+		}
+		
+		public void removePileButton() {
+			if(pileButton!=null) this.pilePart.remove(pileButton);
+			this.pileButton=null;
+			pilePart.updateUI();
 		}
 	
 
@@ -494,7 +518,7 @@ public class GamePanel extends GridBagPanel {
 		public void addDeck(RumourCardsPile rcp) {
 			DeckPanel deckPanel = new DeckPanel(rcp);
 			M.put(rcp, deckPanel);
-			deckPanel.updateContent();
+			deckPanel.updateContent(false);
 			deckPanel.renderPane();
 			JScrollPane jsp = new JScrollPane(deckPanel);
 			jsp.setPreferredSize(this.getPan().getPreferredSize());
@@ -561,6 +585,11 @@ public class GamePanel extends GridBagPanel {
 			return selectedCard;
 		}
 		
+		public void resetAllDecks() {
+			selectedCard=null;
+			M.values().forEach(d->d.resetPane());
+		}
+		
 		public void makeCardsChoosable(RumourCardsPile deck,RumourCardsPile choosableSubpile, NotificationType theme) {
 			DeckPanel deckPanel = getDeck(deck);
 			if(deckPanel != null) this.currentlyUsedForChoosingCard=deckPanel;
@@ -607,11 +636,11 @@ public class GamePanel extends GridBagPanel {
 			
 			public void resetPane() {
 				this.hMarginsMap.clear();
-				this.renderedCardsList.removeIf(truth->true);
 				this.removeAll();
+				this.updateUI();
 			}
 			
-			public void updateContent() {
+			public void updateContent(boolean forceReveal) {
 				if(this.controller!=null)
 					this.controller.destroyAllMouseListeners();
 				
@@ -628,7 +657,7 @@ public class GamePanel extends GridBagPanel {
 						toRemove.add(j.getAssociatedRumourCard());
 					}
 					else{
-						j.update(false);
+						j.update(forceReveal);
 					}
 				}
 				toRemove.forEach(rc->this.removeCard(rc));
@@ -712,6 +741,7 @@ public class GamePanel extends GridBagPanel {
 			super(x,y,w,h,defaultCellBorder,cellsList);
 			this.getPan().setLayout(new BorderLayout());
 			this.getPan().setBackground(Color.ORANGE);
+			
 			//this.getPan().add(textBox);
 		}
 		
@@ -738,10 +768,101 @@ public class GamePanel extends GridBagPanel {
 		}
 	}
 	private class ScorePanel extends GridBagCell{
+
+		private Dimension paneSize;
+		private int rowHeight;
+		private DefaultTableCellRenderer playersColumnRenderer;
+		private DefaultTableCellRenderer totalColumnRenderer;
+		private DefaultTableCellRenderer defaultTableCellRenderer;
+		
 		public ScorePanel(int x, int y,int w, int h) {
 			super(x,y,w,h,defaultCellBorder,cellsList);
-			this.getPan().setBackground(Color.PINK);
+			this.getPan().setLayout(new BorderLayout());
+			
+			defaultTableCellRenderer=new DefaultTableCellRenderer();
+			defaultTableCellRenderer.setFont(new Font(Font.MONOSPACED,Font.PLAIN,14));
+			defaultTableCellRenderer.setHorizontalAlignment(JLabel.CENTER);
+			
+			playersColumnRenderer = new DefaultTableCellRenderer();
+			playersColumnRenderer.setFont(new Font(Font.MONOSPACED,Font.ITALIC,14));
+			playersColumnRenderer.setHorizontalAlignment(JLabel.CENTER);
+			playersColumnRenderer.setForeground(new Color(65,105,225));
+			
+			totalColumnRenderer = new DefaultTableCellRenderer();
+			totalColumnRenderer.setHorizontalAlignment(JLabel.CENTER);
+			totalColumnRenderer.setForeground(new Color(41,128,185));
+			totalColumnRenderer.setFont(new Font(Font.MONOSPACED,Font.BOLD,14));
 		}
+		
+		@Override
+		public void init() {
+		}
+		
+		public void update(ScoreCounter sc) {
+
+			this.getPan().setPreferredSize(this.getPan().getPreferredSize());
+			ScoreBoard sb = sc.getScoreBoard();
+			Map<Player,ArrayList<Integer>> M = sb.getPlayerScoreByRound();
+			List<Player> sortedPlayers = sc.getRanking();
+			int playersCount =sortedPlayers.size();
+			int roundsCount = sb.getRoundsCount();
+			int columnsCount = roundsCount+1+((roundsCount>1)?1:0);
+			Object[][] scores = new Object[playersCount][columnsCount];
+			Object[] columns = new String [columnsCount];
+			columns[0]="Player";
+			for(int i = 1;i<=roundsCount;i++) columns[i]=Integer.toString(i);
+			if(roundsCount>1) columns[columnsCount-1]="Total";
+			
+			for(int i=0; i<playersCount; i++) {
+				Player p = sortedPlayers.get(i);
+				scores[i][0]=p.getName();
+				for(int j=1;j<=roundsCount; j++) {
+					scores[i][j]=M.get(p).get(j-1);
+				}
+				if(roundsCount>1) scores[i][columnsCount-1]=p.getScore();
+			}
+			JTable scoreTable = new JTable(scores,columns);
+			paneSize=this.getPan().getSize();
+			int rowHeight = (int)(paneSize.getHeight()*0.9/(playersCount+1));
+			scoreTable.setRowHeight(rowHeight);
+			scoreTable.getColumnModel().getColumn(0).setCellRenderer(playersColumnRenderer);
+			for(int i = 1;i<=roundsCount;i++) scoreTable.getColumnModel().getColumn(i).setCellRenderer(defaultTableCellRenderer);
+			if(roundsCount>1) scoreTable.getColumnModel().getColumn(columnsCount-1).setCellRenderer(totalColumnRenderer);
+			scoreTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			scoreTable.setCellSelectionEnabled(true);
+			scoreTable.getTableHeader().setPreferredSize(new Dimension((int)scoreTable.getTableHeader().getPreferredSize().getWidth(),rowHeight));
+			this.renderTable(scoreTable);
+		}
+		
+		/*public void update(ScoreCounter sc) {
+			List<Player> ranking = sc.getRanking();
+			int playersCount =ranking.size();
+			Object[][] scores = new Object[playersCount][2];
+			for(int i =0 ; i<playersCount; i++) {
+				Player p = ranking.get(i);
+				scores[i][0]= p.getName();
+				scores[i][1]=p.getScore();
+			}
+			JTable scoreTable = new JTable(scores,columns);
+			this.renderTable(scoreTable);
+		}*/
+		
+		public void renderTable(JTable jt) {
+			this.getPan().removeAll();
+			JScrollPane jsp = new JScrollPane(jt);
+			jsp.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+			    @Override
+				public void adjustmentValueChanged(AdjustmentEvent e) {
+			        e.getAdjustable().setValue(e.getAdjustable().getMaximum());  
+			    }
+			});
+			jsp.setPreferredSize(paneSize);
+			jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+			this.getPan().add(jsp,BorderLayout.CENTER);
+		}
+		
+		
 	}
 	
 	

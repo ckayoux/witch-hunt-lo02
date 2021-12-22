@@ -73,7 +73,6 @@ public class RenderedCard extends JLabel {
 	
 	public void border() {
 		this.currentBorderThickness=defaultBorderThickness;
-		this.repaint();
 	}
 
 	public void bolden() {
@@ -117,6 +116,8 @@ public class RenderedCard extends JLabel {
 		else {
 			this.bordered=false;
 		}
+		
+		this.repaint();
 		
 		if(colorChangeManager!=null) {
 			this.removeMouseListener(colorChangeManager);

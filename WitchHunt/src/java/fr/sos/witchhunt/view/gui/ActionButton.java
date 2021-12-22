@@ -20,10 +20,6 @@ import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
 public class ActionButton extends JButton {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2562392729573544908L;
 	private Color bgColor=null;
 	private Color hoverColor=null;
 	private MouseListener colorChangeManager=null;

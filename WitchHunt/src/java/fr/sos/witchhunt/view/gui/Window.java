@@ -8,11 +8,12 @@ public class Window extends JFrame /*implements InputSource*/ {
 	
 	public static final int WIDTH = 1600;
 	public static final int HEIGHT= 900;
+	public static final String defaultTitle="Witch Hunt";
 
 	
 	//CONSTRUCTOR
 	public Window () {
-		this.setTitle("Witch Hunt");
+		this.setTitle(defaultTitle);
 		this.setSize(new Dimension(WIDTH,HEIGHT));
 		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null);	

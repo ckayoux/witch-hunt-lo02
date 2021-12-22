@@ -88,7 +88,6 @@ public class ChoicesPanel extends GridBagCell {
 	
 	public void makeChoice(Menu m,InputMediator im) {
 		this.controller= new ActionsPanelController(actionButtonsList,im);
-		this.renderPane();
 	}
 	
 	public void renderActionButtons() {
@@ -137,4 +136,9 @@ public class ChoicesPanel extends GridBagCell {
 		return this.choosingACard;
 	}
 	
+	public void choiceHasBeenMade() {
+		if(this.controller!=null) this.controller.destroyMouseListeners();
+		this.controller=null;
+		this.choosingACard=false;
+	}
 }

@@ -127,7 +127,7 @@ public class DeckSelectorButton extends JButton {
 	
 	
 	public void updateText() {
-		if(!this.associatedDeck.isThePile()) {
+		if(this.associatedPlayer!=null) {
 			this.setText(associatedPlayer.getName()+"  |  "+associatedPlayer.getScore());
 		}
 		else {

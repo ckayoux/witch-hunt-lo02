@@ -77,12 +77,12 @@ public final class GUIView {
 		});
 	}
 	
-	public void choiceHasBeenMade(int choice) {
+	public void choiceHasBeenMade(Object o) {
 		if(this.gamePanel!=null) {
 			SwingUtilities.invokeLater(new Runnable() {
 				 @Override
 				public void run() {
-					 if(gamePanel!=null) gamePanel.choiceHasBeenMade(choice);
+					 if(gamePanel!=null) gamePanel.choiceHasBeenMade(o);
 				}
 			});
 		}
@@ -96,7 +96,7 @@ public final class GUIView {
 		}
 	}
 
-	public void displayCards(Menu m,boolean forceReveal) {
+	public void displayCardsChoiceMenu(Menu m,boolean forceReveal) {
 		if(this.gamePanel!=null) {
 			SwingUtilities.invokeLater(new Runnable() {
 				 @Override
@@ -148,10 +148,12 @@ public final class GUIView {
 
 	public void displayRoundStartScreen(int roundNumber) {
 		if(gamePanel!=null) {
+			this.w.setTitle(Window.defaultTitle+" : Round "+roundNumber);
 			gamePanel.resetNotificationsBoxes();
 			gamePanel.displayMainNotification(new Notification("ROUND "+roundNumber+"\n",NotificationType.NORMAL));
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.HARD_SEPARATOR));
 			gamePanel.setPlayerButtonsEnabled(false);
+			gamePanel.updateScoreDisplay(null, tabletop.getScoreCounter());
 		}
 		
 	}
@@ -160,6 +162,8 @@ public final class GUIView {
 		if (gamePanel!=null) {
 			gamePanel.displayMainNotification(new Notification("ROUND "+roundNumber+" IS OVER.\n",NotificationType.NORMAL));
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.HARD_SEPARATOR));
+			gamePanel.resetCardsPanel();
+			gamePanel.hidePile();
 		}
 		
 	}
@@ -235,9 +239,8 @@ public final class GUIView {
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.HARD_SEPARATOR));
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 			gamePanel.renderPile(tabletop.getPile());
-			tabletop.getActivePlayersList().forEach(p->gamePanel.updateDeckContent(p.getHand()));
-			gamePanel.updateDeckContent(tabletop.getPile());
-			//COMMENCER A AFFICHER LES CARTES
+			tabletop.getActivePlayersList().forEach(p->gamePanel.updateDeckContent(p.getHand(),false));
+			gamePanel.updateDeckContent(tabletop.getPile(),false);
 		}
 	}
 
@@ -257,6 +260,7 @@ public final class GUIView {
 	
 	public void displayEndOfTurnScreen() {
 		if(gamePanel!=null){
+			
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 			gamePanel.displaySecondaryNotification(
 					new Notification(
@@ -264,7 +268,6 @@ public final class GUIView {
 					)
 			);
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
-			gamePanel.renderPile(tabletop.getPile());
 			gamePanel.resetEffects();
 		}
 	}
@@ -377,7 +380,7 @@ public final class GUIView {
 			sb.append(" (Total : "+ p.getScore()+")\n");
 			
 			gamePanel.displayMainNotification(new Notification(sb.toString(),NotificationType.SCORE));
-			gamePanel.updateScoreDisplay(p);
+			gamePanel.updateScoreDisplay(p,tabletop.getScoreCounter());
 		}
 	}
 
@@ -465,8 +468,8 @@ public final class GUIView {
 							NotificationType.NORMAL
 					)
 			);
-			gamePanel.updateDeckContent(p.getHand());
-			gamePanel.updateDeckContent(from);
+			gamePanel.updateDeckContent(p.getHand(),forceReveal||playerChoosesOwnCard(p, from));
+			if(from!=p.getHand()) gamePanel.updateDeckContent(from,forceReveal||playerChoosesOwnCard(p, from));
 			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 		}
 		//UPDATE CARDS PANEL
@@ -483,8 +486,8 @@ public final class GUIView {
 					)
 			);
 			//if(rc.isRevealed())gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
-			gamePanel.updateDeckContent(owner.getHand());
-			gamePanel.updateDeckContent(tabletop.getPile());
+			gamePanel.updateDeckContent(owner.getHand(),false);
+			gamePanel.updateDeckContent(tabletop.getPile(),false);
 		}
 		//UPDATE PILE AND OWNER'S HAND
 	}
@@ -544,7 +547,7 @@ public final class GUIView {
 							NotificationType.NORMAL
 					)
 			);
-			gamePanel.updateCardRevealStatus(rc);
+			//gamePanel.updateCardRevealStatus(rc); no
 			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 		}
 		//MAKE RC UNREVEALED ON CARDS PANEL
@@ -675,25 +678,27 @@ public final class GUIView {
 	}
 	
 	private boolean playerChoosesOwnCard(Player p,RumourCardsPile from) {
+
+		System.out.println(p==from.getOwner());
 		return p==from.getOwner();
 	}
 	
 	public void displayChooseAnyCardScreen(Player p,RumourCardsPile from) {
 		if(gamePanel!=null) { 
-			gamePanel.switchDeck(from);
+			gamePanel.switchDeck(from,playerChoosesOwnCard(p,from));
 			gamePanel.makeCardsChoosable(p, from, from, NotificationType.LIGHT_SEPARATOR);
-			displayCards(new Menu("Select any card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
+			displayCardsChoiceMenu(new Menu("Select any card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
 		}
 	}
 	public void displayChooseRevealedCardScreen(Player p,RumourCardsPile from) {
-		gamePanel.switchDeck(from);
+		gamePanel.switchDeck(from,playerChoosesOwnCard(p,from));
 		gamePanel.makeCardsChoosable(p, from, from.getRevealedSubpile(), NotificationType.LIGHT_SEPARATOR);
-		if(gamePanel!=null) displayCards(new Menu("Select a revealed card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
+		if(gamePanel!=null) displayCardsChoiceMenu(new Menu("Select a revealed card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
 	}
 	public void displayChooseUnrevealedCardScreen(Player p,RumourCardsPile from) {
-		gamePanel.switchDeck(from);
+		gamePanel.switchDeck(from,playerChoosesOwnCard(p,from));
 		gamePanel.makeCardsChoosable(p, from, from.getUnrevealedSubpile(), NotificationType.LIGHT_SEPARATOR);
-		if(gamePanel!=null) displayCards(new Menu("Select an unrevealed card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
+		if(gamePanel!=null) displayCardsChoiceMenu(new Menu("Select an unrevealed card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
 	}
 
 
@@ -701,7 +706,7 @@ public final class GUIView {
 		if(gamePanel!=null) {
 			gamePanel.switchDeck(p.getHand(),true);
 			gamePanel.makeCardsChoosable(p, p.getHand() , from, NotificationType.WITCH);
-			displayCards(new Menu("Select a card with a valid Witch? effect",from.getCards().toArray()),true);
+			displayCardsChoiceMenu(new Menu("Select a card with a valid Witch? effect",from.getCards().toArray()),true);
 			SwingUtilities.invokeLater(new Runnable() {
 			    @Override
 				public void run() {
@@ -717,7 +722,7 @@ public final class GUIView {
 		if(gamePanel!=null)  {
 			gamePanel.switchDeck(p.getHand(),true);
 			gamePanel.makeCardsChoosable(p, p.getHand() , from, NotificationType.HUNT);
-			displayCards(new Menu("Select a card with a valid Hunt! effect",from.getCards().toArray()),true);
+			displayCardsChoiceMenu(new Menu("Select a card with a valid Hunt! effect",from.getCards().toArray()),true);
 			SwingUtilities.invokeLater(new Runnable() {
 			    @Override
 				public void run() {
@@ -733,6 +738,20 @@ public final class GUIView {
 		if(gamePanel!=null) gamePanel.switchDeck(p.getHand(), true);
 	}
 
+/*
+	public void displayScoreBoard(ScoreBoard sb) {
+		if(gamePanel!=null) {
+			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+			gamePanel.displaySecondaryNotification(
+				new Notification(
+						"\t"+sb.toString().replace("/+/", "\t"),
+						NotificationType.SCORE
+				)
+			);
+			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
+		}
+	}
+*/
 
 
 
