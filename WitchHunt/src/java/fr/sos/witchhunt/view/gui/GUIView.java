@@ -470,6 +470,7 @@ public final class GUIView {
 			);
 			gamePanel.updateDeckContent(p.getHand(),forceReveal||playerChoosesOwnCard(p, from));
 			if(from!=p.getHand()) gamePanel.updateDeckContent(from,forceReveal||playerChoosesOwnCard(p, from));
+			gamePanel.resetCardsEffects();
 			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 		}
 		//UPDATE CARDS PANEL
@@ -488,6 +489,7 @@ public final class GUIView {
 			//if(rc.isRevealed())gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 			gamePanel.updateDeckContent(owner.getHand(),false);
 			gamePanel.updateDeckContent(tabletop.getPile(),false);
+			gamePanel.resetCardsEffects();
 		}
 		//UPDATE PILE AND OWNER'S HAND
 	}
@@ -679,25 +681,24 @@ public final class GUIView {
 	
 	private boolean playerChoosesOwnCard(Player p,RumourCardsPile from) {
 
-		System.out.println(p==from.getOwner());
 		return p==from.getOwner();
 	}
 	
 	public void displayChooseAnyCardScreen(Player p,RumourCardsPile from) {
 		if(gamePanel!=null) { 
 			gamePanel.switchDeck(from,playerChoosesOwnCard(p,from));
-			gamePanel.makeCardsChoosable(p, from, from, NotificationType.LIGHT_SEPARATOR);
+			gamePanel.makeCardsChoosable(p, from, from, NotificationType.NORMAL);
 			displayCardsChoiceMenu(new Menu("Select any card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
 		}
 	}
 	public void displayChooseRevealedCardScreen(Player p,RumourCardsPile from) {
 		gamePanel.switchDeck(from,playerChoosesOwnCard(p,from));
-		gamePanel.makeCardsChoosable(p, from, from.getRevealedSubpile(), NotificationType.LIGHT_SEPARATOR);
+		gamePanel.makeCardsChoosable(p, from, from.getRevealedSubpile(), NotificationType.NORMAL);
 		if(gamePanel!=null) displayCardsChoiceMenu(new Menu("Select a revealed card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
 	}
 	public void displayChooseUnrevealedCardScreen(Player p,RumourCardsPile from) {
 		gamePanel.switchDeck(from,playerChoosesOwnCard(p,from));
-		gamePanel.makeCardsChoosable(p, from, from.getUnrevealedSubpile(), NotificationType.LIGHT_SEPARATOR);
+		gamePanel.makeCardsChoosable(p, from, from.getUnrevealedSubpile(), NotificationType.NORMAL);
 		if(gamePanel!=null) displayCardsChoiceMenu(new Menu("Select an unrevealed card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
 	}
 

@@ -214,6 +214,10 @@ public class GamePanel extends GridBagPanel {
 		deckSelectorPanel.unBoldenPlayerButton(p);
 	}
 	
+	public void resetCardsEffects() {
+		cardsPanel.backToNormalMode();
+	}
+	
 	public void resetEffects() {
 		deckSelectorPanel.resetPlayersEffects();
 		cardsPanel.backToNormalMode();
@@ -253,8 +257,9 @@ public class GamePanel extends GridBagPanel {
 	public void switchDeck(RumourCardsPile rcp, boolean onlyIffHuman) {
 		if(rcp.getOwner() instanceof HumanPlayer) {
 			forceRevealCardsIfHuman(rcp.getOwner());
-			switchDeck(rcp);
 		}
+
+		switchDeck(rcp);
 	}
 	public void setSelectedCard(RenderedCard j) {
 		this.cardsPanel.setSelectedCard(j);
@@ -557,6 +562,7 @@ public class GamePanel extends GridBagPanel {
 				if(d.choosableCards!=null) d.resetChoosableCardsTheme(null);
 				it.remove();
 			}
+			updateUI();
 		}
 		public void setSelectedCard(RenderedCard view) {			
 			if(view!=null) {

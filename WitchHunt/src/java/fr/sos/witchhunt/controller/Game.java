@@ -11,7 +11,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	private Tabletop tabletop;
 	private DisplayMediator displayMediator;
 	private InputMediator inputMediator;
-	private boolean sleepingAllowed=false;
+	private boolean sleepingAllowed=true;
 	private boolean displayCPUStrategyChange=false;
 	public final static int minPlayersNumber = 3;
 	public final static int maxPlayersNumber = 6;

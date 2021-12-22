@@ -31,17 +31,17 @@ public abstract class Card implements Resettable {
 	
 	
 	public static final BufferedImage getUnrevealedCardImage () {
-		URL resource = Card.class.getResource("/images/cards/Unrevealed.png");
+		URL rsc = Card.class.getResource("/images/cards/Unrevealed.png");
+		
 		BufferedImage image=null;
 		try {
-			image=ImageIO.read(Paths.get(resource.toURI()).toFile());
+			image=ImageIO.read(Paths.get(rsc.toURI()).toFile());
 		}
 		catch(Exception e) {
-			System.err.println("Could not load resource : "+resource.toString());
+			System.err.println("Could not load resource : "+rsc.toString());
 			System.out.println("Aborting...");
 			System.exit(-1);
 		}
-		
 		return resizeCardImage(image);
 	}
 	

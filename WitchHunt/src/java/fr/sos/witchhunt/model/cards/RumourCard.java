@@ -108,20 +108,26 @@ public abstract class RumourCard extends Card {
 	}
 
 	private final void loadImage() {
-		URL resource = getImageURL();
+		URL rsc = this.getImageURL();
 		try {
-			this.image=Card.resizeCardImage(ImageIO.read(Paths.get(resource.toURI()).toFile()));
+			//this.image=Card.resizeCardImage(ImageIO.read(Paths.get(rsc.toURI()).toFile()));
+			this.image=Card.resizeCardImage(ImageIO.read(Paths.get(rsc.toURI()).toFile()));
 		}
 		catch(Exception e) {
-			System.err.println("Could not load resource : "+resource.toString());
+			e.printStackTrace();
+			System.err.println("Could not load resource : "+getImagePath());
 			System.out.println("Aborting...");
 			System.exit(-1);
 		}
 	}
 	
-	private final URL getImageURL() {
+	private final String getImagePath() {
 		String className = this.getClass().getSimpleName();
-		return this.getClass().getResource("/images/cards/"+className+".png");
+		return "/images/cards/"+className+".png";
+	}
+	
+	private final URL getImageURL() {
+		return this.getClass().getResource(getImagePath());
 	}
 	
 	public BufferedImage getImage() {

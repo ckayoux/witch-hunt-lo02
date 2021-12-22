@@ -37,7 +37,7 @@ public final class HookedNose extends RumourCard {
 				Player me = getMyself();
 				Player target = chooseNextPlayer();
 				if(target.hasRumourCards()) {
-					RumourCard chosen = me.chooseAnyCard(target.getHand(), false);
+					RumourCard chosen = target.getHand().getRandomCard();
 					chosen.reset();
 					me.takeRumourCard(chosen, target);
 					me.requestHasChosenCardScreen(chosen,target.getHand(),false);
