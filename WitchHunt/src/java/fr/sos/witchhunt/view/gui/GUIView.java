@@ -254,6 +254,8 @@ public final class GUIView {
 							NotificationType.TURN
 					)
 			);
+
+			gamePanel.switchDeck(p.getHand(),true);
 			gamePanel.showCurrentPlayer(p);
 		}
 	}
@@ -303,6 +305,8 @@ public final class GUIView {
 
 
 	public void displayChooseDefenseMessage(Player p) {
+		if(gamePanel!=null) 
+			gamePanel.switchDeck(p.getHand(),true);
 		/*if(gamePanel!=null) 
 			gamePanel.displaySecondaryNotification(
 				new Notification(
@@ -471,7 +475,6 @@ public final class GUIView {
 			gamePanel.updateDeckContent(p.getHand(),forceReveal||playerChoosesOwnCard(p, from));
 			if(from!=p.getHand()) gamePanel.updateDeckContent(from,forceReveal||playerChoosesOwnCard(p, from));
 			gamePanel.resetCardsEffects();
-			//gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 		}
 		//UPDATE CARDS PANEL
 	}

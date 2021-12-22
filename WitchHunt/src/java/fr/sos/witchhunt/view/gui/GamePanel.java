@@ -202,7 +202,6 @@ public class GamePanel extends GridBagPanel {
 	
 	public void showCurrentPlayer(Player currentPlayer) {
 		this.currentPlayer=currentPlayer;
-		switchDeck(currentPlayer.getHand(), true);
 		deckSelectorPanel.themeUpPlayerButton(currentPlayer,NotificationType.TURN);
 	}
 
@@ -248,7 +247,8 @@ public class GamePanel extends GridBagPanel {
 		DeckSelectorButton selectedDeckButton = deckSelectorPanel.getSelectedDeckButton();
 		if(selectedDeckButton!=null) {
 			if(selectedDeckButton.getDeck()!=rcp) {
-				deckSelectorPanel.setSelectedDeckButton(null);
+				if(rcp.isThePile()) deckSelectorPanel.setSelectedDeckButton(deckSelectorPanel.pileButton);
+				else deckSelectorPanel.setSelectedDeckButton(deckSelectorPanel.playersBList.stream().filter(b->b.getDeck()==rcp).findFirst().get());
 			}
 		}
 		if(rcp.isThePile()) this.cardsPanel.showDeck(rcp);
