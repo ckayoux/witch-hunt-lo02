@@ -29,10 +29,9 @@ public abstract class RumourCard extends Card {
 		this.defaultAdditionnalValue=defaultAdditionnalValue;
 	}
 	
-	//public void discard(){}
 	public boolean witch() {
 		if(this.witchEffect.isAllowed()) {
-			this.reveal();
+			//this.reveal();
 			this.witchEffect.perform();
 			return true;
 		}
@@ -42,7 +41,7 @@ public abstract class RumourCard extends Card {
 	};
 	public boolean hunt() {
 		if(this.huntEffect.isAllowed()) {
-			this.reveal();
+			//this.reveal();
 			this.huntEffect.perform();
 			return true;
 		}

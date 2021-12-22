@@ -462,6 +462,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	protected void witch () {
 		RumourCard chosen = selectWitchCard();
+		chosen.reveal();
 		requestPlayerPlaysWitchEffectScreen(chosen);
 		chosen.witch();
 	}
@@ -475,6 +476,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	protected void hunt() {
 		Tabletop.getInstance().setHunter(this);
 		RumourCard chosen = selectHuntCard();
+		chosen.reveal();
 		requestPlayerPlaysHuntEffectScreen(chosen);
 		chosen.hunt();
 	};
@@ -918,7 +920,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	@Override
 	public void requestSelectCardScreen(RumourCardsPile from, boolean forcedReveal) {
-		displayMediator.displaySelectCardScreen(from, forcedReveal);
+		displayMediator.displaySelectCardScreen(this,from, forcedReveal);
 	}
 	
 	/**
@@ -928,7 +930,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	@Override
 	public void requestSelectUnrevealedCardScreen(RumourCardsPile from, boolean forcedReveal) {
-		displayMediator.displaySelectUnrevealedCardScreen(from, forcedReveal);
+		displayMediator.displaySelectUnrevealedCardScreen(this,from, forcedReveal);
 	}
 	
 	/**
@@ -938,7 +940,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	@Override
 	public void requestSelectRevealedCardScreen(RumourCardsPile from, boolean forcedReveal) {
-		displayMediator.displaySelectRevealedCardScreen( from, forcedReveal);
+		displayMediator.displaySelectRevealedCardScreen(this, from, forcedReveal);
 	}
 	/**
 	 * @param from  A pile of Rumour cards with playable Witch? effects
@@ -946,7 +948,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	@Override
 	public void requestSelectWitchCardScreen(RumourCardsPile from) {
-		displayMediator.displaySelectWitchCardScreen(from);
+		displayMediator.displaySelectWitchCardScreen(this,from);
 	}
 	/**
 	 * @param from  A pile of Rumour cards with playable Hunt! effects
@@ -954,7 +956,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	@Override
 	public void requestSelectHuntCardScreen(RumourCardsPile from) {
-		displayMediator.displaySelectHuntCardScreen(from);
+		displayMediator.displaySelectHuntCardScreen(this,from);
 	}
 	
 	

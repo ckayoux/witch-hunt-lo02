@@ -77,12 +77,12 @@ public final class GUIView {
 		});
 	}
 	
-	public void resetChoicesPanel() {
+	public void choiceHasBeenMade(int choice) {
 		if(this.gamePanel!=null) {
 			SwingUtilities.invokeLater(new Runnable() {
 				 @Override
 				public void run() {
-					 if(gamePanel!=null) gamePanel.resetActionPanel();
+					 if(gamePanel!=null) gamePanel.choiceHasBeenMade(choice);
 				}
 			});
 		}
@@ -96,6 +96,17 @@ public final class GUIView {
 		}
 	}
 
+	public void displayCards(Menu m,boolean forceReveal) {
+		if(this.gamePanel!=null) {
+			SwingUtilities.invokeLater(new Runnable() {
+				 @Override
+				public void run() {
+				    gamePanel.displayCards(m,forceReveal);
+				}
+			});
+		}
+	}
+	
 	public void displayMenu(Menu m) {
 		if(this.gamePanel!=null) {
 			SwingUtilities.invokeLater(new Runnable() {
@@ -253,7 +264,8 @@ public final class GUIView {
 					)
 			);
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
-			gamePanel.resetPlayersEffects();
+			gamePanel.renderPile(tabletop.getPile());
+			gamePanel.resetEffects();
 		}
 	}
 	
@@ -662,26 +674,34 @@ public final class GUIView {
 		this.tabletop=tabletop;
 	}
 	
-	public void displayChooseAnyCardScreen(RumourCardsPile from) {
+	private boolean playerChoosesOwnCard(Player p,RumourCardsPile from) {
+		return p==from.getOwner();
+	}
+	
+	public void displayChooseAnyCardScreen(Player p,RumourCardsPile from) {
 		if(gamePanel!=null) { 
 			gamePanel.switchDeck(from);
-			displayMenu(new Menu("Select any card",from.getCards().toArray()));
+			gamePanel.makeCardsChoosable(p, from, from, NotificationType.LIGHT_SEPARATOR);
+			displayCards(new Menu("Select any card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
 		}
 	}
-	public void displayChooseRevealedCardScreen(RumourCardsPile from) {
+	public void displayChooseRevealedCardScreen(Player p,RumourCardsPile from) {
 		gamePanel.switchDeck(from);
-		if(gamePanel!=null) displayMenu(new Menu("Select a revealed card",from.getCards().toArray()));
+		gamePanel.makeCardsChoosable(p, from, from.getRevealedSubpile(), NotificationType.LIGHT_SEPARATOR);
+		if(gamePanel!=null) displayCards(new Menu("Select a revealed card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
 	}
-	public void displayChooseUnrevealedCardScreen(RumourCardsPile from) {
+	public void displayChooseUnrevealedCardScreen(Player p,RumourCardsPile from) {
 		gamePanel.switchDeck(from);
-		if(gamePanel!=null) displayMenu(new Menu("Select an unrevealed card",from.getCards().toArray()));
+		gamePanel.makeCardsChoosable(p, from, from.getUnrevealedSubpile(), NotificationType.LIGHT_SEPARATOR);
+		if(gamePanel!=null) displayCards(new Menu("Select an unrevealed card",from.getCards().toArray()),playerChoosesOwnCard(p,from));
 	}
 
 
-	public void displayChooseWitchCardScreen(RumourCardsPile from) {
+	public void displayChooseWitchCardScreen(Player p,RumourCardsPile from) {
 		if(gamePanel!=null) {
-			gamePanel.switchDeck(from);
-			displayMenu(new Menu("Select a card with a valid Witch? effect",from.getCards().toArray()));
+			gamePanel.switchDeck(p.getHand(),true);
+			gamePanel.makeCardsChoosable(p, p.getHand() , from, NotificationType.WITCH);
+			displayCards(new Menu("Select a card with a valid Witch? effect",from.getCards().toArray()),true);
 			SwingUtilities.invokeLater(new Runnable() {
 			    @Override
 				public void run() {
@@ -693,9 +713,11 @@ public final class GUIView {
 	}
 
 
-	public void displayChooseHuntCardScreen(RumourCardsPile from) {
+	public void displayChooseHuntCardScreen(Player p,RumourCardsPile from) {
 		if(gamePanel!=null)  {
-			displayMenu(new Menu("Select a card with a valid Hunt! effect",from.getCards().toArray()));
+			gamePanel.switchDeck(p.getHand(),true);
+			gamePanel.makeCardsChoosable(p, p.getHand() , from, NotificationType.HUNT);
+			displayCards(new Menu("Select a card with a valid Hunt! effect",from.getCards().toArray()),true);
 			SwingUtilities.invokeLater(new Runnable() {
 			    @Override
 				public void run() {

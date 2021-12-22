@@ -177,7 +177,7 @@ public class DeckSelectorButton extends JButton {
 		this.boldened=true;
 	}
 	
-	public void unBolden() {
+	public void unbolden() {
 		if(this.boldened) {
 			specialBordersSize-=boldenBy;
 			remakeBorder();

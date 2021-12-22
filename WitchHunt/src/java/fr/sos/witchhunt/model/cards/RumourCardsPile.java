@@ -9,7 +9,6 @@ import fr.sos.witchhunt.DisplayMediator;
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Resettable;
 import fr.sos.witchhunt.model.players.Player;
-import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
 
 public final class RumourCardsPile implements Resettable {
 	private List <RumourCard> cards = new ArrayList <RumourCard> ();
@@ -22,6 +21,10 @@ public final class RumourCardsPile implements Resettable {
 		this.cards=cards;
 	}
 	
+	public RumourCardsPile (List<RumourCard> cards,Player owner) {
+		this.owner=owner;
+		this.cards=cards;
+	}
 	public RumourCardsPile(Player player) {
 		this.owner=player;
 	}
@@ -54,10 +57,10 @@ public final class RumourCardsPile implements Resettable {
 	}
 	
 	public RumourCardsPile getRevealedSubpile (){
-		return new RumourCardsPile((List <RumourCard>) cards.stream().filter(c->c.isRevealed()).collect(Collectors.toList()));
+		return new RumourCardsPile(cards.stream().filter(c->c.isRevealed()).collect(Collectors.toList()),this.owner);
 	}
 	public RumourCardsPile getUnrevealedSubpile (){
-		return new RumourCardsPile((List <RumourCard>) cards.stream().filter(c->!c.isRevealed()).collect(Collectors.toList()));
+		return new RumourCardsPile(cards.stream().filter(c->!c.isRevealed()).collect(Collectors.toList()),this.owner);
 	}
 	
 	public boolean contains(RumourCard rc) {
@@ -70,11 +73,11 @@ public final class RumourCardsPile implements Resettable {
 	
 	public RumourCardsPile getPlayableWitchSubpile (){
 		List <RumourCard> L = new ArrayList <RumourCard> ();
-		return new RumourCardsPile((List <RumourCard>) cards.stream().filter(c->c.canWitch()).collect(Collectors.toList()));
+		return new RumourCardsPile(cards.stream().filter(c->c.canWitch()).collect(Collectors.toList()),this.owner);
 	}
 	public RumourCardsPile getPlayableHuntSubpile (){
 		List <RumourCard> L = new ArrayList <RumourCard> ();
-		return new RumourCardsPile((List <RumourCard>) cards.stream().filter(c->c.canHunt()).collect(Collectors.toList()));
+		return new RumourCardsPile(cards.stream().filter(c->c.canHunt()).collect(Collectors.toList()),this.owner);
 
 	}
 	

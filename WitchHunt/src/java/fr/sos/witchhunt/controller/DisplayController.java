@@ -383,46 +383,46 @@ public final class DisplayController implements DisplayMediator {
 	
 
 	@Override
-	public void displaySelectCardScreen(RumourCardsPile from, boolean forcedReveal) {
+	public void displaySelectCardScreen(Player p,RumourCardsPile from, boolean forcedReveal) {
 		console.logSelectCardsMessage(null);
 		this.displayCards(from, forcedReveal);
 		
-		gui.displayChooseAnyCardScreen(from);
+		gui.displayChooseAnyCardScreen(p,from);
 	}
 
 	@Override
-	public void displaySelectUnrevealedCardScreen(RumourCardsPile from, boolean forcedReveal) {
+	public void displaySelectUnrevealedCardScreen(Player p,RumourCardsPile from, boolean forcedReveal) {
 		console.logSelectCardsMessage("unrevealed");
 		this.displayCards(from, forcedReveal);
 		
-		gui.displayChooseUnrevealedCardScreen(from);
+		gui.displayChooseUnrevealedCardScreen(p,from);
 	}
 	
 	@Override
-	public void displaySelectRevealedCardScreen(RumourCardsPile from, boolean forcedReveal) {
+	public void displaySelectRevealedCardScreen(Player p,RumourCardsPile from, boolean forcedReveal) {
 		console.logSelectCardsMessage("revealed");
 		this.displayCards(from, forcedReveal);
 		
-		gui.displayChooseRevealedCardScreen(from);
+		gui.displayChooseRevealedCardScreen(p,from);
 		
 	}
 	
 	@Override
-	public void displaySelectWitchCardScreen(RumourCardsPile from) {
+	public void displaySelectWitchCardScreen(Player p,RumourCardsPile from) {
 		console.logSelectWitchCardMessage();
 		this.displayWitchEffects(from);
 		
-		gui.displayChooseWitchCardScreen(from);
+		gui.displayChooseWitchCardScreen(p,from);
 	}
 	
 
 	
 	@Override
-	public void displaySelectHuntCardScreen(RumourCardsPile from) {
+	public void displaySelectHuntCardScreen(Player p,RumourCardsPile from) {
 		console.logSelectHuntCardMessage();
 		this.displayHuntEffects(from);
 
-		gui.displayChooseHuntCardScreen(from);
+		gui.displayChooseHuntCardScreen(p, from);
 	}
 
 

@@ -207,6 +207,11 @@ public class ActionButton extends JButton {
 		return buttonText;
 	}
 	
+	public static String makeCardButtonText(RumourCard rc,boolean forceReveal) {
+		if(rc.isRevealed()||forceReveal) return rc.getName();
+		else return "*Unrevealed*";
+	}
+	
 	
 	@Override
 	public Insets getInsets() {

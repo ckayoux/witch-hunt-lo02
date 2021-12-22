@@ -13,7 +13,7 @@ import fr.sos.witchhunt.model.Resettable;
 
 public abstract class Card implements Resettable {
 	protected boolean revealed=false;
-	private static final Dimension IMAGES_SIZE=new Dimension(215,304);
+	public static final Dimension IMAGES_SIZE=new Dimension(215,304);
 	
 	public void reveal() {
 		this.revealed=true;

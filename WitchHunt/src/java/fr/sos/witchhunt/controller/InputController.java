@@ -38,7 +38,7 @@ public final class InputController implements InputMediator {
 			console.logWrongMenuChoiceMessage(timesWrong,helperMsg,n);
 			return makeChoice(m);
 		}else {
-			this.gui.resetChoicesPanel();
+			this.gui.choiceHasBeenMade(choice);
 			timesWrong=0;
 			console.crlf();;
 			currentMenu=null;
@@ -151,7 +151,7 @@ public final class InputController implements InputMediator {
 		console.logContinueMessage();
 		gui.wannaContinue(this);
 		getInput();
-		this.gui.resetChoicesPanel();
+		this.gui.choiceHasBeenMade(1);
 		console.crlf();
 	}
 	

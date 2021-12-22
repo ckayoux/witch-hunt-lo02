@@ -378,34 +378,39 @@ public void displayPlayTurnScreen(Player p);
 	//ADD DOCUMENTATION!!
 	/**
 	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to select a card.</b>
+	 * @param p The player who has to choose.
 	 * @param from The pile of Rumour cards within which any card must be selected.
 	 * @param forcedReveal If <i>true</i>, even unrevealed cards' properties will be shown.
 	 */
-	public void displaySelectCardScreen(RumourCardsPile from, boolean forcedReveal);
+	public void displaySelectCardScreen(Player p,RumourCardsPile from, boolean forcedReveal);
 	/**
 	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to select an unrevealed card.</b>
+	 * @param p The player who has to choose.
 	 * @param from A pile of Rumour cards containing only unrevealed cards.
 	 * @param forcedReveal If <i>true</i>, even unrevealed cards' properties will be shown.
 	 */
-	public void displaySelectUnrevealedCardScreen(RumourCardsPile from, boolean forcedReveal);
+	public void displaySelectUnrevealedCardScreen(Player p,RumourCardsPile from, boolean forcedReveal);
 	/**
 	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to select a revealed card.</b>
+	 * @param p The player who has to choose.
 	 * @param from from A pile of Rumour cards containing only revealed cards.
 	 * @param forcedReveal If <i>true</i>, even unrevealed cards' properties will be shown.
 	 */
-	public void displaySelectRevealedCardScreen(RumourCardsPile from, boolean forcedReveal);
+	public void displaySelectRevealedCardScreen(Player p,RumourCardsPile from, boolean forcedReveal);
 
 	/**
 	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to select a card with a valid Witch effect.</b>
+	 * @param p The player who has to choose a card with a valid Witch Effect
 	 * @param from A pile of Rumour cards containing only cards with a playable Witch? effect.
 	 */
-	public void displaySelectWitchCardScreen(RumourCardsPile from);
+	public void displaySelectWitchCardScreen(Player p,RumourCardsPile from);
 	
 	/**
 	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to select a card with a valid Hunt effect.</b>
+	 * @param p The player who has to choose a card with a valid Hunt! effect.
 	 * @param from A pile of Rumour cards containing only cards with a playable Hunt! effect.
 	 */
-	public void displaySelectHuntCardScreen(RumourCardsPile from);
+	public void displaySelectHuntCardScreen(Player p,RumourCardsPile from);
 	/**
 	 * <b>Requests the DM to display the screen corresponding to the situation when a player has to selecta  card to discard.</b>
 	 * @param p The player who has to choose a card to discard

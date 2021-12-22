@@ -17,6 +17,7 @@ import javax.swing.border.Border;
 import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.controller.ActionsPanelController;
 import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.model.cards.RumourCard;
 
 public class ChoicesPanel extends GridBagCell {
 	private JLabel prompt = new JLabel("",SwingConstants.CENTER);
@@ -24,6 +25,7 @@ public class ChoicesPanel extends GridBagCell {
 	private List<Component> interButtonsMargins = new ArrayList<Component> ();
 	private boolean isRendered=false;
 	private ActionsPanelController controller = null;
+	private boolean choosingACard=false;
 	
 	public ChoicesPanel(int x, int y,int w, int h,Border cellBorder,List<GridBagCell> cellsList) {
 		super(x,y,w,h,cellBorder,cellsList);
@@ -56,6 +58,21 @@ public class ChoicesPanel extends GridBagCell {
 		this.prompt.setText(m.getName());
 		for(Object o : m.getOptions()) {
 			String buttonText = ActionButton.makeButtonText(o);
+			if(buttonText!=null) {
+				ActionButton b =  new ActionButton(buttonText);
+				b.setTheme(ActionButton.getButtonColorByActionType(o));
+				this.actionButtonsList.add(b);
+			}
+		}
+		this.renderPane();
+	}
+	
+	public void displayCards(Menu m,boolean forceReveal) {
+		this.choosingACard=true;
+		this.resetPane();
+		this.prompt.setText(m.getName());
+		for(Object o : m.getOptions()) {
+			String buttonText = ActionButton.makeCardButtonText((RumourCard)o,forceReveal);
 			if(buttonText!=null) {
 				ActionButton b =  new ActionButton(buttonText);
 				b.setTheme(ActionButton.getButtonColorByActionType(o));
@@ -116,5 +133,8 @@ public class ChoicesPanel extends GridBagCell {
 		return this.isRendered;
 	}
 	
+	public boolean isChoosingACard() {
+		return this.choosingACard;
+	}
 	
 }
