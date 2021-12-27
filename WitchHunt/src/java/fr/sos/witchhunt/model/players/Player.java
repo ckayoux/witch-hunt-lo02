@@ -324,7 +324,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 */
 	public void takeNextTurn() {
 		Tabletop.getInstance().getCurrentRound().setNextPlayer(this);
-		if(Tabletop.getInstance().getLastUnrevealedPlayer()!=null) requestTakeNextTurnScreen();
+		if(Tabletop.getInstance().getLastUnrevealedPlayer()==null) requestTakeNextTurnScreen();
 	}
 
 	/**

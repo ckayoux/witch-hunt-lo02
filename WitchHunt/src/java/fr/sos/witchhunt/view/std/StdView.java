@@ -6,6 +6,7 @@ import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.players.DefenseAction;
+import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
 
@@ -562,6 +563,11 @@ public final class StdView {
 	public void logSelectWitchCardMessage() {
 		log("\tSelect a card with a valid Witch? effect :");
 		
+	}
+
+	public void logAddedPlayerMessage(Player p) {
+		log("Added "+p.getName()+((p instanceof HumanPlayer)?" (Human)":""));
+		crlf();
 	}
 
 

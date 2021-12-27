@@ -4,6 +4,8 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+import fr.sos.witchhunt.controller.Tabletop;
+
 public class Window extends JFrame /*implements InputSource*/ {
 	
 	public static final int WIDTH = 1600;
@@ -42,9 +44,9 @@ public class Window extends JFrame /*implements InputSource*/ {
 		return gp;
 	}
 
-	public MatchSetupPanel renderMatchSetupPanel() {
+	public MatchSetupPanel renderMatchSetupPanel(Tabletop t) {
 		this.setVisible(false);
-		MatchSetupPanel msp = new MatchSetupPanel();
+		MatchSetupPanel msp = new MatchSetupPanel(t);
 		this.setContentPane(msp);
 		msp.init();
 		this.pack();

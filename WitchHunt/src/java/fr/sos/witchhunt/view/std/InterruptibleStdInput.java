@@ -3,21 +3,23 @@ package fr.sos.witchhunt.view.std;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 import java.util.concurrent.Callable;
 
 import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.controller.Application;
-import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
 
 public class InterruptibleStdInput implements Callable<String>, Runnable, InputSource {
 	private InputMediator inputMediator;
+	private StdView console;
 	
-	public InterruptibleStdInput(InputMediator im) {
+	public InterruptibleStdInput(InputMediator im,StdView console) {
+		this.console=console;
 		this.inputMediator=im;
 	}
 	
+	@Override
 	public String call() throws IOException {
 	    BufferedReader br = new BufferedReader(
 	        new InputStreamReader(System.in));
@@ -30,6 +32,7 @@ public class InterruptibleStdInput implements Callable<String>, Runnable, InputS
 	        }
 	        input = br.readLine();
 	    } catch (InterruptedException e) {
+	    	console.crlf();
 	        return null;
 	    }
 	    return input;
@@ -52,6 +55,11 @@ public class InterruptibleStdInput implements Callable<String>, Runnable, InputS
 	@Override
 	public void post(String str) {
 		inputMediator.receive(str);
+	}
+	
+	@Override
+	public void post(Player p) {
+		
 	}
 
 	@Override

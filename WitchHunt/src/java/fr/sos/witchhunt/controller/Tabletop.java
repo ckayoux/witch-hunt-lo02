@@ -104,21 +104,22 @@ public final class Tabletop implements Runnable {
 	 * <p>The {@link #minPlayersNumber minimum} and {@link #maxPlayersNumber maximum} players numbers are attributes of this class.</p>
 	 */
 	private void addPlayers() {
-		displayMediator.displayAddPlayersScreen(minPlayersNumber, maxPlayersNumber);
+		displayMediator.displayAddPlayersScreen(this);
 		int n=0;
-		List <String> takenNames = new ArrayList<String> ();
+		Player newPlayer;
  		while(n<minPlayersNumber) {
 			n++;
-			Player newPlayer = inputMediator.createPlayer(n,takenNames);
+			newPlayer = inputMediator.createPlayer(n,getTakenNames(),false);
 			newPlayer.setDisplayMediator(this.displayMediator);
 			instance.playersList.add(newPlayer);
+			displayMediator.displayAddedPlayerScreen(newPlayer);
 		}
 		displayMediator.logYesNoQuestion("\tWould you like to add another player ?");
-		while(n<maxPlayersNumber && inputMediator.answerYesNoQuestion()) {
+		while(n<maxPlayersNumber && (newPlayer = inputMediator.createPlayer(n,getTakenNames(),true))!=null ){
 			n++;
-			Player newPlayer = inputMediator.createPlayer(n,takenNames);
 			newPlayer.setDisplayMediator(this.displayMediator);
 			instance.playersList.add(newPlayer);
+			displayMediator.displayAddedPlayerScreen(newPlayer);
 			displayMediator.logYesNoQuestion("\tWould you like to add another player ?");
 		}
 		displayMediator.displayAddedPlayersScreen(n);
@@ -164,8 +165,8 @@ public final class Tabletop implements Runnable {
 	public void startMatch() {
 		this.addPlayers();
 		
-		displayMediator.displayMatchStartScreen(this);
-		freeze(1500);
+		displayMediator.displayMatchStartScreen();
+		freeze(750);
 
 		scoreCounter = new ScoreCounter(); //Instanciating the score counter
 
@@ -329,7 +330,15 @@ public final class Tabletop implements Runnable {
 	public DisplayMediator getDisplayMediator() {
 		return displayMediator;
 	}
-
+	public int getMinPlayersNumber() {
+		return this.minPlayersNumber;
+	}
+	public int getMaxPlayersNumber() {
+		return this.maxPlayersNumber;
+	}
+	public List<String> getTakenNames() {
+		return this.playersList.stream().map(p->p.getName()).toList();
+	}
 	
 	//SETTERS
 	public void incrementCPUPlayersNumber() {

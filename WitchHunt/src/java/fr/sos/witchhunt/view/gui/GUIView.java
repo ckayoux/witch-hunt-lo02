@@ -37,6 +37,7 @@ public final class GUIView {
 	
 	public void gotoMainMenuPanel() {
 		if(this.mainMenuPanel==null) {
+			this.w.setResizable(false);
 			this.gamePanel=null;
 			this.matchSetupPanel=null;
 			this.mainMenuPanel=this.w.renderMainMenuPanel();
@@ -46,10 +47,13 @@ public final class GUIView {
 	}
 	public void gotoMatchSetupPanel() {
 		if (this.matchSetupPanel==null) {
+			this.w.setResizable(true);
 			this.gamePanel=null;
 			this.mainMenuPanel=null;
-			this.matchSetupPanel=this.w.renderMatchSetupPanel();
+			this.w.setTitle(Window.defaultTitle+" : match setup");
+			this.matchSetupPanel=this.w.renderMatchSetupPanel(this.tabletop);
 			this.matchSetupPanel.setInputMediator(inputMediator);
+			this.matchSetupPanel.update();
 		}
 		
 	}
@@ -145,6 +149,9 @@ public final class GUIView {
 		}
 	}
 	
+	public void displayPlayerAddedScreen(Player p) {
+		if(this.matchSetupPanel!=null) this.matchSetupPanel.addedOne(p);
+	}
 
 	public void displayRoundStartScreen(int roundNumber) {
 		if(gamePanel!=null) {
@@ -240,6 +247,7 @@ public final class GUIView {
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 			gamePanel.renderPile(tabletop.getPile());
 			tabletop.getActivePlayersList().forEach(p->gamePanel.updateDeckContent(p.getHand(),false));
+			gamePanel.displayOwnerLabels();
 			gamePanel.updateDeckContent(tabletop.getPile(),false);
 		}
 	}
@@ -604,7 +612,6 @@ public final class GUIView {
 							NotificationType.NORMAL
 					)
 			);
-		//UPDATE CARDS FOR BOTH PLAYERS 
 	}
 
 

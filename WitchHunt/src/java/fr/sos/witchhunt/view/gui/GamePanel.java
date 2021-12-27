@@ -130,7 +130,8 @@ public class GamePanel extends GridBagPanel {
 	
 	public void choiceHasBeenMade(Object o) {
 		if(actionsPanel.isChoosingACard()&&o instanceof RumourCard) {
-			cardHasBeenChosen(cardsPanel.currentlyUsedForChoosingCard.choosableCards.stream().filter(j->j.getAssociatedRumourCard()==o).findFirst().get());
+			if(cardsPanel.currentlyUsedForChoosingCard!=null)
+				cardHasBeenChosen(cardsPanel.currentlyUsedForChoosingCard.choosableCards.stream().filter(j->j.getAssociatedRumourCard()==o).findFirst().get());
 		}
 		if(actionsPanel.isRendered()) {
 			actionsPanel.resetPane();
@@ -248,7 +249,7 @@ public class GamePanel extends GridBagPanel {
 		if(selectedDeckButton!=null) {
 			if(selectedDeckButton.getDeck()!=rcp) {
 				if(rcp.isThePile()) deckSelectorPanel.setSelectedDeckButton(deckSelectorPanel.pileButton);
-				else deckSelectorPanel.setSelectedDeckButton(deckSelectorPanel.playersBList.stream().filter(b->b.getDeck()==rcp).findFirst().get());
+				else deckSelectorPanel.setSelectedDeckButton(deckSelectorPanel.playersBList.stream().filter(b->b.getDeck().getOwner()==rcp.getOwner()).findFirst().get());
 			}
 		}
 		if(rcp.isThePile()) this.cardsPanel.showDeck(rcp);
@@ -455,11 +456,6 @@ public class GamePanel extends GridBagPanel {
 			pilePart.updateUI();
 		}
 	
-
-	/*	public void resetAccusablePlayersEffects() {
-			//TODO
-		}*/
-
 		public void themeUpPlayerButton(Player p, NotificationType nt) {
 			this.playersBList.stream().filter(b->b.getAssociatedPlayer()==p).forEach(b->{
 				b.resetTheme();
@@ -606,10 +602,16 @@ public class GamePanel extends GridBagPanel {
 			if(currentlyUsedForChoosingCard!=null) this.currentlyUsedForChoosingCard.resetChoosableCardsTheme(exceptedThisOne);
 		}
 		
+		public void renderOwnerLabels() {
+			this.M.values().forEach(d->d.renderOwnerLabel());
+		}
 		
 		private class DeckPanel extends JPanel {
 			private Dimension cardsSize;
 			private String name;
+			private JPanel cardsArea;
+			private JPanel ownerArea;
+			private JLabel ownerLabel;
 			private RumourCardsPile represents;
 			private List<RenderedCard> renderedCardsList = new ArrayList<RenderedCard>();
 			private Map<RenderedCard,Component> hMarginsMap = new HashMap<RenderedCard,Component>();
@@ -620,14 +622,29 @@ public class GamePanel extends GridBagPanel {
 			public DeckPanel(RumourCardsPile rcp) {
 				super();
 				this.represents = rcp;
-				this.setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
+				this.setLayout(new BorderLayout());
+				this.cardsArea = new JPanel();
+				this.ownerArea = new JPanel();
+				this.cardsArea.setLayout(new BoxLayout(this.cardsArea,BoxLayout.LINE_AXIS));
 				this.cardsSize=new Dimension((int)(this.getPreferredSize().getWidth()/6.5),(int)(this.getPreferredSize().getHeight()/1.6));
+				
 				if(rcp.getOwner()!=null) {
+					String ownerName = rcp.getOwner().getName();
+					this.ownerLabel=new JLabel(ownerName + ((ownerName.charAt(ownerName.length()-1)=='s')?"":"'s")+ " deck");
 					this.name=Integer.toString(rcp.getOwner().getId());
 				}
 				else {
+					this.ownerLabel=new JLabel("Discarded cards");
 					this.name="Pile";
 				}
+				this.ownerLabel.setFont(new Font("Arial",Font.BOLD,14));
+				
+				this.add(cardsArea,BorderLayout.CENTER);
+			}
+			
+			public void renderOwnerLabel() {
+				this.ownerArea.add(this.ownerLabel);
+				this.add(ownerArea,BorderLayout.NORTH);
 			}
 
 			@Override
@@ -642,7 +659,7 @@ public class GamePanel extends GridBagPanel {
 			
 			public void resetPane() {
 				this.hMarginsMap.clear();
-				this.removeAll();
+				this.cardsArea.removeAll();
 				this.updateUI();
 			}
 			
@@ -676,10 +693,10 @@ public class GamePanel extends GridBagPanel {
 				while(it.hasNext()) {
 					RenderedCard j = it.next();
 					this.setMaximumSize(cardsSize);
-					this.add(j);;
+					this.cardsArea.add(j);;
 					Component hMargin = Box.createHorizontalStrut(marginSize);
 					hMarginsMap.put(j,hMargin);
-					if(it.hasNext()) this.add(hMargin);
+					if(it.hasNext()) this.cardsArea.add(hMargin);
 				}
 				this.updateUI();
 			}
@@ -695,11 +712,11 @@ public class GamePanel extends GridBagPanel {
 				RenderedCard jay = this.renderedCardsList.stream().filter(j->j.getAssociatedRumourCard()==rc).findAny().get();
 				if(jay!=null) {
 					if(hMarginsMap.get(jay)!=null) {
-						this.remove(hMarginsMap.get(jay));
+						this.cardsArea.remove(hMarginsMap.get(jay));
 						hMarginsMap.remove(jay);
 					}
 					this.renderedCardsList.remove(jay);
-					this.remove(jay);
+					this.cardsArea.remove(jay);
 				}
 			}
 			
@@ -713,7 +730,8 @@ public class GamePanel extends GridBagPanel {
 			}
 			
 			public void makeCardsChoosable(RumourCardsPile choosableSubpile, NotificationType theme) {
-				this.choosableCards = renderedCardsList.stream().filter(j->choosableSubpile.contains(j.getAssociatedRumourCard())).toList();
+				if(this.choosableCards==null) this.choosableCards = new ArrayList<RenderedCard>();
+				this.choosableCards.addAll(renderedCardsList.stream().filter(j->choosableSubpile.contains(j.getAssociatedRumourCard())).toList());
 				choosableCards.forEach(j->j.setTheme(theme));
 				new CardSelectorController(choosableCards, gamePanelInstance,inputMediator);
 			}
@@ -735,8 +753,7 @@ public class GamePanel extends GridBagPanel {
 			public List<RenderedCard> getRenderedCardsList () {
 				return renderedCardsList;
 			}
-		}
-		
+		}		
 
 		
 	}
@@ -869,6 +886,9 @@ public class GamePanel extends GridBagPanel {
 		}
 		
 		
+	}
+	public void displayOwnerLabels() {
+		this.cardsPanel.renderOwnerLabels();
 	}
 	
 	

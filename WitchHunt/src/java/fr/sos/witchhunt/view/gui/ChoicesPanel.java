@@ -20,8 +20,8 @@ import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 
 public class ChoicesPanel extends GridBagCell {
-	private JLabel prompt = new JLabel("",SwingConstants.CENTER);
-	private List<ActionButton> actionButtonsList = new ArrayList<ActionButton>();
+	protected JLabel prompt = new JLabel("",SwingConstants.CENTER);
+	protected List<ActionButton> actionButtonsList = new ArrayList<ActionButton>();
 	private List<Component> interButtonsMargins = new ArrayList<Component> ();
 	private boolean isRendered=false;
 	private ActionsPanelController controller = null;
@@ -140,5 +140,9 @@ public class ChoicesPanel extends GridBagCell {
 		if(this.controller!=null) this.controller.destroyMouseListeners();
 		this.controller=null;
 		this.choosingACard=false;
+	}
+	
+	public JLabel getPrompt() {
+		return this.prompt;
 	}
 }

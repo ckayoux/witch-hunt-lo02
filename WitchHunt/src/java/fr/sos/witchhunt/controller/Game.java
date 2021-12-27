@@ -29,7 +29,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	
 	public void gotoMainMenu() {
 		
-		Menu mainMenu = new Menu("main menu","Start new game"/*,"Options"*/,"Exit");
+		Menu mainMenu = new Menu("MAIN MENU","Start new game","Options","Exit");
 		displayMediator.displayMenu(mainMenu);
 		switch (inputMediator.makeChoice(mainMenu)) {
 				case 1:
@@ -39,10 +39,10 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 					Thread matchThread = new Thread(tabletop);
 					matchThread.start();
 					break;
-				/*case 2:
-					options();
-					break;*/
 				case 2:
+					options();
+					break;
+				case 3:
 					exit();
 					break;
 		}
@@ -57,8 +57,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	}
 
 	private void options() {
-		String[] options = {((sleepingAllowed)?"Disable":"Enable")+" delay between CPU players' actions",
-			((displayCPUStrategyChange)?"Disable":"Enable")+" displaying CPU players' changes of strategy",
+		String[] options = {((sleepingAllowed)?"Disable":"Enable")+" delay between actions",
 			"Main menu"};
 
 		Menu optionsMenu = new Menu("game options",options);
@@ -66,17 +65,12 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		int input = Application.inputController.makeChoice(optionsMenu);
 		switch (input) {
 			case 1:
-				Application.displayController.passLog("Delay set to : "+((sleepingAllowed)?"OFF":"ON"));
+				displayMediator.passLog("Delay set to : "+((sleepingAllowed)?"OFF":"ON"));
 				sleepingAllowed=!sleepingAllowed;
 				options();
 				break;
 			case 2:
-				Application.displayController.passLog("CPU players will "+((displayCPUStrategyChange)?"NOT ":"")+ "display their changes of strategy.");
-				displayCPUStrategyChange=!displayCPUStrategyChange;
-				options();
-				break;
-			case 3:
-				break;
+				gotoMainMenu();
 				
 		}
 	}

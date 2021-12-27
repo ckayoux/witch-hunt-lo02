@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import fr.sos.witchhunt.InputMediator;
+import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
 import fr.sos.witchhunt.view.gui.GamePanel;
 import fr.sos.witchhunt.view.gui.RenderedCard;
@@ -112,6 +113,12 @@ public class CardSelectorController implements InputSource {
 	@Override
 	public void post() {
 		inputMediator.receive();
+	}
+
+	@Override
+	public void post(Player p) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

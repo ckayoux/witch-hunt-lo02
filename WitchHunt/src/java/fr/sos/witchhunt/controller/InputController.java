@@ -10,6 +10,7 @@ import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.gui.GUIView;
 import fr.sos.witchhunt.view.std.InterruptibleStdInput;
+import fr.sos.witchhunt.view.std.StdPlayerCreator;
 import fr.sos.witchhunt.view.std.StdView;
 
 public final class InputController implements InputMediator {
@@ -19,7 +20,9 @@ public final class InputController implements InputMediator {
 	private StdView console;
 	private GUIView gui;
 	private Thread stdInputThread;
+	private Thread activePlayerCreatorThread;
 	private String receivedString;
+	private Player receivedPlayer;
 	private Menu currentMenu=null;
 	private int timesWrong=0;
 	
@@ -49,62 +52,54 @@ public final class InputController implements InputMediator {
 	}
 	
 	@Override
-	public Player createPlayer(int id,List<String> chosenNames) {
-		console.log("\tPlayer "+Integer.toString(id)+" : ");
-		console.yesNoQuestion("\tHuman-controlled ?");
-		boolean human = answerYesNoQuestion();
+	public Player createPlayer(int id,List<String> chosenNames,boolean optionnal) {
+		InputController ic = new InputController();
+		ic.setConsole(console);
+		ic.setGui(gui);
+		StdPlayerCreator spc = new StdPlayerCreator(this,ic,console,id,chosenNames,optionnal);
+		activePlayerCreatorThread= new Thread(spc);
+		activePlayerCreatorThread.start();
+		Player output=getPlayerInput();
+		return output;
+	}
+	
+	@Override
+	public Player createPlayer(int id, String name, boolean isHuman) {
 		Player output;
-		if(human) {
-			HumanPlayer temp;
-			console.log("\tName :");
-			String name = "";
-			boolean correct;
-			do {
-				name = getStringInput();
-				if(chosenNames.contains(name)) {
-					console.log("\tThis name is already taken.");
-					correct=false;
-				}
-				else if (name.contains("CPU")) {
-					console.log("\tThis name is reserved.");
-					correct=false;
-				}
-				else {
-					correct=true;
-				}
-				if(!correct) console.log("\tPlease choose another one :");
-			}
-			while(!correct);
-			chosenNames.add(name);
-			console.crlf();
-			temp = new HumanPlayer(name,id);
-			temp.setInputMediator(this);
-			output=temp;
+		if(isHuman) {
+			HumanPlayer houtput =new HumanPlayer(name,id);
+			houtput.setInputMediator(this);
+			output=houtput;
 		}
-		else {
+		else  {
 			Tabletop.getInstance().incrementCPUPlayersNumber();
-			console.crlf();
-			output = new CPUPlayer(id,Tabletop.getInstance().getCPUPlayersNumber());
+			output=new CPUPlayer(id,Tabletop.getInstance().getCPUPlayersNumber());
 		}
 		return output;
 	}
 	
-	public void getInput() {
-		stdInputThread= new Thread( new InterruptibleStdInput(this));
+	public void getInput() throws InterruptedException {
+		stdInputThread= new Thread( new InterruptibleStdInput(this,console));
 		stdInputThread.start();
-		try{latch.await();}
-		catch(InterruptedException e) {
-			e.printStackTrace();
-		}
+		latch.await();
 	}
 	
-	public String getStringInput() {
+	@Override
+	public String getStringInput() throws InterruptedException {
 		getInput();
 		if (receivedString==null||receivedString.equals("")) {
 			console.logInputWasExpectedMessage();
 			return getStringInput();
 		}
 		else return receivedString;
+	}
+	
+	public Player getPlayerInput() {
+		try{latch.await();}
+		catch(InterruptedException e) {
+			e.printStackTrace();
+		}
+		return receivedPlayer;
 	}
 	public int getIntInput() {
 		try {
@@ -114,10 +109,13 @@ public final class InputController implements InputMediator {
 		catch (final NumberFormatException e) {
 			return -1;
 		}
+		catch (InterruptedException e) {
+			return -1;
+		}
 			
 	}
 	@Override
-	public boolean answerYesNoQuestion() {
+	public boolean answerYesNoQuestion() throws InterruptedException {
 		char input = getStringInput().toLowerCase().charAt(0);
 		if(input=='y') {
 			return true;
@@ -138,6 +136,17 @@ public final class InputController implements InputMediator {
 		latch = new CountDownLatch(1);
 	}
 	@Override
+	public void receive(Player p) {
+		this.latch.countDown();
+		if(this.activePlayerCreatorThread!=null && this.activePlayerCreatorThread.isAlive()) {
+			this.activePlayerCreatorThread.interrupt();
+			this.activePlayerCreatorThread=null;
+		}
+		this.receivedPlayer=p;
+		latch = new CountDownLatch(1);
+	}
+	
+	@Override
 	public void receive(int i) {
 		this.receive(Integer.toString(i));
 	}
@@ -151,18 +160,23 @@ public final class InputController implements InputMediator {
 	public void wannaContinue() {
 		console.logContinueMessage();
 		gui.wannaContinue(this);
-		getInput();
+		try {
+			getInput();
+		} catch (InterruptedException e) {
+
+		}
 		this.gui.choiceHasBeenMade(1);
 		console.crlf();
 	}
 	
+	@Override
 	public void interruptStdInput() {
 		if(stdInputThread != null) {
 			if(stdInputThread.isAlive()) {
 				stdInputThread.interrupt();
 				stdInputThread = null;
 			}
-		}	
+		}
 	}
 	
 	public void sleepStdInput() {

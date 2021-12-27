@@ -25,6 +25,12 @@ public final class DisplayController implements DisplayMediator {
 	}
 	
 	@Override
+	public void displayAddedPlayerScreen(Player p) {
+		console.logAddedPlayerMessage(p);
+		gui.displayPlayerAddedScreen(p);
+	}
+	
+	@Override
 	public void displayAddedPlayersScreen(int n) {
 		console.logAddedPlayersScreen(n);
 	}
@@ -67,8 +73,9 @@ public final class DisplayController implements DisplayMediator {
 	}
 	
 	@Override
-	public void displayAddPlayersScreen(int minPlayersNumber,int maxPlayersNumber) {
-		console.logAddPlayersScreen(minPlayersNumber, maxPlayersNumber);
+	public void displayAddPlayersScreen(Tabletop tabletop) {
+		console.logAddPlayersScreen(tabletop.getMinPlayersNumber(), tabletop.getMaxPlayersNumber());
+		gui.setTabletop(tabletop);
 		gui.gotoMatchSetupPanel();
 	}
 	
@@ -77,9 +84,8 @@ public final class DisplayController implements DisplayMediator {
 	}
 	
 	@Override
-	public void displayMatchStartScreen(Tabletop tabletop) {
+	public void displayMatchStartScreen() {
 		console.logMatchStartMessage();
-		gui.setTabletop(tabletop);
 		gui.gotoGamePanel();
 	}
 

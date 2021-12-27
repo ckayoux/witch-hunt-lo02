@@ -23,10 +23,15 @@ public interface DisplayMediator {
 	
 	/**
 	 * <b>Requests the DM to display the "add players" screen.</b>
-	 * @param minPlayersNumber The minimal number of players to add
-	 * @param maxPlayersNumber The maximal number of players a match can have
+	 * @param tabletop The mtach (instance of {@link fr.sos.witchhunt.controller.Tabletop Tabletop}) which is being set up
 	 */
-	public void displayAddPlayersScreen(int minPlayersNumber,int maxPlayersNumber) ;
+	public void displayAddPlayersScreen(Tabletop tabletop) ;
+	
+	/**
+	 * <b>Requests the DM to display the screen corresponding to the situation when one player has been added.</b>
+	 * @param p The player who has been added
+	 */
+	public void displayAddedPlayerScreen(Player p);
 	
 	/**
 	 * <b>Requests the DM to display the screen corresponding to the situation where all players have been added to the match.</b>
@@ -51,10 +56,9 @@ public interface DisplayMediator {
 	
 	/**
 	 * <b>Requests the DM to display the screen corresponding to the match's start.</b>
-	 * @param tabletop An instance of Tabletop, representing the match
 	 * @see Tabletop
 	 */
-	public void displayMatchStartScreen(Tabletop tabletop);
+	public void displayMatchStartScreen();
 	
 	/**
 	 * <b>Requests the DM to display the screen corresponding to a Round's start.</b>
@@ -416,7 +420,6 @@ public void displayPlayTurnScreen(Player p);
 	 * @param p The player who has to choose a card to discard
 	 */
 	public void displayChooseCardToDiscardScreen(Player p);
-
 
 
 }
