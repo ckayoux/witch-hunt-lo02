@@ -9,6 +9,7 @@ import fr.sos.witchhunt.model.cards.BlackCat;
 import fr.sos.witchhunt.model.cards.Broomstick;
 import fr.sos.witchhunt.model.cards.Cauldron;
 import fr.sos.witchhunt.model.cards.DuckingStool;
+import fr.sos.witchhunt.model.cards.EvilEye;
 import fr.sos.witchhunt.model.cards.ExistingRumourCards;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
@@ -149,7 +150,7 @@ public abstract class CPUStrategy implements PlayStrategy {
 					M.setValueFor(rc,cv );
 				}
 			}
-			else if(rc==ExistingRumourCards.getInstanceByClass(BlackCat.class)) {//EVIL EYE
+			else if(rc==ExistingRumourCards.getInstanceByClass(EvilEye.class)) {//EVIL EYE
 				/*value becomes -1, risked if there are only 2 accusable players remaining
 				 * the card is valuable when this is not the case and the average cards number is low (chances to cause a player to have no cards on your turn)*/
 				if(Tabletop.getInstance().getActivePlayersList().size()<=2) {

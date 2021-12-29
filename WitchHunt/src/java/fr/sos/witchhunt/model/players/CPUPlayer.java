@@ -54,7 +54,7 @@ public final class CPUPlayer extends Player {
 	 * <p><b>A short delay is added between all actions performed by CPU Players to let the users keep the track of what happens during their turns.</b></p>
 	 * <p>Expressed in milliseconds.</p>
 	 */
-	private int actionsDelay = 1500;
+	private int actionsDelay = 1125;
 	
 	/**
 	 * CPU players' default name is determined by the number of existing CPU Players at instanciation.
@@ -361,6 +361,7 @@ public final class CPUPlayer extends Player {
 	@Override
 	public void requestPlayerPlaysWitchEffectScreen(RumourCard rc) {
 		displayMediator.displayPlayerPlaysWitchEffectScreen(this,rc);
+		this.delayGame(actionsDelay);
 	}
 	/**
 	 * Sends a notification informing the view of the played Hunt! effect, and simulates a long delay afterwise.
@@ -371,6 +372,7 @@ public final class CPUPlayer extends Player {
 	@Override
 	public void requestPlayerPlaysHuntEffectScreen(RumourCard rc) {
 		displayMediator.displayPlayerPlaysHuntEffectScreen(this,rc);
+		this.delayGame(actionsDelay);
 	}
 	
 	/**
@@ -403,8 +405,9 @@ public final class CPUPlayer extends Player {
 	 * 
 	 * <p>The {@link #chosenStrategy} will then be used for making every choice the CPU-controlled player has to make.</p>
 	 * 
-	 * <p>The chosen strategy's behavior can be {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#updateBehavior(boolean, Identity, RumourCardsPile) updated} to 
-	 * actualize {@link fr.sos.witchhunt.model.players.cpustrategies.CardValue the value given to each card}.</p>
+	 * <p>The chosen strategy's behavior is then {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#updateBehavior(boolean, Identity, RumourCardsPile) updated} to 
+	 * actualize {@link fr.sos.witchhunt.model.players.cpustrategies.CardValue the value given to each card}.
+	 * It will be regularly updated afterwise (before every choice).</p>
 	 * 
 	 * @see fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy PlayStrategy
 	 * @see #chosenStrategy
@@ -447,6 +450,9 @@ public final class CPUPlayer extends Player {
 				&&this.score<3)
 				this.chosenStrategy=new GropingStrategy();
 		else this.chosenStrategy=new DefensiveStrategy();
+		
+		chosenStrategy.updateBehavior(isRevealed(), identity, hand);
+		
 		if(chosenStrategy.getClass()!=oldStrategy.getClass()) displayMediator.displayStrategyChange(this,this.chosenStrategy); //no effect
 		oldStrategy=chosenStrategy;
 	}

@@ -25,9 +25,7 @@ public final class TheInquisition extends RumourCard {
 					//we assume that we can discard a revealed card
 				}
 				else {
-					me.discard(new RumourCardsPile(
-							me.getHand().getCards(),me
-							));
+					me.discard();
 				}		
 				takeNextTurn();
 			}

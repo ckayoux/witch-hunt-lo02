@@ -17,7 +17,7 @@ public final class BlackCat extends RumourCard {
 		};
 		
 		this.huntEffect = new HuntEffect("Add one discarded card to your hand, and then discard this card.\n"
-				+ "/+/Take next turn.",1) { //value augments when there is at least 1 card in the pile, even more if there is one revealed card with overall value>=3
+				+ "/+/Take next turn.",0) { //value augments when there is at least 1 card in the pile, even more if there is one revealed card with overall value>=3 in the pile
 			
 
 			@Override

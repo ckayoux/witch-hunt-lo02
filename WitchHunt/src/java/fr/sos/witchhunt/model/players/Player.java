@@ -301,8 +301,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * @see #takeNextTurn()
 	 */
 	public void playTurnAgain() {
-		takeNextTurn();
 		requestPlayTurnAgainScreen();
+		takeNextTurn();
 	}
 	
 	/**
@@ -320,11 +320,12 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	/**
 	 * <b>Elect this player to play the next turn.</b>
 	 * Requests for the display of a suitable notification.
+	 * No display if the round is over (only one unrevealed player).
 	 * @see fr.sos.witchhunt.controller.Round#setNextPlayer(Player) Round::setNextPlayer(Player)
 	 */
 	public void takeNextTurn() {
 		Tabletop.getInstance().getCurrentRound().setNextPlayer(this);
-		if(Tabletop.getInstance().getLastUnrevealedPlayer()==null) requestTakeNextTurnScreen();
+		if(Tabletop.getInstance().getUnrevealedPlayersList().size()>1) requestTakeNextTurnScreen();
 	}
 
 	/**

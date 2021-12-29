@@ -112,8 +112,8 @@ public class CardValueMap {
 
 	public RumourCardsPile getCardsWithMaxAdditionnalValue(RumourCardsPile rcp) {
 		Map<RumourCard,CardValue> M = this.filter(rcp);
-		List<Integer> additionnalValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getAdditionnalValue()) ;
+		List<Integer> additionnalValues = getSubValues(M, (ToIntFunction<CardValue>) cv -> cv.getAdditionalValue()) ;
 		int max = Collections.max(additionnalValues);
-		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getAdditionnalValue(), max));
+		return new RumourCardsPile(getCardsWithSubValue(M,(ToIntFunction<CardValue>) cv -> cv.getAdditionalValue(), max));
 	}
 }

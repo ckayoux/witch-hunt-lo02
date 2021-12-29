@@ -239,7 +239,7 @@ public class GamePanel extends GridBagPanel {
 	}
 	
 	public void updateDeckContent(RumourCardsPile rcp,boolean forceReveal) {
-		this.cardsPanel.getDeck(rcp).updateContent(rcp.getOwner()==currentPlayer);
+		this.cardsPanel.getDeck(rcp).updateContent(rcp.getOwner()==currentPlayer&&currentPlayer instanceof HumanPlayer);
 		this.cardsPanel.getDeck(rcp).renderPane();
 		if(rcp.isThePile()) this.deckSelectorPanel.updatePileButton();
 	}
