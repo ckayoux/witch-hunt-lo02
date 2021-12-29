@@ -116,6 +116,13 @@ public final class CardValue {
 	}
 	
 	//GETTERS
+	/**
+	 * A {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}'s overall value is computed as the sum of :
+	 * its {@link #witchValue Witch? effect's value},
+	 * its {@link #huntValue Hunt! effect's value},
+	 * and its {@link #additionalValue additional value}
+	 * @return The card's overall value
+	 */
 	public int getOverallValue() {
 		return this.witchValue + this.huntValue + this.additionalValue;
 	}

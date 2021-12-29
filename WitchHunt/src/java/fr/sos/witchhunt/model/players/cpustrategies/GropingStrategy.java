@@ -63,6 +63,22 @@ public final class GropingStrategy extends CPUStrategy {
 		return list.get(list.size()*(int)Math.random());
 	}
 
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * <b>With this strategy, the player keeps the best witch effects for the end of the round, in the event that they can decide soon for a more defined strategy.</b>
+	 * 
+	 * @return A random card among the ones with the lowest {@link CardValue#getWitchValue() Witch? effect value} and the lowest {@link CardValue#getOverallValue() overall value}.
+	 * @see CardValueMap#getCardsWithMinWitchValue(RumourCardsPile)
+	 * @see CardValueMap#getCardsWithMinOverallValue(RumourCardsPile)
+	 */
+	@Override
+	public RumourCard selectWitchCard(RumourCardsPile rcp) {
+		RumourCardsPile worstWitchCards = cvm.getCardsWithMinOverallValue(cvm.getCardsWithMinWitchValue(rcp));		
+		return worstWitchCards.getRandomCard(); 
+	}
+
 	/**
 	 * {@inheritDoc}
 	 * 
