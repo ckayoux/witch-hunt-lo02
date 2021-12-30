@@ -655,9 +655,9 @@ public final class GUIView {
 			sb.append(rc.getName());
 			sb.append(" :");
 			sb.append('\n');
-			if(!rc.getAdditionnalEffectDescription().equals("")) {
+			if(!rc.getAdditionalEffectDescription().equals("")) {
 				sb.append("\t*"); 
-				sb.append(rc.getAdditionnalEffectDescription().replace("/+/", "\t ")); 
+				sb.append(rc.getAdditionalEffectDescription().replace("/+/", "\t ")); 
 				sb.append("*\n");
 			}
 			for(Supplier<String> getter : effectGetters) {

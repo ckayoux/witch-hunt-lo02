@@ -298,11 +298,11 @@ public final class DisplayController implements DisplayMediator {
 	@Override
 	public void displayCard(RumourCard rc, boolean forcedReveal) {
 		if(rc.isRevealed() || forcedReveal) {
-			if(rc.getAdditionnalEffectDescription().equals("")) {
+			if(rc.getAdditionalEffectDescription().equals("")) {
 				console.logRumourCard(rc.getName(),rc.isRevealed(),rc.getWitchEffectDescription(),rc.getHuntEffectDescription());
 			}
 			else {
-				console.logRumourCard(rc.getName(),rc.isRevealed(),rc.getAdditionnalEffectDescription(),rc.getWitchEffectDescription(),rc.getHuntEffectDescription());
+				console.logRumourCard(rc.getName(),rc.isRevealed(),rc.getAdditionalEffectDescription(),rc.getWitchEffectDescription(),rc.getHuntEffectDescription());
 			}
 		}
 		else {
@@ -312,21 +312,21 @@ public final class DisplayController implements DisplayMediator {
 
 	@Override
 	public void displayWitchEffect(RumourCard rc) {
-		if(rc.getAdditionnalEffectDescription().equals("")) {
+		if(rc.getAdditionalEffectDescription().equals("")) {
 			console.logEffect(rc.getName(),rc.getWitchEffectDescription());
 		}
 		else {
-			console.logEffect(rc.getName(),rc.getAdditionnalEffectDescription(),rc.getWitchEffectDescription());
+			console.logEffect(rc.getName(),rc.getAdditionalEffectDescription(),rc.getWitchEffectDescription());
 		}
 	}
 
 	@Override
 	public void displayHuntEffect(RumourCard rc) {
-		if(rc.getAdditionnalEffectDescription().equals("")) {
+		if(rc.getAdditionalEffectDescription().equals("")) {
 			console.logEffect(rc.getName(),rc.getHuntEffectDescription());
 		}
 		else {
-			console.logEffect(rc.getName(),rc.getAdditionnalEffectDescription(),rc.getHuntEffectDescription());
+			console.logEffect(rc.getName(),rc.getAdditionalEffectDescription(),rc.getHuntEffectDescription());
 		}
 	}
 
@@ -434,29 +434,29 @@ public final class DisplayController implements DisplayMediator {
 
 	@Override
 	public void displayPlayerPlaysWitchEffectScreen(Player p,RumourCard rc) {
-		if(rc.getAdditionnalEffectDescription()=="") 
+		if(rc.getAdditionalEffectDescription()=="") 
 			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getWitchEffectDescription());
 		else
-			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getWitchEffectDescription(),rc.getAdditionnalEffectDescription());
+			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getWitchEffectDescription(),rc.getAdditionalEffectDescription());
 		gui.displayPlayerPlaysWitchEffectScreen(p,rc);
 	}
 	
 	@Override
 	public void displayPlayerPlaysHuntEffectScreen(Player p,RumourCard rc) {
-		if(rc.getAdditionnalEffectDescription()=="")
+		if(rc.getAdditionalEffectDescription()=="")
 			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getHuntEffectDescription());
 		else
-			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getHuntEffectDescription(),rc.getAdditionnalEffectDescription());
+			console.logPlayerPlaysEffectMessage(p.getName(),rc.getName(),rc.getHuntEffectDescription(),rc.getAdditionalEffectDescription());
 		gui.displayPlayerPlaysHuntEffectScreen(p, rc);
 	}
 
 	@Override
 	public void displayHasChosenCardScreen(Player p, RumourCard chosen,RumourCardsPile from,boolean forceReveal) {
-		if(chosen.getAdditionnalEffectDescription()=="") 
+		if(chosen.getAdditionalEffectDescription()=="") 
 			console.logHasChosenCardMessage(p.getName(),chosen.getName(),(chosen.isRevealed()||forceReveal),
 					chosen.getWitchEffectDescription(),chosen.getHuntEffectDescription());
 		else 
-			console.logHasChosenCardMessage(p.getName(),chosen.getName(),(chosen.isRevealed()||forceReveal),chosen.getAdditionnalEffectDescription(),
+			console.logHasChosenCardMessage(p.getName(),chosen.getName(),(chosen.isRevealed()||forceReveal),chosen.getAdditionalEffectDescription(),
 					chosen.getWitchEffectDescription(),chosen.getHuntEffectDescription());
 		gui.displayPlayerHasChosenCardScreen(p, chosen,from,forceReveal);
 	}
