@@ -37,7 +37,7 @@ public final class AngryMob extends RumourCard {
 				switch(target.revealIdentity()) {
 					case WITCH:
 					me.addScore(2);
-					me.playTurnAgain();
+					takeNextTurn();
 					break;
 					
 					case VILLAGER:

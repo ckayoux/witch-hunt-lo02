@@ -296,14 +296,15 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		
 	}
 	/**
+	
 	 * <b>Elects this player to take the next turn again, and requests for the display of a suitable notification.</b>
 	 * @see #playTurn()
 	 * @see #takeNextTurn()
-	 */
+	 
 	public void playTurnAgain() {
 		requestPlayTurnAgainScreen();
 		takeNextTurn();
-	}
+	}*/
 	
 	/**
 	 * <p><b>Elects the player who is going to take the next turn.</b></p>
@@ -318,14 +319,18 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	public abstract Player chooseNextPlayer();
 	
 	/**
-	 * <b>Elect this player to play the next turn.</b>
-	 * Requests for the display of a suitable notification.
-	 * No display if the round is over (only one unrevealed player).
+	 * <p><b>Elects this player to play the next turn.</b></p>
+	 * <p>Requests for the display of a suitable notification : if it was not already this player's turn, only notifies the view that this player takes the next turn,
+	 * otherwise, notifies the view that this player is taking again another turn.</p>
+	 * <p>No display if the round is over (only one unrevealed player).</p>
 	 * @see fr.sos.witchhunt.controller.Round#setNextPlayer(Player) Round::setNextPlayer(Player)
 	 */
 	public void takeNextTurn() {
+		if(Tabletop.getInstance().getUnrevealedPlayersList().size()>1) {
+			if(Tabletop.getInstance().getCurrentPlayer()!=this) requestTakeNextTurnScreen();
+			else requestPlayTurnAgainScreen();
+		}
 		Tabletop.getInstance().getCurrentRound().setNextPlayer(this);
-		if(Tabletop.getInstance().getUnrevealedPlayersList().size()>1) requestTakeNextTurnScreen();
 	}
 
 	/**
@@ -384,7 +389,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 			case WITCH:
 				eliminate(p);
 				this.addScore(1);
-				this.playTurnAgain();
+				this.takeNextTurn();
 				break;
 			}
 		}

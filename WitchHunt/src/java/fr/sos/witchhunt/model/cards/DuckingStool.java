@@ -48,7 +48,7 @@ public final class DuckingStool extends RumourCard {
 							case WITCH:
 								me.eliminate(target);
 								me.addScore(1);
-								me.playTurnAgain();
+								takeNextTurn();
 								break;
 									
 							case VILLAGER:
