@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
 
@@ -86,14 +88,16 @@ public class MainMenuPanel extends GridBagPanel{
 	}
 	
 	public static final BufferedImage loadBgImage () {
-		URL rsc = MainMenuPanel.class.getResource("/images/bg/main-menu.jpg");
+		String absPath = "/images/bg/main-menu.jpg";
+		InputStream is = MainMenuPanel.class.getResourceAsStream(absPath);
 		
 		BufferedImage image=null;
 		try {
-			image=ImageIO.read(Paths.get(rsc.toURI()).toFile());
+			image=ImageIO.read(is);
 		}
 		catch(Exception e) {
-			System.err.println("Could not load resource : "+rsc.toString());
+			e.printStackTrace();
+			System.err.println("Could not load resource : "+absPath);
 			System.out.println("Aborting...");
 			System.exit(-1);
 		}

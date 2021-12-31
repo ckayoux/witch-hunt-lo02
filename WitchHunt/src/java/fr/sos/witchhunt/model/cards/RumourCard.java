@@ -1,6 +1,7 @@
 package fr.sos.witchhunt.model.cards;
 
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
 
@@ -276,14 +277,13 @@ public abstract class RumourCard extends Card {
 	 * <p>The picture is {@link Card#resizeCardImage(BufferedImage) resized} to the chosen {@link #IMAGES_SIZE normalized size} for all cards.</p>
 	 * @return The revealed Rumour cards' picture, loaded as a {@link java.awt.image.BufferedImage BufferedImage} and resized to the chosen {@link #IMAGES_SIZE normalized size} for all cards.
 	 * @see #getImagePath()
-	 * @see #getImageURL()
 	 * @see Card#resizeCardImage(BufferedImage) 
 	 */
 	private final void loadImage() {
-		URL rsc = this.getImageURL();
+		InputStream is = this.getClass().getResourceAsStream(getImagePath());
 		try {
 			//this.image=Card.resizeCardImage(ImageIO.read(Paths.get(rsc.toURI()).toFile()));
-			this.image=Card.resizeCardImage(ImageIO.read(Paths.get(rsc.toURI()).toFile()));
+			this.image=Card.resizeCardImage(ImageIO.read(is));
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -304,9 +304,7 @@ public abstract class RumourCard extends Card {
 		return "/images/cards/"+className+".png";
 	}
 
-	private final URL getImageURL() {
-		return this.getClass().getResource(getImagePath());
-	}
+
 	
 	public BufferedImage getImage() {
 		return this.image;

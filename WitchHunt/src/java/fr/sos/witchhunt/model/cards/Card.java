@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
 
@@ -61,14 +62,15 @@ public abstract class Card implements Resettable {
 	 * @return The unrevealed cards' picture, loaded as a {@link java.awt.image.BufferedImage BufferedImage} and resized to the chosen {@link #IMAGES_SIZE normalized size}.
 	 */
 	public static final BufferedImage getUnrevealedCardImage () {
-		URL rsc = Card.class.getResource("/images/cards/Unrevealed.png");
+		String absPath = "/images/cards/Unrevealed.png";
+		InputStream is = Card.class.getResourceAsStream(absPath);
 		
 		BufferedImage image=null;
 		try {
-			image=ImageIO.read(Paths.get(rsc.toURI()).toFile());
+			image=ImageIO.read(is);
 		}
 		catch(Exception e) {
-			System.err.println("Could not load resource : "+rsc.toString());
+			System.err.println("Could not load resource : "+absPath);
 			System.out.println("Aborting...");
 			System.exit(-1);
 		}
