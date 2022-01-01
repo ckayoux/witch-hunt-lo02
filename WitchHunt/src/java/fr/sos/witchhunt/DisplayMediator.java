@@ -2,6 +2,7 @@ package fr.sos.witchhunt;
 
 import java.util.List;
 
+import fr.sos.witchhunt.controller.ScoreCounter;
 import fr.sos.witchhunt.controller.ScoreCounter.ScoreBoard;
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Menu;
@@ -340,12 +341,12 @@ public void displayPlayTurnScreen(Player p);
 	public void displayStrategyChange(Player p,PlayStrategy strat);
 /**
  * <b>Requests the DM to display the players' ranking with their current score.</b> 
- * @param p the (human) player requesting to display the ranking.
- * @param ranking Players ordered by descending score.
- * @see fr.sos.witchhunt.controller.ScoreCounter#getRanking() ScoreCounter::getRanking()
+ * @param p The (human) player requesting to display the ranking.
+ * @param sc The game's score counter
+ * @see fr.sos.witchhunt.controller.ScoreCounter ScoreCounter
  * @see fr.sos.witchhunt.model.players.HumanPlayer#showRanking() HumanPlayer::showRanking() 
  */
-	public void displayRanking(Player p,List<Player> ranking);
+	public void displayRanking(Player p,ScoreCounter sc);
 	
 	/**
 	 * <b>Requests the DM to display a score board.</b>

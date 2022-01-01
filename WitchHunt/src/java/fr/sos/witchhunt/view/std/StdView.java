@@ -36,7 +36,7 @@ public final class StdView {
 	}
 	
 	public void log(String msg) {
-		System.out.println(msg);
+		System.out.println(msg.replace("/c/",""));
 	}
 	
 	public void tabbedPrint(String msg) {
@@ -506,7 +506,7 @@ public final class StdView {
 	}
 
 	public void logStrategyChange(String name, String playstyleDesc) {
-		/*log("\t"+name+" opts for "+playstyleDesc+".");*/
+		log("\t"+name+" opts for "+playstyleDesc+".");
 	}
 
 	public void logAddPlayersScreen(int minPlayersNumber,int maxPlayersNumber) {

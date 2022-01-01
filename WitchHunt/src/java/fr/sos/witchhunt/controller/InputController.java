@@ -42,7 +42,7 @@ public final class InputController implements InputMediator {
 			return makeChoice(m);
 		}else {
 			this.gui.choiceHasBeenMade(m.getNthOption(choice));
-			System.out.println(choice + " : "+m.getNthOption(choice).toString()); //logging choice correspondance in console
+			console.log(choice + " : "+m.getNthOption(choice).toString()); //logging choice correspondance in console
 			timesWrong=0;
 			console.crlf();;
 			currentMenu=null;

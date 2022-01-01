@@ -58,7 +58,8 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 
 	private void options() {
 		String[] options = {((sleepingAllowed)?"Disable":"Enable")+" delay between actions",
-			"Main menu"};
+				((displayCPUStrategyChange)?"Disable":"Enable")+" displaying CPU strategy choices",
+				"Main menu"};
 
 		Menu optionsMenu = new Menu("game options",options);
 		Application.displayController.displayMenu(optionsMenu);
@@ -70,6 +71,11 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 				options();
 				break;
 			case 2:
+				displayMediator.passLog("Display of CPU Strategy choices set to : "+((displayCPUStrategyChange)?"OFF":"ON"));
+				displayCPUStrategyChange=!displayCPUStrategyChange;
+				options();
+				break;
+			case 3:
 				gotoMainMenu();
 				
 		}
@@ -77,7 +83,7 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 	public boolean sleepingIsAllowed() {
 		return this.sleepingAllowed;
 	}
-	public boolean cpuPlayersDisplayChangesOfStrategy() {
+	public boolean displayChangesOfStrategy() {
 		return this.displayCPUStrategyChange;
 	}
 	

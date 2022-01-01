@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import fr.sos.witchhunt.InputMediator;
+import fr.sos.witchhunt.controller.ScoreCounter.ScoreBoard;
 import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
@@ -14,6 +15,7 @@ import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
+import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
 
 public final class GUIView {
 
@@ -180,7 +182,7 @@ public final class GUIView {
 		if(gamePanel!=null) {
 			gamePanel.displayMainNotification(
 				new Notification(
-						winner.getName() + " has won the game with a score of "+winner.getScore()+"\n",
+						winner.getName() + " has won the game with a score of "+winner.getScore()+" !\n",
 						NotificationType.SCORE
 				)
 			);
@@ -749,7 +751,18 @@ public final class GUIView {
 		if(gamePanel!=null) gamePanel.switchDeck(p.getHand(), true);
 	}
 
-/*
+
+	public void displayStrategyChange(Player p, PlayStrategy strat) {
+		if(gamePanel!=null) {
+			gamePanel.displaySecondaryNotification(
+					new Notification(p.getName()+" opts for "+strat.toString()+".\n",
+					NotificationType.SCORE
+				)
+			);
+		}
+	}
+
+
 	public void displayScoreBoard(ScoreBoard sb) {
 		if(gamePanel!=null) {
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
@@ -762,11 +775,7 @@ public final class GUIView {
 			gamePanel.displaySecondaryNotification(new Notification(NotificationType.CRLF));
 		}
 	}
-*/
 
 
-
-
-	
 	
 }

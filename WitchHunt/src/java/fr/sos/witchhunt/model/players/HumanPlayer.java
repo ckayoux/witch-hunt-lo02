@@ -240,7 +240,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 * @see fr.sos.witchhunt.controller.ScoreCounter#getRanking() ScoreCounter::getRanking() 
 	 */
 	private void showRanking() {
-		displayMediator.displayRanking(this,Tabletop.getInstance().getRanking());
+		displayMediator.displayRanking(this,Tabletop.getInstance().getScoreCounter());
 	}
 	
 	/**

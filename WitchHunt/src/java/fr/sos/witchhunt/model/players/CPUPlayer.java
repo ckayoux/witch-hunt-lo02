@@ -32,7 +32,7 @@ public final class CPUPlayer extends Player {
 	 */
 	private PlayStrategy chosenStrategy=new GropingStrategy();
 	/**
-	 * @deprecated This attribute was used to notify the view of a change of strategy. The notifications are still sent but the view does not take it into account anymore.
+	 * @deprecated This attribute has no use excepted if the "Display CPU Players strategy changes" option is activated.
 	 * @see #chooseStrategy() 
 	 */
 	@Deprecated
@@ -91,7 +91,6 @@ public final class CPUPlayer extends Player {
 	@Override
 	public void reset() {
 		super.reset();
-		this.chooseStrategy();
 	}
 	
 	/**

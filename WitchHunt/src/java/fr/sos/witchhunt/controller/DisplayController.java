@@ -139,7 +139,8 @@ public final class DisplayController implements DisplayMediator {
 		console.decreaseTabulation();
 	}*/
 	@Override
-	public void displayRanking(Player P,List<Player> ranking) {
+	public void displayRanking(Player P,ScoreCounter sc) {
+		List<Player> ranking = sc.getRanking();
 		int rank=1;
 		int pSRank=-1;
 		boolean pIsExAequo=false;
@@ -171,6 +172,8 @@ public final class DisplayController implements DisplayMediator {
 		}
 		console.crlf();
 		console.decreaseTabulation();
+		
+		gui.displayScoreBoard(sc.getScoreBoard());
 	}
 
 	@Override
@@ -538,7 +541,7 @@ public final class DisplayController implements DisplayMediator {
 		console.logScoreBoard(sb.toString());
 		console.decreaseTabulation();
 		
-	//	gui.displayScoreBoard(sb);
+		gui.displayScoreBoard(sb);
 	}
 
 	@Override
@@ -550,7 +553,10 @@ public final class DisplayController implements DisplayMediator {
 
 	@Override
 	public void displayStrategyChange(Player p, PlayStrategy strat) {
-		/*if(Game.getInstance().cpuPlayersDisplayChangesOfStrategy())*/ console.logStrategyChange(p.getName(),strat.toString());
+		if(Game.getInstance().displayChangesOfStrategy()) {
+			console.logStrategyChange(p.getName(),strat.toString());
+			gui.displayStrategyChange(p,strat);
+		}
 	}
 
 	@Override
