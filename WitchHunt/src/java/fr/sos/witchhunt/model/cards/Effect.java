@@ -1,6 +1,6 @@
 package fr.sos.witchhunt.model.cards;
 
-import fr.sos.witchhunt.controller.Tabletop;
+import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.Player;
 
 /**
@@ -20,8 +20,8 @@ public abstract class Effect {
 	/**
 	 * <p><b>The effect's description, which composes the card's display.</b></p>
 	 * <p>The "/+/" sequence can be added before all lines (but the first one) to make multiline dynamically indented paragraphs.</p>
-	 * @see fr.sos.witchhunt.DisplayMediator#displayWitchEffect(RumourCard) DisplayMediator::displayWitchEffect(RumourCard)
-	 * @see fr.sos.witchhunt.DisplayMediator#displayHuntEffect(RumourCard) DisplayMediator::displayHuntEffect(RumourCard)
+	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayWitchEffect(RumourCard) DisplayMediator::displayWitchEffect(RumourCard)
+	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayHuntEffect(RumourCard) DisplayMediator::displayHuntEffect(RumourCard)
 	 */
 	private String description;
 	/**
@@ -95,11 +95,11 @@ public abstract class Effect {
 	}
 	
 	/**
-	 * @return <b>The player triggering this effect</b> : for {@link WitchEffect}, should return the {@link fr.sos.witchhunt.controller.Tabletop#getAccusedPlayer() accused player}, whereas for {@link HuntEffect}, should return the {@link fr.sos.witchhunt.controller.Tabletop#getHunter() the hunting player}.
+	 * @return <b>The player triggering this effect</b> : for {@link WitchEffect}, should return the {@link fr.sos.witchhunt.model.flow.Tabletop#getAccusedPlayer() accused player}, whereas for {@link HuntEffect}, should return the {@link fr.sos.witchhunt.model.flow.Tabletop#getHunter() the hunting player}.
 	 */
 	protected abstract Player getMyself();
 	/**
-	 * @return <b>The player targetted by this effect</b> : for most {@link WitchEffect Witch? effects}, should return the {@link fr.sos.witchhunt.controller.Tabletop#getAccusator() accusator}, whereas for most {@link HuntEffect Hunt! effects}, should return the {@link fr.sos.witchhunt.controller.Tabletop#getHuntedPlayer() the hunted player}.
+	 * @return <b>The player targetted by this effect</b> : for most {@link WitchEffect Witch? effects}, should return the {@link fr.sos.witchhunt.model.flow.Tabletop#getAccusator() accusator}, whereas for most {@link HuntEffect Hunt! effects}, should return the {@link fr.sos.witchhunt.model.flow.Tabletop#getHuntedPlayer() the hunted player}.
 	 */
 	protected abstract Player getTarget();
 }

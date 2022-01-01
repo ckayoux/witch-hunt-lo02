@@ -26,7 +26,7 @@ public class IdentityCard extends Card {
 	/**
 	 * <p>IdentityCards are reset by their owners when they are requested to reset themselves (at the end of each round).</p>
 	 * <p>When reset, the card's reveal status becomes <i>unrevealed</i> and the identity associated with it is reinitialized.</p>
-	 * @see fr.sos.witchhunt.controller.Round
+	 * @see fr.sos.witchhunt.model.flow.Round
 	 * @see fr.sos.witchhunt.model.players.Player#reset()
 	 * @see fr.sos.witchhunt.model.Resettable
 	 */

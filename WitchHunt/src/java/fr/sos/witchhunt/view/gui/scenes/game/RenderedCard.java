@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.view.gui;
+package fr.sos.witchhunt.view.gui.scenes.game;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 
 import fr.sos.witchhunt.model.cards.Card;
 import fr.sos.witchhunt.model.cards.RumourCard;
+import fr.sos.witchhunt.view.gui.Notification;
+import fr.sos.witchhunt.view.gui.Theme;
 
 public class RenderedCard extends JLabel {
 	private RumourCard represents=null;
@@ -21,7 +23,7 @@ public class RenderedCard extends JLabel {
 	private final static ImageIcon unrevealedRenderedCard = new ImageIcon(Card.getUnrevealedCardImage());
 	private static Map<RumourCard,ImageIcon> renderedCardIconsMap = new HashMap<RumourCard,ImageIcon>();
 	
-	private final static NotificationType defaultTheme = NotificationType.LIGHT_SEPARATOR;
+	private final static Theme defaultTheme = Theme.LIGHT_SEPARATOR;
 	
 	private MouseListener colorChangeManager=null;
 	
@@ -102,7 +104,7 @@ public class RenderedCard extends JLabel {
 		}
 	}
 	
-	public void setTheme(NotificationType theme) {
+	public void setTheme(Theme theme) {
 		this.themeColor = new Notification(theme).getFg();
 		
 		this.currentBorderColor=themeColor;

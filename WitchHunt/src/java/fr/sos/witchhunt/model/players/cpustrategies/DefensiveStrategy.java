@@ -3,17 +3,17 @@ package fr.sos.witchhunt.model.players.cpustrategies;
 import java.util.Collections;
 import java.util.List;
 
-import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.cards.ExistingRumourCards;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
 
 /**
  * <p><b>This strategy will be chosen by the CPUPlayer when they feel threatened :</b>
- * If the {@link fr.sos.witchhunt.controller.Tabletop#gameIsTied() game is tied}, if the leading players are far above in score,
+ * If the {@link fr.sos.witchhunt.model.flow.Tabletop#gameIsTied() game is tied}, if the leading players are far above in score,
  * if this player has no cards left, or if this player plays as a {@link fr.sos.witchhunt.model.Identity#WITCH witch} and is not close to victory.</p>
  * <p>It will be likely to choose to play as a {@link fr.sos.witchhunt.model.Identity#WITCH witch}, as this suits well a defensive playstyle.</p>
  * <p>It will {@link #selectPlayerToAccuse(List) focus the leading players}, excepted when a player is ready to receive the finishing blow.</p>
@@ -106,7 +106,7 @@ public class DefensiveStrategy extends CPUStrategy {
 	 * {@inheritDoc}
 	 * 
 	 * <b>This strategy will priorize accusing players with exactly 0 or 2 cards - if there are none, they will target the leading players.</b>
-	 * @see fr.sos.witchhunt.controller.Tabletop#getLeadingPlayers() Tabletop::getLeadingPlayers()
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getLeadingPlayers() Tabletop::getLeadingPlayers()
 	 */
 	@Override
 	public Player selectPlayerToAccuse(List<Player> accusablePlayersList) {

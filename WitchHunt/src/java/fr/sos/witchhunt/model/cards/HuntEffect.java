@@ -1,6 +1,6 @@
 package fr.sos.witchhunt.model.cards;
 
-import fr.sos.witchhunt.controller.Tabletop;
+import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.Player;
 
 /**
@@ -31,8 +31,8 @@ public abstract class HuntEffect extends Effect {
 	}
 	
 	/**
-	 * @return The player triggering this <i>Hunt!</i> effect, that is to say {@link fr.sos.witchhunt.controller.Tabletop#getHunter() the current hunting player}.
-	 * @see fr.sos.witchhunt.controller.Tabletop#getHunter() Tabletop::getHunter()
+	 * @return The player triggering this <i>Hunt!</i> effect, that is to say {@link fr.sos.witchhunt.model.flow.Tabletop#getHunter() the current hunting player}.
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getHunter() Tabletop::getHunter()
 	 */
 	@Override
 	protected Player getMyself() {
@@ -40,8 +40,8 @@ public abstract class HuntEffect extends Effect {
 	}
 	/**
 	 * Useful only for a few <i>Hunt!</i> effects.
-	 * @return The player targetted by this <i>Hunt!</i> effect, that is to say the {@link fr.sos.witchhunt.controller.Tabletop#getHuntedPlayer() the current hunted player}.
-	 * @see fr.sos.witchhunt.controller.Tabletop#getHuntedPlayer() Tabletop::getHuntedPlayer()
+	 * @return The player targetted by this <i>Hunt!</i> effect, that is to say the {@link fr.sos.witchhunt.model.flow.Tabletop#getHuntedPlayer() the current hunted player}.
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getHuntedPlayer() Tabletop::getHuntedPlayer()
 	 */
 	@Override
 	protected Player getTarget() {

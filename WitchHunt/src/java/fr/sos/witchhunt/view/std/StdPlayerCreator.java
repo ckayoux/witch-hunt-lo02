@@ -3,7 +3,7 @@ package fr.sos.witchhunt.view.std;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import fr.sos.witchhunt.InputMediator;
+import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;

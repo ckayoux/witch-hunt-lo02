@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.controller;
+package fr.sos.witchhunt.model.flow;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.sos.witchhunt.Visitable;
-import fr.sos.witchhunt.Visitor;
+import fr.sos.witchhunt.model.Visitable;
+import fr.sos.witchhunt.model.Visitor;
 import fr.sos.witchhunt.model.players.Player;
 
 /**
@@ -17,7 +17,7 @@ import fr.sos.witchhunt.model.players.Player;
  * <p>Can produce a ranking ordered by descending number of points.</p>
  * <p>Used to check whether the victory conditions are met.</p>
  * <p>Also polled by the AIs in order to choose a strategy based on their ranking and that of other players.</p>
- * @see fr.sos.witchhunt.Visitor
+ * @see fr.sos.witchhunt.model.Visitor
  */
 public final class ScoreCounter implements Visitor {
 	
@@ -32,7 +32,7 @@ public final class ScoreCounter implements Visitor {
 	/**
 	 * @deprecated the <i>visit</i> method is not defined for a visitable of an unknown class.
 	 * @param v A visitable whose class is not handled by this Visitor.
-	 * @see fr.sos.witchhunt.Visitable Visitable
+	 * @see fr.sos.witchhunt.model.Visitable Visitable
 	 */
 	@Deprecated
 	@Override
@@ -43,7 +43,7 @@ public final class ScoreCounter implements Visitor {
 	 * <b>When visiting an instance of {@link fr.sos.witchhunt.model.players.Player Player}, updates the {@link #ScoreBoard score board} by calling its own <i>visit</i> method.</b>
 	 * @param p The player accepting a visit from the score counter.
 	 * @see fr.sos.witchhunt.model.players.Player#accept(Visitor) Player::accept(Visitor)
-	 * @see fr.sos.witchhunt.Visitable Visitable
+	 * @see fr.sos.witchhunt.model.Visitable Visitable
 	 */
 	@Override
 	public void visit(Player p) {
@@ -131,7 +131,7 @@ public final class ScoreCounter implements Visitor {
 	 * <p><b>Internal class of {@link ScoreCounter}.</b></p>
 	 * <p>In charge of keeping accounts of the score obtained at each round by each player.</p>
 	 * <p>Update itselfs using the {@link https://refactoringguru.cn/design-patterns/visitor Visitor} design pattern.</p>
-	 * @see fr.sos.witchhunt.Visitor
+	 * @see fr.sos.witchhunt.model.Visitor
 	 */
 	public class ScoreBoard implements Visitor  {
 		/**
@@ -195,7 +195,7 @@ public final class ScoreCounter implements Visitor {
 		/**
 		 * @deprecated the <i>visit</i> method is not defined for a visitable of an unknown class.
 		 * @param v A visitable whose class is not handled by this Visitor.
-		 * @see fr.sos.witchhunt.Visitable Visitable
+		 * @see fr.sos.witchhunt.model.Visitable Visitable
 		 */
 		@Deprecated
 		@Override

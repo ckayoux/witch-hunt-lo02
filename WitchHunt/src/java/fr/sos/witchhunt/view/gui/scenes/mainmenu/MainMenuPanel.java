@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.view.gui;
+package fr.sos.witchhunt.view.gui.scenes.mainmenu;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -13,8 +13,13 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
-import fr.sos.witchhunt.InputMediator;
+import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.view.gui.Notification;
+import fr.sos.witchhunt.view.gui.Theme;
+import fr.sos.witchhunt.view.gui.scenes.ActionButton;
+import fr.sos.witchhunt.view.gui.scenes.ChoicesPanel;
+import fr.sos.witchhunt.view.gui.scenes.GridBagPanel;
 
 public class MainMenuPanel extends GridBagPanel{
 	private InputMediator inputMediator;
@@ -34,7 +39,7 @@ public class MainMenuPanel extends GridBagPanel{
 					String buttonText = ActionButton.makeButtonText(o);
 					if(buttonText!=null) {
 						ActionButton b =  new ActionButton(buttonText);
-						b.setTheme(new Notification(NotificationType.WITCH).getFg());
+						b.setTheme(new Notification(Theme.WITCH).getFg());
 						b.setForeground(Color.WHITE);
 						this.actionButtonsList.add(b);
 					}
@@ -47,7 +52,7 @@ public class MainMenuPanel extends GridBagPanel{
 		this.choicesPanel.getPan().setBorder(null);
 		this.choicesPanel.getPan().setAlignmentY(Component.CENTER_ALIGNMENT);
 		this.choicesPanel.getPrompt().setFont(new Font("Arial",Font.BOLD,46));
-		this.choicesPanel.getPrompt().setForeground(new Notification(NotificationType.HUNT).getFg());
+		this.choicesPanel.getPrompt().setForeground(new Notification(Theme.HUNT).getFg());
 		
 		buildCustomGridBag();
 		this.repaint();

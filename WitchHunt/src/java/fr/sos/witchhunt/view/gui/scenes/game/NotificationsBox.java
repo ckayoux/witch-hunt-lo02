@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.view.gui;
+package fr.sos.witchhunt.view.gui.scenes.game;
 
 import java.awt.Font;
 
@@ -10,6 +10,8 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Element;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
+
+import fr.sos.witchhunt.view.gui.Notification;
 
 public class NotificationsBox extends JScrollPane{
 		private JTextPane textPane ;

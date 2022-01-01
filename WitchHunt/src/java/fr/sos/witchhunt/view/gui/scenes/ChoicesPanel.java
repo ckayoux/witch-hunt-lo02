@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.view.gui;
+package fr.sos.witchhunt.view.gui.scenes;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -14,8 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.controller.ActionsPanelController;
+import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 

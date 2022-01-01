@@ -2,11 +2,11 @@ package fr.sos.witchhunt.model.players.cpustrategies;
 
 import java.util.List;
 
-import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.cards.ExistingRumourCards;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.CPUPlayer;
 import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
@@ -103,7 +103,7 @@ public interface PlayStrategy {
 	
 	/**
 	 * <p><b>Selects a {@link fr.sos.witchhunt.model.players.Player player} to {@link fr.sos.witchhunt.model.players.Player#takeNextTurn() take the next turn}.</b></p>
-	 * <p>Most strategies will avoid giving the next turn to the {@link fr.sos.witchhunt.controller.Tabletop#getLeadingPlayers() leading players}.</p>
+	 * <p>Most strategies will avoid giving the next turn to the {@link fr.sos.witchhunt.model.flow.Tabletop#getLeadingPlayers() leading players}.</p>
 	 * @param list A list of {@link fr.sos.witchhunt.model.players.Player players} within which the next player has to be selected.
 	 * @return The chosen player to {@link fr.sos.witchhunt.model.players.Player#takeNextTurn() take the next turn}.
 	 * @see fr.sos.witchhunt.model.players.CPUPlayer#chooseNextPlayer() CPUPlayer::chooseNextPlayer()

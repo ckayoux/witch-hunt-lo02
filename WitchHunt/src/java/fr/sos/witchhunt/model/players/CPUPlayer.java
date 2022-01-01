@@ -2,11 +2,11 @@ package fr.sos.witchhunt.model.players;
 
 import java.util.List;
 
-import fr.sos.witchhunt.DisplayMediator;
-import fr.sos.witchhunt.controller.Tabletop;
+import fr.sos.witchhunt.controller.DisplayMediator;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.cpustrategies.DefensiveStrategy;
 import fr.sos.witchhunt.model.players.cpustrategies.GropingStrategy;
 import fr.sos.witchhunt.model.players.cpustrategies.OffensiveStrategy;
@@ -94,7 +94,7 @@ public final class CPUPlayer extends Player {
 	}
 	
 	/**
-	 * <b>Chooses the player's identity for the current {@link fr.sos.witchhunt.controller.Round round}, {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#selectIdentity() based on the chosen strategy}.</b>
+	 * <b>Chooses the player's identity for the current {@link fr.sos.witchhunt.model.flow.Round round}, {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#selectIdentity() based on the chosen strategy}.</b>
 	 * <p>Also requests for the display of a screen notifying the view that the CPUPlayer has chosen their identity.</p>
 	 * @see Player#chooseIdentity()
 	 * @see fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#selectIdentity() PlayStrategy::selectIdentity()
@@ -391,7 +391,7 @@ public final class CPUPlayer extends Player {
 	 * allowing them to take more risks, {@link #hunt()} more often, to focus the weakest players, to value the cards with offensive effects and causes them to be more likely to choose 
 	 * to play as {@link fr.sos.witchhunt.model.Identity#VILLAGER villagers}.</p>
 	 * 
-	 * <p>If the {@link fr.sos.witchhunt.controller.Tabletop#gameIsTied() game is tied}, if the leading players are far above in score,
+	 * <p>If the {@link fr.sos.witchhunt.model.flow.Tabletop#gameIsTied() game is tied}, if the leading players are far above in score,
 	 *  if this player has no cards left, if this player plays as a {@link fr.sos.witchhunt.model.Identity#WITCH witch} and is not close to victory,
 	 * they will opt for a {@link fr.sos.witchhunt.model.players.cpustrategies.DefensiveStrategy defensive strategy},
 	 * making them more likely to play as witches, stingier on cards and valuing cards based on their {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} above all,

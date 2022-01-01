@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.view.gui;
+package fr.sos.witchhunt.view.gui.scenes.matchsetup;
 
 import java.awt.Color;
 import java.awt.Component;

@@ -9,12 +9,12 @@ public class Notification {
 	private String text;
 	private Color fg;
 
-	public Notification(String text, NotificationType type) {
+	public Notification(String text, Theme type) {
 		this(type);
 		this.text=text;
 	}
 	
-	public Notification (NotificationType type) {
+	public Notification (Theme type) {
 			switch (type) {
 				case NORMAL:
 					fg=Color.BLACK;

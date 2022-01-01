@@ -7,10 +7,9 @@ import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
-import fr.sos.witchhunt.view.gui.PlayerCreatorPanel;
+import fr.sos.witchhunt.view.gui.scenes.matchsetup.PlayerCreatorPanel;
 
 public class PlayerCreatorController implements InputSource {
 	private InputMediator inputMediator;

@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
-import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.controller.Application;
+import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
 

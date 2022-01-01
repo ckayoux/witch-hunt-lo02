@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.controller;
+package fr.sos.witchhunt.model.flow;
 
 import fr.sos.witchhunt.model.players.Player;
 

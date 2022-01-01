@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.view.gui;
+package fr.sos.witchhunt.view.gui.scenes.game;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -24,16 +24,22 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.controller.CardSelectorController;
 import fr.sos.witchhunt.controller.DeckSelectorButtonController;
-import fr.sos.witchhunt.controller.ScoreCounter;
-import fr.sos.witchhunt.controller.ScoreCounter.ScoreBoard;
+import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.flow.ScoreCounter;
+import fr.sos.witchhunt.model.flow.ScoreCounter.ScoreBoard;
 import fr.sos.witchhunt.model.players.HumanPlayer;
-import fr.sos.witchhunt.model.players.Player;  
+import fr.sos.witchhunt.model.players.Player;
+import fr.sos.witchhunt.view.gui.Notification;
+import fr.sos.witchhunt.view.gui.Theme;
+import fr.sos.witchhunt.view.gui.Window;
+import fr.sos.witchhunt.view.gui.scenes.ChoicesPanel;
+import fr.sos.witchhunt.view.gui.scenes.GridBagCell;
+import fr.sos.witchhunt.view.gui.scenes.GridBagPanel;  
 
 public class GamePanel extends GridBagPanel {
 	
@@ -181,7 +187,7 @@ public class GamePanel extends GridBagPanel {
 	
 	public void showAccusedPlayer(Player accused) {
 	//	deckSelectorPanel.resetAccusablePlayersEffects();
-		deckSelectorPanel.themeUpPlayerButton(accused,NotificationType.OFFENSIVE);
+		deckSelectorPanel.themeUpPlayerButton(accused,Theme.OFFENSIVE);
 	}
 
 	public void showAccusablePlayers(List<Player> accusablePlayers) {
@@ -189,12 +195,12 @@ public class GamePanel extends GridBagPanel {
 	}
 
 	public void showHuntedPlayer(Player huntedPlayer) {
-		deckSelectorPanel.themeUpPlayerButton(huntedPlayer,NotificationType.HUNT);
+		deckSelectorPanel.themeUpPlayerButton(huntedPlayer,Theme.HUNT);
 		
 	}
 	
 	public void showWitchingPlayer(Player witchingPlayer) {
-		deckSelectorPanel.themeUpPlayerButton(witchingPlayer, NotificationType.WITCH);
+		deckSelectorPanel.themeUpPlayerButton(witchingPlayer, Theme.WITCH);
 	}
 
 	private void forceRevealCardsIfHuman(Player p) {
@@ -203,7 +209,7 @@ public class GamePanel extends GridBagPanel {
 	
 	public void showCurrentPlayer(Player currentPlayer) {
 		this.currentPlayer=currentPlayer;
-		deckSelectorPanel.themeUpPlayerButton(currentPlayer,NotificationType.TURN);
+		deckSelectorPanel.themeUpPlayerButton(currentPlayer,Theme.TURN);
 	}
 
 	public void boldenPlayer(Player p) {
@@ -277,7 +283,7 @@ public class GamePanel extends GridBagPanel {
 		if(j!=null) j.bolden();
 	}
 	
-	public void makeCardsChoosable(Player whoHasToChoose,RumourCardsPile deck, RumourCardsPile validSubpile,NotificationType theme) {
+	public void makeCardsChoosable(Player whoHasToChoose,RumourCardsPile deck, RumourCardsPile validSubpile,Theme theme) {
 		if(whoHasToChoose instanceof HumanPlayer) {
 			this.cardsPanel.makeCardsChoosable(deck, validSubpile, theme);
 		}
@@ -456,7 +462,7 @@ public class GamePanel extends GridBagPanel {
 			pilePart.updateUI();
 		}
 	
-		public void themeUpPlayerButton(Player p, NotificationType nt) {
+		public void themeUpPlayerButton(Player p, Theme nt) {
 			this.playersBList.stream().filter(b->b.getAssociatedPlayer()==p).forEach(b->{
 				b.resetTheme();
 				b.makeTheme(nt);
@@ -592,7 +598,7 @@ public class GamePanel extends GridBagPanel {
 			M.values().forEach(d->d.resetPane());
 		}
 		
-		public void makeCardsChoosable(RumourCardsPile deck,RumourCardsPile choosableSubpile, NotificationType theme) {
+		public void makeCardsChoosable(RumourCardsPile deck,RumourCardsPile choosableSubpile, Theme theme) {
 			DeckPanel deckPanel = getDeck(deck);
 			if(deckPanel != null) this.currentlyUsedForChoosingCard=deckPanel;
 			deckPanel.makeCardsChoosable(choosableSubpile,theme);
@@ -729,7 +735,7 @@ public class GamePanel extends GridBagPanel {
 				this.renderedCardsList.forEach(j->j.update(yes));
 			}
 			
-			public void makeCardsChoosable(RumourCardsPile choosableSubpile, NotificationType theme) {
+			public void makeCardsChoosable(RumourCardsPile choosableSubpile, Theme theme) {
 				if(this.choosableCards==null) this.choosableCards = new ArrayList<RenderedCard>();
 				this.choosableCards.addAll(renderedCardsList.stream().filter(j->choosableSubpile.contains(j.getAssociatedRumourCard())).toList());
 				choosableCards.forEach(j->j.setTheme(theme));

@@ -2,7 +2,6 @@ package fr.sos.witchhunt.model.players.cpustrategies;
 
 import java.util.List;
 
-import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.cards.AngryMob;
 import fr.sos.witchhunt.model.cards.BlackCat;
@@ -15,6 +14,7 @@ import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.cards.Toad;
 import fr.sos.witchhunt.model.cards.Wart;
+import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
@@ -139,7 +139,7 @@ public abstract class CPUStrategy implements PlayStrategy {
 	 * <b>Returns the average number of unrevealed cards, all players considered.</b>
 	 * <p>Used for assessing the clutchness of the situation. If the players are averagely short on cards, offensive actions become more interesting.</p>
 	 * @return The average count of {@link fr.sos.witchhunt.model.cards.RumourCard#isRevealed() unrevealed} cards, all {@link fr.sos.witchhunt.model.players.Player#isActive() active players} considered.
-	 * @see fr.sos.witchhunt.controller.Tabletop#getActivePlayersList() Tabletop::getActivePlayersList
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getActivePlayersList() Tabletop::getActivePlayersList
 	 */
 	public double getAverageUnrevealedCardsNumber() {
 		List <Integer> cardNumbers = Tabletop.getInstance().getActivePlayersList().stream()

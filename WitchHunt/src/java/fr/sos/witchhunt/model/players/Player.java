@@ -2,44 +2,44 @@ package fr.sos.witchhunt.model.players;
 
 import java.util.List;
 
-import fr.sos.witchhunt.DisplayMediator;
-import fr.sos.witchhunt.Visitable;
-import fr.sos.witchhunt.Visitor;
-import fr.sos.witchhunt.controller.Tabletop;
+import fr.sos.witchhunt.controller.DisplayMediator;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.Resettable;
+import fr.sos.witchhunt.model.Visitable;
+import fr.sos.witchhunt.model.Visitor;
 import fr.sos.witchhunt.model.cards.IdentityCard;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.flow.Tabletop;
 
 /**
  * <p><b>This <i>abstract</i> class defines common behavior and specifies required abstract methods for both {@link HumanPlayer human} and {@link CPUPlayer CPU} players.</b><p>
  * <p>A player has a unique name (chosen at the start of a match human players), and a unique id, which is auto-incremented.</p>
- * <p>Players are added {@link fr.sos.witchhunt.controller.Tabletop#startMatch() at the start of the match} by an instance of {@link fr.sos.witchhunt.controller.Tabletop}.</p>
+ * <p>Players are added {@link fr.sos.witchhunt.model.flow.Tabletop#startMatch() at the start of the match} by an instance of {@link fr.sos.witchhunt.model.flow.Tabletop}.</p>
  * <p>They have an {@link fr.sos.witchhunt.model.Identity identity}, 
  * which is determined by their {@link fr.sos.witchhunt.model.cards.IdentityCard card} (which can be revealed or not).</p>
  * <p>They also possess a {@link #hand hand} containing plural {@link fr.sos.witchhunt.model.cards.RumourCard Rumour cards}, which can also be revealed or not.</p>
- * <p>They can be {@link #active active}, or not if they were eliminated or if they are not part of a {@link fr.sos.witchhunt.controller.Tabletop#gameIsTied() tied game}'s last round.</p>
+ * <p>They can be {@link #active active}, or not if they were eliminated or if they are not part of a {@link fr.sos.witchhunt.model.flow.Tabletop#gameIsTied() tied game}'s last round.</p>
  * 
  * <p>All abstract methods within this class must be defined with different bodies by the classes representing {@link HumanPlayer human} and {@link CPUPlayer CPU} players</p>
  * 
  * <p>They implement {@link fr.sos.witchhunt.model.Resettable Resettable} and are {@link #reset reset} at the end of each round.</p>
- * <p>They also implement {@link fr.sos.witchhunt.Visitable Visitable}, which makes them a possible target for classes implementing 
- * {@link fr.sos.witchhunt.Visitor Visitor}. The score they obtained at each round is saved by an instance of {@link fr.sos.witchhunt.controller.ScoreCounter ScoreCounter},
+ * <p>They also implement {@link fr.sos.witchhunt.model.Visitable Visitable}, which makes them a possible target for classes implementing 
+ * {@link fr.sos.witchhunt.model.Visitor Visitor}. The score they obtained at each round is saved by an instance of {@link fr.sos.witchhunt.model.flow.ScoreCounter ScoreCounter},
  * using the {@link https://refactoringguru.cn/design-patterns/visitor Visitor design pattern}.</p>
- * <p>Their display requests are passed to an instance of a class implementing {@link fr.sos.witchhunt.DisplayMediator DisplayMediator}.
+ * <p>Their display requests are passed to an instance of a class implementing {@link fr.sos.witchhunt.controller.DisplayMediator DisplayMediator}.
  * They themselves implement {@link PlayerDisplayObservable}, which specifies all types of display requests they can need.</p> 
  *
  * @see HumanPlayer
  * @see CPUPlayer
  * 
  * @see fr.sos.witchhunt.model.Identity identity
- * @see fr.sos.witchhunt.Visitable Visitable
+ * @see fr.sos.witchhunt.model.Visitable Visitable
  * @see fr.sos.witchhunt.model.Resettable Resettable
  * 
  * @see PlayerDisplayObservable
- * @see fr.sos.witchhunt.DisplayMediator DisplayMediator
+ * @see fr.sos.witchhunt.controller.DisplayMediator DisplayMediator
  *
  */
 public abstract class Player implements PlayerDisplayObservable, Resettable, Visitable {
@@ -61,7 +61,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * {@link #winRound()} by remaining the last unrevealed one. They can also earn or loose points thanks to the 
 	 * {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effects} of certain {@link fr.sos.witchhunt.model.cards.RumourCard Rumour cards}.</p>
 	 * <p>A player can win the round if they are leading with score >= 5.</p>
-	 * <p>Updated exclusively using method {@link #addScore(int)}, which also accepts a {@link fr.sos.witchhunt.controller.ScoreCounter#visit(Player) visit from the score counter}
+	 * <p>Updated exclusively using method {@link #addScore(int)}, which also accepts a {@link fr.sos.witchhunt.model.flow.ScoreCounter#visit(Player) visit from the score counter}
 	 * to update the latter one.</p>
 	 * <p>The player's score is not reset between two rounds ! Thus, it isn't affected by the {@link #reset()} method.</p>
 	 * 
@@ -69,11 +69,11 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * @see #accuse(Player)
 	 * @see #winRound()
 	 * 
-	 * @see fr.sos.witchhunt.controller.ScoreCounter ScoreCounter
-	 * @see fr.sos.witchhunt.controller.ScoreCounter#visit(Player) ScoreCounter::visit(Player)
-	 * @see fr.sos.witchhunt.Visitable Visitable
-	 * @see fr.sos.witchhunt.controller.ScoreCounter#getPotentialWinners() ScoreCounter::getPotentialWinners()
-	 * @see fr.sos.witchhunt.controller.ScoreCounter#getRanking() ScoreCounter::getRanking()
+	 * @see fr.sos.witchhunt.model.flow.ScoreCounter ScoreCounter
+	 * @see fr.sos.witchhunt.model.flow.ScoreCounter#visit(Player) ScoreCounter::visit(Player)
+	 * @see fr.sos.witchhunt.model.Visitable Visitable
+	 * @see fr.sos.witchhunt.model.flow.ScoreCounter#getPotentialWinners() ScoreCounter::getPotentialWinners()
+	 * @see fr.sos.witchhunt.model.flow.ScoreCounter#getRanking() ScoreCounter::getRanking()
 	 */
 	protected int score=0;
 	
@@ -110,7 +110,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * <p>Some of these {@link fr.sos.witchhunt.model.cards.Effect effects} can lead the player to discarding, stealing, or taking back cards, thus modifying their hand.</p>
 	 * <p>The player's hand is {@link fr.sos.witchhunt.model.cards.RumourCardsPile#reset() reset} when they get <i>{@link #reset()}</i> themselves, 
 	 * {@link fr.sos.witchhunt.model.cards.RumourCard#reset() resetting all Rumour cards} it contains and returning them 
-	 * to {@link fr.sos.witchhunt.controller.Tabletop the game's list of existing cards}.</p>
+	 * to {@link fr.sos.witchhunt.model.flow.Tabletop the game's list of existing cards}.</p>
 	 * @see #getRevealedSubhand()
 	 * @see #getUnrevealedSubhand()
 	 * @see #showHand(boolean)
@@ -148,22 +148,22 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	private boolean immunized; 
 	
 	/**
-	 * <p><b>When this boolean is false, the player is out of the current {@link fr.sos.witchhunt.controller.Round round}.</b></p>
+	 * <p><b>When this boolean is false, the player is out of the current {@link fr.sos.witchhunt.model.flow.Round round}.</b></p>
 	 * <p>This can happen either when the player gets {@link #eliminate()} eliminated, or when the player is not part of the last round 
-	 * of a {@link fr.sos.witchhunt.controller.Tabletop#gameIsTied() tied game}.</p>
+	 * of a {@link fr.sos.witchhunt.model.flow.Tabletop#gameIsTied() tied game}.</p>
 	 * <p>This boolean is set back to <i>true</i> at the end of each round, when the player gets {@link #reset()}.</p>
 	 * @see #eliminate()
 	 * @see #eliminate(Player)
 	 * @see #reset()
-	 * @see fr.sos.witchhunt.controller.Tabletop#getActivePlayersList() Tabletop::getActivePlayersList()
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getActivePlayersList() Tabletop::getActivePlayersList()
 	 */
 	private boolean active = true;
 
 	/**
-	 * <p><b>The players are associated with an instance of a class implementing {@link fr.sos.witchhunt.DisplayMediator DisplayMediator}</b></p>
+	 * <p><b>The players are associated with an instance of a class implementing {@link fr.sos.witchhunt.controller.DisplayMediator DisplayMediator}</b></p>
 	 * <p>The players passes every display request they have to this object, which is responsible of organizing their display.</p>
 	 * <p>This field is binded at the player's creation.</p>
-	 * @see fr.sos.witchhunt.DisplayMediator DisplayMediator
+	 * @see fr.sos.witchhunt.controller.DisplayMediator DisplayMediator
 	 * @see PlayerDisplayObservable
 	 */
 	protected DisplayMediator displayMediator;
@@ -259,7 +259,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	public abstract TurnAction chooseTurnAction();
 	
 	/**
-	 * <p><b>Called when it is the player's {@link fr.sos.witchhunt.controller.Turn turn}.</b></p>
+	 * <p><b>Called when it is the player's {@link fr.sos.witchhunt.model.flow.Turn turn}.</b></p>
 	 * <p>Causes the player to choose an {@link TurnAction action to perform} and executes it.</p>
 	 * <p>Requests display of a message indicating it is the player's turn.</p>
 	 * <p>In the special situation where the player has been forced to accuse an adversary by {@link fr.sos.witchhunt.model.cards.EvilEye the Evil Eye Rumour card},
@@ -314,7 +314,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * @see #takeNextTurn()
 	 * @see HumanPlayer#chooseNextPlayer()
 	 * @see CPUPlayer#chooseNextPlayer()
-	 * @see fr.sos.witchhunt.controller.Round#setNextPlayer(Player)
+	 * @see fr.sos.witchhunt.model.flow.Round#setNextPlayer(Player)
 	 */
 	public abstract Player chooseNextPlayer();
 	
@@ -323,7 +323,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * <p>Requests for the display of a suitable notification : if it was not already this player's turn, only notifies the view that this player takes the next turn,
 	 * otherwise, notifies the view that this player is taking again another turn.</p>
 	 * <p>No display if the round is over (only one unrevealed player).</p>
-	 * @see fr.sos.witchhunt.controller.Round#setNextPlayer(Player) Round::setNextPlayer(Player)
+	 * @see fr.sos.witchhunt.model.flow.Round#setNextPlayer(Player) Round::setNextPlayer(Player)
 	 */
 	public void takeNextTurn() {
 		if(Tabletop.getInstance().getUnrevealedPlayersList().size()>1) {
@@ -334,14 +334,14 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	}
 
 	/**
-	 * <p><b>The player wins the {@link fr.sos.witchhunt.controller.Round current round} as they are the last whose {@link fr.sos.witchhunt.model.Identity identity} wasn't revealed.</b></p>
+	 * <p><b>The player wins the {@link fr.sos.witchhunt.model.flow.Round current round} as they are the last whose {@link fr.sos.witchhunt.model.Identity identity} wasn't revealed.</b></p>
 	 * <p>Lets them {@link #addScore(int) score} 2 points if they were playing as a <i>Witch</i>, or 1 point if they were playing as a <i>Villager</i>.</p>
 	 * <p>If another round is to be played, this player will start.</p>
 	 * @see #addScore(int)
-	 * @see fr.sos.witchhunt.controller.Tabletop#setLastUnrevealedPlayer(Player) Tabletop::setLastUnrevealedPlayer
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#setLastUnrevealedPlayer(Player) Tabletop::setLastUnrevealedPlayer
 	 * @see fr.sos.witchhunt.model.Identity Identity
 	 * @see #isRevealed()
-	 * @see fr.sos.witchhunt.controller.Round Round
+	 * @see fr.sos.witchhunt.model.flow.Round Round
 	 */
 	public void winRound() {
 		Tabletop.getInstance().setLastUnrevealedPlayer(this);
@@ -366,8 +366,8 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * If the target was revealed as a <i>Villager</i>, the target {@link #takeNextTurn() takes the next turn}.
 	 * Otherwise, if the target was revealed as a <i>Witch</i>, the accusing player {@link #addScore(int) earns 1 point} and {@link #eliminate(Player) eliminates their target}.</p>  
 	 * @param p The player to accuse.
-	 * @see fr.sos.witchhunt.controller.Tabletop#setAccusator(Player) Tabletop::setAccusator(Player)
-	 * @see fr.sos.witchhunt.controller.Tabletop#setAccusedPlayer(Player) Tabletop::setAccusedPlayer(Player)
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#setAccusator(Player) Tabletop::setAccusator(Player)
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#setAccusedPlayer(Player) Tabletop::setAccusedPlayer(Player)
 	 * @see fr.sos.witchhunt.model.Identity Identity
 	 * @see #defend()
 	 * @see #chooseDefenseAction()
@@ -408,7 +408,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * <p><b>Chooses a player to accuse</b></p>
 	 * Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.
 	 * @return A reference pointing towards the selected target.
-	 * @see fr.sos.witchhunt.controller.Tabletop#getAccusablePlayersList() Tabletop::getAccusablePlayersList()
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getAccusablePlayersList() Tabletop::getAccusablePlayersList()
 	 * @see #accuse(Player)
 	 * @see HumanPlayer#choosePlayerToAccuse()
 	 * @see CPUPlayer#choosePlayerToAccuse()
@@ -515,7 +515,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	
 	/**
 	 * <b>Marks the player as the "currently hunted player" at the game's scale.</b>
-	 * @see fr.sos.witchhunt.controller.Tabletop#setHuntedPlayer(Player) 
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#setHuntedPlayer(Player) 
 	 * @see #canHunt()
 	 */
 	public void beHunted() {
@@ -527,7 +527,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * <b>Adds a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} from the given {@link fr.sos.witchhunt.model.cards.RumourCardsPile Rumour cards pile} to the 
 	 * player's {@link #hand}.</b>
 	 * @param rc The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} added to the player's {@link #hand}.
-	 * @param from The {@link fr.sos.witchhunt.model.cards.RumourCardsPile Rumour cards pile} (another {@link #getHand() player's hand} or the {@link fr.sos.witchhunt.controller.Tabletop#getPile() common pile}.
+	 * @param from The {@link fr.sos.witchhunt.model.cards.RumourCardsPile Rumour cards pile} (another {@link #getHand() player's hand} or the {@link fr.sos.witchhunt.model.flow.Tabletop#getPile() common pile}.
 	 */
 	public void takeRumourCard(RumourCard rc,RumourCardsPile from) {
 		from.giveCard(rc, this.hand);
@@ -570,14 +570,14 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	};
 	
 	/**
-	 * <p><b>Sends a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} from the player's {@link #hand} to the {@link fr.sos.witchhunt.controller.Tabletop#getPile() pile}.</b></p>
+	 * <p><b>Sends a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} from the player's {@link #hand} to the {@link fr.sos.witchhunt.model.flow.Tabletop#getPile() pile}.</b></p>
 	 * <p>Requests for a display of this event.</p>
 	 * <p>Caused by certain {@link fr.sos.witchhunt.model.cards.RumourCard Rumour cards'} effects, like the {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} of 
 	 * {@link fr.sos.witchhunt.model.cards.DuckingStool the Ducking Stool}.</p>
 	 * @param rc A {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} coming from the player's {@link #hand}.
 	 * @see fr.sos.witchhunt.model.cards.RumourCard Rumour card
 	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#giveCard(RumourCard, RumourCardsPile) RumourCardsPile::giveCard(RumourCard, RumourCardsPile)
-	 * @see fr.sos.witchhunt.controller.Tabletop#getPile() Tabletop::getPile()
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getPile() Tabletop::getPile()
 	 * @see fr.sos.witchhunt.model.cards.DuckingStool DuckingStool
 	 */
 	public void discard(RumourCard rc) {
@@ -714,7 +714,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 		
 	/**
 	 * <p><b>Resets some of the player's attributes to their initial states.</b></p>
-	 * <p>Called after the end of each {@link fr.sos.witchhunt.controller.Round round} by class {@link fr.sos.witchhunt.controller.Tabletop Tabletop}.</p>
+	 * <p>Called after the end of each {@link fr.sos.witchhunt.model.flow.Round round} by class {@link fr.sos.witchhunt.model.flow.Tabletop Tabletop}.</p>
 	 * <p>The player's {@link #identity identity} is set back to <i>null</i> and their {@link fr.sos.witchhunt.model.cards.IdentityCard#reset() Identity card is reset}.
 	 * Their {@link #hand} is also {@link fr.sos.witchhunt.model.cards.RumourCardsPile#reset() reset}.
 	 * The player becomes {@link #active} again.</p>
@@ -725,7 +725,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * @see #hand
 	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#reset() resetting an instance of RumourCardsPile
 	 * @see #active
-	 * @see fr.sos.witchhunt.controller.Tabletop
+	 * @see fr.sos.witchhunt.model.flow.Tabletop
 	 */
 	@Override
 	public void reset() {
@@ -833,7 +833,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	@Override
 	/**
 	 * <b>Requests the display (only) of a {@link fr.sos.witchhunt.model.Menu Menu}.</b>
-	 * Does not collect any input (this is achieved using {@link fr.sos.witchhunt.InputMediator#makeChoice(Menu)}).
+	 * Does not collect any input (this is achieved using {@link fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu)}).
 	 * @see DisplayMediator#displayPossibilities(Menu)
 	 * @see fr.sos.witchhunt.model.Menu Menu
 	 * @see HumanPlayer
@@ -1131,7 +1131,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * <b>A player is accusable if they are {@link #isRevealed() not revealed yet} and {@link #isImmunized() not immunized}.</b>
 	 * @see #immunized
 	 * @see #isRevealed()
-	 * @see fr.sos.witchhunt.controller.Tabletop#getAccusablePlayersList()
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getAccusablePlayersList()
 	 * @see #accuse(Player)
 	 */
 	public boolean isAccusable() {
@@ -1170,19 +1170,19 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	
 	/**
 	 * <p><b>Adds the given number of points to the {@link #score player's score} and notifies the 
-	 * {@link fr.sos.witchhunt.controller.ScoreCounter score counter} of a change in the player's score using the {@link #accept(Visitor)} method.</b></p>
+	 * {@link fr.sos.witchhunt.model.flow.ScoreCounter score counter} of a change in the player's score using the {@link #accept(Visitor)} method.</b></p>
 	 * <p>@param pts The number of points by which the {@link #score player's score} is updated <b>(can be negative, as some cards can make a player loose points)</b></p>
 	 * <p>Requests for the display of a suitable notification.</p>
 	 * <p>A player can score by {@link #accuse() accusing} or {@link #hunt hunting} their opponents, or by being the round's {@link #winRound() last unrevealed player}.</p>
 	 * @see #score
-	 * @see fr.sos.witchhunt.Visitable
+	 * @see fr.sos.witchhunt.model.Visitable
 	 * @see #accept(Visitor)
-	 * @see fr.sos.witchhunt.controller.ScoreCounter#visit(Player)
+	 * @see fr.sos.witchhunt.model.flow.ScoreCounter#visit(Player)
 	 * 
 	 * @see #accuse()
 	 * @see #hunt()
 	 * @see #winRound()
-	 * @see fr.sos.witchhunt.controller.Tabletop#getLastUnrevealedPlayer()
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getLastUnrevealedPlayer()
 	 */
 	public void addScore(int pts) {
 		this.score += pts;
@@ -1215,16 +1215,16 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	}
 	
 	/**
-	 * <b>This player will be out of the current {@link fr.sos.witchhunt.controller.Round round}.</b>
+	 * <b>This player will be out of the current {@link fr.sos.witchhunt.model.flow.Round round}.</b>
 	 * @see #active
-	 * @see fr.sos.witchhunt.controller.Tabletop#getActivePlayersList() Tabletop::getActivePlayersList()
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getActivePlayersList() Tabletop::getActivePlayersList()
 	 */
 	public void eliminate() {
 		this.active = false;
 	}
 	
 	/**
-	 * <b>Eliminates a given player from the current {@link fr.sos.witchhunt.controller.Round round}.</b>
+	 * <b>Eliminates a given player from the current {@link fr.sos.witchhunt.model.flow.Round round}.</b>
 	 * Requests the display of a suitable message.
 	 * @see #eliminate()
 	 * @see #accuse(Player)
@@ -1257,13 +1257,13 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	/**
 	 * <b>Tests if the player has unrevealed cards with {@link fr.sos.witchhunt.model.cards.HuntEffect#isAllowed() a playable Hunt! effect} in their {@link #hand}.</b>
 	 * <p>Indirectly calls the {@link fr.sos.witchhunt.model.cards.HuntEffect#isAllowed() HuntEffect::isAllowed()} method, which requires the player to be
-	 * {@link fr.sos.witchhunt.controller.Tabletop#setHunter(Player) as the "currently hunting player" at the scale of the game}.</p>
+	 * {@link fr.sos.witchhunt.model.flow.Tabletop#setHunter(Player) as the "currently hunting player" at the scale of the game}.</p>
 	 * @return <i>true</i> if the player can play a Hunt! effect.
 	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#getPlayableHuntSubpile() RumourCardsPile::getPlayableHuntSubpile() 
 	 * @see fr.sos.witchhunt.model.cards.HuntEffect HuntEffect
 	 * @see fr.sos.witchhunt.model.cards.HuntEffect#isAllowed() HuntEffect::isAllowed()
 	 * @see #chooseTurnAction()
-	 * @see fr.sos.witchhunt.controller.Tabletop#setHunter(Player) Tabletop::setHunter(Player)
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#setHunter(Player) Tabletop::setHunter(Player)
 	 */
 	protected boolean canHunt() {
 		Tabletop.getInstance().setHunter(this);
@@ -1274,13 +1274,13 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * <b>Tests if the player has unrevealed cards with {@link fr.sos.witchhunt.model.cards.WitchEffect#isAllowed() a playable Witch? effect} in their {@link #hand}.</b>
 	 * <p>Calls the {@link fr.sos.witchhunt.model.cards.WitchEffect#isAllowed() HuntEffect::isAllowed()} method.</p>
 	 * <p>Indirectly calls the {@link fr.sos.witchhunt.model.cards.WitchEffect#isAllowed() WitchEffect::isAllowed()} method, which requires the player to be
-	 * {@link fr.sos.witchhunt.controller.Tabletop#setAccusator(Player) as the "current accusator" at the scale of the game}.</p>
+	 * {@link fr.sos.witchhunt.model.flow.Tabletop#setAccusator(Player) as the "current accusator" at the scale of the game}.</p>
 	 * @return <i>true</i> if the player can play a Witch? effect.
 	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#getPlayableWitchSubpile() RumourCardsPile::getPlayableWitchSubpile() 
 	 * @see fr.sos.witchhunt.model.cards.WitchEffect WitchEffect
 	 * @see fr.sos.witchhunt.model.cards.WitchEffect#isAllowed() WitchEffect::isAllowed()
 	 * @see #defend()
-	 * @see fr.sos.witchhunt.controller.Tabletop#setHunter(Player) Tabletop::setAccusator(Player)
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#setHunter(Player) Tabletop::setAccusator(Player)
 	 */
 	public boolean canWitch() {
 		return (!this.hand.getPlayableWitchSubpile().isEmpty());

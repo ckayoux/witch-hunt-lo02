@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
-import fr.sos.witchhunt.view.gui.GamePanel;
-import fr.sos.witchhunt.view.gui.RenderedCard;
+import fr.sos.witchhunt.view.gui.scenes.game.GamePanel;
+import fr.sos.witchhunt.view.gui.scenes.game.RenderedCard;
 
 public class CardSelectorController implements InputSource {
 	

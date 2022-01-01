@@ -14,7 +14,7 @@ import java.util.Set;
  * call its constructor in this class' {@link #ExistingRumourCards() constructor}. Each type of Rumour card must have an unique instance within this class' {@link #existingCardsSet set}.</p>
  *<p>{@link RumourCard Rumour cards} should only be instantiated by this class, as there must exist no duplicate instances of a same type of Rumour card.</p>
  * @see RumourCard
- * @see fr.sos.witchhunt.controller.Tabletop#getAllCardsPile() Tabletop::getAllCardsPile()
+ * @see fr.sos.witchhunt.model.flow.Tabletop#getAllCardsPile() Tabletop::getAllCardsPile()
  */
 public final class ExistingRumourCards {
 	/**

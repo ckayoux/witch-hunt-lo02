@@ -1,12 +1,13 @@
-package fr.sos.witchhunt.controller;
+package fr.sos.witchhunt.model.flow;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import fr.sos.witchhunt.DisplayMediator;
-import fr.sos.witchhunt.InputMediator;
+import fr.sos.witchhunt.controller.DisplayMediator;
+import fr.sos.witchhunt.controller.Game;
+import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.model.cards.ExistingRumourCards;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;

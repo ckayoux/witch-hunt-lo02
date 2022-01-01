@@ -1,13 +1,13 @@
-package fr.sos.witchhunt;
+package fr.sos.witchhunt.controller;
 
 import java.util.List;
 
-import fr.sos.witchhunt.controller.ScoreCounter;
-import fr.sos.witchhunt.controller.ScoreCounter.ScoreBoard;
-import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.flow.ScoreCounter;
+import fr.sos.witchhunt.model.flow.Tabletop;
+import fr.sos.witchhunt.model.flow.ScoreCounter.ScoreBoard;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
 
@@ -16,7 +16,7 @@ import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
  * <p>Makes the link between the Model (<i>Player</i> and <i>RumourCardsPile</i>) and the View (<i>StdView</i> and <i>GuiView</i>).</p>
  * <p>Specifies a set of methods which must be redefined to achieve all cases where a display associated with a Model's component has to be shown.</p>
  * 
- * @see fr.sos.witchhunt.controller.DisplayController
+ * @see fr.sos.witchhunt.controller.ConcreteDisplayMediator
  * @see InputMediator
  * 
  */
@@ -24,7 +24,7 @@ public interface DisplayMediator {
 	
 	/**
 	 * <b>Requests the DM to display the "add players" screen.</b>
-	 * @param tabletop The mtach (instance of {@link fr.sos.witchhunt.controller.Tabletop Tabletop}) which is being set up
+	 * @param tabletop The mtach (instance of {@link fr.sos.witchhunt.model.flow.Tabletop Tabletop}) which is being set up
 	 */
 	public void displayAddPlayersScreen(Tabletop tabletop) ;
 	
@@ -63,7 +63,7 @@ public interface DisplayMediator {
 	
 	/**
 	 * <b>Requests the DM to display the screen corresponding to a Round's start.</b>
-	 * @see fr.sos.witchhunt.controller.Round Round
+	 * @see fr.sos.witchhunt.model.flow.Round Round
 	 * @param roundNumber
 	 */
 	public void displayRoundStartScreen(int roundNumber);
@@ -343,7 +343,7 @@ public void displayPlayTurnScreen(Player p);
  * <b>Requests the DM to display the players' ranking with their current score.</b> 
  * @param p The (human) player requesting to display the ranking.
  * @param sc The game's score counter
- * @see fr.sos.witchhunt.controller.ScoreCounter ScoreCounter
+ * @see fr.sos.witchhunt.model.flow.ScoreCounter ScoreCounter
  * @see fr.sos.witchhunt.model.players.HumanPlayer#showRanking() HumanPlayer::showRanking() 
  */
 	public void displayRanking(Player p,ScoreCounter sc);
@@ -351,7 +351,7 @@ public void displayPlayTurnScreen(Player p);
 	/**
 	 * <b>Requests the DM to display a score board.</b>
 	 * @param scoreBoard The score board to be displayed.
-	 * @see fr.sos.witchhunt.controller.ScoreCounter#getScoreBoard() ScoreBoard;
+	 * @see fr.sos.witchhunt.model.flow.ScoreCounter#getScoreBoard() ScoreBoard;
 	 */
 	public void displayScoreBoard(ScoreBoard scoreBoard);
 

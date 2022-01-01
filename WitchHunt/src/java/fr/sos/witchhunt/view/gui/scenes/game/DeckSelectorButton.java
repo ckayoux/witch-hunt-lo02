@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.view.gui;
+package fr.sos.witchhunt.view.gui.scenes.game;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -14,6 +14,8 @@ import javax.swing.border.LineBorder;
 
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;
+import fr.sos.witchhunt.view.gui.Notification;
+import fr.sos.witchhunt.view.gui.Theme;
 
 public class DeckSelectorButton extends JButton {
 	
@@ -65,7 +67,7 @@ public class DeckSelectorButton extends JButton {
 		 else super.paintComponent(g);
      }
 	
-	public void makeBackground(NotificationType theme) {
+	public void makeBackground(Theme theme) {
 		Color themeColor = new Notification(theme).getFg();
 		float[] hsbVals = new float [3] ;
 		Color.RGBtoHSB(themeColor.getRed(),themeColor.getGreen(),themeColor.getBlue(),hsbVals);
@@ -144,7 +146,7 @@ public class DeckSelectorButton extends JButton {
 		if(this.boldened) this.bolden(); //stay boldened even if reset
 	}
 	
-	public void makeTheme(NotificationType nt) {
+	public void makeTheme(Theme nt) {
 		this.makeBackground(nt);
 		this.currentBorderColor=(new Notification(nt)).getFg();
 		LineBorder lb = new LineBorder(this.currentBorderColor,specialBordersSize);
@@ -168,7 +170,7 @@ public class DeckSelectorButton extends JButton {
 	public void bolden() {
 		if(!this.boldened) this.specialBordersSize+=boldenBy;
 		if(currentBorder==defaultBorder) {
-			LineBorder lb = new LineBorder(new Notification(NotificationType.LIGHT_SEPARATOR).getFg(),specialBordersSize);
+			LineBorder lb = new LineBorder(new Notification(Theme.LIGHT_SEPARATOR).getFg(),specialBordersSize);
 			this.setBorder(BorderFactory.createCompoundBorder(lb,getSpecialEmptyBorder()));
 		}
 		else {

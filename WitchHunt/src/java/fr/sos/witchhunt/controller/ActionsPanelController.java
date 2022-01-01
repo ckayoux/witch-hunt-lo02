@@ -4,10 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
-import fr.sos.witchhunt.view.gui.ActionButton;
+import fr.sos.witchhunt.view.gui.scenes.ActionButton;
 
 public class ActionsPanelController implements InputSource {
 	

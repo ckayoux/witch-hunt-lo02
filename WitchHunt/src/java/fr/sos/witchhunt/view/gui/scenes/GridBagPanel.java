@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.view.gui;
+package fr.sos.witchhunt.view.gui.scenes;
 
 import java.awt.Color;
 import java.awt.Dimension;

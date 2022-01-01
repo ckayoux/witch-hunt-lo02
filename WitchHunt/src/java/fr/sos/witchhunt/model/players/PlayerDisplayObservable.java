@@ -1,6 +1,6 @@
 package fr.sos.witchhunt.model.players;
 
-import fr.sos.witchhunt.DisplayMediator;
+import fr.sos.witchhunt.controller.DisplayMediator;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;

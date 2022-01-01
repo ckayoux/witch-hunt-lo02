@@ -10,10 +10,10 @@ import java.util.Set;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
-import fr.sos.witchhunt.controller.Tabletop;
 import fr.sos.witchhunt.model.cards.ExistingRumourCards;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.flow.Tabletop;
 
 /**
  * <b>Associates each instance of {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} with a {@link CardValue Card value}

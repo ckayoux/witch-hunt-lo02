@@ -10,8 +10,8 @@ public class Application {
 		
 	public static StdView console;
 	public static GUIView gui;
-	public static DisplayController displayController;
-	public static InputController inputController;
+	public static ConcreteDisplayMediator displayMediator;
+	public static ConcreteInputMediator inputMediator;
 		
 	public static void main(String[] args) {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 		Application.getInstance();
@@ -20,20 +20,20 @@ public class Application {
 	private Application() {
 		
 		
-		displayController = new DisplayController();
-		inputController = new InputController();
+		displayMediator = new ConcreteDisplayMediator();
+		inputMediator = new ConcreteInputMediator();
 		
 		console = new StdView();
-		gui = new GUIView(inputController);
+		gui = new GUIView(inputMediator);
 		
-		displayController.setConsole(console);
-		displayController.setGUI(gui);
-		inputController.setConsole(console);
-		inputController.setGui(gui);
+		displayMediator.setConsole(console);
+		displayMediator.setGUI(gui);
+		inputMediator.setConsole(console);
+		inputMediator.setGui(gui);
 		
 		Game game = Game.getInstance();
-		game.setDisplayMediator(displayController);
-		game.setInputMediator(inputController);
+		game.setDisplayMediator(displayMediator);
+		game.setInputMediator(inputMediator);
 		game.gotoMainMenu();
 	}
 	

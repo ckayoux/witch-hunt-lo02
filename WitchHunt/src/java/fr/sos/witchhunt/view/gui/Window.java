@@ -4,7 +4,10 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import fr.sos.witchhunt.controller.Tabletop;
+import fr.sos.witchhunt.model.flow.Tabletop;
+import fr.sos.witchhunt.view.gui.scenes.game.GamePanel;
+import fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel;
+import fr.sos.witchhunt.view.gui.scenes.matchsetup.MatchSetupPanel;
 
 public class Window extends JFrame /*implements InputSource*/ {
 	

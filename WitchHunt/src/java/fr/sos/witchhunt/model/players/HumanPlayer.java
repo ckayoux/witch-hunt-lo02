@@ -2,12 +2,12 @@ package fr.sos.witchhunt.model.players;
 
 import java.util.List;
 
-import fr.sos.witchhunt.InputMediator;
-import fr.sos.witchhunt.controller.Tabletop;
+import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
+import fr.sos.witchhunt.model.flow.Tabletop;
 
 /**
  * <p><b>This class represents a human-controlled player.</b></p>
@@ -19,7 +19,7 @@ import fr.sos.witchhunt.model.cards.RumourCardsPile;
 public final class HumanPlayer extends Player implements PlayerInputObservable {
 	
 	/**
-	 * An instance of a class implementing {@link fr.sos.witchhunt.InputMediator InputMediator} is responsible for requesting the view to collect user-input.
+	 * An instance of a class implementing {@link fr.sos.witchhunt.controller.InputMediator InputMediator} is responsible for requesting the view to collect user-input.
 	 */
 	private InputMediator inputMediator;
 	
@@ -88,7 +88,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	
 	/**
 	 * <b>Selects a player to {@link #accuse(Player) accuse} based on user-input.</b>
-	 * @return The chosen Player, belonging to the {@link fr.sos.witchhunt.controller.Tabletop#getAccusablePlayersList() list of accusable players}.
+	 * @return The chosen Player, belonging to the {@link fr.sos.witchhunt.model.flow.Tabletop#getAccusablePlayersList() list of accusable players}.
 	 * @see #choose(List, String)
 	 * @see #accuse(Player)
 	 */
@@ -114,7 +114,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 * like {@link fr.sos.witchhunt.model.cards.DuckingStool the Ducking Stool's} Witch? effect for example.</p>
 	 * @see #choose(List, String)
 	 * @see #takeNextTurn()
-	 * @see fr.sos.witchhunt.controller.Round#setNextPlayer(Player)
+	 * @see fr.sos.witchhunt.model.flow.Round#setNextPlayer(Player)
 	 */
 	@Override
 	public Player chooseNextPlayer() {
@@ -225,19 +225,19 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	}
 
 	/**
-	 * <p><b>Requests the {@link fr.sos.witchhunt.DisplayMediator Display Mediator} to show all of the cards in the player's hand.</b></p>
+	 * <p><b>Requests the {@link fr.sos.witchhunt.controller.DisplayMediator Display Mediator} to show all of the cards in the player's hand.</b></p>
 	 * <p>Shows the unrevealed cards as if they were revealed.</p>
-	 * @see fr.sos.witchhunt.DisplayMediator#showCards(Player) DisplayMediator::showCards(Player)
+	 * @see fr.sos.witchhunt.controller.DisplayMediator#showCards(Player) DisplayMediator::showCards(Player)
 	 */
 	public void showHand() {
 		displayMediator.showCards(this);
 	}
 	
 	/**
-	 * <p><b>Requests the {@link fr.sos.witchhunt.DisplayMediator Display Mediator} to show players ranking.</b></p>
+	 * <p><b>Requests the {@link fr.sos.witchhunt.controller.DisplayMediator Display Mediator} to show players ranking.</b></p>
 	 * <p>Specific information about this player's score and position in the ranking can be displayed.</p>
-	 * @see fr.sos.witchhunt.DisplayMediator#displayRanking(Player) DisplayMediator::displayRanking(Player)
-	 * @see fr.sos.witchhunt.controller.ScoreCounter#getRanking() ScoreCounter::getRanking() 
+	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayRanking(Player) DisplayMediator::displayRanking(Player)
+	 * @see fr.sos.witchhunt.model.flow.ScoreCounter#getRanking() ScoreCounter::getRanking() 
 	 */
 	private void showRanking() {
 		displayMediator.displayRanking(this,Tabletop.getInstance().getScoreCounter());

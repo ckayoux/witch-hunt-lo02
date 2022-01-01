@@ -32,7 +32,7 @@ import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
  * + {@link #witch() triggering its Witch? effect} when {@link fr.sos.witchhunt.model.players.Player#defend() defending against an accusation} (has to be unrevealed, becomes revealed)
  * + {@link #hunt() triggering its Hunt! effect} on {@link fr.sos.witchhunt.model.players.Player#playTurn() the player's turn} (has to be unrevealed, becomes revealed)
  * + reset by a player who has already used it (has to be revealed)
- * + discarded to the {@link fr.sos.witchhunt.controller.Tabletop#getPile() common pile of Rumour cards}, or taken from the pile (reset when taken)
+ * + discarded to the {@link fr.sos.witchhunt.model.flow.Tabletop#getPile() common pile of Rumour cards}, or taken from the pile (reset when taken)
  * + exchanged between players' hands (reset when taken)</p>
  * 
  * @see Card

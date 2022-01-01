@@ -1,8 +1,8 @@
-package fr.sos.witchhunt.controller;
+package fr.sos.witchhunt.model.flow;
 
 import java.util.List;
 
-import fr.sos.witchhunt.DisplayMediator;
+import fr.sos.witchhunt.controller.DisplayMediator;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;

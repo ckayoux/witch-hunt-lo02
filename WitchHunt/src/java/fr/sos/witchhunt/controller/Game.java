@@ -1,8 +1,7 @@
 package fr.sos.witchhunt.controller;
 
-import fr.sos.witchhunt.DisplayMediator;
-import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.model.flow.Tabletop;
 
 public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 
@@ -62,8 +61,8 @@ public final class Game {	//IMPLEMENTE LE DESIGN PATTERN SINGLETON
 				"Main menu"};
 
 		Menu optionsMenu = new Menu("game options",options);
-		Application.displayController.displayMenu(optionsMenu);
-		int input = Application.inputController.makeChoice(optionsMenu);
+		displayMediator.displayMenu(optionsMenu);
+		int input = inputMediator.makeChoice(optionsMenu);
 		switch (input) {
 			case 1:
 				displayMediator.passLog("Delay set to : "+((sleepingAllowed)?"OFF":"ON"));

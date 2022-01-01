@@ -1,6 +1,6 @@
 package fr.sos.witchhunt.model.cards;
 
-import fr.sos.witchhunt.controller.Tabletop;
+import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.Player;
 
 /**
@@ -31,8 +31,8 @@ public abstract class WitchEffect extends Effect {
 	}
 	
 	/**
-	 * @return The player triggering this <i>Witch?</i> effect, that is to say {@link fr.sos.witchhunt.controller.Tabletop#getAccusedPlayer() the currently accused player}.
-	 * @see fr.sos.witchhunt.controller.Tabletop#getAccusedPlayer() Tabletop::getAccusedPlayer()
+	 * @return The player triggering this <i>Witch?</i> effect, that is to say {@link fr.sos.witchhunt.model.flow.Tabletop#getAccusedPlayer() the currently accused player}.
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getAccusedPlayer() Tabletop::getAccusedPlayer()
 	 */
 	@Override
 	protected Player getMyself() {
@@ -40,8 +40,8 @@ public abstract class WitchEffect extends Effect {
 	}
 
 	/**
-	 * @return The player triggering this <i>Witch?</i> effect, that is to say, the most often, {@link fr.sos.witchhunt.controller.Tabletop#getAccusator() the accusator}. Can be redefined.
-	 * @see fr.sos.witchhunt.controller.Tabletop#getAccusator() Tabletop::getAccusator()
+	 * @return The player triggering this <i>Witch?</i> effect, that is to say, the most often, {@link fr.sos.witchhunt.model.flow.Tabletop#getAccusator() the accusator}. Can be redefined.
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#getAccusator() Tabletop::getAccusator()
 	 */
 	@Override
 	protected Player getTarget() {

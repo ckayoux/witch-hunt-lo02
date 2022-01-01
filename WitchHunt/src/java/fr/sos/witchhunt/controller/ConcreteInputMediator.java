@@ -3,8 +3,8 @@ package fr.sos.witchhunt.controller;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import fr.sos.witchhunt.InputMediator;
 import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.CPUPlayer;
 import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
@@ -13,7 +13,7 @@ import fr.sos.witchhunt.view.std.InterruptibleStdInput;
 import fr.sos.witchhunt.view.std.StdPlayerCreator;
 import fr.sos.witchhunt.view.std.StdView;
 
-public final class InputController implements InputMediator {
+public final class ConcreteInputMediator implements InputMediator {
 
 	//ATTRIBUTES
 	private CountDownLatch latch = new CountDownLatch(1) ;
@@ -53,7 +53,7 @@ public final class InputController implements InputMediator {
 	
 	@Override
 	public Player createPlayer(int id,List<String> chosenNames,boolean optionnal) {
-		InputController ic = new InputController();
+		ConcreteInputMediator ic = new ConcreteInputMediator();
 		ic.setConsole(console);
 		ic.setGui(gui);
 		StdPlayerCreator spc = new StdPlayerCreator(this,ic,console,id,chosenNames,optionnal);

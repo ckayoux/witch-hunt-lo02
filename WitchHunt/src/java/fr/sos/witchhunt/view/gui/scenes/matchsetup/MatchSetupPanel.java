@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.view.gui;
+package fr.sos.witchhunt.view.gui.scenes.matchsetup;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -14,11 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import fr.sos.witchhunt.InputMediator;
+import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.controller.PlayerCreatorController;
-import fr.sos.witchhunt.controller.Tabletop;
+import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
+import fr.sos.witchhunt.view.gui.Window;
 
 public class MatchSetupPanel extends JPanel implements InputSource {
 	 private InputMediator inputMediator;

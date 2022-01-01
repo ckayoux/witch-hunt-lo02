@@ -3,8 +3,8 @@ package fr.sos.witchhunt.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import fr.sos.witchhunt.view.gui.DeckSelectorButton;
-import fr.sos.witchhunt.view.gui.GamePanel;
+import fr.sos.witchhunt.view.gui.scenes.game.DeckSelectorButton;
+import fr.sos.witchhunt.view.gui.scenes.game.GamePanel;
 
 public class DeckSelectorButtonController {
 

@@ -1,4 +1,4 @@
-package fr.sos.witchhunt;
+package fr.sos.witchhunt.controller;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import fr.sos.witchhunt.model.players.Player;
  * <p>Specifies the methods required by the Model's components which require user inputs.</p>
  * 
  * @see InputMediator
- * @see fr.sos.witchhunt.controller.InputController
+ * @see fr.sos.witchhunt.controller.ConcreteInputMediator
  */
 public interface InputMediator {
 	
