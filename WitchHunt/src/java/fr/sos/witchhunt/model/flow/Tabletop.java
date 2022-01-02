@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import fr.sos.witchhunt.controller.DisplayMediator;
-import fr.sos.witchhunt.controller.Game;
 import fr.sos.witchhunt.controller.InputMediator;
+import fr.sos.witchhunt.controller.core.Game;
 import fr.sos.witchhunt.model.cards.ExistingRumourCards;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;
@@ -17,7 +17,7 @@ import fr.sos.witchhunt.model.players.Player;
  * <p>Starts the match and starts new {@link Round rounds} until the victory conditions are met.</p>
  * <p>Contains a {@link this.playersList list} of all {@link fr.sos.witchhunt.model.players.Player players} participating to the match.</p>
  * <p>Interacts with an instance of {@link ScoreCounter} to check whether victory conditions are met or not.</p>
- * <p>Instanciated as a {@link https://refactoringguru.cn/design-patterns/singleton Singleton} using the {@link this#getInstance() static method}.
+ * <p>Instantiated as a {@link https://refactoringguru.cn/design-patterns/singleton Singleton} using the {@link this#getInstance() static method}.
  * Can be accessed globally, exposing its public and non-static members, using the same method.</p>
  * <p>Implements Runnable. The whole match is supposed to stand within one thread, 
  * which can then {@link #freeze(int) frozen to simulate a delay} between players' actions.</p>

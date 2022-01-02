@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import fr.sos.witchhunt.controller.InputMediator;
-import fr.sos.witchhunt.controller.PlayerCreatorController;
+import fr.sos.witchhunt.controller.interactions.PlayerCreatorController;
 import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;

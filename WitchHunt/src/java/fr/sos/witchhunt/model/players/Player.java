@@ -3,8 +3,8 @@ package fr.sos.witchhunt.model.players;
 import java.util.List;
 
 import fr.sos.witchhunt.controller.DisplayMediator;
+import fr.sos.witchhunt.controller.interactions.Menu;
 import fr.sos.witchhunt.model.Identity;
-import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.Resettable;
 import fr.sos.witchhunt.model.Visitable;
 import fr.sos.witchhunt.model.Visitor;
@@ -832,10 +832,10 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	
 	@Override
 	/**
-	 * <b>Requests the display (only) of a {@link fr.sos.witchhunt.model.Menu Menu}.</b>
+	 * <b>Requests the display (only) of a {@link fr.sos.witchhunt.controller.interactions.Menu Menu}.</b>
 	 * Does not collect any input (this is achieved using {@link fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu)}).
 	 * @see DisplayMediator#displayPossibilities(Menu)
-	 * @see fr.sos.witchhunt.model.Menu Menu
+	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
 	 * @see HumanPlayer
 	 */
 	public void requestDisplayPossibilities(Menu m) {

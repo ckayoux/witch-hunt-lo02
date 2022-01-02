@@ -2,7 +2,7 @@ package fr.sos.witchhunt.controller;
 
 import java.util.List;
 
-import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.controller.interactions.Menu;
 import fr.sos.witchhunt.model.players.Player;
 
 /**

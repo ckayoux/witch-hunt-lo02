@@ -1,7 +1,5 @@
 package fr.sos.witchhunt.model.cards;
 
-import fr.sos.witchhunt.model.players.cpustrategies.CardValue;
-
 public final class Wart extends RumourCard {
 	
 	private int defaultAdditionnalValue = 1; //this card has an additionnal effect (immunity against DuckingStool).

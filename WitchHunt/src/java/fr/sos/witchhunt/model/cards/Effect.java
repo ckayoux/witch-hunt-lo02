@@ -1,6 +1,5 @@
 package fr.sos.witchhunt.model.cards;
 
-import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.Player;
 
 /**

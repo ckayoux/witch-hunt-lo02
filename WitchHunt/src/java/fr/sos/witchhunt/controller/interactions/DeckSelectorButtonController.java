@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.controller;
+package fr.sos.witchhunt.controller.interactions;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

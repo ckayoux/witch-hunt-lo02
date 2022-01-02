@@ -24,10 +24,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import fr.sos.witchhunt.controller.CardSelectorController;
-import fr.sos.witchhunt.controller.DeckSelectorButtonController;
 import fr.sos.witchhunt.controller.InputMediator;
-import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.controller.interactions.CardSelectorController;
+import fr.sos.witchhunt.controller.interactions.DeckSelectorButtonController;
+import fr.sos.witchhunt.controller.interactions.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.flow.ScoreCounter;

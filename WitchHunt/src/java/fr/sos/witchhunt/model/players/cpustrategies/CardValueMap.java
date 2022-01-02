@@ -1,19 +1,15 @@
 package fr.sos.witchhunt.model.players.cpustrategies;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 import fr.sos.witchhunt.model.cards.ExistingRumourCards;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
-import fr.sos.witchhunt.model.flow.Tabletop;
 
 /**
  * <b>Associates each instance of {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} with a {@link CardValue Card value}

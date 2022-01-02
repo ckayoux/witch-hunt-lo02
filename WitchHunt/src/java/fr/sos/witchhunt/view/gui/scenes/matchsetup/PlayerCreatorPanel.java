@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import fr.sos.witchhunt.controller.PlayerCreatorController;
+import fr.sos.witchhunt.controller.interactions.PlayerCreatorController;
 import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
 

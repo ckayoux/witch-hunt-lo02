@@ -2,12 +2,13 @@ package fr.sos.witchhunt.controller;
 
 import java.util.List;
 
-import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.controller.core.Game;
+import fr.sos.witchhunt.controller.interactions.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.flow.ScoreCounter;
-import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.flow.ScoreCounter.ScoreBoard;
+import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
 import fr.sos.witchhunt.view.gui.GUIView;

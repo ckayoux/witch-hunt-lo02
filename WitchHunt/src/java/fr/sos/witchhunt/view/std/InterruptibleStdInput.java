@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
-import fr.sos.witchhunt.controller.Application;
 import fr.sos.witchhunt.controller.InputMediator;
+import fr.sos.witchhunt.controller.core.Application;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
 
@@ -23,7 +23,7 @@ public class InterruptibleStdInput implements Callable<String>, Runnable, InputS
 	public String call() throws IOException {
 	    BufferedReader br = new BufferedReader(
 	        new InputStreamReader(System.in));
-	    Application.console.invite();
+	    console.invite();
 	    String input;
 	    try {
 	        // wait until we have data to complete a readLine()

@@ -6,15 +6,12 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
 import fr.sos.witchhunt.controller.InputMediator;
-import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.controller.interactions.Menu;
 import fr.sos.witchhunt.view.gui.Notification;
 import fr.sos.witchhunt.view.gui.Theme;
 import fr.sos.witchhunt.view.gui.scenes.ActionButton;

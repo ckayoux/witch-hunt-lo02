@@ -1,7 +1,7 @@
 package fr.sos.witchhunt.model.players;
 
 import fr.sos.witchhunt.controller.InputMediator;
-import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.controller.interactions.Menu;
 
 /**
  * <p><b>Interface implemented by Players and their daughter classes</b></p>
@@ -26,7 +26,7 @@ public interface PlayerInputObservable {
 	 * @param m A Menu with a given title and given options
 	 * @return An integer corresponding to the position of the chosen option in the menu's options array
 	 * @see InputMediator#makeChoice(Menu m)
-	 * @see fr.sos.witchhunt.model.Menu Menu
+	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
 	 */
 	public int makeChoice(Menu m);
 }

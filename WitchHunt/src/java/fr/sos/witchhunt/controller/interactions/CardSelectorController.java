@@ -1,4 +1,4 @@
-package fr.sos.witchhunt.controller;
+package fr.sos.witchhunt.controller.interactions;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
 import fr.sos.witchhunt.view.gui.scenes.game.GamePanel;

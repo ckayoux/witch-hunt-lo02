@@ -3,8 +3,8 @@ package fr.sos.witchhunt.model.players;
 import java.util.List;
 
 import fr.sos.witchhunt.controller.InputMediator;
+import fr.sos.witchhunt.controller.interactions.Menu;
 import fr.sos.witchhunt.model.Identity;
-import fr.sos.witchhunt.model.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.flow.Tabletop;
@@ -37,7 +37,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 * <b>Chooses and sets the player's {@link #identity} and that of their {@link #identityCard}.</b>
 	 * @see fr.sos.witchhunt.model.Identity Identity
 	 * @see fr.sos.witchhunt.model.IdentityCard Identity card
-	 * @see fr.sos.witchhunt.model.Menu Menu
+	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
 	 * @see PlayerInputObservable#makeChoice(Menu)
 	 */
 	@Override
@@ -66,7 +66,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 * @param from The list of objects of type {@literal <T>}
 	 * @param prompt The message to be displayed with the input request
 	 * @return An unique object of type {@literal <T>}, belonging to the list given in parameters
-	 * @see fr.sos.witchhunt.model.Menu Menu
+	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
 	 * @see PlayerInputObservable#makeChoice(Menu)
 	 * @see #chooseRevealedCard(RumourCardsPile)
 	 * @see #chooseUnrevealedCard(RumourCardsPile, boolean)

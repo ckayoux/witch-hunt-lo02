@@ -14,9 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-import fr.sos.witchhunt.controller.ActionsPanelController;
 import fr.sos.witchhunt.controller.InputMediator;
-import fr.sos.witchhunt.model.Menu;
+import fr.sos.witchhunt.controller.interactions.ChoicesPanelController;
+import fr.sos.witchhunt.controller.interactions.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
 
 public class ChoicesPanel extends GridBagCell {
@@ -24,7 +24,7 @@ public class ChoicesPanel extends GridBagCell {
 	protected List<ActionButton> actionButtonsList = new ArrayList<ActionButton>();
 	private List<Component> interButtonsMargins = new ArrayList<Component> ();
 	private boolean isRendered=false;
-	private ActionsPanelController controller = null;
+	private ChoicesPanelController controller = null;
 	private boolean choosingACard=false;
 	
 	public ChoicesPanel(int x, int y,int w, int h,Border cellBorder,List<GridBagCell> cellsList) {
@@ -49,7 +49,7 @@ public class ChoicesPanel extends GridBagCell {
 		this.prompt.setText("Wanna continue ?");
 		ActionButton continueButton =  new ActionButton("CONTINUE");
 		this.actionButtonsList.add(continueButton);
-		this.controller= new ActionsPanelController(actionButtonsList,im);
+		this.controller= new ChoicesPanelController(actionButtonsList,im);
 		this.renderPane();
 	}
 	
@@ -87,7 +87,7 @@ public class ChoicesPanel extends GridBagCell {
 	}
 	
 	public void makeChoice(Menu m,InputMediator im) {
-		this.controller= new ActionsPanelController(actionButtonsList,im);
+		this.controller= new ChoicesPanelController(actionButtonsList,im);
 	}
 	
 	public void renderActionButtons() {

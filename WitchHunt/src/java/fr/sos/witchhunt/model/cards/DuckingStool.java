@@ -2,9 +2,7 @@ package fr.sos.witchhunt.model.cards;
 
 import java.util.List;
 
-import fr.sos.witchhunt.model.Identity;
 import fr.sos.witchhunt.model.flow.Tabletop;
-import fr.sos.witchhunt.model.players.DefenseAction;
 import fr.sos.witchhunt.model.players.Player;
 
 public final class DuckingStool extends RumourCard {

@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import fr.sos.witchhunt.model.Identity;
-import fr.sos.witchhunt.model.cards.ExistingRumourCards;
 import fr.sos.witchhunt.model.cards.RumourCard;
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.flow.Tabletop;

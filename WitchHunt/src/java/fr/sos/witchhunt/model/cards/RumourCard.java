@@ -2,8 +2,6 @@ package fr.sos.witchhunt.model.cards;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
