@@ -623,7 +623,7 @@ public final class GUIView {
 	public void displayGameIsTiedScreen(int score, List<Player> potentialWinners) {
 		if(gamePanel!=null) {
 			gamePanel.displayMainNotification(
-					new Notification("~ The game is tied ! ~",
+					new Notification("~ The game is tied ! ~\n",
 					Theme.SCORE
 				)
 			);
