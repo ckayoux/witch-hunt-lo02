@@ -15,8 +15,8 @@ import fr.sos.witchhunt.view.gui.scenes.game.RenderedCard;
  * <p><b>Gathers user-input from an instance of DeckPanel {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel (internal class of GamePanel)} active on the Graphical User Interface.</b></p>
  * <p>When a user clicks on a card's picture, depending on which constructor this controller was instantiated by :</p> 
  * <p>- Displays the {@link fr.sos.witchhunt.view.gui.scenes.game.RenderedCard RenderedCard} as {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel#setSelectedCard(RenderedCard) selected} (boldened border)</p>
- * <p>- If this controller's constructor was given an instance of {@link fr.sos.witchhunt.controller.InputMediator InputMediator}, also {@link #post(String) sends} to it the integer corresponding to the</p>
- * card's position in the {@link #jList list of choosable rendered cards}. Used for choosing cards directly using their picture instead of a {@link ChoicesPanelController menu made of buttons}.
+ * <p>- If this controller's constructor was given an instance of {@link fr.sos.witchhunt.controller.InputMediator InputMediator}, also {@link #post(String) sends} to it the integer corresponding to the
+ * card's position in the {@link #jList list of choosable rendered cards}. Used for choosing cards directly using their pictures instead of a {@link ChoicesPanelController menu made of buttons}.
  * This integer corresponds to a choice in the {@link Menu} containing all choosable cards ordered the same way.</p>
  * <p>Can be in concurrence with {@link fr.sos.witchhunt.view.std.InterruptibleStdInput Std input} : <code>{@link fr.sos.witchhunt.controller.ConcreteInputMediator#makeChoice(Menu) see ConcreteInputMediator::makeChoice(Menu)}</code>.
  * The first instance of <code>{@link fr.sos.witchhunt.gui.view.InputSource InputSource}</code> to {@link fr.sos.witchhunt.gui.view.InputSource#post(String) post} rules over all others.</p>
@@ -106,6 +106,28 @@ public class CardSelectorController implements InputSource {
 		}
 	}
 	
+	/**
+	 * <p>With this constructor, this controller is <b>used for making a choice and transfer it to the model</b> using directly their pictures instead of a {@link ChoicesPanelController menu made of buttons}.</p>
+	 * <p>Creates a MouseListener for {@link #jList each choosable RenderedCard} : on click, {@link #post(String) sends} to the linked instance of {@link fr.sos.witchhunt.controller.InputMediator InputMediator}}
+	 * ,the integer corresponding to the card's position in the {@link #jList list of choosable rendered cards}.
+	 * This integer corresponds to a choice in the {@link Menu} containing all choosable cards ordered the same way.</p>
+	 * <p>The clicked RenderedCard will therefore {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel#cardHasBeenChosen(RenderedCard) be marked as chosen}.</p>
+	 * <p>Once the choice is made, {@link #thisControllersMLMap the MouseListeners (created by this controller only)} will be killed.</p>
+	 * @param jList Value for field {@link #jList}
+	 * @param gp The instance of {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel GamePanel} (GUI view) instantiating this controller.
+	 * @param im Value for field {@link #inputMediator}
+	 * 
+	 * @see Menu
+	 * @see fr.sos.witchhunt.controller.InputMediator InputMediator
+	 * @see fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) InputMediator::makeChoice(Menu)
+	 * @see fr.sos.witchhunt.gui.view.std.InterruptibleStdInput InterruptibleStdInput
+	 * @see fr.sos.witchhunt.gui.view.std.InputSource InputSource
+	 * 
+	 * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#cardHasBeenChosen(RenderedCard) GamePanel::cardHasBeenChosen(RenderedCard)
+	 * 
+	 * @see #destroyThisControllersMouseListeners()
+	 * @see java.awt.event.MouseListener
+	 */
 	public CardSelectorController(List<RenderedCard> jList,GamePanel gp,InputMediator im) {
 		this.jList=jList;
 		this.inputMediator=im;
@@ -147,6 +169,11 @@ public class CardSelectorController implements InputSource {
 		}
 	}
 	
+	/**
+	 * <p>Kills <b>all MouseListeners</b> associated with <b>{@link #jList every RenderedCard covered by this controller}</b>.</p>
+	 *<p> Called by the view on permanent controllers when {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel#updateDeckContent(fr.sos.witchhunt.model.cards.RumourCardsPile, boolean) a deck's content is updated}, 
+	 * as some cards are going to stop being displayed by the panel.</p>
+	 */
 	public void destroyAllMouseListeners() {
 		this.jList.forEach(j->{
 			for(MouseListener ml : j.getMouseListeners()) {
@@ -155,22 +182,39 @@ public class CardSelectorController implements InputSource {
 		});
 	}
 
+	/**
+	 * <p>Kills all MouseListeners <b>created by this controller only</b>.</p>
+	 * <p>Called by this class itself {@link #CardSelectorController(List, GamePanel, InputMediator) choice has been made}.</p>
+	 * <p>This way, MouseListeners used only for highlighting clicked cards and not updating the {@link fr.sos.witchhunt.model model}, are not destroyed.</p>
+	 * @see #thisControllersMLMap <code>thisControllersMLMap</code> Map storing the controllers created by this controller only
+	 */
 	private void destroyThisControllersMouseListeners() {
 		this.thisControllersMLMap.keySet().forEach(j->{
 			j.removeMouseListener(thisControllersMLMap.get(j));
 		});
 	}
 	
+	/**
+	*{@inheritDoc}
+	*/
 	@Override
 	public void post(String str) {
 		inputMediator.receive(str);
 	}
 
+	/**
+	 * @deprecated Used by other classes implementing {@link fr.sos.witchhunt.view.InputSource InputSource}.
+	 */
+	@Deprecated
 	@Override
 	public void post() {
 		inputMediator.receive();
 	}
 
+	/**
+	 * @deprecated Used by other classes implementing {@link fr.sos.witchhunt.view.InputSource InputSource}.
+	 */
+	@Deprecated
 	@Override
 	public void post(Player p) {
 		// TODO Auto-generated method stub
