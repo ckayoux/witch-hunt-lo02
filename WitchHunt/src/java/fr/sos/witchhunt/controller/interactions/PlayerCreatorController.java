@@ -171,7 +171,7 @@ public class PlayerCreatorController implements InputSource {
 		String name = this.pcp.getNameField().getText();
 		boolean isHuman = this.pcp.getIsHumanCB().isSelected();
 		if(isHuman) {
-			if(name!=null && name.length()>1 && !takenNames.contains(name)&& !name.contains("CPU")) {
+			if(name!=null && name.length()>0 && !takenNames.contains(name)&& !name.contains("CPU")) {
 				post(inputMediator.createPlayer(nthPlayer,name,isHuman));
 			}
 			else {

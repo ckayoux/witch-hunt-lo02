@@ -98,10 +98,12 @@ public class RenderedCard extends JLabel {
 	}
 	
 	public void resetTheme() {
-		this.setTheme(defaultTheme);
+
 		if(bordered&&!this.boldened) {
 			this.currentBorderThickness=0;
+			this.bordered=false;
 		}
+		this.setTheme(defaultTheme);
 	}
 	
 	public void setTheme(Theme theme) {

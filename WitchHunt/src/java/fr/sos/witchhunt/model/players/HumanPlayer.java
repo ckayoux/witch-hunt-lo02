@@ -254,8 +254,8 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 */
 	@Override
 	public RumourCard selectCardToDiscard(RumourCardsPile in) {
-		if(this.hasRumourCards()) {
-			if(this.hasUnrevealedRumourCards()) {
+		if(!in.isEmpty()) {
+			if(!in.getUnrevealedSubpile().isEmpty()) {
 				displayMediator.displayChooseCardToDiscardScreen(this);
 				return chooseUnrevealedCard(in.getUnrevealedSubpile(),true);
 			}

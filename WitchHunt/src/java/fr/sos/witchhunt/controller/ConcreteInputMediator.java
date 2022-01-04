@@ -91,7 +91,11 @@ public final class ConcreteInputMediator implements InputMediator {
 			console.logInputWasExpectedMessage();
 			return getStringInput();
 		}
-		else return receivedString;
+		else {
+			String output=this.receivedString;
+			this.receivedString=null;
+			return output;
+		}
 	}
 	
 	public Player getPlayerInput() {
@@ -99,7 +103,9 @@ public final class ConcreteInputMediator implements InputMediator {
 		catch(InterruptedException e) {
 			e.printStackTrace();
 		}
-		return receivedPlayer;
+		Player output = receivedPlayer;
+		this.receivedPlayer=null;
+		return output;
 	}
 	public int getIntInput() {
 		try {

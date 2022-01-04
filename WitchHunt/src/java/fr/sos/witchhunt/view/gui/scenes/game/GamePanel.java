@@ -137,7 +137,8 @@ public class GamePanel extends GridBagPanel {
 	public void choiceHasBeenMade(Object o) {
 		if(actionsPanel.isChoosingACard()&&o instanceof RumourCard) {
 			if(cardsPanel.currentlyUsedForChoosingCard!=null)
-				cardHasBeenChosen(cardsPanel.currentlyUsedForChoosingCard.choosableCards.stream().filter(j->j.getAssociatedRumourCard()==o).findFirst().get());
+				if(cardsPanel.currentlyUsedForChoosingCard.choosableCards.stream().filter(j->j.getAssociatedRumourCard()==o).count()>0)
+					cardHasBeenChosen(cardsPanel.currentlyUsedForChoosingCard.choosableCards.stream().filter(j->j.getAssociatedRumourCard()==o).findFirst().get());
 		}
 		if(actionsPanel.isRendered()) {
 			actionsPanel.resetPane();
@@ -566,11 +567,11 @@ public class GamePanel extends GridBagPanel {
 			}
 			updateUI();
 		}
-		public void setSelectedCard(RenderedCard view) {			
-			if(view!=null) {
-				if(view!=selectedCard) {
+		public void setSelectedCard(RenderedCard j) {			
+			if(j!=null) {
+				if(j!=selectedCard) {
 					if(this.selectedCard!=null) this.selectedCard.unbolden();
-					selectedCard=view;
+					selectedCard=j;
 					selectedCard.bolden();
 				}
 				else {
@@ -580,6 +581,7 @@ public class GamePanel extends GridBagPanel {
 			}
 			else {
 				if(this.selectedCard!=null) this.selectedCard.unbolden();
+				this.selectedCard=null;
 			}
 			
 		}
@@ -736,23 +738,33 @@ public class GamePanel extends GridBagPanel {
 			}
 			
 			public void makeCardsChoosable(RumourCardsPile choosableSubpile, Theme theme) {
-				if(this.choosableCards==null) this.choosableCards = new ArrayList<RenderedCard>();
+				if(choosableCards!=null) {
+					this.resetChoosableCardsTheme(null);
+				}
+				this.choosableCards = new ArrayList<RenderedCard>();
 				this.choosableCards.addAll(renderedCardsList.stream().filter(j->choosableSubpile.contains(j.getAssociatedRumourCard())).toList());
 				choosableCards.forEach(j->j.setTheme(theme));
 				new CardSelectorController(choosableCards, gamePanelInstance,inputMediator);
 			}
 			
 			public void resetChoosableCardsTheme(RenderedCard exceptedThisOne) {
-				List<RenderedCard> toReset = choosableCards.stream().filter(j->j!=exceptedThisOne).toList();
+				List<RenderedCard> toReset;
+				
+				if(exceptedThisOne==null) {
+					toReset=choosableCards;
+					choosableCards=null;
+				}
+				else {
+					toReset = choosableCards.stream().filter(j->j!=exceptedThisOne).toList();
+					choosableCards = new ArrayList<RenderedCard>();
+					choosableCards.add(exceptedThisOne);					
+				}
 				toReset.forEach(j->{
 					j.resetTheme();
 					j.unbolden();
 				});
-				if(exceptedThisOne==null) choosableCards=null;
-				else {
-					choosableCards = new ArrayList<RenderedCard>();
-					choosableCards.add(exceptedThisOne);
-				}
+				
+				if(this.controller!=null) this.controller.destroyAllMouseListeners();
 				
 			}
 			
