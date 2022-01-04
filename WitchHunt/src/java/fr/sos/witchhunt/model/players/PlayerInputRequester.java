@@ -8,15 +8,15 @@ import fr.sos.witchhunt.controller.interactions.Menu;
  * <p>Specifies a set of methods allowing the players to communicate with an input controller implementing {@link InputMediator}.</p>
  * <p>All methods specified this interface are meant to trigger their counterpart from the InputMediator interface.</p>
  * @see InputMediator
- * @see PlayerDisplayObservable
+ * @see PlayerDisplayRequester
  * @see fr.sos.witchhunt.model.players.Player Player
  * @see fr.sos.witchhunt.model.players.CPUPlayer CPUPlayer
  * @see fr.sos.witchhunt.model.players.HumanPlayer HumanPlayer
  */
-public interface PlayerInputObservable {
+public interface PlayerInputRequester {
 	
 	/**
-	 * <b>Associate to a PlayerInputObservable entity the given controller implementing InputMediator.</b>
+	 * <b>Associate to a PlayerInputRequester entity the given controller implementing InputMediator.</b>
 	 * @param im An input controller implementing InputMediator
 	 */
 	public void setInputMediator(InputMediator im);

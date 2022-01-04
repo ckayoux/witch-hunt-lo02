@@ -14,7 +14,7 @@ import fr.sos.witchhunt.model.cards.RumourCardsPile;
  * @see fr.sos.witchhunt.model.players.CPUPlayer CPUPlayer
  * @see fr.sos.witchhunt.model.players.HumanPlayer HumanPlayer
  */
-public interface PlayerDisplayObservable {
+public interface PlayerDisplayRequester {
 
 	/**
 	 * <b>Sets the value of the controller in charge of displaying players-related information</p> 

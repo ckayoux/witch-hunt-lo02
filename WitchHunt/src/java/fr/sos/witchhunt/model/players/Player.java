@@ -29,7 +29,7 @@ import fr.sos.witchhunt.model.flow.Tabletop;
  * {@link fr.sos.witchhunt.model.Visitor Visitor}. The score they obtained at each round is saved by an instance of {@link fr.sos.witchhunt.model.flow.ScoreCounter ScoreCounter},
  * using the {@link https://refactoringguru.cn/design-patterns/visitor Visitor design pattern}.</p>
  * <p>Their display requests are passed to an instance of a class implementing {@link fr.sos.witchhunt.controller.DisplayMediator DisplayMediator}.
- * They themselves implement {@link PlayerDisplayObservable}, which specifies all types of display requests they can need.</p> 
+ * They themselves implement {@link PlayerDisplayRequester}, which specifies all types of display requests they can need.</p> 
  *
  * @see HumanPlayer
  * @see CPUPlayer
@@ -38,11 +38,11 @@ import fr.sos.witchhunt.model.flow.Tabletop;
  * @see fr.sos.witchhunt.model.Visitable Visitable
  * @see fr.sos.witchhunt.model.Resettable Resettable
  * 
- * @see PlayerDisplayObservable
+ * @see PlayerDisplayRequester
  * @see fr.sos.witchhunt.controller.DisplayMediator DisplayMediator
  *
  */
-public abstract class Player implements PlayerDisplayObservable, Resettable, Visitable {
+public abstract class Player implements PlayerDisplayRequester, Resettable, Visitable {
 	
 	//ATTRIBUTES
 	
@@ -164,7 +164,7 @@ public abstract class Player implements PlayerDisplayObservable, Resettable, Vis
 	 * <p>The players passes every display request they have to this object, which is responsible of organizing their display.</p>
 	 * <p>This field is binded at the player's creation.</p>
 	 * @see fr.sos.witchhunt.controller.DisplayMediator DisplayMediator
-	 * @see PlayerDisplayObservable
+	 * @see PlayerDisplayRequester
 	 */
 	protected DisplayMediator displayMediator;
 

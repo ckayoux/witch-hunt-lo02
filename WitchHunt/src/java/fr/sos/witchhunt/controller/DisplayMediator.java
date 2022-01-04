@@ -24,7 +24,7 @@ public interface DisplayMediator {
 	
 	/**
 	 * <b>Requests the DM to display the "add players" screen.</b>
-	 * @param tabletop The mtach (instance of {@link fr.sos.witchhunt.model.flow.Tabletop Tabletop}) which is being set up
+	 * @param tabletop The match (instance of {@link fr.sos.witchhunt.model.flow.Tabletop Tabletop}) which is being set up
 	 */
 	public void displayAddPlayersScreen(Tabletop tabletop) ;
 	

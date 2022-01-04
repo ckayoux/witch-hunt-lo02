@@ -12,11 +12,11 @@ import fr.sos.witchhunt.model.flow.Tabletop;
 /**
  * <p><b>This class represents a human-controlled player.</b></p>
  * <p>It overrides all of {@link Player}'s abstract methods, so that all choices a HumanPlayer can be led to make are based on user-input.</p>
- * <p>All required input methods are specified in the {@link PlayerInputObservable} interface.</p>
+ * <p>All required input methods are specified in the {@link PlayerInputRequester} interface.</p>
  * @see Player
- * @see PlayerInputObservable
+ * @see PlayerInputRequester
  */
-public final class HumanPlayer extends Player implements PlayerInputObservable {
+public final class HumanPlayer extends Player implements PlayerInputRequester {
 	
 	/**
 	 * An instance of a class implementing {@link fr.sos.witchhunt.controller.InputMediator InputMediator} is responsible for requesting the view to collect user-input.
@@ -38,7 +38,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 * @see fr.sos.witchhunt.model.Identity Identity
 	 * @see fr.sos.witchhunt.model.IdentityCard Identity card
 	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
-	 * @see PlayerInputObservable#makeChoice(Menu)
+	 * @see PlayerInputRequester#makeChoice(Menu)
 	 */
 	@Override
 	public void chooseIdentity() {
@@ -67,7 +67,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 	 * @param prompt The message to be displayed with the input request
 	 * @return An unique object of type {@literal <T>}, belonging to the list given in parameters
 	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
-	 * @see PlayerInputObservable#makeChoice(Menu)
+	 * @see PlayerInputRequester#makeChoice(Menu)
 	 * @see #chooseRevealedCard(RumourCardsPile)
 	 * @see #chooseUnrevealedCard(RumourCardsPile, boolean)
 	 * @see #chooseAnyCard(RumourCardsPile, boolean)

@@ -38,12 +38,12 @@ public interface InputMediator {
 	public Player createPlayer(int id,List<String> chosenNames,boolean optionnal);
 	
 	/**
-	 * <p><b>Requests for the creation of a player with the given parameters.</b></p>
+	 * <p><b>Lets the input mediator create a player with the given parameters and become this new player's input mediator.</b></p>
 	 * @param id The id of the player that is to be created.
 	 * @param name The new player's name
 	 * @param isHuman <i>true</i> if the player is human-controlled
 	 * @return The player, created on the basis of the information gathered from user-input
-	 * @see fr.sos.witchhunt.model.players.Player
+	 * @see fr.sos.witchhunt.model.players.Player Player
 	 */
 	public Player createPlayer(int id,String name,boolean isHuman);
 	
@@ -51,7 +51,7 @@ public interface InputMediator {
 	/**
 	 * <p><b>Requests the View to get an input from the user corresponding to a choice of the given Menu</b></p>
 	 * <p>Only calls for input and display error messages concerning that input</p>
-	 * <p>The display of the menu itselfs is achieved by a class implementing{@link DisplayMediator}</p>
+	 * <p>The display of the menu itselfs is achieved by a class implementing {@link DisplayMediator}</p>
 	 * @param possibilities An instance of Menu, with a given title and given options
 	 * @return A positive <i>int</i> corresponding to the position of the selected option in the given Menu's array of choices.
 	 */
@@ -61,23 +61,23 @@ public interface InputMediator {
 	 * <p><b>Sends an empty signal to the input mediator.</b></p>
 	 * @see fr.sos.witchhunt.view.InputSource InputSource
 	 */
-	void receive();
+	public void receive();
 	/**
 	 * <p><b>Sends an integer to the input mediator.</b></p>
 	 * @see fr.sos.witchhunt.view.InputSource InputSource
 	 */
-	void receive(int i);
+	public void receive(int i);
 	/**
 	 * <p><b>Sends a string to the input mediator.</b></p>
 	 * @see fr.sos.witchhunt.view.InputSource InputSource
 	 */
-	void receive(String str);
+	public void receive(String str);
 	
 	/**
 	 * <p><b>Sends a player to the input mediator.</b></p>
 	 * @param p The sent player
 	 */
-	void receive(Player p);
+	public void receive(Player p);
 
 	/**
 	 * <b>Requests the input mediator to collect a string from the user</b>
