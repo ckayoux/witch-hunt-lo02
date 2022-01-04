@@ -8,7 +8,6 @@ import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
 import fr.sos.witchhunt.view.gui.scenes.ActionButton;
-import fr.sos.witchhunt.view.gui.scenes.ChoicesPanel;
 
 /**
  * <p><b>Gathers user-input from an instance of {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel} active on the Graphical User Interface.</b></p>

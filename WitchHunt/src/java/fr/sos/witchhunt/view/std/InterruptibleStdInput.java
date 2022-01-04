@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.concurrent.Callable;
 
 import fr.sos.witchhunt.controller.InputMediator;
-import fr.sos.witchhunt.controller.core.Application;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
 

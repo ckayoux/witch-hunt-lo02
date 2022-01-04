@@ -160,7 +160,7 @@ public final class HumanPlayer extends Player implements PlayerInputObservable {
 		}
 		else {
 			requestDisplayNoAvailableHuntEffectsScreen();
-			possibilities = new Menu("You have no more playable Hunt! effects.",
+			possibilities = new Menu("Choose an action.",
 										TurnAction.ACCUSE,
 										"/c/Show your cards",
 										"/c/Show players ranking");
