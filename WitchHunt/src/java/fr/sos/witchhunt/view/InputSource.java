@@ -1,6 +1,5 @@
 package fr.sos.witchhunt.view;
 
-import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.model.players.Player;
 /**
  * <p><b>Classes implementing this interface are supposed to be able to {@link #post() transmit} data to an implementation of {@link fr.sos.witchhunt.controller.InputMediator InputMediator}.</b></p>

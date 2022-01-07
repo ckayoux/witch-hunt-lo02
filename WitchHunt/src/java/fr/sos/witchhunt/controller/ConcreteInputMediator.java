@@ -8,7 +8,6 @@ import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.CPUPlayer;
 import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
-import fr.sos.witchhunt.view.InputSource;
 import fr.sos.witchhunt.view.gui.GUIView;
 import fr.sos.witchhunt.view.std.InterruptibleStdInput;
 import fr.sos.witchhunt.view.std.StdPlayerCreator;

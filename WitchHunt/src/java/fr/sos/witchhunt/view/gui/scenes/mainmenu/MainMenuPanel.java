@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
@@ -102,6 +103,13 @@ public class MainMenuPanel extends GridBagPanel{
 			System.err.println("Could not load resource : "+absPath);
 			System.out.println("Aborting...");
 			System.exit(-1);
+		}
+		finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return image;
 	}

@@ -1,6 +1,7 @@
 package fr.sos.witchhunt.model.cards;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
@@ -288,6 +289,13 @@ public abstract class RumourCard extends Card {
 			System.err.println("Could not load resource : "+getImagePath());
 			System.out.println("Aborting...");
 			System.exit(-1);
+		}
+		finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

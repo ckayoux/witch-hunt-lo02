@@ -3,7 +3,6 @@ package fr.sos.witchhunt.controller.interactions;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.gui.scenes.game.DeckSelectorButton;
 import fr.sos.witchhunt.view.gui.scenes.game.GamePanel;
 

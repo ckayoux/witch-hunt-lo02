@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
@@ -71,6 +72,13 @@ public abstract class Card implements Resettable {
 			System.err.println("Could not load resource : "+absPath);
 			System.out.println("Aborting...");
 			System.exit(-1);
+		}
+		finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return resizeCardImage(image);
 	}
