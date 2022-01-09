@@ -340,7 +340,7 @@ public final class ConcreteDisplayMediator implements DisplayMediator {
 	@Override
 	public void displayOnlyTwoUnrevealedRemainingScreen() {
 		console.logOnlyTwoUnrevealedRemainingMessage();
-		gui.displayOnlyTwoUnrevealedRemainingScreen();
+		//It is already obvious in the GUI when there are only two unrevealed players left
 	}
 	/**
 	 *{@inheritDoc}

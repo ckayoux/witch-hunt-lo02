@@ -20,26 +20,93 @@ import fr.sos.witchhunt.view.gui.scenes.game.GamePanel;
 import fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel;
 import fr.sos.witchhunt.view.gui.scenes.matchsetup.MatchSetupPanel;
 
+/**
+ * <p><b>Central class of the GUI view. Possesses high-level display and input methods.</b></p>
+ * <p>Instantiates a {@link Window} and updates it to display the extension of JPanel corresponding to the current {@link fr.sos.witchhunt.view.gui.scenes scene}.</p>
+ * <p>Also manipulates directly the current {@link fr.sos.witchhunt.view.gui.scenes scene's main class}, calling their lower-level display or input methods.</p>
+ * <p>Receives and performs display requests from a {@link fr.sos.witchhunt.controller.DisplayMediator DisplayMediator}.
+ * Possesses one display method per situation when display on the GUI is required.
+ * Not concerned by some display requests.</p>
+ * <p>Receives and performs input requests from the {@link fr.sos.witchhunt.controller.InputMediator InputMediator} with which it is associated.
+ * Possesses one input method per type of input request that can be performed by the Graphical Interface.
+ * The {@link fr.sos.witchhunt.controller.ConcreteInputMediator InputMediator} keeps the GUI when it receives user input from this view or from other concurrent ones.</p>
+ * 
+ * @see fr.sos.witchhunt.controller.DisplayMediator DisplayMediator
+ * @see fr.sos.witchhunt.controller.ConcreteDisplayMediator ConcreteDisplayMediator
+ *
+ * @see fr.sos.witchhunt.controller.InputMediator InputMediator
+ * @see fr.sos.witchhunt.controller.ConcreteInputMediator ConcreteInputMediator
+ *
+ * @see Window
+ * @see fr.sos.witchhunt.view.gui.scenes
+ * @see fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel is the central class of the Main Menu scene
+ * @see fr.sos.witchhunt.view.gui.scenes.matchsetup.MatchSetupPanel is the central class of the game setup scene (players creation)
+ * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel GamePanel is the central class of the ingame scene
+ * 
+ * 
+ */
 public final class GUIView {
 
+	/**
+	 * <b>The {@link fr.sos.witchhunt.controller.InputMediator InputMediator} gathering input from this Graphical User Interface.</b>
+	 * <p>Sends input requests. Receives user-input and keeps all concurrent views synchronized in terms of input collection.</p>
+	 * @see fr.sos.witchhunt.controller.InputMediator InputMediator
+	 * @see fr.sos.witchhunt.controller.ConcreteInputMediator ConcreteInputMediator
+	 */
 	private InputMediator inputMediator;
-	private Window w; 
+	/**
+	 * <b>The {@link Window} in which all {@link fr.sos.witchhunt.view.gui.scenes scenes} are rendered.</b>
+	 */
+	private Window w;
+	
+	/**
+	 * <b>The ingame scene of this Graphical User Interface.</b>
+	 * @see #gotoGamePanel()
+	 * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel GamePanel
+	 * @see fr.sos.witchhunt.view.gui.scenes.game
+	 */
 	private GamePanel gamePanel;
+	/**
+	 * <b>The Main Menu scene of this Graphical User Interface.</b>
+	 * @see #gotoMainMenuPanel()
+	 * @see fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel MainMenuPanel
+	 */
 	private MainMenuPanel mainMenuPanel;
+	/**
+	 * <b>The m setup scene of this Graphical User Interface.</b>
+	 * @see #gotoMatchSetupPanel()
+	 * @see fr.sos.witchhunt.view.gui.scenes.matchsetup.MatchSetupPanel MatchSetupPanel
+	 * @see fr.sos.witchhunt.view.gui.scenes.matchsetup
+	 */
 	private MatchSetupPanel matchSetupPanel;
-	private JPanel currentPanel = null;
+
+	/**
+	 * <b>The {@link fr.sos.witchhunt.model.flow.Tabletop instance of Tabletop} which the game setup and ingame scenes represent.</b>
+	 * @see fr.sos.witchhunt.model.flow.Tabletop Tabletop
+	 */
 	private Tabletop tabletop;
 	
+	
 	//CONSTRUCTOR
+	/**
+	 * <p><b>Creates a Graphical User Interface working for the given {@link fr.sos.witchhunt.controller.InputMediator InputMediator}.</b></p>
+	 * <p>Instantiates a unique {@link Window}, which will be used as a frame for all Graphical User Interface displays.</p>
+	 * @param im Value for field {@link #inputMediator}. The {@link fr.sos.witchhunt.controller.InputMediator InputMediator} keeping this view synchronized with others and sending its input requests.</p>
+	 * @see fr.sos.witchhunt.controller.InputMediator InputMediator
+	 * @see #inputMediator
+	 * @see Window
+	 */
 	public GUIView (InputMediator im) {
 		this.inputMediator=im;
 		this.w = new Window ();
-
-		//gotoMainMenuPanel();
-
 	}
 	
-	
+	/**
+	 * <b>Switches to the {@link fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel Main Menu scene}.</b>
+	 * <p>No effect if this scene is already the current one.</p>
+	 * <p>The currently active scene is destroyed.</p>
+	 * <p>Resizing the {@link Window} is not allowed for this scene.</p>
+	 */
 	public void gotoMainMenuPanel() {
 		if(this.mainMenuPanel==null) {
 			this.w.setResizable(false);
@@ -47,11 +114,18 @@ public final class GUIView {
 			this.matchSetupPanel=null;
 			this.mainMenuPanel=this.w.renderMainMenuPanel();
 			this.mainMenuPanel.setInputMediator(inputMediator);
-		}
-		
+		}	
 	}
+	
+	/**
+	 * <b>Switches to the {@link fr.sos.witchhunt.view.gui.scenes.matchsetup.MatchSetupPanel match setup scene}.</b>
+	 * <p>No effect if this scene is already the current one or if this class does not know the instance of {@link #tabletop Tabletop} it represents.</p>.</p>
+	 * <p>The currently active scene is destroyed.</p>
+	 * <p>Resizing the {@link Window} is allowed for this scene.</p>
+	 * <p>The window's title is modified when switching to this scene.</p>
+	 */
 	public void gotoMatchSetupPanel() {
-		if (this.matchSetupPanel==null) {
+		if (this.matchSetupPanel==null&&this.tabletop!=null) {
 			this.w.setResizable(true);
 			this.gamePanel=null;
 			this.mainMenuPanel=null;
@@ -63,6 +137,13 @@ public final class GUIView {
 		
 	}
 	
+	/**
+	 * <b>Switches to the {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel ingame scene} and initializes it.</b>
+	 * <p>No effect if this scene is already the current one or if this class does not know the instance of {@link #tabletop Tabletop} it represents.</p>
+	 * <p>The currently active scene is destroyed.</p>
+	 * <p>Resizing the {@link Window} is allowed for this scene.</p>
+	 * <p>The window's title is modified when switching to this scene.</p>
+	 */
 	public void gotoGamePanel() {
 		if (this.gamePanel==null&&this.tabletop!=null){
 			this.matchSetupPanel=null;
@@ -75,47 +156,78 @@ public final class GUIView {
 		}
 	}
 
-
-	
-	public void wannaContinue(InputMediator im) {
+	/**
+	 * <p>Calls the {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel#wannaContinue(InputMediator) GamePanel::wannaContinue(InputMediator) method}, which
+	 * <b>freezes the game and asks for user input to unpause it.</b></p>
+	 * <p>Used when the master {@link fr.sos.witchhunt.controller.ConcreteInputMediator#wannaContinue() InputMediator sends a "wanna continue ?" input request}.</p>
+	 * @see fr.sos.witchhunt.controller.InputMediator#wannaContinue() InputMediator::wannaContinue()
+	 * @see fr.sos.witchhunt.controller.ConcreteInputMediator#wannaContinue() ConcreteInputMediator::wannaContinue()
+	 * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#wannaContinue(InputMediator) GamePanel::wannaContinue(InputMediator)
+	 */
+	public void wannaContinue() {
 		SwingUtilities.invokeLater(new Runnable() {
 		    @Override
 			public void run() {
-		        gamePanel.wannaContinue(im);
+		        gamePanel.wannaContinue(inputMediator);
 		    }
 		});
 	}
 	
-	public void choiceHasBeenMade(Object o) {
+	/**
+	 * <p>Calls the {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel#makeChoice(Menu, InputMediator) ChoicesPanel::makeChoice(Menu, InputMediator) method} for the current scene's {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel}, if it has one, activating 
+	 * {@link fr.sos.witchhunt.controller.interactions.ChoicesPanelController its controller} to collect user input. Not in charge of the display of the menu, see {@link #displayMenu(Menu)}.</p>
+	 * <p>Used when the master {@link fr.sos.witchhunt.controller.ConcreteInputMediator#makeChoice(Menu) InputMediator asks the users to choose between plural possibilities} to let the user make its choice using this Graphical Interface.</p>
+	 * <p>{@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel} is a class dedicated to representing a {@link fr.sos.witchhunt.controller.interactions.Menu Menu} on the Graphical Interface. It is used by a {@link fr.sos.witchhunt.view.gui.scenes scene}.</p>
+	 * @see fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) InputMediator::makeChoice(Menu)
+	 * @see fr.sos.witchhunt.controller.ConcreteInputMediator#makeChoice(Menu) ConcreteInputMediator::makeChoice(Menu)
+	 * 
+	 * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#makeChoice(Menu) GamePanel::makeChoice(Menu)
+	 * @see fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel#makeChoice(Menu) MainMenuPanel::makeChoice(Menu)
+	 * 
+	 * @see fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel
+	 * @see fr.sos.witchhunt.view.gui.scenes.ChoicesPanel#makeChoice(Menu, InputMediator) ChoicesPanel::makeChoice(Menu, InputMediator)
+	 *
+	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
+	 * 
+	 */
+	public void makeChoice(Menu m) {
 		if(this.gamePanel!=null) {
 			SwingUtilities.invokeLater(new Runnable() {
 				 @Override
 				public void run() {
-					 if(gamePanel!=null) gamePanel.choiceHasBeenMade(o);
+				    gamePanel.makeChoice(m);
 				}
 			});
 		}
-		else if (this.mainMenuPanel!=null){
+		else if (this.mainMenuPanel!=null) {
 			SwingUtilities.invokeLater(new Runnable() {
 				 @Override
 				public void run() {
-				    mainMenuPanel.resetChoicesPanel();
-				}
-			});
-		}
-	}
-
-	public void displayCardsChoiceMenu(Menu m,boolean forceReveal) {
-		if(this.gamePanel!=null) {
-			SwingUtilities.invokeLater(new Runnable() {
-				 @Override
-				public void run() {
-				    gamePanel.displayCards(m,forceReveal);
+				    mainMenuPanel.makeChoice(m);
 				}
 			});
 		}
 	}
 	
+	
+	/**
+	 * <p>Calls the {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel#displayMenu(Menu) ChoicesPanel::displayMenu(Menu) method} for the current scene's {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel}, 
+	 * displaying the entitled and options of the given {@link fr.sos.witchhunt.controller.interactions.Menu Menu}.
+	 * Not in charge of collecting the user's choice, see {@link #makeChoice(Menu)}.</p>
+	 * <p>Used when the master {@link fr.sos.witchhunt.controller.ConcreteDisplayMediator#displayMenu(Menu) DisplayMediator orders to display a Menu} on all concurrent views.</p>
+	 * <p>{@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel} is a class dedicated to representing a {@link fr.sos.witchhunt.controller.interactions.Menu Menu} on the Graphical Interface. It is used by a {@link fr.sos.witchhunt.view.gui.scenes scene}.</p>
+	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayMenu(Menu) DisplayMediator::displayMenu(Menu)
+	 * @see fr.sos.witchhunt.controller.ConcreteDisplayMediator#displayMenu(Menu) ConcreteDisplayMediator::displayMenu(Menu)
+	 * 
+	 * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#displayMenu(Menu) GamePanel::displayMenu(Menu)
+	 * @see fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel#displayMenu(Menu) MainMenuPanel::displayMenu(Menu)
+	 * 
+	 * @see fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel
+	 * @see fr.sos.witchhunt.view.gui.scenes.ChoicesPanel#displayMenu(Menu) ChoicesPanel::displayMenu(Menu)
+	 *
+	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
+	 * 
+	 */
 	public void displayMenu(Menu m) {
 		if(this.gamePanel!=null) {
 			SwingUtilities.invokeLater(new Runnable() {
@@ -135,24 +247,62 @@ public final class GUIView {
 		}
 	}
 	
-	public void makeChoice(Menu m) {
+	/**
+	 * <p>Called by the master {@link fr.sos.witchhunt.controller.InputMediator} when {@link fr.sos.witchhunt.controller.ConcreteInputMediator#makeChoice(Menu) it has asked the users to choose between plural possibilities
+	 *  and received their answer} to update the active scene, telling it "okay, we got an answer, you can stop harassing our users".</b></p>
+	 * <p>If the current scene is {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel the ingame scene}, calls its {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel#choiceHasBeenMade(Object) choiceHasBeenMade(Object)} method.</p> 
+	 * <p>Otherwise, if it is the {@link fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel the main menu scene}, calls its {@link fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel#resetChoicesPanel() resetChoicesPanel} method.</p>
+	 * @param o The {@link fr.sos.witchhunt.controller.interactions.Menu#getOptions() chosen Menu entry}.
+	 * @see fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) InputMediator::makeChoice(Menu)
+	 * @see fr.sos.witchhunt.controller.ConcreteInputMediator#makeChoice(Menu) ConcreteInputMediator::makeChoice(Menu)
+	 * 
+	 * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#choiceHasBeenMade(Object) GamePanel::choiceHasBeenMade(Object)
+	 * @see fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel#resetChoicesPanel() MainMenuPanel::resetChoicesPanel()
+	 * 
+	 * @see fr.sos.witchhunt.controller.interactions.Menu#getOptions() Menu::getOptions()
+	 */
+	public void choiceHasBeenMade(Object o) {
 		if(this.gamePanel!=null) {
 			SwingUtilities.invokeLater(new Runnable() {
 				 @Override
 				public void run() {
-				    gamePanel.makeChoice(m);
+					 if(gamePanel!=null) gamePanel.choiceHasBeenMade(o);
 				}
 			});
 		}
-		else if (this.mainMenuPanel!=null) {
+		else if (this.mainMenuPanel!=null){
 			SwingUtilities.invokeLater(new Runnable() {
 				 @Override
 				public void run() {
-				    mainMenuPanel.makeChoice(m);
+				    mainMenuPanel.resetChoicesPanel();
 				}
 			});
 		}
 	}
+
+	/**
+	 * <b>Displays a {@link fr.sos.witchhunt.controller.interactions.Menu Menu} containing only Rumour cards</b> as entries 
+	 * on the {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel ingame scene}, if it is active.
+	 * 
+	 * @param m A menu containing entries of type {@link fr.sos.witchhunt.model.cards.RumourCard RumourCard}.
+	 * @param forceReveal If this boolean is <i>true</i>, even {@link fr.sos.witchhunt.model.cards.RumourCard#isRevealed() unrevealed Rumour cards'} information will be visible.
+	 * 
+	 * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#displayCards(Menu, boolean) GamePanel::displayCards(Menu, boolean)
+	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayCa
+	 * @see fr.sos.witchhunt.model.cards.RumourCard RumourCard
+	 */
+	private void displayCardsChoiceMenu(Menu m,boolean forceReveal) {
+		if(this.gamePanel!=null) {
+			SwingUtilities.invokeLater(new Runnable() {
+				 @Override
+				public void run() {
+				    gamePanel.displayCards(m,forceReveal);
+				}
+			});
+		}
+	}
+	
+	
 	
 	public void displayPlayerAddedScreen(Player p) {
 		if(this.matchSetupPanel!=null) this.matchSetupPanel.addedOne(p);
@@ -320,13 +470,7 @@ public final class GUIView {
 	public void displayChooseDefenseMessage(Player p) {
 		if(gamePanel!=null) 
 			gamePanel.switchDeck(p.getHand(),true);
-		/*if(gamePanel!=null) 
-			gamePanel.displaySecondaryNotification(
-				new Notification(
-						"The village's pyre has been lit up.\n",
-						Theme.NORMAL
-				)
-			);*/
+
 
 	}
 
@@ -435,19 +579,10 @@ public final class GUIView {
 							Theme.NORMAL
 					)
 			);
-	}
-
-
-	public void displayOnlyTwoUnrevealedRemainingScreen() {
-		//AFFICHER QUELQUE CHOSE DE PARTICULIER SUR LE PLAYERS PANEL
-	}
-	
-
-	
+	}	
 
 	public void displayPlayerPlaysWitchEffectScreen(Player p, RumourCard rc) {
 		if(gamePanel!=null) {
-			//gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
 			gamePanel.displayMainNotification(
 					new Notification(
 							p.getName()+" uses "+stringifyRumourCard(rc, true,rc::getWitchEffectDescription),
@@ -455,14 +590,11 @@ public final class GUIView {
 					)
 			);
 			gamePanel.updateCardRevealStatus(rc);
-			//gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
 		}
-		//UPDATE REVEAL STATUS
 	}
 	
 	public void displayPlayerPlaysHuntEffectScreen(Player p, RumourCard rc) {
 		if(gamePanel!=null) {
-			//gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
 			gamePanel.displayMainNotification(
 					new Notification(
 						p.getName()+" uses "+stringifyRumourCard(rc, true,rc::getHuntEffectDescription),
@@ -470,15 +602,12 @@ public final class GUIView {
 					)
 			);
 			gamePanel.updateCardRevealStatus(rc);
-			//gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
 		}
-		//UPDATE REVEAL STATUS
 	}
 	
 	
 	public void displayPlayerHasChosenCardScreen(Player p, RumourCard chosen, RumourCardsPile from, boolean forceReveal) {
 		if(gamePanel!=null) {
-			//gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
 			gamePanel.displayMainNotification(
 					new Notification(
 							p.getName()+" has taken "+stringifyRumourCard(chosen, forceReveal, chosen::getWitchEffectDescription ,chosen::getHuntEffectDescription),
@@ -489,25 +618,21 @@ public final class GUIView {
 			if(from!=p.getHand()) gamePanel.updateDeckContent(from,forceReveal||playerChoosesOwnCard(p, from));
 			gamePanel.resetCardsEffects();
 		}
-		//UPDATE CARDS PANEL
 	}
 
 
 	public void displayPlayerHasDiscardedCardScreen(Player owner, RumourCard rc) {
 		if(gamePanel!=null) {
-			//if(rc.isRevealed())gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
 			gamePanel.displayMainNotification(
 					new Notification(
 						owner.getName()+" has discarded "+stringifyRumourCard(rc, false, rc::getWitchEffectDescription ,rc::getHuntEffectDescription),
 						Theme.NORMAL
 					)
 			);
-			//if(rc.isRevealed())gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
 			gamePanel.updateDeckContent(owner.getHand(),false);
 			gamePanel.updateDeckContent(tabletop.getPile(),false);
 			gamePanel.resetCardsEffects();
 		}
-		//UPDATE PILE AND OWNER'S HAND
 	}
 
 
@@ -558,17 +683,13 @@ public final class GUIView {
 
 	public void displayPlayerHasResetCardScreen(Player player, RumourCard rc) {
 		if(gamePanel!=null) {
-			//gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
 			gamePanel.displayMainNotification(
 					new Notification(
 							player.getName() +" took back "+stringifyRumourCard(rc, true, rc::getWitchEffectDescription ,rc::getHuntEffectDescription),
 							Theme.NORMAL
 					)
 			);
-			//gamePanel.updateCardRevealStatus(rc); no
-			//gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
 		}
-		//MAKE RC UNREVEALED ON CARDS PANEL
 	}
 
 
@@ -649,11 +770,35 @@ public final class GUIView {
 						Theme.TURN
 					)
 			);
-			//DISABLE inactive players' button
 		}
 		
 	}
 	
+	public void displayStrategyChange(Player p, PlayStrategy strat) {
+		if(gamePanel!=null) {
+			gamePanel.displaySecondaryNotification(
+					new Notification(p.getName()+" opts for "+strat.toString()+".\n",
+					Theme.SCORE
+				)
+			);
+		}
+	}
+
+
+	public void displayScoreBoard(ScoreBoard sb) {
+		if(gamePanel!=null) {
+			gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
+			gamePanel.displaySecondaryNotification(
+				new Notification(
+						"\t"+sb.toString().replace("/+/", "\t"),
+						Theme.SCORE
+				)
+			);
+			gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
+		}
+	}
+	
+	//TODO JAVADOC
 	private String stringifyRumourCard(RumourCard rc,boolean forceReveal,Supplier<String> ...effectGetters) {
 		StringBuffer sb = new StringBuffer();
 		if(forceReveal||rc.isRevealed()) {
@@ -688,15 +833,6 @@ public final class GUIView {
 			return "*Unrevealed*\n";
 		}
 		
-	}
-	
-	public void setTabletop(Tabletop tabletop) {
-		this.tabletop=tabletop;
-	}
-	
-	private boolean playerChoosesOwnCard(Player p,RumourCardsPile from) {
-
-		return p==from.getOwner();
 	}
 	
 	public void displayChooseAnyCardScreen(Player p,RumourCardsPile from) {
@@ -755,29 +891,19 @@ public final class GUIView {
 	}
 
 
-	public void displayStrategyChange(Player p, PlayStrategy strat) {
-		if(gamePanel!=null) {
-			gamePanel.displaySecondaryNotification(
-					new Notification(p.getName()+" opts for "+strat.toString()+".\n",
-					Theme.SCORE
-				)
-			);
-		}
+	
+	public void setTabletop(Tabletop tabletop) {
+		this.tabletop=tabletop;
 	}
+	
+	//TODO JAVADOC
+	private boolean playerChoosesOwnCard(Player p,RumourCardsPile from) {
 
-
-	public void displayScoreBoard(ScoreBoard sb) {
-		if(gamePanel!=null) {
-			gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
-			gamePanel.displaySecondaryNotification(
-				new Notification(
-						"\t"+sb.toString().replace("/+/", "\t"),
-						Theme.SCORE
-				)
-			);
-			gamePanel.displaySecondaryNotification(new Notification(Theme.CRLF));
-		}
+		return p==from.getOwner();
 	}
+	
+	
+
 
 
 	

@@ -163,7 +163,7 @@ public final class ConcreteInputMediator implements InputMediator {
 	@Override
 	public void wannaContinue() {
 		console.logContinueMessage();
-		gui.wannaContinue(this);
+		gui.wannaContinue();
 		try {
 			getStdInput();
 		} catch (InterruptedException e) {
