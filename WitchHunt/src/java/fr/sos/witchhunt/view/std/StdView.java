@@ -10,12 +10,69 @@ import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
 
-
+/**
+ * <b>Central class of the console view, responsible for console display.</b>
+ * <p>Comes with console-display related utilities ({@link #logDashedLine() drawing a line, #setTabulation(int) managing indentation}) ...</p>
+ * <p>Defines one method per situation where console display is required.</p>
+ * <p>Special character sequences can be used.</p>
+ * <p>A "/c/" sequence in {@link fr.sos.witchhunt.controller.interactions.Menu a menu's} String option means "display this entry only in the console view". The sequence itselfs will be invisible</p>
+ * <p>A "/+/" sequence in a String will be replaced by the sum of the current {@link #offset} and the current {@link #tabulation} to display all lines after the first one as within a paragraph.</p>
+ * 
+ * <p>Display requests sent from the Model are supposed to be managed by {@link fr.sos.witchhunt.controller.DisplayMediator a DisplayMediator}.</p>
+ *
+ * <p>Not in charge of collecting any input. See {@link InterruptibleStdInput}.</p>
+ *
+ * @see fr.sos.witchhunt.controller.DisplayMediator DisplayMediator
+ * @see fr.sos.witchhunt.controller.ConcreteDisplayMediator ConcreteDisplayMediator
+ * 
+ * @see fr.sos.witchhunt.controller.interactions.Menu Menu
+ * 
+ * @see fr.sos.witchhunt.view.std
+ */
 public final class StdView {
 	
+	/**
+	 * <p>When using {@link #tabbedLog(String)} or {@link #tabbedPrint(String)}, any "/+/" sequence <b>will be replaced by 
+	 * a number of "\t" </b> equal to this field + a number of ' ' characters equal to {@link #offset}.</p>
+	 * <p>For example, if {@link #tabulation} == 2 and {@link #offset} == "LO02",
+	 * <code>{@link #tabbedLog(String) tabbedLog("Roses are red\n/+/,Violets are blue")}</code> will log the following String into the console :
+	 * <pre>\t\tLO02Roses are red\n\t\t    Violets are blue</pre></p>
+	 * 
+	 * <p>Allows displaying dynamically-indented paragraphs.</p>
+	 * <p>The "/+/" sequence should not be added to the first '\n' (newline character)	of the paragraph.</p>
+	 * @see #offset
+	 * @see #tabbedLog(String)
+	 * @see #tabbedPrint(String)
+	 * @see #increaseTabulation()
+	 * @see #decreaseTabulation()
+	 * @see #setTabulation(int)
+	 */
 	int tabulation = 0;
+	
+	/**
+	 * <p>This String will be <b>displayed before the String parameter of any display method</b> within this class.</p>
+	 * <p>When using {@link #tabbedLog(String)} or {@link #tabbedPrint(String)}, any "/+/" sequence <b>will be replaced by 
+	 * a number of "\t" </b> equal to {@link #tabulation} + a number of ' ' character equal to this String's length.</p>
+	 * 
+	 * <p>For example, if {@link #tabulation} == 0 and {@link #offset} == "LO02",
+	 * <code>{@link #tabbedLog(String) tabbedLog("Roses are red\n/+/,Violets are blue")}</code> will log the following String into the console :
+	 * <pre>LO02Roses are red\n    Violets are blue</pre></p>
+	 * 
+	 * <p>Allows displaying dynamically-indented paragraphs precedented by this character sequence and normalized in terms of indentation.</p>
+	 * <p>The "/+/" sequence should not be added to the first '\n' (newline character)	of the paragraph.</p>
+	 * @see #offset
+	 * @see #tabbedLog(String)
+	 * @see #tabbedPrint(String)
+	 * @see #increaseTabulation()
+	 * @see #decreaseTabulation()
+	 * @see #setTabulation(int)
+	 */
 	private String offset="";
 	
+	/**
+	 * <b>Logs the welcome message into the console when instantiated.</b>
+	 * @see #logSplash()
+	 */
 	//CONSTRUCTORS
 	public StdView() {
 		logStarsLine();
@@ -30,15 +87,35 @@ public final class StdView {
 		decreaseTabulation();
 	}
 	
+//UTILS
+	
+	/**
+	 * <b>Calls {@link #tabbedPrint(String)} and logs a newline '\n' character.</b>
+	 * @param msg The String to be logged with the current {@link #tabulation} and {@link #offset}.
+	 * @see #tabbedPrint(String)
+	 * @see #crlf()
+	 */
 	public void tabbedLog(String msg) {
 		tabbedPrint(msg);
 		crlf();
 	}
 	
+	/**
+	 * <b>Simply calls <code>System.out.println</code> after replacing any "/c/" ("console-only") sequence by an empty String</b> 
+	 * @param msg The text to be logged into the console.
+	 */
 	public void log(String msg) {
 		System.out.println(msg.replace("/c/",""));
 	}
 	
+	/**
+	 * <p>- Prints the current{@link #offset}.</p>
+	 * <p>- Prints the {@link #tabulation} times '\t'.</p>
+	 * <p>- Prints the first line of the given String.</p>
+	 * <p>- Prints all other lines, replacing any "/+/" sequence by {@link #offset} times ' ' and {@link #tabulation} times '\t'
+	 * <p>- No '\n' character added at the end, in opposition to {@link #tabbedLog(String)}.
+	 * @param msg The text to display. My contain "/+/" ("Catch-up firstline indentation") special sequences. 
+	 */
 	public void tabbedPrint(String msg) {
 		StringBuffer sb = new StringBuffer();
 		StringBuffer megaTabSb= new StringBuffer();
@@ -54,39 +131,139 @@ public final class StdView {
 		sb.append(msg.replace("/+/", megaTabSb.toString()));
 		System.out.print(sb.toString());
 	}
+	
+	/**
+	 * Simply calls <code>System.out.print</code> with the given String as a parameter.
+	 * @param msg The String to be displayed with no modifications.
+	 */
 	public void print(String msg) {
 		System.out.print(msg);
 	}
 	
+	/**
+	 * <b>Logs a fancy stars line into the console.</b>
+	 * @see #log(String)
+	 */
 	public void logStarsLine() {
 		log("*********************************************************");
 	}
 	
+	/**
+	 * <b>Logs a fancy dashed line into the console.</b>
+	 * @see #log(String)
+	 */
 	public void logDashedLine() {
 		log("---------------------------------------------------------");
 	}
 	
+	/**
+	 * <b>Logs an indented and porous dashed line into the console.</b>
+	 * @see #log(String)
+	 */
 	public void logWeakDashedLine() {
 		log("     - - - - - - - - - - - - - - - - - - - - - - - - - - -");
 	}
 	
+	/**
+	 * <b>Logs a solid line made of underscore '_' characters.</b>
+	 * @see #log(String)
+	 */
 	public void logHardLine() {
 		log("―――――――――――――――――――――――――――――――――――――――――――――――――――――――――");
 	}
 	
+	/**
+	 * <b>Logs a '\n' newline character into the console.</b>
+	 */
 	public void crlf() {
-		//new line
-		log("");
+		System.out.print('\n');
 	}
 	
+	/**
+	 * <b>Displays a prompt inviting the user to enter input into the console.</b>
+	 * <p>Not in charge of collecting the input : see {@link InterruptibleStdInput}.</p>
+	 * @see InterruptibleStdInput
+	 * @see fr.sos.witchhunt.controller.InputMediator#getStringInput() InputMediator::getStringInput()
+	 */
 	public void invite() {
 		System.out.print("\t>> ");
 	}
 	
+	/**
+	 * <b>Displays a message asking for user-input before continuing.</b>
+	 * <p>Not in charge of collecting the input and pausing the game : see {@link InterruptibleStdInput}.</p>
+	 * @see InterruptibleStdInput
+	 * @see fr.sos.witchhunt.controller.InputMediator#wannaContinue() InputMediator::wannaContinue()
+	 */
 	public void logContinueMessage() {
 		log("\tPress ENTER to continue:");
 	}
 	
+	/**
+	 * @see #offset
+	 */
+	public void setOffset(String str) {
+		this.offset=str;
+	}
+	/**
+	 * @see #offset
+	 */
+	public void setBlankOffset(String str) {
+		this.offset=" ".repeat(str.length());
+	}
+	/**
+	 * @see #offset
+	 */
+	public void addOffset(String str) {
+		this.offset+=str;
+	}
+	/**
+	 * @see #offset
+	 */
+	public void resetOffset() {
+		this.offset="";
+	}
+	/**
+	 * @see #tabulation
+	 */
+	public void setTabulation(int t) {
+		this.tabulation=t;
+	}
+	/**
+	 * @see #tabulation
+	 */
+	public void increaseTabulation() {
+		this.tabulation++;
+	}
+	/**
+	 * @see #tabulation
+	 */
+	public void decreaseTabulation() {
+		this.tabulation--;
+	}
+
+//ONE DISPLAY METHOD FOR EACH SITUATION REQUIRING CONSOLE DISPLAY
+	
+	/**
+	 * <p><b>Converts a single {@link fr.sos.witchhunt.controller.interactions.Menu#getOptions() Menu's entry} into a String. (Console version)</b></p>
+	 * <p>Conversion is generaly more verbose than for the {@link fr.sos.witchhunt.view.gui.scenes.ActionButton#makeButtonText(Object) Graphical User Interface}.</p>
+	 * <p>A {@link fr.sos.witchhunt.controller.interactions.Menu#getOptions() Menu's entry} is of the <code>Object</code> type. The conversion result will depend on <code>instanceof</code> assertions, testing for 
+	 * a membership to a more specific type.</p>
+	 * <p>A String is displayed as it is, excepted for "/c/" ("Console-only" special sequence), which will be removed.</p>
+	 * <p>An {@link fr.sos.witchhunt.model.Identity Identity} will display a text corresponding to it.</p>
+	 * <p>A {@link fr.sos.witchhunt.model.players.TurnAction TurnAction} or a {@link fr.sos.witchhunt.model.players.DefenseAction DefenseAction} will be translated into a verbose description of the action's effect.</p>
+	 * <p>A {@link fr.sos.witchhunt.model.players.Player Player} or a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} will be replaced by the value of their <code>getName()</code> method.</p>
+	 * @param o A {@link fr.sos.witchhunt.controller.interactions.Menu#getOptions() Menu's entry} (of type <code>Object</code>)
+	 * @return The String describing the Menu's entry, depending on the classes or enums it is an instance of.
+	 * 
+	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
+	 * @see fr.sos.witchhunt.controller.interactions.Menu#getOptions() Menu::getOptions()
+	 * 
+	 * @see #makeMenu(Menu)
+	 * @see #logPossibilities(Menu)
+	 * 
+	 * @see fr.sos.witchhunt.view.gui.scenes.ActionButton#makeButtonText(Object) Console homologue of the GUI's ActionButton::makeButtonText(Object) method.
+	 */
 	public String stringifyMenuOption(Object o) {
 		if (o instanceof String) {
 			String str = (String) o;
@@ -132,6 +309,17 @@ public final class StdView {
 		return o.toString();
 	}
 	
+	/**
+	 * <p><b>Displays an Application-scale {@link fr.sos.witchhunt.controller.interactions.Menu Menu}, (such as the {@link fr.sos.witchhunt.controller.core.Game#gotoMainMenu() Game's main menu}) into the console.</b></p>
+	 * <p>- Logs the {@link fr.sos.witchhunt.controller.interactions.Menu#getName() Menu's entitled} in UPPERCASE</p>
+	 * <p>- {@link #logHardLine() Logs a solid separator}.</p>
+	 * <p>- {@link #stringifyMenuOption(Object) Converts each entry of this Menu} into a String and logs it.</p> 
+	 * <p>Secondary menus are displayed differently using the {@link #logPossibilities(Menu)} method.</p>
+	 * @param m The {@link fr.sos.witchhunt.controller.interactions.Menu Menu} to be displayed into the console.
+	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
+	 * @see #logPossibilities(Menu)
+	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayMenu(Menu) DisplayMediator::displayMenu(Menu) 
+	 */
 	public void makeMenu(Menu m) {
 		//used for main menus
 		crlf();
@@ -150,6 +338,17 @@ public final class StdView {
 		crlf();
 	}
 	
+	/**
+	 * <p><b>Displays a match-scale, secondary {@link fr.sos.witchhunt.controller.interactions.Menu Menu}, (such as a {@link fr.sos.witchhunt.model.players.HumanPlayer#chooseNextPlayer() "Choose the next Player to play"} menu) into the console.</b></p>
+	 * <p>All menus created from {@link fr.sos.witchhunt.model model} to ask an user to make a choice should be displayed as secondary menus.</p> 
+	 * <p>- Logs the {@link fr.sos.witchhunt.controller.interactions.Menu#getName() Menu's entitled} with no modifications</p>
+	 * <p>- {@link #stringifyMenuOption(Object) Converts each entry of this Menu} into a String and logs it.</p> 
+	 * <p>Application-scale menus are displayed differently using the {@link #makeMenu(Menu)} method.</p>
+	 * @param m The {@link fr.sos.witchhunt.controller.interactions.Menu Menu} to be displayed into the console.
+	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
+	 * @see #makeMenu(Menu)
+	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayPossibilities(Menu) DisplayMediator::displayPossibilities(Menu) 
+	 */
 	public void logPossibilities(Menu possibilities) {
 		//used for making choices within a match
 		log("\t"+possibilities.getName());
@@ -165,6 +364,12 @@ public final class StdView {
 		crlf();
 	}
 
+	/**
+	 * <p><b>Displays a fancy ASCII-art splash.</b></p>
+	 * <p>Indentation is determined dynamically thanks to the "/+/" ("Catch-up firstline indentation") special characters sequence.</p>
+	 * @see #StdView() The splash is displayed at instantiation.
+	 * @see #tabbedLog(String)
+	 */
 	public void logSplash() {
 		tabbedPrint(" _     _         	\n"
 				+ "/+/' )   / _/_    /    \n" 
@@ -327,17 +532,6 @@ public final class StdView {
 		tabbedLog("*Unrevealed*");
 	}
 	
-	//SETTERS
-	public void setTabulation(int t) {
-		this.tabulation=t;
-	}
-	public void increaseTabulation() {
-		this.tabulation++;
-	}
-	public void decreaseTabulation() {
-		this.tabulation--;
-	}
-
 	public void logRumourCard(String name, boolean revealed, String additionnalEffectDescription, String witchEffectDescription,
 		String huntEffectDescription) {
 		tabbedLog(name + ((revealed)?"\t(Revealed)":""));
@@ -396,19 +590,6 @@ public final class StdView {
 		logEffect(cardName,additionnalEffectDescription,effectDescription);
 		resetOffset();
 		crlf();
-	}
-
-	public void setOffset(String str) {
-		this.offset=str;
-	}
-	public void setBlankOffset(String str) {
-		this.offset=" ".repeat(str.length());
-	}
-	public void addOffset(String str) {
-		this.offset+=str;
-	}
-	public void resetOffset() {
-		this.offset="";
 	}
 
 	public void logHasChosenCardMessage(String playerName,String cardName,boolean revealed,String additionnalEffectDescription,
@@ -569,9 +750,6 @@ public final class StdView {
 		log("Added "+p.getName()+((p instanceof HumanPlayer)?" (Human)":""));
 		crlf();
 	}
-
-
-
 	
 
 }
