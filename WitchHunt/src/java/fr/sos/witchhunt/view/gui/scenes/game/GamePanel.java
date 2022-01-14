@@ -34,8 +34,6 @@ import fr.sos.witchhunt.model.flow.ScoreCounter;
 import fr.sos.witchhunt.model.flow.ScoreCounter.ScoreBoard;
 import fr.sos.witchhunt.model.players.HumanPlayer;
 import fr.sos.witchhunt.model.players.Player;
-import fr.sos.witchhunt.view.gui.Notification;
-import fr.sos.witchhunt.view.gui.Theme;
 import fr.sos.witchhunt.view.gui.Window;
 import fr.sos.witchhunt.view.gui.scenes.ChoicesPanel;
 import fr.sos.witchhunt.view.gui.scenes.GridBagCell;

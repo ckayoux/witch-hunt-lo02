@@ -13,8 +13,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import fr.sos.witchhunt.view.gui.Theme;
-
 /**
  * <b>An extension of JPanel managed by a {@link java.awt.GridBagLayout}.</b>
  * <p><b>{@link GridBagPanel this} {@code <#>--} {@link GridBagCell GridBagCells}.</b> The GridBagPanel can create plural GridBagCells with a chosen position in the grid as well as a 

@@ -13,11 +13,11 @@ import javax.imageio.ImageIO;
 
 import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.controller.interactions.Menu;
-import fr.sos.witchhunt.view.gui.Notification;
-import fr.sos.witchhunt.view.gui.Theme;
 import fr.sos.witchhunt.view.gui.scenes.ChoiceButton;
 import fr.sos.witchhunt.view.gui.scenes.ChoicesPanel;
 import fr.sos.witchhunt.view.gui.scenes.GridBagPanel;
+import fr.sos.witchhunt.view.gui.scenes.game.Notification;
+import fr.sos.witchhunt.view.gui.scenes.game.Theme;
 
 /**
  * <p><b>The Main Menu scene.</b></p>

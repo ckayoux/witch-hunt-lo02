@@ -3,7 +3,6 @@ package fr.sos.witchhunt.view.gui;
 import java.util.List;
 import java.util.function.Supplier;
 
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import fr.sos.witchhunt.controller.InputMediator;
@@ -17,6 +16,8 @@ import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.model.players.TurnAction;
 import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
 import fr.sos.witchhunt.view.gui.scenes.game.GamePanel;
+import fr.sos.witchhunt.view.gui.scenes.game.Notification;
+import fr.sos.witchhunt.view.gui.scenes.game.Theme;
 import fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel;
 import fr.sos.witchhunt.view.gui.scenes.matchsetup.MatchSetupPanel;
 

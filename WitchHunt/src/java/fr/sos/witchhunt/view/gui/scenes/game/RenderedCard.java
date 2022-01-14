@@ -14,8 +14,6 @@ import javax.swing.JLabel;
 
 import fr.sos.witchhunt.model.cards.Card;
 import fr.sos.witchhunt.model.cards.RumourCard;
-import fr.sos.witchhunt.view.gui.Notification;
-import fr.sos.witchhunt.view.gui.Theme;
 
 public class RenderedCard extends JLabel {
 	private RumourCard represents=null;

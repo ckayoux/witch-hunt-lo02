@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import fr.sos.witchhunt.controller.InputMediator;
-import fr.sos.witchhunt.controller.interactions.Menu;
 import fr.sos.witchhunt.controller.interactions.PlayerCreatorController;
 import fr.sos.witchhunt.model.flow.Tabletop;
 import fr.sos.witchhunt.model.players.Player;
@@ -29,6 +28,7 @@ import fr.sos.witchhunt.view.gui.Window;
  * <p>Created and controlled by the {@link fr.sos.witchhunt.view.gui.GUIView GUI View's central class}. See {@link fr.sos.witchhunt.view.gui.GUIView#gotoMatchSetupPanel() GUIView::gotoMatchSetupPanel()}.</p>
  * <p>Is a visual representation of the {@link fr.sos.witchhunt.model.flow.Tabletop state induced by Tabletop::addPlayers()}.</p>
  * <p>Implements {@link fr.sos.witchhunt.view.InputSource InputSource} as it is able to produce Players and {@link #post(Player) send} them to an instance of {@link fr.sos.witchhunt.controller.InputMediator InputMediator}.</p>
+ * <p>this {@code <#>--} {@link PlayerCreatorPanel}</p>
  * @see fr.sos.witchhunt.model.flow.Tabletop Tabletop::addPlayers()
  * 
  * @see PlayerCreatorPanel
@@ -190,7 +190,8 @@ public class MatchSetupPanel extends JPanel implements InputSource {
 	/**
 	 * <p><b>Notifies this object that a {@link fr.sos.witchhunt.model.players.Player Player} has been added to the match</b> - it doesn't matter whether it has been created using this view or not.</p>
 	 * <p>Called by the {@link #inputMediator InputMediator} collecting input via this object to synchronize all concurrent views in charge of creating players.</p>
-	 * <p>{@link #update() Updates} the scene based on this notification.
+	 * <p>{@link #update() Updates} the scene based on this notification.</p>
+	 * @see PlayerCreatorPanel#addedOne(Player)
 	 * @see fr.sos.witchhunt.controller.ConcreteInputMediator#createPlayer(int, java.util.List, boolean) ConcreteInputMediator::createPlayer(int, java.util.List, boolean)
 	 * @param p The {@link fr.sos.witchhunt.model.players.Player Player} who has been added to the match.
 	 */

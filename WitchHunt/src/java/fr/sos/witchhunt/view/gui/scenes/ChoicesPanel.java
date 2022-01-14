@@ -18,7 +18,6 @@ import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.controller.interactions.ChoicesPanelController;
 import fr.sos.witchhunt.controller.interactions.Menu;
 import fr.sos.witchhunt.model.cards.RumourCard;
-import fr.sos.witchhunt.view.gui.Theme;
 /**
  * <p><b>This class defines a visual representation for {@link fr.sos.witchhunt.controller.interactions.Menu Menus} on the GUI View.</b></p>
  * <p>Is an extension of {@link javax.swing.JPanel JPanel} adapted to fit into a scene that is an extension of {@link GridBagPanel}. (see {@link GridBagCell})</p>

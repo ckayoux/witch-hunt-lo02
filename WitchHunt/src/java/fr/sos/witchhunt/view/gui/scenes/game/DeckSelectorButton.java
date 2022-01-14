@@ -14,8 +14,6 @@ import javax.swing.border.LineBorder;
 
 import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.players.Player;
-import fr.sos.witchhunt.view.gui.Notification;
-import fr.sos.witchhunt.view.gui.Theme;
 
 public class DeckSelectorButton extends JButton {
 	
