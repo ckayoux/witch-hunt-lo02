@@ -17,7 +17,7 @@ import fr.sos.witchhunt.model.cards.RumourCardsPile;
 public interface PlayerDisplayRequester {
 
 	/**
-	 * <b>Sets the value of the controller in charge of displaying players-related information</p> 
+	 * <b>Sets the value of the controller in charge of displaying players-related information</b> 
 	 * @param dm : a controller implementing the interface DisplayMediator
 	 */
 	public void setDisplayMediator(DisplayMediator dm);

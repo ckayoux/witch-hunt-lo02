@@ -21,7 +21,7 @@ import fr.sos.witchhunt.view.std.StdView;
  * <p>Defines a method per situation requiring update of the display. These methods are specified by the {@link DisplayMediator interface}.</p>
  * <p>The {@link fr.sos.witchhunt.model model}'s classes requiring to update the view must be associated with a class implementing {@link InputMediator}, through which they can send
  * their requests by calling its public methods.</p>
- * <p>Knows the central class of each concurrent view ({@link fr.sos.witchhunt.view.std.StdView StdView} and {@link fr.sos.witchhunt.view.std.GUIView GUIView}).
+ * <p>Knows the central class of each concurrent view ({@link fr.sos.witchhunt.view.std.StdView StdView} and {@link fr.sos.witchhunt.view.gui.GUIView GUIView}).
  * These classes come with a set of public methods corresponding to each situation.
  * Most of this class' methods will update all concurrent views, by calling the methods corresponding to the requested notification on each view-related known classes.</p>
  * <p>If new views were to be added, they should be managed by this class, the same way it manages the already existing views.</p>
@@ -30,10 +30,10 @@ import fr.sos.witchhunt.view.std.StdView;
  *
  * @see fr.sos.witchhunt.view
  * @see fr.sos.witchhunt.view.std.StdView StdView, the central class of the Console view
- * @see fr.sos.witchhunt.view.std.GUIView GUIView, the central class of the Graphical User Interface
+ * @see fr.sos.witchhunt.view.gui.GUIView GUIView, the central class of the Graphical User Interface
  *
  * @see fr.sos.witchhunt.model
- * @see fr.sos.witchhunt.players.PlayerDisplayRequester Players can send many different types of display requests, specified by the PlayerDisplayRequester interface's methods
+ * @see fr.sos.witchhunt.model.players.PlayerDisplayRequester Players can send many different types of display requests, specified by the PlayerDisplayRequester interface's methods
  * 
  * @see DisplayMediator Stranger classes send their display requests through an instance of a class implementing DisplayMediator
  * @see InputMediator User-input is gathered from the view by another component, the InputMediator

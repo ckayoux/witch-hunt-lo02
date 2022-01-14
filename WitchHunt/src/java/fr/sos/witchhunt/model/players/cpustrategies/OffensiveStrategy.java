@@ -60,7 +60,7 @@ public class OffensiveStrategy extends CPUStrategy {
 	 * <p>If the calling player is <i>{@link fr.sos.witchhunt.model.Identity#VILLAGER VILLAGER}</i>, the more cards they have, the more likely it is to choose to hunt.</p>
 	 * <p>Otherwise, if they are a <i>{@link fr.sos.witchhunt.model.Identity#WITCH WITCH}</i>, they will hunt only if they have cards with {@link CardValue#getHuntValue() valuable Hunt! effects},
 	 * that are not {@link CardValue#isRisked() risked}, or if they still have a lot of cards.</p>
-	 * Generally speaking, a <i>{@link fr.sos.witchhunt.model.Identity#WITCH WITCH}</i> using this strategy will be more likely to choose to {@link fr.sos.witchhunt.model.players.TurnAction#ACCUSE accuse}.
+	 * <p>Generally speaking, a <i>{@link fr.sos.witchhunt.model.Identity#WITCH WITCH}</i> using this strategy will be more likely to choose to {@link fr.sos.witchhunt.model.players.TurnAction#ACCUSE accuse}.
 	 * in order to keep their cards.</p>
 	 */
 	@Override

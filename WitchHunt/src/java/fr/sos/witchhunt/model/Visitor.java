@@ -3,7 +3,7 @@ package fr.sos.witchhunt.model;
 import fr.sos.witchhunt.model.players.Player;
 
 /**
- * <p><b>Generic interface implemented by entities that visit <i>{@link Visitable visitables} entities.</b></p> 
+ * <p><b>Generic interface implemented by entities that visit <i>{@link Visitable visitables}</i> entities.</b></p> 
  * <p><i>Implemented in particular by the game's {@link fr.sos.witchhunt.model.flow.ScoreCounter ScoreCounter}, which updates its score table by visiting players each time their score changes.</i></p>
  * <p>Defining a specific method for each class implementing <i>{@link Visitable}</i> is recommended if all Visitors can be lead to visiting them. Otherwise, create a new interface.</p>
  * @see Visitable
@@ -12,7 +12,7 @@ import fr.sos.witchhunt.model.players.Player;
 public interface Visitor {
 	/**
 	 * <b>Visit of a <i>{@link Visitable}</i> entity whose class is unknown by the visitor.</b>
-	 * @param v A reference to a {@link Visitable}</i> entity
+	 * @param v A reference to a <i>{@link Visitable}</i> entity
 	 */
 	void visit(Visitable  v);
 	

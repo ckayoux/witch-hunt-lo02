@@ -17,7 +17,7 @@ import fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy;
  * <p>It overrides all of {@link Player}'s abstract methods.</p>
  * <p>All choices are made using a {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy strategy}, which behaves as an artificial intelligence with a behavior that is suited for specific situations.
  * CPU-controlled players regularly choose one Strategy among others depending on the situation (their position in the ranking, the leading player's score, their number of cards, their score...).
- * This is an implementation of the {@link https://refactoring.guru/fr/design-patterns/strategy Strategy design pattern}.</p>
+ * This is an implementation of the <i>Strategy design pattern</i>.</p>
  * @see Player
  * @see fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy
  * @see #chooseStrategy()
@@ -32,10 +32,8 @@ public final class CPUPlayer extends Player {
 	 */
 	private PlayStrategy chosenStrategy=new GropingStrategy();
 	/**
-	 * @deprecated This attribute has no use excepted if the "Display CPU Players strategy changes" option is activated.
 	 * @see #chooseStrategy() 
 	 */
-	@Deprecated
 	private PlayStrategy oldStrategy = chosenStrategy;
 	/**
 	 * <p><b>A reference to a player known as a {@link fr.sos.witchhunt.model.Identity#WITCH Witch}.</b></p>
@@ -59,6 +57,7 @@ public final class CPUPlayer extends Player {
 	/**
 	 * CPU players' default name is determined by the number of existing CPU Players at instanciation.
 	 * @param nthCpuPlayer This CPUPlayer will be the nth one
+	 * @param id The future CPUPlayer's id
 	 * @see Player#Player(int)
 	 */
 	public CPUPlayer(int id, int nthCpuPlayer) {
@@ -67,8 +66,8 @@ public final class CPUPlayer extends Player {
 	}
 	
 	/**
-	 * <b>{@link #chooseStrategy() Chooses a strategy}, {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#updateBehavior(boolean, Identity, RumourCardsPile) updates its behavior}</b>
-	 * and start playing a turn.</b>
+	 * <p><b>{@link #chooseStrategy() Chooses a strategy}, {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#updateBehavior(boolean, Identity, RumourCardsPile) updates its behavior}</b>
+	 * and starts playing a turn.</p>
 	 * @see #chooseStrategy()
 	 * @see fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#updateBehavior(boolean, Identity, RumourCardsPile) PlayStrategy::updateBehavior(boolean, Identity, RumourCardsPile)
 	 * @see #chooseTurnAction()
@@ -247,7 +246,7 @@ public final class CPUPlayer extends Player {
 	 * <p><b>Chooses the best card (revealed or not) within a pile of Rumour cards, {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#selectBestCard(RumourCardsPile, boolean) based on the chosen strategy}.</b></p>
 	 * <p>The {@link #chosenStrategy} is beforehand {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#updateBehavior(boolean, Identity, RumourCardsPile) updated} in order to have the most accurate possible behavior.</p>
 	 * <p>It is possible to keep secret the properties of unrevealed cards to the {@link #chosenStrategy}.</p>
-	 * @param from The {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards} within which a card must be chosen.
+	 * @param rcp The {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards} within which a card must be chosen.
 	 * @param seeUnrevealedCards If this boolean is <i>true</i>, the {@link #chosenStrategy} will be able to access the information of unrevealed cards as well to make their choice.
 	 * @return The best {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} within the given pile, {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#selectBestCard(RumourCardsPile, boolean) according to the chosen strategy}.
 	 * @see Player#chooseAnyCard(RumourCardsPile, boolean)
@@ -355,7 +354,7 @@ public final class CPUPlayer extends Player {
 	 * Sends a notification informing the view of the played Witch? effect, and simulates a long delay afterwise.
 	 * @see DisplayMediator#displayPlayerPlaysWitchEffectScreen(Player, RumourCard)
 	 * @see #witch()
-	 * @param The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} is played.
+	 * @param rc The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} is played.
 	 */
 	@Override
 	public void requestPlayerPlaysWitchEffectScreen(RumourCard rc) {
@@ -366,7 +365,7 @@ public final class CPUPlayer extends Player {
 	 * Sends a notification informing the view of the played Hunt! effect, and simulates a long delay afterwise.
 	 * @see DisplayMediator#displayPlayerPlaysHuntEffectScreen(Player, RumourCard)
 	 * @see #hunt()
-	 * @param The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} is played.
+	 * @param rc The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} is played.
 	 */
 	@Override
 	public void requestPlayerPlaysHuntEffectScreen(RumourCard rc) {
@@ -385,7 +384,7 @@ public final class CPUPlayer extends Player {
 	};
 
 	/**
-	 * <p><b>Chooses a {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy strategy} based on the player's current situation.</b><p>
+	 * <p><b>Chooses a {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy strategy} based on the player's current situation.</b></p>
 	 * 
 	 * <p>If the player is in relatively good position (score close to 5, is leading or has many cards), the player will opt for an {@link fr.sos.witchhunt.model.players.cpustrategies.OffensiveStrategy offensive strategy},
 	 * allowing them to take more risks, {@link #hunt()} more often, to focus the weakest players, to value the cards with offensive effects and causes them to be more likely to choose 
@@ -415,9 +414,9 @@ public final class CPUPlayer extends Player {
 	 * @see fr.sos.witchhunt.model.players.cpustrategies.DefensiveStrategy DefensiveStrategy
 	 * @see fr.sos.witchhunt.model.players.cpustrategies.GropingStrategy GropingStrategy
 	 * 
-	 * @see Tabletop.getInstance().getRanking() Tabletop::getRanking()
-	 * @see Tabletop.getInstance().getLeadingPlayers() Tabletop::getLeadingPlayers()
-	 * @see Tabletop.getInstance().getLastPlayers() Tabletop::getLastPlayers()
+	 * @see Tabletop#getRanking() Tabletop::getRanking()
+	 * @see Tabletop#getLeadingPlayers() Tabletop::getLeadingPlayers()
+	 * @see Tabletop#getLastPlayers() Tabletop::getLastPlayers()
 	 * @see #getScore()
 	 * @see #getIdentity()
 	 * @see #getHand()

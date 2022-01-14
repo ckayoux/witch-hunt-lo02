@@ -19,7 +19,7 @@ import fr.sos.witchhunt.view.gui.scenes.game.RenderedCard;
  * card's position in the {@link #jList list of choosable rendered cards}. Used for choosing cards directly using their pictures instead of a {@link ChoicesPanelController menu made of buttons}.
  * This integer corresponds to a choice in the {@link Menu} containing all choosable cards ordered the same way.</p>
  * <p>Can be in concurrence with {@link fr.sos.witchhunt.view.std.InterruptibleStdInput Std input} : <code>{@link fr.sos.witchhunt.controller.ConcreteInputMediator#makeChoice(Menu) see ConcreteInputMediator::makeChoice(Menu)}</code>.
- * The first instance of <code>{@link fr.sos.witchhunt.gui.view.InputSource InputSource}</code> to {@link fr.sos.witchhunt.gui.view.InputSource#post(String) post} rules over all others.</p>
+ * The first instance of <code>{@link fr.sos.witchhunt.view.InputSource InputSource}</code> to {@link fr.sos.witchhunt.view.InputSource#post(String) post} rules over all others.</p>
  * 
  * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel GamePanel.CardsPanel.DeckPanel
  * @see fr.sos.witchhunt.view.gui.scenes.game.RenderedCard DeckPanel {@code < >--} RenderedCard
@@ -27,13 +27,13 @@ import fr.sos.witchhunt.view.gui.scenes.game.RenderedCard;
  * @see Menu
  * @see fr.sos.witchhunt.controller.InputMediator InputMediator
  * @see fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) InputMediator::makeChoice(Menu)
- * @see fr.sos.witchhunt.gui.view.std.InterruptibleStdInput InterruptibleStdInput
- * @see fr.sos.witchhunt.gui.view.std.InputSource InputSource
+ * @see fr.sos.witchhunt.view.std.InterruptibleStdInput InterruptibleStdInput
+ * @see fr.sos.witchhunt.view.InputSource InputSource
  */
 public class CardSelectorController implements InputSource {
 	/**
 	 * <p>The instance of {@link fr.sos.witchhunt.controller.InputMediator InputMediator} that is
-	 * {@link fr.sos.witchhunt.controller.InputMediator#wait() awaiting} for {@link fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) an integer choice}
+	 * {@link fr.sos.witchhunt.controller.ConcreteInputMediator#wait() awaiting} for {@link fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) an integer choice}
 	 * and {@link fr.sos.witchhunt.controller.InputMediator#receive() managing the concurrence between all views}.</p>
 	 * <p>If <code>null</code>, the controller is not used for making a choice and transfer it to the model : it is only used to display a {@link fr.sos.witchhunt.view.gui.scenes.game.RenderedCard card} as 
 	 * {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel#setSelectedCard(RenderedCard) selected}, interacting only with the {@link fr.sos.witchhunt.view.gui GUI view}.</p>
@@ -42,13 +42,13 @@ public class CardSelectorController implements InputSource {
 	 * @see #CardSelectorController(List, GamePanel)
 	 * 
 	 * @see fr.sos.witchhunt.controller.InputMediator InputMediator
-	 * @see fr.sos.witchhunt.controller.InputMediator#wait() InputMediator::wait()
+	 * @see fr.sos.witchhunt.controller.ConcreteInputMediator#wait() InputMediator::wait()
 	 * @see fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) InputMediator::makeChoice(Menu)
 	 * @see fr.sos.witchhunt.controller.InputMediator#receive() InputMediator::receive()
 	 */
 	private InputMediator inputMediator=null;
 	/**
-	 * <p>The list of {@link fr.sos.witchhunt.model.view.scenes.game.RenderedCard RenderedCard} covered by this controller.</p>
+	 * <p>The list of {@link fr.sos.witchhunt.view.gui.scenes.game.RenderedCard RenderedCard} covered by this controller.</p>
 	 * <p>- If the controller is {@link #CardSelectorController(List, GamePanel, InputMediator) used for making a choice to transfer to the model}, only choosable cards are covered.</p>
 	 * <p>- Otherwise, any card can be selected, since it is disconnected from the {@link fr.sos.witchhunt.model model} and has holds sway only on the {@link fr.sos.witchhunt.view.gui GUI view}.</p>
 	 */
@@ -120,8 +120,8 @@ public class CardSelectorController implements InputSource {
 	 * @see Menu
 	 * @see fr.sos.witchhunt.controller.InputMediator InputMediator
 	 * @see fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) InputMediator::makeChoice(Menu)
-	 * @see fr.sos.witchhunt.gui.view.std.InterruptibleStdInput InterruptibleStdInput
-	 * @see fr.sos.witchhunt.gui.view.std.InputSource InputSource
+	 * @see fr.sos.witchhunt.view.std.InterruptibleStdInput InterruptibleStdInput
+	 * @see fr.sos.witchhunt.view.InputSource InputSource
 	 * 
 	 * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#cardHasBeenChosen(RenderedCard) GamePanel::cardHasBeenChosen(RenderedCard)
 	 * 

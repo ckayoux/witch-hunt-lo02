@@ -94,14 +94,14 @@ public class ChoiceButton extends JButton {
 	  * <p><b>Sets the background default and hover colors as well as the button's borders</b> on the basis of the given color.</p>
 	  * <p>The button's {@link #bgColor} default background color will become the one given in the method's parameters.</p>
 	  * <p>The background and border colors when hovering and pressing is created automatically by lightening/darkening this color.</p>
-	  * <p>On hover, creates a compound border out of an {@link javax.swing.EmptyBorder to simulate margins} and of a {@link javax.swing.BevelBorder BevelBorder (when hovering/pressing)} or a {@link javax.swing.LineBorder (default)}.</p>
+	  * <p>On hover, creates a compound border out of an {@link javax.swing.border.EmptyBorder to simulate margins} and of a {@link javax.swing.border.BevelBorder BevelBorder (when hovering/pressing)} or a {@link javax.swing.border.LineBorder (default)}.</p>
 	  * <p>The new theme will be displayed when {@link #paintComponent(Graphics) repainting} the component.</p>
 	  * <p>The events are all listened by a specialized {@link #colorChangeManager MouseListener} associated with this class and responsible for styling up the button on MouseEvents.</p>
 	  * @param bg The main color for this button's theme.
 	  * @see java.awt.Color#getHSBColor(float, float, float)
-	  * @see javax.swing.EmptyBorder
-	  * @see javax.swing.LineBorder
-	  * @see javax.swing.BevelBorder
+	  * @see javax.swing.border.EmptyBorder
+	  * @see javax.swing.border.LineBorder
+	  * @see javax.swing.border.BevelBorder
 	  * 
 	  * @see #bgColor
 	  * @see #hoverColor
@@ -227,8 +227,8 @@ public class ChoiceButton extends JButton {
 	 * <p>The result is generally less verbose than for the {@link fr.sos.witchhunt.view.std.StdView#stringifyMenuOption(Object) console view}.</p>
 	 * <p>A {@link fr.sos.witchhunt.controller.interactions.Menu#getOptions() Menu's entry} is of the <code>Object</code> type. The conversion result will depend on <code>instanceof</code> assertions, testing for 
 	 * a membership to a more specific type.</p>
-	 * <p><b>Called by the {@link ChoicesPanel#displayMenu(Menu) ChoicesPanel::displayMenu(Menu) method}.
-	 * <p>A String is displayed as it is, excepted for <b>"/c/" ("Console-only" special sequence)</b>, which will make this method return <code>null</code> to indicate that no button should be made out of this option.</p>
+	 * <p><b>Called by the {@link ChoicesPanel#displayMenu(Menu) ChoicesPanel::displayMenu(Menu) method}.</b></p>
+	 * <p>A String is displayed as it is, excepted for <b>"/c/" ("Console-only" special sequence)</b>, which will make this method return <i>null</i> to indicate that no button should be made out of this option.</p>
 	 * <p>An {@link fr.sos.witchhunt.model.Identity Identity} will display a text corresponding to it.</p>
 	 * <p>A {@link fr.sos.witchhunt.model.players.TurnAction TurnAction} or a {@link fr.sos.witchhunt.model.players.DefenseAction DefenseAction} will be translated into a verbose description of the action's effect.</p>
 	 * <p>A {@link fr.sos.witchhunt.model.players.Player Player} or a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} will be replaced by the value of their <code>getName()</code> method.</p>
@@ -238,8 +238,7 @@ public class ChoiceButton extends JButton {
 	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
 	 * @see fr.sos.witchhunt.controller.interactions.Menu#getOptions() Menu::getOptions()
 	 * 
-	 * @see #makeMenu(Menu)
-	 * @see #logPossibilities(Menu)
+	 * @see ChoicesPanel#displayMenu(Menu)
 	 * 
 	 * @see fr.sos.witchhunt.view.std.StdView#stringifyMenuOption(Object) GUI homologue of the console view's <code>StdView::stringifyMenuOption(Object)</code> method.
 	 */

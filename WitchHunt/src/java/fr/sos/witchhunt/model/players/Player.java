@@ -14,7 +14,7 @@ import fr.sos.witchhunt.model.cards.RumourCardsPile;
 import fr.sos.witchhunt.model.flow.Tabletop;
 
 /**
- * <p><b>This <i>abstract</i> class defines common behavior and specifies required abstract methods for both {@link HumanPlayer human} and {@link CPUPlayer CPU} players.</b><p>
+ * <p><b>This <i>abstract</i> class defines common behavior and specifies required abstract methods for both {@link HumanPlayer human} and {@link CPUPlayer CPU} players.</b></p>
  * <p>A player has a unique name (chosen at the start of a match human players), and a unique id, which is auto-incremented.</p>
  * <p>Players are added {@link fr.sos.witchhunt.model.flow.Tabletop#startMatch() at the start of the match} by an instance of {@link fr.sos.witchhunt.model.flow.Tabletop}.</p>
  * <p>They have an {@link fr.sos.witchhunt.model.Identity identity}, 
@@ -27,7 +27,7 @@ import fr.sos.witchhunt.model.flow.Tabletop;
  * <p>They implement {@link fr.sos.witchhunt.model.Resettable Resettable} and are {@link #reset reset} at the end of each round.</p>
  * <p>They also implement {@link fr.sos.witchhunt.model.Visitable Visitable}, which makes them a possible target for classes implementing 
  * {@link fr.sos.witchhunt.model.Visitor Visitor}. The score they obtained at each round is saved by an instance of {@link fr.sos.witchhunt.model.flow.ScoreCounter ScoreCounter},
- * using the {@link https://refactoringguru.cn/design-patterns/visitor Visitor design pattern}.</p>
+ * using the <i>Visitor design pattern</i>.</p>
  * <p>Their display requests are passed to an instance of a class implementing {@link fr.sos.witchhunt.controller.DisplayMediator DisplayMediator}.
  * They themselves implement {@link PlayerDisplayRequester}, which specifies all types of display requests they can need.</p> 
  *
@@ -93,7 +93,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	 * <p>Linked to the player's {@link #identity} attribute.</p>
 	 * <p>Reset when the player is {@link #reset()} themselves.</p>
 	 * <p>Chosen at the start of each round.</p>
-	 * @link fr.sos.witchhunt.model.cards.IdentityCard IdentityCard
+	 * @see fr.sos.witchhunt.model.cards.IdentityCard IdentityCard
 	 * @see #identity
 	 * @see #revealIdentity()
 	 * @see #chooseIdentity()
@@ -127,7 +127,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	protected RumourCardsPile hand;
 	
 	/**
-	 * <p><b>A reference to an adversary forcing the player to accuse someone else on their turn.</b><p>
+	 * <p><b>A reference to an adversary forcing the player to accuse someone else on their turn.</b></p>
 	 * <p>Indeed, the {@link fr.sos.witchhunt.model.cards.EvilEye Evil Eye} {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} can be used by a player to enforce an adversary to accuse
 	 * any player but them the next turn.</p>
 	 * @see #forceToAccuseNextTurn(Player)
@@ -213,7 +213,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	 * @see HumanPlayer#chooseIdentity()
 	 * @see CPUPlayer#chooseIdentity()
 	 * @see fr.sos.witchhunt.model.Identity Identity
-	 * @see fr.sos.witchhunt.model.IdentityCard Identity card
+	 * @see fr.sos.witchhunt.model.cards.IdentityCard Identity card
 	 */
 	public abstract void chooseIdentity();;
 	
@@ -222,7 +222,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	 * Requests display of this event.
 	 * @return The player's {@link #identity}
 	 * @see fr.sos.witchhunt.model.Identity Identity
-	 * @see fr.sos.witchhunt.model.IdentityCard Identity card
+	 * @see fr.sos.witchhunt.model.cards.IdentityCard Identity card
 	 */
 	public Identity revealIdentity() {
 		requestIdentityRevealScreen();
@@ -249,7 +249,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	/**
 	 * <p><b>Chooses an {@link TurnAction action} to perform during the player's turn.</b></p>
 	 * <p>Based on user input for {@link HumanPlayer human players}, done by artificial intelligence for {@link CPUPlayer CPUPlayers}.</p> 
-	 * @return The selected action : {@link TurnAction can be either <i>{@link #accuse(Player) ACCUSE}</i> or <i>{@link #hunt() HUNT}}</i>.
+	 * @return The selected action : {@link TurnAction} can be either <i>{@link #accuse(Player) ACCUSE}</i> or <i>{@link #hunt() HUNT}</i>.
 	 * @see TurnAction
 	 * @see #accuse(Player)
 	 * @see #hunt()
@@ -295,16 +295,6 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 		requestEndOfTurnScreen();
 		
 	}
-	/**
-	
-	 * <b>Elects this player to take the next turn again, and requests for the display of a suitable notification.</b>
-	 * @see #playTurn()
-	 * @see #takeNextTurn()
-	 
-	public void playTurnAgain() {
-		requestPlayTurnAgainScreen();
-		takeNextTurn();
-	}*/
 	
 	/**
 	 * <p><b>Elects the player who is going to take the next turn.</b></p>
@@ -315,6 +305,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	 * @see HumanPlayer#chooseNextPlayer()
 	 * @see CPUPlayer#chooseNextPlayer()
 	 * @see fr.sos.witchhunt.model.flow.Round#setNextPlayer(Player)
+	 * @return The Player who was chosen to take the next turn
 	 */
 	public abstract Player chooseNextPlayer();
 	
@@ -433,7 +424,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	public abstract DefenseAction chooseDefenseAction();
 	
 	/**
-	 * <b>Respond to an {@link #accuse(Player) accusation}, {@link #revealIdentity() revealing the player's identity} or playing a {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect.</b>
+	 * <b>Respond to an {@link #accuse(Player) accusation}, {@link #revealIdentity() revealing the player's identity} or playing a {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect}.</b>
 	 * If the player has no cards with playable witch effects left, they are {@link #forcedReveal()} forced to reveal their identity.
 	 * @return The accused player's disclosed identity, if they revealed it. Otherwise, <i>null</i>.
 	 * @see fr.sos.witchhunt.model.Identity Identity
@@ -536,7 +527,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	 * <p><b>Adds a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} belonging to a given adversary to the player's {@link #hand}.</b></p>
 	 * <p>Requests for a display of this event.</p>
 	 * @param rc The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} added to the player's {@link #hand}.
-	 * @param from The player from which a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} is subtilized.
+	 * @param stolenPlayer The player from which a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} is subtilized.
 	 */
 	public void takeRumourCard(RumourCard rc,Player stolenPlayer) {
 		requestStealCardFromScreen(stolenPlayer);
@@ -544,7 +535,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	}
 	
 	/**
-	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} to {@link #discard(RumourCard) discard from the given {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}.</b>
+	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} to {@link #discard(RumourCard) discard} from the given {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}.</b>
 	 * Based on user-input for {@link HumanPlayer human players}, chosen by artificial intelligence for {@link CPUPlayer CPUplayers}.
 	 * @param in A {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}.
 	 * @return The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} that was chosen to be {@link #discard(RumourCard) discarded}.
@@ -715,10 +706,9 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	/**
 	 * <p><b>Resets some of the player's attributes to their initial states.</b></p>
 	 * <p>Called after the end of each {@link fr.sos.witchhunt.model.flow.Round round} by class {@link fr.sos.witchhunt.model.flow.Tabletop Tabletop}.</p>
-	 * <p>The player's {@link #identity identity} is set back to <i>null</i> and their {@link fr.sos.witchhunt.model.cards.IdentityCard#reset() Identity card is reset}.
-	 * Their {@link #hand} is also {@link fr.sos.witchhunt.model.cards.RumourCardsPile#reset() reset}.
-	 * The player becomes {@link #active} again.</p>
-	 * @see fr.sos.witchhunt.model.Resettable;
+	 * <p>The player's {@link #identity identity} is set back to <i>null</i> and their {@link fr.sos.witchhunt.model.cards.IdentityCard#reset() Identity card is reset}. 
+	 * Their {@link #hand} is also {@link fr.sos.witchhunt.model.cards.RumourCardsPile#reset() reset}. The player becomes {@link #active} again.</p>
+	 * @see fr.sos.witchhunt.model.Resettable
 	 * @see #identity
 	 * @see #identityCard
 	 * @see fr.sos.witchhunt.model.cards.IdentityCard#reset() resetting an Identity card
@@ -739,6 +729,8 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile#isEmpty() RumourCardsPile::isEmpty()
 	 * @see #chooseAnyCard(RumourCardsPile, boolean)
 	 * @see #chooseRevealedCard(RumourCardsPile)
+	 * @param rcp The pile of Rumour cards to test
+	 * @return <i>true</i> if it does contain cards, <i>false</i> otherwise
 	 */
 	public boolean targetPileContainsCards(RumourCardsPile rcp) {
 		if(rcp.isEmpty()) {
@@ -778,7 +770,6 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	
 	/**
 	 * @see DisplayMediator#displayPlayTurnAgainScreen(Player)
-	 * @see #playTurnAgain()
 	 */
 	@Override
 	public void requestPlayTurnAgainScreen() {
@@ -847,7 +838,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	}
 	
 	/**
-	 * @see DisplayMediator#displayChooseDefenseScreen()
+	 * @see DisplayMediator#displayChooseDefenseScreen(Player)
 	 * @see #defend()
 	 */
 	@Override
@@ -922,7 +913,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	/**
 	 * @param forcedReveal If <i>true</i>, unrevealed cards' properties will be shown as well 
 	 * @param from  The pile of Rumour cards within which a card has to be chosen
-	 * @see DisplayMediator#displaySelectCardScreen(RumourCardsPile,boolean)
+	 * @see DisplayMediator#displaySelectCardScreen(Player, RumourCardsPile, boolean)
 	 */
 	@Override
 	public void requestSelectCardScreen(RumourCardsPile from, boolean forcedReveal) {
@@ -932,7 +923,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	/**
 	 * @param forcedReveal If <i>true</i>, unrevealed cards' properties will be shown as well 
 	 * @param from  A pile of unrevealed Rumour cards
-	 * @see DisplayMediator#displaySelectUnrevealedCardScreen(RumourCardsPile,boolean)
+	 * @see DisplayMediator#displaySelectUnrevealedCardScreen(Player, RumourCardsPile, boolean)
 	 */
 	@Override
 	public void requestSelectUnrevealedCardScreen(RumourCardsPile from, boolean forcedReveal) {
@@ -942,7 +933,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	/**
 	 * @param forcedReveal If <i>true</i>, unrevealed cards' properties will be shown as well 
 	 * @param from  A pile of revealed Rumour cards
-	 * @see DisplayMediator#displaySelectRevealedCardScreen(RumourCardsPile,boolean)
+	 * @see DisplayMediator#displaySelectRevealedCardScreen(Player, RumourCardsPile, boolean)
 	 */
 	@Override
 	public void requestSelectRevealedCardScreen(RumourCardsPile from, boolean forcedReveal) {
@@ -950,7 +941,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	}
 	/**
 	 * @param from  A pile of Rumour cards with playable Witch? effects
-	 * @see DisplayMediator#displaySelectWitchCardScreen(RumourCardsPile)
+	 * @see DisplayMediator#displaySelectWitchCardScreen(Player, RumourCardsPile)
 	 */
 	@Override
 	public void requestSelectWitchCardScreen(RumourCardsPile from) {
@@ -958,7 +949,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	}
 	/**
 	 * @param from  A pile of Rumour cards with playable Hunt! effects
-	 * @see DisplayMediator#displaySelectHuntCardScreen(RumourCardsPile)
+	 * @see DisplayMediator#displaySelectHuntCardScreen(Player, RumourCardsPile)
 	 */
 	@Override
 	public void requestSelectHuntCardScreen(RumourCardsPile from) {
@@ -986,7 +977,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	 * Sends a notification informing the view of the played Witch? effect.
 	 * @see DisplayMediator#displayPlayerPlaysWitchEffectScreen(Player, RumourCard)
 	 * @see #witch()
-	 * @param The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} is played.
+	 * @param rc The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.WitchEffect Witch? effect} is played.
 	 */
 	@Override
 	public void requestPlayerPlaysWitchEffectScreen(RumourCard rc) {
@@ -996,7 +987,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	 * Sends a notification informing the view of the played Hunt! effect.
 	 * @see DisplayMediator#displayPlayerPlaysHuntEffectScreen(Player, RumourCard)
 	 * @see #hunt()
-	 * @param The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} is played.
+	 * @param rc The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} of which the {@link fr.sos.witchhunt.model.cards.HuntEffect Hunt! effect} is played.
 	 */
 	@Override
 	public void requestPlayerPlaysHuntEffectScreen(RumourCard rc) {
@@ -1005,10 +996,10 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	/**
 	 * Sends a notification informing the view of the chosen Rumour Card, then simulates a long delay to let the users
 	 * read the card's information.
-	 * @see DisplayMediator#displayHasChosenCardScreen(Player, RumourCard, boolean)
+	 * @see DisplayMediator#displayHasChosenCardScreen(Player, RumourCard, RumourCardsPile, boolean)
 	 * @param chosen The chosen {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}.
 	 * @param from The pile of Rumour cards from which the card has been taken.
-	 * @param forcedReveal If this boolean is true, the chosen card will be shown as if it was revealed even if it is not.
+	 * @param forceReveal If this boolean is true, the chosen card will be shown as if it was revealed even if it is not.
 	 */
 	@Override
 	public void requestHasChosenCardScreen(RumourCard chosen,RumourCardsPile from,boolean forceReveal) {
@@ -1028,7 +1019,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	/**
 	 * Sends a notification informing of the discarded card to the view, then, adds a delay depending on the 
 	 * reveal status of the discarded card.
-	 * @see DisplayMediator#displayDiscardCardScreen(Player, RumourCard)
+	 * @see DisplayMediator#displayPlayerDiscardedCardScreen(Player, RumourCard)
 	 * @see #discard(RumourCard)
 	 * @param rc The discarded {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card}
 	 */
@@ -1174,6 +1165,8 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	 * <p>@param pts The number of points by which the {@link #score player's score} is updated <b>(can be negative, as some cards can make a player loose points)</b></p>
 	 * <p>Requests for the display of a suitable notification.</p>
 	 * <p>A player can score by {@link #accuse() accusing} or {@link #hunt hunting} their opponents, or by being the round's {@link #winRound() last unrevealed player}.</p>
+	 * @param pts The number of points by which the player's score should be updated
+	 * 
 	 * @see #score
 	 * @see fr.sos.witchhunt.model.Visitable
 	 * @see #accept(Visitor)
@@ -1247,6 +1240,7 @@ public abstract class Player implements PlayerDisplayRequester, Resettable, Visi
 	//UTILS
 	/**
 	 * @see #isAccusable()
+	 * @return The list of all currently accusable players.
 	 */
 	public List<Player> getAccusablePlayers() {
 		List <Player> l = Tabletop.getInstance().getAccusablePlayersList();

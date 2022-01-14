@@ -19,13 +19,13 @@ import fr.sos.witchhunt.view.std.StdView;
  * <p>In charge of gathering user-input from <b>one of the concurrent views</b>.</p>
  * <p>Works with semaphore-inspired latches. This class can <b>send input requests to all known views</b> and <b>sleep itself until it receives</b> valid input from a view.
  * When a stranger class sends an input request through an instance of this class, it will also put itself on hold until valid input is received.
- * <p>The following classes use this class to send their input requests through a class implementing <p>{@link InputMediator}</b>, specifying each type
+ * <p>The following classes use this class to send their input requests through a class implementing <b>{@link InputMediator}</b>, specifying each type
  * of input to be collected : {@link fr.sos.witchhunt.controller.core classes of the controller.core package}, {@link fr.sos.witchhunt.model.players.HumanPlayer HumanPlayer},
  * {@link fr.sos.witchhunt.model.flow.Tabletop Tabletop} and {@link fr.sos.witchhunt.view.std.StdPlayerCreator StdPlayerCreator}.</p>
  * <p>The following classes are sources of input for this class : {@link fr.sos.witchhunt.controller.core most classes of the controller.interactions package} and {@link fr.sos.witchhunt.view.std.InterruptibleStdInput InterruptibleStdInput}.
  * See {@link fr.sos.witchhunt.view.InputSource InputSource}, the interface implemented by user-input-gathering view classes.</p>
  * <p>This class is also responsible for <b>interrupting input collect</b> on all concurrent views once a first response is received.</p>
- * <p>Knows the central class of each concurrent view ({@link fr.sos.witchhunt.view.std.StdView StdView} and {@link fr.sos.witchhunt.view.std.GUIView GUIView}).
+ * <p>Knows the central class of each concurrent view ({@link fr.sos.witchhunt.view.std.StdView StdView} and {@link fr.sos.witchhunt.view.gui.GUIView GUIView}).
  * Also knows {@link fr.sos.witchhunt.view.std.InterruptibleStdInput InterruptibleStdInput}.</p>
  * <p>The main input mediator is instantiated by {@link fr.sos.witchhunt.controller.core.Application Application}.</p>
  *
@@ -46,7 +46,7 @@ import fr.sos.witchhunt.view.std.StdView;
  * 
  * @see fr.sos.witchhunt.view The view is updated when asking for input and when receiving invalid or valid input.
  * @see fr.sos.witchhunt.view.std.StdView StdView, the central class of the Console view. Used for displaying error messages and prompts.
- * @see fr.sos.witchhunt.view.std.GUIView GUIView, the central class of the Graphical User Interface. Display-update directives are sent once input is received.
+ * @see fr.sos.witchhunt.view.gui.GUIView GUIView, the central class of the Graphical User Interface. Display-update directives are sent once input is received.
  *
  *
  * @see DisplayMediator Stranger classes send their display requests through an instance of a class implementing DisplayMediator
@@ -233,7 +233,7 @@ public final class ConcreteInputMediator implements InputMediator {
 	
 	/**
 	 * <p><b>Puts this class on the hold until it {@link #receive(String) receives a String}, then returns it.</b></p>
-	 * <p>Can be called by foreign classes when used as a slave input mediator for building a result step by step based on plural sequential answers. (see {@link fr.sos.witchhunt.view.std.StdPlayerCreator#StdPlayerCreator(InputMediator, InputMediator, StdView, int, List, boolean) StdPlayerCreator).</p>
+	 * <p>Can be called by foreign classes when used as a slave input mediator for building a result step by step based on plural sequential answers. (see {@link fr.sos.witchhunt.view.std.StdPlayerCreator#StdPlayerCreator(InputMediator, InputMediator, StdView, int, List, boolean) StdPlayerCreator}).</p>
 	 * return #receivedString once it is nonempty.
 	 */
 	@Override
@@ -251,7 +251,7 @@ public final class ConcreteInputMediator implements InputMediator {
 	}
 	
 	/**
-	 * <p><b>Puts this class on the hold until it {@link #receive(int)) receives an integer}, then returns it.</b></p>
+	 * <p><b>Puts this class on the hold until it {@link #receive(int) receives an integer}, then returns it.</b></p>
 	 * @return {@link #receivedString} parsed as an integer. -1 if parsing failed.
 	 * @see #getStringInput() Calls getStringInput()
 	 */

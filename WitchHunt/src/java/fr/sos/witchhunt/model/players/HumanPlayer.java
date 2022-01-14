@@ -36,7 +36,7 @@ public final class HumanPlayer extends Player implements PlayerInputRequester {
 	/**
 	 * <b>Chooses and sets the player's {@link #identity} and that of their {@link #identityCard}.</b>
 	 * @see fr.sos.witchhunt.model.Identity Identity
-	 * @see fr.sos.witchhunt.model.IdentityCard Identity card
+	 * @see fr.sos.witchhunt.model.cards.IdentityCard Identity card
 	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
 	 * @see PlayerInputRequester#makeChoice(Menu)
 	 */
@@ -62,7 +62,7 @@ public final class HumanPlayer extends Player implements PlayerInputRequester {
 	/**
 	 * <p><b>Chooses an object within a list of plural objects of a given and unique type.</b></p>
 	 * <p>This method is made for the human players to select an element from a list of elements of a given type (using genericity).</p>
-	 * @param {{@literal <T>} The type of the objects in the list. Could be {@link fr.sos.witchhunt.model.cards.RumourCard}, {@link Player} ...
+	 * <p>{@literal <T>} Is the type of the objects in the list. Could be {@link fr.sos.witchhunt.model.cards.RumourCard}, {@link Player} ...</p>
 	 * @param from The list of objects of type {@literal <T>}
 	 * @param prompt The message to be displayed with the input request
 	 * @return An unique object of type {@literal <T>}, belonging to the list given in parameters
@@ -99,7 +99,8 @@ public final class HumanPlayer extends Player implements PlayerInputRequester {
 	
 	/**
 	 * <b>Selects a target (a player) within a list of eligible players, based on user-input.</b>
-	 * @param The chosen target, belonging to the list of eligible players.
+	 * @return The chosen target, belonging to the list of eligible players.
+	 * @param eligiblePlayersList The list of eligible players
 	 * @see #choose(List, String)
 	 * @see #chooseHuntedTarget(List)
 	 */
@@ -126,7 +127,7 @@ public final class HumanPlayer extends Player implements PlayerInputRequester {
 	 * <p>Human players, like CPUPlayers, can {@link #accuse(Player) accuse} and {@link #hunt() hunt}, but they also can
 	 * choose between two other special actions, {@link #showHand() show their cards} and {@link #showRanking() show players ranking}.
 	 * The two latter actions do not put an end to the turn : once performed, the player is asked to choose an action again.</p>
-	 * @return The selected action : {@link TurnAction can be <i>{@link #accuse(Player) ACCUSE}</i>,<i>{@link #hunt() HUNT}</i>}, {@link #showHand() show your cards} or {@link #showRanking() show players ranking}.
+	 * @return The selected action : {@link TurnAction} can be <i>{@link #accuse(Player) ACCUSE}</i>,<i>{@link #hunt() HUNT}</i>, {@link #showHand() show your cards} or {@link #showRanking() show players ranking}.
 	 * @see #choose(List, String)
 	 * @see TurnAction
 	 * @see #accuse(Player)
@@ -236,7 +237,7 @@ public final class HumanPlayer extends Player implements PlayerInputRequester {
 	/**
 	 * <p><b>Requests the {@link fr.sos.witchhunt.controller.DisplayMediator Display Mediator} to show players ranking.</b></p>
 	 * <p>Specific information about this player's score and position in the ranking can be displayed.</p>
-	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayRanking(Player) DisplayMediator::displayRanking(Player)
+	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayRanking(Player, fr.sos.witchhunt.model.flow.ScoreCounter) DisplayMediator::displayRanking(Player,ScoreCounter)
 	 * @see fr.sos.witchhunt.model.flow.ScoreCounter#getRanking() ScoreCounter::getRanking() 
 	 */
 	private void showRanking() {
@@ -244,7 +245,7 @@ public final class HumanPlayer extends Player implements PlayerInputRequester {
 	}
 	
 	/**
-	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} to {@link #discard(RumourCard) discard from the given {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}, based on user-input</b>
+	 * <b>Selects a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} to {@link #discard(RumourCard) discard} from the given {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}, based on user-input</b>
 	 * @param in A {@link fr.sos.witchhunt.model.cards.RumourCardsPile pile of Rumour cards}.
 	 * @return The {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} that was chosen to be {@link #discard(RumourCard) discarded}.
 	 * @see #discard(RumourCard)
@@ -297,12 +298,13 @@ public final class HumanPlayer extends Player implements PlayerInputRequester {
 	}
 	/**
 	 * <b>Chooses an unrevealed card within a pile of cards, based on user-input.</b>
+	 * @param from The pile of Rumour cards from which an unrevealed Rumour card should be chosen
+	 * @return An unrevealed Rumour card chose within the given pile of Rumour cards
 	 */
 	public RumourCard chooseUnrevealedCard(RumourCardsPile from,boolean forcedReveal){
 		if(targetPileContainsCards(from.getUnrevealedSubpile())){
 			//the player must necessarily choose an unrevealed card
 			requestSelectUnrevealedCardScreen(from.getUnrevealedSubpile(),forcedReveal);
-			//displayMediator.displayCards(from.getUnrevealedSubpile(),forcedReveal);
 			return chooseCard(from.getUnrevealedSubpile());
 		}
 		else return null;

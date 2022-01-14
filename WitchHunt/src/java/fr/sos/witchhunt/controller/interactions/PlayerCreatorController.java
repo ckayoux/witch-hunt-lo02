@@ -20,7 +20,7 @@ import fr.sos.witchhunt.view.gui.scenes.matchsetup.PlayerCreatorPanel;
  * <p>Intangible characteristics (the player's id, the name of a CPU-controlled player, and the validity of a Human player's name) are determined on the basis of 
  * values stored in the {@link fr.sos.witchhunt.model.flow.Tabletop#getInstance() match's instance}.</p>
  * <p>Can be in concurrence with {@link fr.sos.witchhunt.view.std.StdPlayerCreator the console version of the player creation interface} : <code>{@link fr.sos.witchhunt.controller.ConcreteInputMediator#createPlayer(int, List, boolean) see ConcreteInputMediator::createPlayer(int, List, boolean)}</code>.
- * The first instance of <code>{@link fr.sos.witchhunt.gui.view.InputSource InputSource}</code> to {@link fr.sos.witchhunt.gui.view.InputSource#post(Player) post an instance of} {@link fr.sos.witchhunt.model.players.Player Player} 
+ * The first instance of <code>{@link fr.sos.witchhunt.view.InputSource InputSource}</code> to {@link fr.sos.witchhunt.view.InputSource#post(Player) post an instance of} {@link fr.sos.witchhunt.model.players.Player Player} 
  * rules over all others, interrupting them and inviting them to create another.</p>
  * 
  * @see fr.sos.witchhunt.view.gui.scenes.matchsetup.PlayerCreatorPanel PlayerCreatorPanel
@@ -35,17 +35,17 @@ import fr.sos.witchhunt.view.gui.scenes.matchsetup.PlayerCreatorPanel;
  * @see fr.sos.witchhunt.controller.ConcreteInputMediator#createPlayer(int, List, boolean) InputMediator::createPlayer(int, List, boolean)
  * @see #post(Player)
  * @see	fr.sos.witchhunt.view.std.StdPlayerCreator In concurrence with StdPlayerCreator
- * @see fr.sos.witchhunt.gui.view.std.InputSource InputSource
+ * @see fr.sos.witchhunt.view.InputSource InputSource
  */
 public class PlayerCreatorController implements InputSource {
 	
 	/**
 	 * <p>The instance of {@link fr.sos.witchhunt.controller.InputMediator InputMediator} that is
-	 * {@link fr.sos.witchhunt.controller.InputMediator#wait() awaiting} for {@link fr.sos.witchhunt.controller.InputMediator#createPlayer(int, List, boolean) an instance of Player}
+	 * {@link fr.sos.witchhunt.controller.ConcreteInputMediator#wait() awaiting} for {@link fr.sos.witchhunt.controller.InputMediator#createPlayer(int, List, boolean) an instance of Player}
 	 * and {@link fr.sos.witchhunt.controller.InputMediator#receive(Player) managing the concurrence between all views}.</p>
 	 * 
 	 * @see fr.sos.witchhunt.controller.InputMediator InputMediator
-	 * @see fr.sos.witchhunt.controller.InputMediator#wait() InputMediator::wait()
+	 * @see fr.sos.witchhunt.controller.ConcreteInputMediator#wait() InputMediator::wait()
 	 * @see fr.sos.witchhunt.controller.InputMediator#createPlayer(int, List, boolean) InputMediator::createPlayer(int, List, boolean)
 	 * @see fr.sos.witchhunt.controller.InputMediator#receive(Player) InputMediator::receive(Player)
 	 */
@@ -104,7 +104,7 @@ public class PlayerCreatorController implements InputSource {
 	 * @see #couldNotCreate
 	 * 
 	 * @see java.awt.event.ActionListener
-	 * @see java.awt.event.DocumentListener
+	 * @see javax.swing.event.DocumentListener
 	 */
 	public PlayerCreatorController(int nthPlayer,int nthCPUPlayer,PlayerCreatorPanel p,List<String> takenNames,InputMediator im) {
 		this.inputMediator=im;
@@ -197,7 +197,7 @@ public class PlayerCreatorController implements InputSource {
 	/**
 	 * <b>Destroys each and every listener associated to this controller's {@link #pcp PlayerCreatorPanel's JComponents}.</b>
 	 * @see java.awt.event.ActionListener
-	 * @see java.awt.event.DocumentListener
+	 * @see javax.swing.event.DocumentListener
 	 */
 	public void destroy() {
 		for(ActionListener al : this.pcp.getCreateButton().getActionListeners()) this.pcp.getCreateButton().removeActionListener(al);

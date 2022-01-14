@@ -29,7 +29,7 @@ public class InterruptibleStdInput implements Callable<String>, Runnable, InputS
 	private StdView console;
 	
 	/**
-	 * @param The calling {@link fr.sos.witchhunt.controller.InputMediator InputMediator}, to which collected user-input is {@link #post() sent}. 
+	 * @param im The calling {@link fr.sos.witchhunt.controller.InputMediator InputMediator}, to which collected user-input is {@link #post() sent}. 
 	 * @param console {@link StdView The console view}, used for displaying the prompt symbol and newline characters.
 	 */
 	public InterruptibleStdInput(InputMediator im,StdView console) {
@@ -42,7 +42,7 @@ public class InterruptibleStdInput implements Callable<String>, Runnable, InputS
 	 * Displays input-related symbols in the {@link #console}.
 	 * @return The read String, or null if the reader was interrupted.
 	 * @throws IOException
-	 * @see {@link #run()} Called by the {@link #run()} method
+	 * @see #run() Called by the run() method
 	 * @see java.util.concurrent.Callable
 	 */
 	@Override

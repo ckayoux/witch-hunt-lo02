@@ -120,10 +120,10 @@ public interface PlayStrategy {
 	public RumourCard selectBestCard(RumourCardsPile rcp, boolean seeUnrevealedCards);
 	
 	/**
-	 * <p><b>Chooses an {@link fr.sos.witchhunt.model.players.DefenseAction action} between {@link #revealIdentity() revealing your identity} and {@link #discard(RumourCard) discarding a Rumour card from your hand},
+	 * <p><b>Chooses an {@link fr.sos.witchhunt.model.players.DefenseAction action} between revealing your identity and discard(RumourCard) discarding a Rumour card from your hand,
 	 * {@link fr.sos.witchhunt.model.players.cpustrategies.PlayStrategy#revealOrDiscard(Identity, RumourCardsPile) based on the chosen strategy}.</b></p>
 	 * <p>To make this choice, requires knowledge of the calling player's identity and hand.</p>
-	 * @see fr.sos.witchhunt.model.players.CPUPlayer#revealOrDiscard(Identity, RumourCardsPile) CPUPlayer::revealOrDiscard(Identity, RumourCardsPile) 
+	 * @see fr.sos.witchhunt.model.players.CPUPlayer#revealOrDiscard() CPUPlayer::revealOrDiscard() 
 	 * @see DefenseAction
 	 * @see fr.sos.witchhunt.model.cards.DuckingStool DuckingStool
 	 * @return Either {@link fr.sos.witchhunt.model.players.DefenseAction DefenseAction#REVEAL} or {@link fr.sos.witchhunt.model.players.DefenseAction DefenseAction#DISCARD}
@@ -131,7 +131,7 @@ public interface PlayStrategy {
 	public DefenseAction revealOrDiscard(Identity identity,RumourCardsPile rcp);
 	
 	/**
-	 * <p><b>Updates the behavior the strategy according to the player's {@link fr.sos.witchhunt.model.players.Player#getIdentity() identity}, 
+	 * <p><b>Updates the behavior the strategy according to the player's {@link fr.sos.witchhunt.model.players.Player#getIdentity() identity}</b>, 
 	 * {@link fr.sos.witchhunt.model.players.Player#isRevealed() reveal status} and {@link fr.sos.witchhunt.model.players.Player#getHand() hand}.
 	 * @param amIRevealed The {@link fr.sos.witchhunt.model.players.CPUPlayer#isRevealed() reveal status} of the calling player
 	 * @param myIdentity The {@link fr.sos.witchhunt.model.players.CPUPlayer#getIdentity() calling player's identity}.

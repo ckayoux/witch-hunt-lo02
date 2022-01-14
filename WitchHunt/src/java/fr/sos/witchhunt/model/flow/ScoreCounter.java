@@ -12,7 +12,7 @@ import fr.sos.witchhunt.model.Visitor;
 import fr.sos.witchhunt.model.players.Player;
 
 /**
- * <p><b>Class responsible for counting each player's score using the {@link https://refactoringguru.cn/design-patterns/visitor Visitor} design pattern.</b></p>
+ * <p><b>Class responsible for counting each player's score using the <i>Visitor design pattern</i>.</b></p>
  * <p>Keeps the accounts of the points obtained at each round by each player. Able to produce a scoreboard.</p>
  * <p>Can produce a ranking ordered by descending number of points.</p>
  * <p>Used to check whether the victory conditions are met.</p>
@@ -40,7 +40,7 @@ public final class ScoreCounter implements Visitor {
 
 	}
 	/**
-	 * <b>When visiting an instance of {@link fr.sos.witchhunt.model.players.Player Player}, updates the {@link #ScoreBoard score board} by calling its own <i>visit</i> method.</b>
+	 * <b>When visiting an instance of {@link fr.sos.witchhunt.model.players.Player Player}, updates the {@link #getScoreBoard() score board} by calling its own <i>visit</i> method.</b>
 	 * @param p The player accepting a visit from the score counter.
 	 * @see fr.sos.witchhunt.model.players.Player#accept(Visitor) Player::accept(Visitor)
 	 * @see fr.sos.witchhunt.model.Visitable Visitable
@@ -91,7 +91,7 @@ public final class ScoreCounter implements Visitor {
 	
 	/**
 	 * <b>Checks whether the victory conditions are met or not.</b>
-	 * @return true if {@link #getWinner()} returns an instance of {@link fr.sos.model.players.Player Player}.
+	 * @return true if {@link #getWinner()} returns an instance of {@link fr.sos.witchhunt.model.players.Player Player}.
 	 * @see #getWinner()
 	 */
 	public boolean hasWinner() {
@@ -130,7 +130,7 @@ public final class ScoreCounter implements Visitor {
 	/**
 	 * <p><b>Internal class of {@link ScoreCounter}.</b></p>
 	 * <p>In charge of keeping accounts of the score obtained at each round by each player.</p>
-	 * <p>Update itselfs using the {@link https://refactoringguru.cn/design-patterns/visitor Visitor} design pattern.</p>
+	 * <p>Update itselfs using the <i>Visitor design pattern</i>.</p>
 	 * @see fr.sos.witchhunt.model.Visitor
 	 */
 	public class ScoreBoard implements Visitor  {

@@ -73,7 +73,7 @@ public abstract class GridBagPanel extends JPanel {
 	}
 	
 	/**
-	 * <b>Renders each cell of the {@link #cellsList list of GridBagCells}</b> by parameterizing the {@link java.awt.GridBagConstraints} based on the cells properties and adding it to JPanel.</b> 
+	 * <b>Renders each cell of the {@link #cellsList list of GridBagCells}</b> by parameterizing the {@link java.awt.GridBagConstraints} based on the cells properties and adding it to JPanel. 
 	 * <p>Position, size, insets and borders are this classe's responsibility.</p>
 	 */
 	protected void buildCustomGridBag () {

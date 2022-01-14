@@ -64,7 +64,7 @@ public interface DisplayMediator {
 	/**
 	 * <b>Requests the DM to display the screen corresponding to a Round's start.</b>
 	 * @see fr.sos.witchhunt.model.flow.Round Round
-	 * @param roundNumber
+	 * @param roundNumber The Round that is about to start is the n<i>th</i> one
 	 */
 	public void displayRoundStartScreen(int roundNumber);
 	
@@ -128,7 +128,7 @@ public void displayPlayTurnScreen(Player p);
 /**
  * <b>Requests the DM to notify the view that a player is authorized to play one turn again.</b>
  * @param p the player taking another turn.
- * @see fr.sos.witchhunt.model.players.Player#playTurnAgain() Player::playTurnAgain
+ * @see fr.sos.witchhunt.model.players.Player#takeNextTurn() Player::takeNextTurn
  */
 	public void displayPlayTurnAgainScreen(Player p);
 	/**
@@ -266,9 +266,9 @@ public void displayPlayTurnScreen(Player p);
 	public void displayPlayerPlaysHuntEffectScreen(Player player, RumourCard rc);
 /**
  * <b>Requests the DM to notify the view when a card is taken by a player.</b>
- * @param player the player taking a card.
- * @param chosen the Rumour Card taken by the player.
- * @param The pile of Rumour cards from which the card has been taken.
+ * @param player The player taking a card.
+ * @param chosen The Rumour Card taken by the player.
+ * @param from The pile of Rumour cards from which the card has been taken.
  * @param forceReveal if <i>false</i> : the taken Rumour Card's name and properties will remain hidden.
  */
 	public void displayHasChosenCardScreen(Player player, RumourCard chosen, RumourCardsPile from, boolean forceReveal);
@@ -321,31 +321,28 @@ public void displayPlayTurnScreen(Player p);
 	
 	public void displayStealCardScreen(Player thief, Player stolenPlayer);
 //MISCELLANEOUS DISPLAY METHODS
-/**
-* <p>Requests the associated display mediator to log a message.</p>
-* <p>Used for debugging.</p>
-* @deprecated
-* @param msg a String.
-*/
-	@Deprecated
+	/**
+	* <p>Requests the associated display mediator to log a message.</p>
+	* <p>Used for debugging.</p>
+	* @param msg a String.
+	*/
 	public void passLog(String msg);
 
 	
-/**
- * <b>Requests the DM to notify the view of a change of strategy by a CPU player</b>
- * @deprecated Initially meant to be used for debugging and improving the AIs' behaviour 
- * @param p the player who changed their strategy
- * @param strat the strategy newly chosen
- */
-	@Deprecated
+	/**
+	 * <b>Requests the DM to notify the view of a change of strategy by a CPU player</b>
+	 * @param p the player who changed their strategy
+	 * @param strat the strategy newly chosen
+	 * @see fr.sos.witchhunt.controller.core.Game#displayChangesOfStrategy() Game::displayChangesOfStrategy()
+	 */
 	public void displayStrategyChange(Player p,PlayStrategy strat);
-/**
- * <b>Requests the DM to display the players' ranking with their current score.</b> 
- * @param p The (human) player requesting to display the ranking.
- * @param sc The game's score counter
- * @see fr.sos.witchhunt.model.flow.ScoreCounter ScoreCounter
- * @see fr.sos.witchhunt.model.players.HumanPlayer#showRanking() HumanPlayer::showRanking() 
- */
+	/**
+	 * <b>Requests the DM to display the players' ranking with their current score.</b> 
+	 * @param p The (human) player requesting to display the ranking.
+	 * @param sc The game's score counter
+	 * @see fr.sos.witchhunt.model.flow.ScoreCounter ScoreCounter
+	 * @see fr.sos.witchhunt.model.players.HumanPlayer#showRanking() HumanPlayer::showRanking() 
+	 */
 	public void displayRanking(Player p,ScoreCounter sc);
 	
 	/**

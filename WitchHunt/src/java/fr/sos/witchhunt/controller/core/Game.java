@@ -7,12 +7,12 @@ import fr.sos.witchhunt.model.flow.Tabletop;
 
 /**
  * <p><b>Core class giving access to the game and its options.</b></p>
- * <p>Instantiated by class {@link Application}, as a {@link https://refactoringguru.cn/design-patterns/singleton Singleton} using the {@link this#getInstance() static method}.
+ * <p>Instantiated by class {@link Application}, as a <i>Singleton</i> using the {@link #getInstance() static method}.
  * Can be accessed globally, exposing its public and non-static members, using the same method.
  * Game options are supposed to be checked by the model this way.</p>
  * <p>Gives access to the {@link #gotoMainMenu() Main Menu}, which is the entry point to the {@link #options() game options menu} and lets the user start the match.</p>
  * 
- * @see https://refactoringguru.cn/design-patterns/singleton Singleton design pattern
+ * @see <a href="https://refactoringguru.cn/design-patterns/singleton"> Singleton design pattern </a>
  * @see #getInstance()
  * 
  * @see #gotoMainMenu()
@@ -102,7 +102,7 @@ public final class Game {
 	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayMenu(Menu) DisplayMediator::displayMenu(Menu)
 	 * @see fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) InputMediator::makeChoice(Menu)
 	 * 
-	 * @see fr.sos.witchhunt.model.flow.Tabletop#startMatch() <p>The match is instantiated as a {@link https://refactoringguru.cn/design-patterns/singleton Singleton} and started in its own thread.</p>
+	 * @see fr.sos.witchhunt.model.flow.Tabletop#startMatch() The match is instantiated as a <a href="https://refactoringguru.cn/design-patterns/singleton"> Singleton</a> and started in its own thread.
 	 * @see #options()
 	 * @see #exit()
 	 */

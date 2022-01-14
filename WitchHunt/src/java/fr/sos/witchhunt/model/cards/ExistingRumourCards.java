@@ -18,7 +18,7 @@ import java.util.Set;
 public final class ExistingRumourCards {
 	/**
 	 * The unique instance of this class. Initialized and obtained using {@link #getInstance()}.
-	 * @see https://refactoringguru.cn/design-patterns/singleton Singleton design pattern
+	 * @see <a href="https://refactoringguru.cn/design-patterns/singleton">Singleton design pattern</a>
 	 */
 	private static volatile ExistingRumourCards instance = null;
 	/**
@@ -49,7 +49,7 @@ public final class ExistingRumourCards {
 	/**
 	 * <b>Instantiates an object of this class if it has never been done during the current session.</b>
 	 * @return The unique {@link #instance} of this class.
-	 * @see https://refactoringguru.cn/design-patterns/singleton Singleton design pattern
+	 * @see <a href="https://refactoringguru.cn/design-patterns/singleton">Singleton design pattern</a>
 	 * @see #instance
 	 */
 	public final static ExistingRumourCards getInstance() {

@@ -92,7 +92,7 @@ public final class GUIView {
 	/**
 	 * <p><b>Creates a Graphical User Interface working for the given {@link fr.sos.witchhunt.controller.InputMediator InputMediator}.</b></p>
 	 * <p>Instantiates a unique {@link Window}, which will be used as a frame for all Graphical User Interface displays.</p>
-	 * @param im Value for field {@link #inputMediator}. The {@link fr.sos.witchhunt.controller.InputMediator InputMediator} keeping this view synchronized with others and sending its input requests.</p>
+	 * @param im Value for field {@link #inputMediator}. The {@link fr.sos.witchhunt.controller.InputMediator InputMediator} keeping this view synchronized with others and sending its input requests.
 	 * @see fr.sos.witchhunt.controller.InputMediator InputMediator
 	 * @see #inputMediator
 	 * @see Window
@@ -120,7 +120,7 @@ public final class GUIView {
 	
 	/**
 	 * <b>Switches to the {@link fr.sos.witchhunt.view.gui.scenes.matchsetup.MatchSetupPanel match setup scene}.</b>
-	 * <p>No effect if this scene is already the current one or if this class does not know the instance of {@link #tabletop Tabletop} it represents.</p>.</p>
+	 * <p>No effect if this scene is already the current one or if this class does not know the instance of {@link #tabletop Tabletop} it represents.</p>
 	 * <p>The currently active scene is destroyed.</p>
 	 * <p>Resizing the {@link Window} is allowed for this scene.</p>
 	 * <p>The window's title is modified when switching to this scene.</p>
@@ -175,18 +175,18 @@ public final class GUIView {
 	}
 	
 	/**
-	 * <p>Calls the {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel#makeChoice(Menu, InputMediator) ChoicesPanel::makeChoice(Menu, InputMediator) method} for the current scene's {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel}, if it has one, activating 
+	 * <p>Calls the {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel#makeChoice(InputMediator) ChoicesPanel::makeChoice(InputMediator) method} for the current scene's {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel}, if it has one, activating 
 	 * {@link fr.sos.witchhunt.controller.interactions.ChoicesPanelController its controller} to collect user input. Not in charge of the display of the menu, see {@link #displayMenu(Menu)}.</p>
 	 * <p>Used when the master {@link fr.sos.witchhunt.controller.ConcreteInputMediator#makeChoice(Menu) InputMediator asks the users to choose between plural possibilities} to let the user make its choice using this Graphical Interface.</p>
 	 * <p>{@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel} is a class dedicated to representing a {@link fr.sos.witchhunt.controller.interactions.Menu Menu} on the Graphical Interface. It is used by a {@link fr.sos.witchhunt.view.gui.scenes scene}.</p>
 	 * @see fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) InputMediator::makeChoice(Menu)
 	 * @see fr.sos.witchhunt.controller.ConcreteInputMediator#makeChoice(Menu) ConcreteInputMediator::makeChoice(Menu)
 	 * 
-	 * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#makeChoice(Menu) GamePanel::makeChoice(Menu)
-	 * @see fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel#makeChoice(Menu) MainMenuPanel::makeChoice(Menu)
+	 * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#makeChoice() GamePanel::makeChoice()
+	 * @see fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel#makeChoice() MainMenuPanel::makeChoice()
 	 * 
 	 * @see fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel
-	 * @see fr.sos.witchhunt.view.gui.scenes.ChoicesPanel#makeChoice(Menu, InputMediator) ChoicesPanel::makeChoice(Menu, InputMediator)
+	 * @see fr.sos.witchhunt.view.gui.scenes.ChoicesPanel#makeChoice(InputMediator) ChoicesPanel::makeChoice(InputMediator)
 	 *
 	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
 	 * 
@@ -214,7 +214,7 @@ public final class GUIView {
 	/**
 	 * <p>Calls the {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel#displayMenu(Menu) ChoicesPanel::displayMenu(Menu) method} for the current scene's {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel}, 
 	 * displaying the entitled and options of the given {@link fr.sos.witchhunt.controller.interactions.Menu Menu}.
-	 * Not in charge of collecting the user's choice, see {@link #makeChoice(Menu)}.</p>
+	 * Not in charge of collecting the user's choice, see {@link #makeChoice()}.</p>
 	 * <p>Used when the master {@link fr.sos.witchhunt.controller.ConcreteDisplayMediator#displayMenu(Menu) DisplayMediator orders to display a Menu} on all concurrent views.</p>
 	 * <p>{@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel} is a class dedicated to representing a {@link fr.sos.witchhunt.controller.interactions.Menu Menu} on the Graphical Interface. It is used by a {@link fr.sos.witchhunt.view.gui.scenes scene}.</p>
 	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayMenu(Menu) DisplayMediator::displayMenu(Menu)
@@ -250,7 +250,7 @@ public final class GUIView {
 	
 	/**
 	 * <p>Called by the master {@link fr.sos.witchhunt.controller.InputMediator} when {@link fr.sos.witchhunt.controller.ConcreteInputMediator#makeChoice(Menu) it has asked the users to choose between plural possibilities
-	 *  and received their answer} to update the active scene, telling it "okay, we got an answer, you can stop harassing our users".</b></p>
+	 *  and received their answer} to update the active scene, telling it "okay, we got an answer, you can stop harassing our users".</p>
 	 * <p>If the current scene is {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel the ingame scene}, calls its {@link fr.sos.witchhunt.view.gui.scenes.game.GamePanel#choiceHasBeenMade(Object) choiceHasBeenMade(Object)} method.</p> 
 	 * <p>Otherwise, if it is the {@link fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel the main menu scene}, calls its {@link fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel#resetChoicesPanel() resetChoicesPanel} method.</p>
 	 * @param o The {@link fr.sos.witchhunt.controller.interactions.Menu#getOptions() chosen Menu entry}.
@@ -289,7 +289,6 @@ public final class GUIView {
 	 * @param forceReveal If this boolean is <i>true</i>, even {@link fr.sos.witchhunt.model.cards.RumourCard#isRevealed() unrevealed Rumour cards'} information will be visible.
 	 * 
 	 * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#displayCards(Menu, boolean) GamePanel::displayCards(Menu, boolean)
-	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayCa
 	 * @see fr.sos.witchhunt.model.cards.RumourCard RumourCard
 	 */
 	private void displayCardsChoiceMenu(Menu m,boolean forceReveal) {
@@ -819,7 +818,7 @@ public final class GUIView {
 	 * @see #displayStealCardScreen(Player, Player)
 	 * @see #displayPlayerHasResetCardScreen(Player, RumourCard)
 	 * 
-	 * @see java.util.function.Supplier a Supplier<T> is a method taking no entry parameter and returning an object of type T.
+	 * @see java.util.function.Supplier a Supplier{@literal <T>} is a method taking no entry parameter and returning an object of type T.
 	 */
 	private String stringifyRumourCard(RumourCard rc,boolean forceReveal,Supplier<String> ...effectGetters) {
 		StringBuffer sb = new StringBuffer();

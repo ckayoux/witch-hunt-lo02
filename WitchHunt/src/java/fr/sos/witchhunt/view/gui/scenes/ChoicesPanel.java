@@ -35,7 +35,7 @@ import fr.sos.witchhunt.model.cards.RumourCard;
  * @see fr.sos.witchhunt.controller.interactions.Menu Menu
  *  
  * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#displayMenu(Menu) GamePanel::displayMenu(Menu)
- * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#displayCards(Menu) GamePanel::displayCards(Menu)
+ * @see fr.sos.witchhunt.view.gui.scenes.game.GamePanel#displayCards(Menu, boolean) GamePanel::displayCards(Menu,boolean)
  * @see fr.sos.witchhunt.view.gui.scenes.mainmenu.MainMenuPanel#displayMenu(Menu) MainMenuPanel::displayMenu(Menu)
  */
 public class ChoicesPanel extends GridBagCell {
@@ -64,9 +64,9 @@ public class ChoicesPanel extends GridBagCell {
 	/**
 	 * <p><b>The instance of {@link fr.sos.witchhunt.controller.interactions.ChoicesPanelController ChoicesPanelController} in charge of collecting user-input</b>.
 	 * <p>Listens for {@link java.awt.event.ActionEvent ActionEvents} on each {@link #choiceButtonsList active ChoiceButton}.</p>
-	 * <p>Set when calling {@link #makeChoice(Menu, InputMediator)} and destroyed when calling {@link #choiceHasBeenMade()}.</p>
+	 * <p>Set when calling {@link #makeChoice(InputMediator)} and destroyed when calling {@link #choiceHasBeenMade()}.</p>
 	 * @see fr.sos.witchhunt.controller.interactions.ChoicesPanelController ChoicesPanelController
-	 * @see #makeChoice(Menu, InputMediator)
+	 * @see #makeChoice(InputMediator)
 	 * @see #choiceHasBeenMade()
 	 */
 	private ChoicesPanelController controller = null;
@@ -180,7 +180,7 @@ public class ChoicesPanel extends GridBagCell {
 	
 	/**
 	 * <b>Instantiates a {@link fr.sos.witchhunt.controller.interactions.ChoicesPanelController ChoicesPanelController} to gather user-input within the {@link fr.sos.witchhunt.controller.interactions.Menu#getOptions() Menu entries} represented by this cell.</b>
-	 * @param The {@link fr.sos.witchhunt.controller.InputMediator InputMediator} sending the input request and waiting for the user's choice.
+	 * @param im The {@link fr.sos.witchhunt.controller.InputMediator InputMediator} sending the input request and waiting for the user's choice.
 	 * @see fr.sos.witchhunt.controller.interactions.ChoicesPanelController ChoicesPanelController
 	 * @see fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) InputMediator::makeChoice(Menu)
 	 */
@@ -222,7 +222,7 @@ public class ChoicesPanel extends GridBagCell {
 	 * <p><b>Cleans the cell's content.</b></p>
 	 * <p>- The {@link #prompt} is set to an empty String.</p>
 	 * <p>- Each of the {{@link #choiceButtonsList} rendered ChoiceButtons} is removed.</p>
-	 * <p>- Each of the {@link inter-button margins #interButtonsMargins} is removed.</p>
+	 * <p>- Each of the {@link #interButtonsMargins inter-button margins} is removed.</p>
 	 * <p>- If there is a {@link #controller} waiting to receive input from within this cell's {@link ChoiceButton ChoiceButtons}, abandons them.</p>
 	 */
 	public void resetPane() {

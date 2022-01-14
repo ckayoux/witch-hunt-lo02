@@ -78,6 +78,7 @@ public abstract class Effect {
 	 * <b>Makes {@link #getMyself() the player triggering this effect} choose an adversary to play the next turn.</b>
 	 * @see #getMyself()
 	 * @see fr.sos.witchhunt.model.players.Player#chooseNextPlayer() Player::chooseNextPlayer()
+	 * @return The Player who was chosen to take the next turn.
 	 */
 	protected Player chooseNextPlayer() {
 		Player nextPlayer = getMyself().chooseNextPlayer();

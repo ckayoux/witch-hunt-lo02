@@ -287,7 +287,7 @@ public abstract class CPUStrategy implements PlayStrategy {
 	}
 	
 	/**
-	 * <p><b>Chooses an {@link fr.sos.witchhunt.model.players.TurnAction action to perform on the player's turn}, based on the current situation.</p></b>
+	 * <p><b>Chooses an {@link fr.sos.witchhunt.model.players.TurnAction action to perform on the player's turn}, based on the current situation.</b></p>
 	 * <p>When playing as a {@link fr.sos.witchhunt.model.Identity#WITCH witch}, a CPU Player will logically be more likely to choose to
 	 * {@link fr.sos.witchhunt.model.players.Player#accuse(Player) accuse another player}, and even more when the situation becomes critical.</p>
 	 * <p>There is always a chance of choosing to play a {@link fr.sos.witchhunt.model.players.Player#hunt() play a Hunt! effect}, excepted when the player only has risked Hunt! effects.</p>

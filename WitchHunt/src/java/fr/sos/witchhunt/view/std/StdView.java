@@ -35,8 +35,8 @@ public final class StdView {
 	 * <p>When using {@link #tabbedLog(String)} or {@link #tabbedPrint(String)}, any "/+/" sequence <b>will be replaced by 
 	 * a number of "\t" </b> equal to this field + a number of ' ' characters equal to {@link #offset}.</p>
 	 * <p>For example, if {@link #tabulation} == 2 and {@link #offset} == "LO02",
-	 * <code>{@link #tabbedLog(String) tabbedLog("Roses are red\n/+/,Violets are blue")}</code> will log the following String into the console :
-	 * <pre>\t\tLO02Roses are red\n\t\t    Violets are blue</pre></p>
+	 * <code>{@link #tabbedLog(String) tabbedLog("Roses are red\n/+/,Violets are blue")}</code> will log the following String into the console :</p>
+	 * <pre>\t\tLO02Roses are red\n\t\t    Violets are blue</pre>
 	 * 
 	 * <p>Allows displaying dynamically-indented paragraphs.</p>
 	 * <p>The "/+/" sequence should not be added to the first '\n' (newline character)	of the paragraph.</p>
@@ -55,8 +55,8 @@ public final class StdView {
 	 * a number of "\t" </b> equal to {@link #tabulation} + a number of ' ' character equal to this String's length.</p>
 	 * 
 	 * <p>For example, if {@link #tabulation} == 0 and {@link #offset} == "LO02",
-	 * <code>{@link #tabbedLog(String) tabbedLog("Roses are red\n/+/,Violets are blue")}</code> will log the following String into the console :
-	 * <pre>LO02Roses are red\n    Violets are blue</pre></p>
+	 * <code>{@link #tabbedLog(String) tabbedLog("Roses are red\n/+/,Violets are blue")}</code> will log the following String into the console :</p>
+	 * <pre>LO02Roses are red\n    Violets are blue</pre>
 	 * 
 	 * <p>Allows displaying dynamically-indented paragraphs precedented by this character sequence and normalized in terms of indentation.</p>
 	 * <p>The "/+/" sequence should not be added to the first '\n' (newline character)	of the paragraph.</p>
@@ -344,7 +344,7 @@ public final class StdView {
 	 * <p>- Logs the {@link fr.sos.witchhunt.controller.interactions.Menu#getName() Menu's entitled} with no modifications</p>
 	 * <p>- {@link #stringifyMenuOption(Object) Converts each entry of this Menu} into a String and logs it.</p> 
 	 * <p>Application-scale menus are displayed differently using the {@link #makeMenu(Menu)} method.</p>
-	 * @param m The {@link fr.sos.witchhunt.controller.interactions.Menu Menu} to be displayed into the console.
+	 * @param possibilities The {@link fr.sos.witchhunt.controller.interactions.Menu Menu} to be displayed into the console.
 	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
 	 * @see #makeMenu(Menu)
 	 * @see fr.sos.witchhunt.controller.DisplayMediator#displayPossibilities(Menu) DisplayMediator::displayPossibilities(Menu) 

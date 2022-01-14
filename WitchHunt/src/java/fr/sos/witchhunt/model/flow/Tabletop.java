@@ -15,9 +15,9 @@ import fr.sos.witchhunt.model.players.Player;
 /**
  * <p><b>Class playing a central role, aggregating all of Model's components and controlling the game's flow.</b></p> 
  * <p>Starts the match and starts new {@link Round rounds} until the victory conditions are met.</p>
- * <p>Contains a {@link this.playersList list} of all {@link fr.sos.witchhunt.model.players.Player players} participating to the match.</p>
+ * <p>Contains a {@link #playersList list} of all {@link fr.sos.witchhunt.model.players.Player players} participating to the match.</p>
  * <p>Interacts with an instance of {@link ScoreCounter} to check whether victory conditions are met or not.</p>
- * <p>Instantiated as a {@link https://refactoringguru.cn/design-patterns/singleton Singleton} using the {@link this#getInstance() static method}.
+ * <p>Instantiated as a <i>Singleton</i> using the {@link #getInstance() static method}.
  * Can be accessed globally, exposing its public and non-static members, using the same method.</p>
  * <p>Implements Runnable. The whole match is supposed to stand within one thread, 
  * which can then {@link #freeze(int) frozen to simulate a delay} between players' actions.</p>
@@ -361,13 +361,13 @@ public final class Tabletop implements Runnable {
 		getCurrentTurn().setAccusator(accusator);
 	}
 	/**
-	 * @param The latest player targetted by a hunt effect.
+	 * @param huntedPlayer The latest player targetted by a hunt effect.
 	 */
 	public void setHuntedPlayer(Player huntedPlayer) {
 		getCurrentTurn().setHuntedPlayer(huntedPlayer);
 	}
 	/**
-	 * @param The latest player who triggered a Hunt! effect or checked if they could do so.
+	 * @param hunter The latest player who triggered a Hunt! effect or checked if they could do so.
 	 */
 	public void setHunter(Player hunter) {
 		getCurrentTurn().setHunter(hunter);

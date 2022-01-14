@@ -28,7 +28,7 @@ public final class Turn {
 	
 	/**
 	 * A reference to the player targetted by a hunt effect during this turn, if there is one.
-	 * @see fr.sos.witchhunt.model.players.Player#chooseHuntedTarget(java.util.List) Player::chooseHuntedTarget(List {@literal} <Player>})
+	 * @see fr.sos.witchhunt.model.players.Player#chooseHuntedTarget(java.util.List) Player::chooseHuntedTarget(List {@literal <Player>})
 	 * @see fr.sos.witchhunt.model.players.Player#beHunted() Player::beHunted()
 	 */
 	private Player hunted;

@@ -15,7 +15,7 @@ import fr.sos.witchhunt.view.gui.scenes.ChoiceButton;
  * button's position in the {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel}.
  * This integer corresponds to a choice in the {@link Menu} from which the {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel#renderActionButtons() ChoicesPanel's buttons are created}.</p>
  * <p>Can be in concurrence with {@link fr.sos.witchhunt.view.std.InterruptibleStdInput Std input} : <code>{@link fr.sos.witchhunt.controller.ConcreteInputMediator#makeChoice(Menu) see ConcreteInputMediator::makeChoice(Menu)}</code>.
- * The first instance of <code>{@link fr.sos.witchhunt.gui.view.InputSource InputSource}</code> to {@link fr.sos.witchhunt.gui.view.InputSource#post(String) post} rules over all others.</p>
+ * The first instance of <code>{@link fr.sos.witchhunt.view.InputSource InputSource}</code> to {@link fr.sos.witchhunt.view.InputSource#post(String) post} rules over all others.</p>
  * 
  * @see fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel
  * @see fr.sos.witchhunt.view.gui.scenes.ChoiceButton ChoicesPanel {@code <#>--} ChoiceButtons
@@ -23,17 +23,17 @@ import fr.sos.witchhunt.view.gui.scenes.ChoiceButton;
  *
  * @see fr.sos.witchhunt.controller.InputMediator InputMediator
  * @see fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) InputMediator::makeChoice(Menu)
- * @see fr.sos.witchhunt.gui.view.std.InterruptibleStdInput InterruptibleStdInput
- * @see fr.sos.witchhunt.gui.view.std.InputSource InputSource
+ * @see fr.sos.witchhunt.view.std.InterruptibleStdInput InterruptibleStdInput
+ * @see fr.sos.witchhunt.view.InputSource InputSource
  */
 public class ChoicesPanelController implements InputSource {
 	/**
 	 * <p>The instance of {@link fr.sos.witchhunt.controller.InputMediator InputMediator} that is
-	 * {@link fr.sos.witchhunt.controller.InputMediator#wait() awaiting} for {@link fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) an integer choice}
+	 * {@link fr.sos.witchhunt.controller.ConcreteInputMediator#wait() awaiting} for {@link fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) an integer choice}
 	 * and {@link fr.sos.witchhunt.controller.InputMediator#receive() managing the concurrence between all views}.</p>
 	 * 
 	 * @see fr.sos.witchhunt.controller.InputMediator InputMediator
-	 * @see fr.sos.witchhunt.controller.InputMediator#wait() InputMediator::wait()
+	 * @see fr.sos.witchhunt.controller.ConcreteInputMediator#wait() InputMediator::wait()
 	 * @see fr.sos.witchhunt.controller.InputMediator#makeChoice(Menu) InputMediator::makeChoice(Menu)
 	 * @see fr.sos.witchhunt.controller.InputMediator#receive() InputMediator::receive()
 	 */

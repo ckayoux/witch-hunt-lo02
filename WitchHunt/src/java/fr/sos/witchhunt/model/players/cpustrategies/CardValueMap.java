@@ -14,7 +14,7 @@ import fr.sos.witchhunt.model.cards.RumourCardsPile;
 /**
  * <b>Associates each instance of {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} with a {@link CardValue Card value}
  * for a SINGLE {@link fr.sos.witchhunt.model.players.CPUPlayer CPUPlayer's} chosen {@link CPUStrategy chosen strategy}.</b>
- * <p>Done using a {@link java.util.Map Map<RumourCard,CardValue>}.</p>
+ * <p>Achieved using a {@link java.util.Map Map with keys of type RumourCard and values of type CardValue}.</p>
  * <p>Designed assuming there are no duplicated Rumour cards circulating in the game.</p>
  * <p>Knows all {@link fr.sos.witchhunt.model.cards.ExistingRumourCards existing Rumour cards} in the game : they are map's keys.</p>
  * <p>Queried by {@link CPUStrategy CPU strategies} to find the cards with the best Hunt! effects, the worst overall cards ...</p>
@@ -29,7 +29,7 @@ import fr.sos.witchhunt.model.cards.RumourCardsPile;
  */
 public class CardValueMap {
 	/**
-	 * <b>The {@link java.util.Map Map<RumourCard,CardValue>} used for associating each RumourCard with its value.</b>
+	 * <b>The {@link java.util.Map Map} used for associating each RumourCard with its value.</b>
 	 */
 	private Map <RumourCard,CardValue> m;
 	
@@ -76,7 +76,6 @@ public class CardValueMap {
 	
 	/**
 	 * Makes a copy of {@link #m the map}, keeping only the {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} that exist within the given {@link fr.sos.witchhunt.model.cards.RumourCardsPile deck}.
-	 * @param rcp
 	 * @return The filtered copy of the map.
 	 */
 	public Map<RumourCard,CardValue> filter(RumourCardsPile rcp){
@@ -208,7 +207,7 @@ public class CardValueMap {
 	/**
 	 * @param rcp The {@link fr.sos.witchhunt.model.cards.RumourCardsPile deck} within which we select the cards with the best {@link CardValue#getOverallValue() overall values}.
 	 * @return The cards with the best {@link CardValue#getOverallValue() overall values} within the given deck.
-	 * @see The overall value is computed by adding all integer fields (hunt value, witch value and additionnal value).
+	 * @see CardValue#getOverallValue() The overall value is computed by adding all integer fields (hunt value, witch value and additionnal value).
 	 */
 	public RumourCardsPile getCardsWithMaxOverallValue(RumourCardsPile rcp) {
 		Map<RumourCard,CardValue> M = this.filter(rcp);

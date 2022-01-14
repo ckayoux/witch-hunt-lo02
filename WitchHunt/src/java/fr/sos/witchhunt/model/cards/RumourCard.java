@@ -101,7 +101,7 @@ public abstract class RumourCard extends Card {
 	/**
 	 * The Rumour card's picture.
 	 * <b>{@link #loadImage() Loaded automatically} {@link #getImagePath() based on its class name}.</b>
-	 * When adding a new Rumour card with a class named "className" to the game, <b>make sure you add its picture</b> at <i>"/images/cards/"+className+".png"</i>.</p> 
+	 * <p>When adding a new Rumour card with a class named "className" to the game, <b>make sure you add its picture</b> at <i>"/images/cards/"+className+".png"</i>.</p> 
 	 */
 	protected BufferedImage image;
 	
@@ -116,7 +116,7 @@ public abstract class RumourCard extends Card {
 	
 	/**
 	 * <p><b>Parameterized constructor. for cards with an additional effect.</b></p>
-	 * <p>{@link #loadImage() loads the card's picture by calling the {@link #RumourCard super constructor}.</p>
+	 * <p>{@link #loadImage() loads} the card's picture by calling the {@link #RumourCard super constructor}.</p>
 	 * <p>Define the additional effect at instanciation by overriding method {@link #grantsImmunityAgainst(RumourCard)} (because, for now, all additional effects 
 	 * only give a protection against another specific Rumour card.</p>
 	 * @param additionalEffectDescription The card's additional effect's description.
@@ -132,7 +132,7 @@ public abstract class RumourCard extends Card {
 	
 	/**
 	 * <p><b>{@link WitchEffect#perform() Performs} this Rumour card's {@link #witchEffect Witch? effect}, if it {@link WitchEffect#isAllowed() is allowed}.</b></p>
-	 * </p>This verification is optional as it is already performed by players before choosing an action, but it could be useful if new Rumour cards that would force
+	 * <p>This verification is optional as it is already performed by players before choosing an action, but it could be useful if new Rumour cards that would force
 	 * players to trigger a Witch? effect were to come.</p>
 	 * @return <i>true</i> if the card's witch effect {@link WitchEffect#isAllowed() was allowed}, <i>false</i> otherwise.
 	 */
@@ -175,7 +175,6 @@ public abstract class RumourCard extends Card {
 	 * 
 	 * @see WitchEffect#getValue()
 	 * @see HuntEffect#getValue()
-	 * @see #getAdditionalValue();
 	 * @see #givesCards
 	 * @see #isRisked
 	 * @see #isOffensive
@@ -274,7 +273,6 @@ public abstract class RumourCard extends Card {
 	/**
 	 * <p><b>Loads the card's picture (in its unrevealed state), from a {@link #getImagePath() path based on its class name}.</b></p>
 	 * <p>The picture is {@link Card#resizeCardImage(BufferedImage) resized} to the chosen {@link #IMAGES_SIZE normalized size} for all cards.</p>
-	 * @return The revealed Rumour cards' picture, loaded as a {@link java.awt.image.BufferedImage BufferedImage} and resized to the chosen {@link #IMAGES_SIZE normalized size} for all cards.
 	 * @see #getImagePath()
 	 * @see Card#resizeCardImage(BufferedImage) 
 	 */
@@ -300,9 +298,9 @@ public abstract class RumourCard extends Card {
 	}
 	
 	/**
-	 * A Rumour card's picture is expected to be found at <i>"/images/cards/"+<b>className</b>+".png"</i>, <b>className</b> being the extension's class name.
-	 * When adding a new Rumour card with a class named "className" to the game, <b>make sure you add its picture</b> at <i>"/images/cards/"+<b>className</b>+".png"</i>.</p>
-	 * If you want to load an image with another name, override this method for your extension. 
+	 * <p>A Rumour card's picture is expected to be found at <i>"/images/cards/"+<b>className</b>+".png"</i>, <b>className</b> being the extension's class name.</p>
+	 * <p>When adding a new Rumour card with a class named "className" to the game, <b>make sure you add its picture</b> at <i>"/images/cards/"+<b>className</b>+".png"</i>.</p>
+	 * <p>If you want to load an image with another name, override this method for your extension.</p>
 	 * @return The extension's image path, computed automatically based on the extension's class name.
 	 */
 	private final String getImagePath() {

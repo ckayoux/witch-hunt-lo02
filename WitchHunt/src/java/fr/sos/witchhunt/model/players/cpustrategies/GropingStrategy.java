@@ -11,7 +11,7 @@ import fr.sos.witchhunt.model.players.Player;
  * <b>The initial strategy of all {@link fr.sos.witchhunt.model.players.CPUPlayer CPU-controlled players}, and the one adopted when the situation
  * is not clear enough to choose a more angular strategy.</b>
  * <p>Most choices are done randomly.</p>
- * <p>Tries keeping the {@link CardValueMap#getCardsWithMaxOverallValue(RumourCardsPile) best cards} (in terms of {@link fr.sos.witchhunt.model.cards.CardValue overall value}) for the end of the round.</p>
+ * <p>Tries keeping the {@link CardValueMap#getCardsWithMaxOverallValue(RumourCardsPile) best cards} (in terms of {@link CardValue overall value}) for the end of the round.</p>
  * <p>A witch using this strategy {@link fr.sos.witchhunt.model.Identity#WITCH witch} will never reveal their identity unless 
  * {@link fr.sos.witchhunt.model.players.Player#canWitch() they have no more playable Witch? effects in their hand}.</p>
  * @see PlayStrategy

@@ -9,7 +9,7 @@ import fr.sos.witchhunt.view.std.StdView;
 /**
  * <p><b>Core class in charge of initializing the application's core components.</b></p>
  * <p>Contains the <code>main</code> method. Supposed to be the <code>Main-Class</code> of the executable JAR's manifest.</p>
- * <p>Instantiated as a {@link https://refactoringguru.cn/design-patterns/singleton Singleton} using the {@link this#getInstance() static method}.
+ * <p>Instantiated as a <i>Singleton</i> using the {@link #getInstance() static method}.
  * Can be accessed globally, exposing its public and non-static members, using the same method.</p>
  * <p>When instantiated, prepares all objects that will be responsible for display and input, 
  * such as {@link fr.sos.witchhunt.controller.DisplayMediator DisplayMediator} the display mediator,
@@ -17,7 +17,7 @@ import fr.sos.witchhunt.view.std.StdView;
  * @author Félix Houdebert, Audrey Souppaya
  * @see #main(String[])
  * 
- * @see https://refactoringguru.cn/design-patterns/singleton Singleton design pattern
+ * @see <a href="https://refactoringguru.cn/design-patterns/singleton">Singleton design pattern</a>
  * @see #getInstance()
  * 
  * @see fr.sos.witchhunt.controller.DisplayMediator DisplayMediator
@@ -84,8 +84,8 @@ public class Application {
 	}
 	
 	/**
-	 * <b>Constructor is private as the class implements the {@link https://refactoringguru.cn/design-patterns/singleton Singleton design pattern}.</b>
 	 * @see #getInstance() only the <code>getInstance()</code> method is supposed to instantiate this class.
+	 * @see <a href="https://refactoringguru.cn/design-patterns/singleton">Constructor is private as the class implements the Singleton design pattern.</a>
 	 */
 	private Application() {	
 		displayMediator = new ConcreteDisplayMediator();

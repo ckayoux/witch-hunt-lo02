@@ -17,9 +17,7 @@ import fr.sos.witchhunt.view.InputSource;
  * - If yes, how should we call them ?</p>
  * <p>At the same time an input Consumer and a Producer {@link fr.sos.witchhunt.view.InputSource (see InputSource)} :
  * Standard-input is collected using a {@link #slaveInputMediator slave input mediator} to control an instance of {@link InterruptibleStdInput InterruptibleStdInput}.
- * A Player is therefore instantiated based on the required information, then, {@link #post(Player)} to the {@link #masterInputMediator master input mediator}.
- * Master InputMediator :: {@link fr.sos.witchhunt.controller.ConcreteInputMediator#createPlayer(int, List, boolean) createPlayer} <code>----></code>StdPlayerCreator :: call <code>--request--></code> Slave InputMediator  <code>--request--></code>  {@link InterruptibleStdInput}.
- * Master InputMediator :: {@link fr.sos.witchhunt.controller.ConcreteInputMediator#receive(Player) receive(Player)} <code> <--Player-- </code> StdPlayerCreator :: call <code><--processed-answers--</code> Slave InputMediator  <code><--Strings--</code>  {@link InterruptibleStdInput}.</p>  
+ * A Player is therefore instantiated based on the required information, then, {@link #post(Player)} to the {@link #masterInputMediator master input mediator}.</p> 
  * <p>{@link fr.sos.witchhunt.controller.ConcreteInputMediator#createPlayer(int, List, boolean) Started into a Thread which can be interrupted}.</p>
  * <p>In concurrence with {@link fr.sos.witchhunt.controller.interactions.PlayerCreatorController PlayerCreatorController (Controller for the graphical players creation interface)}.
  * The first one to {@link #post(Player) send a non-null instance of Player} rules and provokes its concurrent's interruption.</p>
@@ -68,10 +66,10 @@ public class StdPlayerCreator implements Runnable ,Callable<Player>,InputSource{
 	 * @param takenNames Value for field {@link #takenNames}
 	 * @param optional Value for field {@link #optional}
 	 */
-	public StdPlayerCreator(InputMediator master,InputMediator slave,StdView console,int playerId,List<String> takenNames,boolean optionnal) {
+	public StdPlayerCreator(InputMediator master,InputMediator slave,StdView console,int playerId,List<String> takenNames,boolean optional) {
 		this.masterInputMediator=master;
 		this.slaveInputMediator = slave;
-		this.optional=optionnal;
+		this.optional=optional;
 		this.console=console;
 		this.playerId=playerId;
 		this.takenNames=takenNames;

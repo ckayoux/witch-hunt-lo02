@@ -62,9 +62,9 @@ public final class RumourCardsPile implements Resettable {
 	 * <b>Makes an empty deck belonging to the given {@link fr.sos.witchhunt.model.players.Player player}.</b>
 	 * @param owner This deck's {@link #owner}.
 	 */
-	public RumourCardsPile(Player player) {
+	public RumourCardsPile(Player owner) {
 		this();
-		this.owner=player;
+		this.owner=owner;
 	}
 	
 	/**
