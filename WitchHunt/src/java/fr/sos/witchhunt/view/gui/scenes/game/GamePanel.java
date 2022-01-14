@@ -185,12 +185,7 @@ public class GamePanel extends GridBagPanel {
 	}
 	
 	public void showAccusedPlayer(Player accused) {
-	//	deckSelectorPanel.resetAccusablePlayersEffects();
 		deckSelectorPanel.themeUpPlayerButton(accused,Theme.OFFENSIVE);
-	}
-
-	public void showAccusablePlayers(List<Player> accusablePlayers) {
-		deckSelectorPanel.setAccusablePlayers();
 	}
 
 	public void showHuntedPlayer(Player huntedPlayer) {
@@ -477,10 +472,6 @@ public class GamePanel extends GridBagPanel {
 		}
 			
 		
-		public void setAccusablePlayers() {
-			// TODO Auto-generated method stub
-			
-		}
 		
 		public void setSelectedDeckButton(DeckSelectorButton b) {
 			if(this.selectedDeckButton!=null) {
