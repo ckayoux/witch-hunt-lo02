@@ -119,7 +119,7 @@ public final class ConcreteInputMediator implements InputMediator {
 	public int makeChoice(Menu m) {
 		int choice;
 		boolean correct;
-		gui.makeChoice(m);
+		gui.makeChoice();
 		int n = m.getOptionsCount();
 		choice = getIntInput();
 		if(!(1 <= choice && choice <= n)) {

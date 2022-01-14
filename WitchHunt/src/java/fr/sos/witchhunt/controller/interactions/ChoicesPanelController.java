@@ -7,7 +7,7 @@ import java.util.List;
 import fr.sos.witchhunt.controller.InputMediator;
 import fr.sos.witchhunt.model.players.Player;
 import fr.sos.witchhunt.view.InputSource;
-import fr.sos.witchhunt.view.gui.scenes.ActionButton;
+import fr.sos.witchhunt.view.gui.scenes.ChoiceButton;
 
 /**
  * <p><b>Gathers user-input from an instance of {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel} active on the Graphical User Interface.</b></p>
@@ -18,7 +18,7 @@ import fr.sos.witchhunt.view.gui.scenes.ActionButton;
  * The first instance of <code>{@link fr.sos.witchhunt.gui.view.InputSource InputSource}</code> to {@link fr.sos.witchhunt.gui.view.InputSource#post(String) post} rules over all others.</p>
  * 
  * @see fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel
- * @see fr.sos.witchhunt.view.gui.scenes.ActionButton ChoicesPanel {@code <#>--} ActionButtons
+ * @see fr.sos.witchhunt.view.gui.scenes.ChoiceButton ChoicesPanel {@code <#>--} ChoiceButtons
  * @see Menu
  *
  * @see fr.sos.witchhunt.controller.InputMediator InputMediator
@@ -39,11 +39,11 @@ public class ChoicesPanelController implements InputSource {
 	 */
 	private InputMediator inputMediator;
 	/**
-	 * The list of {@link fr.sos.witchhunt.view.gui.scenes.ActionButton ActionButtons} of a {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel}.
-	 * @see fr.sos.witchhunt.view.gui.scenes.ActionButton ActionButton
+	 * The list of {@link fr.sos.witchhunt.view.gui.scenes.ChoiceButton ChoiceButtons} of a {@link fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel}.
+	 * @see fr.sos.witchhunt.view.gui.scenes.ChoiceButton ChoiceButton
 	 * @see fr.sos.witchhunt.view.gui.scenes.ChoicesPanel ChoicesPanel
 	 */
-	private List<ActionButton> bList;
+	private List<ChoiceButton> bList;
 
 	
 	/**
@@ -54,13 +54,13 @@ public class ChoicesPanelController implements InputSource {
 	 * 
 	 * @see #post(String)
 	 * @see java.awt.event.ActionListener ActionListener
-	 * @see fr.sos.witchhunt.view.gui.scenes.ActionButton#addActionListener(ActionListener) ActionButton::addActionListener(ActionListener)
+	 * @see fr.sos.witchhunt.view.gui.scenes.ChoiceButton#addActionListener(ActionListener) ChoiceButton::addActionListener(ActionListener)
 	 */
-	public ChoicesPanelController(List<ActionButton> bList,InputMediator im) {
+	public ChoicesPanelController(List<ChoiceButton> bList,InputMediator im) {
 		this.inputMediator=im;
 		this.bList=bList;
 		for(int i=0;i<bList.size(); i++) {
-			ActionButton b = bList.get(i);
+			ChoiceButton b = bList.get(i);
 			final int choice = i;
 			b.addActionListener( new ActionListener (){
 				@Override
@@ -75,7 +75,7 @@ public class ChoicesPanelController implements InputSource {
 	 * Removes each button's {@link java.awt.event.ActionListener ActionListener} to make sure input is sent only once.
 	 * Called from the exterior.
 	 * @see java.awt.event.ActionListener ActionListener
-	 * @see fr.sos.witchhunt.view.gui.scenes.ActionButton#removeActionListener(ActionListener) ActionButton::removeActionListener(ActionListener)
+	 * @see fr.sos.witchhunt.view.gui.scenes.ChoiceButton#removeActionListener(ActionListener) ChoiceButton::removeActionListener(ActionListener)
 	 */
 	public void destroyMouseListeners() {
 		bList.forEach(b->

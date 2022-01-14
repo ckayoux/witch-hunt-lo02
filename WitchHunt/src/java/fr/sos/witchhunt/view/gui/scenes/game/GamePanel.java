@@ -125,8 +125,8 @@ public class GamePanel extends GridBagPanel {
 		actionsPanel.displayCards(m,forceReveal);
 	}
 	
-	public void makeChoice(Menu m) {
-		actionsPanel.makeChoice(m, inputMediator);
+	public void makeChoice() {
+		actionsPanel.makeChoice(inputMediator);
 	}
 	
 	public void setActionsPanelThemeAsForActionType(Object o) {

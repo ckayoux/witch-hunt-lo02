@@ -246,7 +246,7 @@ public final class StdView {
 	
 	/**
 	 * <p><b>Converts a single {@link fr.sos.witchhunt.controller.interactions.Menu#getOptions() Menu's entry} into a String. (Console version)</b></p>
-	 * <p>Conversion is generaly more verbose than for the {@link fr.sos.witchhunt.view.gui.scenes.ActionButton#makeButtonText(Object) Graphical User Interface}.</p>
+	 * <p>The result is generally more verbose than for the {@link fr.sos.witchhunt.view.gui.scenes.ChoiceButton#makeButtonText(Object) Graphical User Interface}.</p>
 	 * <p>A {@link fr.sos.witchhunt.controller.interactions.Menu#getOptions() Menu's entry} is of the <code>Object</code> type. The conversion result will depend on <code>instanceof</code> assertions, testing for 
 	 * a membership to a more specific type.</p>
 	 * <p>A String is displayed as it is, excepted for "/c/" ("Console-only" special sequence), which will be removed.</p>
@@ -262,7 +262,7 @@ public final class StdView {
 	 * @see #makeMenu(Menu)
 	 * @see #logPossibilities(Menu)
 	 * 
-	 * @see fr.sos.witchhunt.view.gui.scenes.ActionButton#makeButtonText(Object) Console homologue of the GUI's ActionButton::makeButtonText(Object) method.
+	 * @see fr.sos.witchhunt.view.gui.scenes.ChoiceButton#makeButtonText(Object) Console homologue of the GUI's ChoiceButton::makeButtonText(Object) method.
 	 */
 	public String stringifyMenuOption(Object o) {
 		if (o instanceof String) {

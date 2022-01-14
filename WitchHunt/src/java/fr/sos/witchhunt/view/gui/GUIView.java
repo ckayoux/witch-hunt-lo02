@@ -190,12 +190,12 @@ public final class GUIView {
 	 * @see fr.sos.witchhunt.controller.interactions.Menu Menu
 	 * 
 	 */
-	public void makeChoice(Menu m) {
+	public void makeChoice() {
 		if(this.gamePanel!=null) {
 			SwingUtilities.invokeLater(new Runnable() {
 				 @Override
 				public void run() {
-				    gamePanel.makeChoice(m);
+				    gamePanel.makeChoice();
 				}
 			});
 		}
@@ -203,7 +203,7 @@ public final class GUIView {
 			SwingUtilities.invokeLater(new Runnable() {
 				 @Override
 				public void run() {
-				    mainMenuPanel.makeChoice(m);
+				    mainMenuPanel.makeChoice();
 				}
 			});
 		}
@@ -798,7 +798,28 @@ public final class GUIView {
 		}
 	}
 	
-	//TODO JAVADOC
+	/**
+	 * <p><b>Transforms a {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} into a String (GUI version).</b></p>
+	 * <p>Used for displaying cards-related messages (played a Witch? effect, discarded a card ...) in the {@link #gamePanel ingame scene}.</p>
+	 * <p>The /+/ "catch up indentation" special sequence is replaced with spaces in order to make a paragraph out of the card's description.</p>
+	 * @param rc A {@link fr.sos.witchhunt.model.cards.RumourCard Rumour card} to stringify
+	 * @param forceReveal The unrevealed cards' name and properties will be hidden unless this boolean is set to <i>true</i>. 
+	 * @param effectGetters An array of String getters giving the wanted parts of the cards' description. See for example : {@link fr.sos.witchhunt.model.cards.RumourCard#getWitchEffectDescription() RumourCard::getWitchEffectDescription()}
+	 * @return A String describing the given card's, which can be used for display on the GUI view.
+	 * @see fr.sos.witchhunt.model.cards.RumourCard RumourCard
+	 * @see fr.sos.witchhunt.model.cards.RumourCard#getAdditionalEffectDescription() RumourCard::getAdditionalEffectDescription()
+	 * @see fr.sos.witchhunt.model.cards.RumourCard#getWitchEffectDescription() RumourCard::getAdditionalEffectDescription()
+	 * @see fr.sos.witchhunt.model.cards.RumourCard#getHuntEffectDescription() RumourCard::getHuntEffectDescription()
+	 * 
+	 * @see #displayPlayerPlaysWitchEffectScreen(Player, RumourCard)
+	 * @see #displayChooseHuntCardScreen(Player, RumourCardsPile)
+	 * @see #displayPlayerHasDiscardedCardScreen(Player, RumourCard)
+	 * @see #displayPlayerHasChosenCardScreen(Player, RumourCard, RumourCardsPile, boolean)
+	 * @see #displayStealCardScreen(Player, Player)
+	 * @see #displayPlayerHasResetCardScreen(Player, RumourCard)
+	 * 
+	 * @see java.util.function.Supplier a Supplier<T> is a method taking no entry parameter and returning an object of type T.
+	 */
 	private String stringifyRumourCard(RumourCard rc,boolean forceReveal,Supplier<String> ...effectGetters) {
 		StringBuffer sb = new StringBuffer();
 		if(forceReveal||rc.isRevealed()) {
@@ -896,9 +917,20 @@ public final class GUIView {
 		this.tabletop=tabletop;
 	}
 	
-	//TODO JAVADOC
+	/**
+	 * <p><b>Asserts whether the given {@link fr.sos.witchhunt.model.cards.RumourCardsPile deck} belongs to the given player or not.</b></p>
+	 * <p>Used to know whether the {@link #gamePanel ingame scene} has to show the given deck's view or not.</p>
+	 * @param p Is this one player the owner of the following deck ?
+	 * @param from Does this pile of cards belong to the given {@link fr.sos.witchhunt.model.players.Player Player} ?
+	 * @return <i>true</i> if the deck belongs to the given player, <i>false</i> otherwise.
+	 * @see fr.sos.witchhunt.model.cards.RumourCardsPile RumourCardsPile
+	 * @see fr.sos.witchhunt.model.players.Player Player Player
+	 * @see #displayChooseAnyCardScreen(Player, RumourCardsPile)
+	 * @see #displayChooseUnrevealedCardScreen(Player, RumourCardsPile)
+	 * @see #displayChooseRevealedCardScreen(Player, RumourCardsPile)
+	 * @see #displayChooseCardToDiscardScreen(Player)
+	 */
 	private boolean playerChoosesOwnCard(Player p,RumourCardsPile from) {
-
 		return p==from.getOwner();
 	}
 	
