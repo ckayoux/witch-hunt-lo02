@@ -1,0 +1,17 @@
+module:WitchHunt
+fr.sos.witchhunt
+fr.sos.witchhunt.controller
+fr.sos.witchhunt.controller.core
+fr.sos.witchhunt.controller.interactions
+fr.sos.witchhunt.model
+fr.sos.witchhunt.model.cards
+fr.sos.witchhunt.model.flow
+fr.sos.witchhunt.model.players
+fr.sos.witchhunt.model.players.cpustrategies
+fr.sos.witchhunt.view
+fr.sos.witchhunt.view.gui
+fr.sos.witchhunt.view.gui.scenes
+fr.sos.witchhunt.view.gui.scenes.game
+fr.sos.witchhunt.view.gui.scenes.mainmenu
+fr.sos.witchhunt.view.gui.scenes.matchsetup
+fr.sos.witchhunt.view.std
